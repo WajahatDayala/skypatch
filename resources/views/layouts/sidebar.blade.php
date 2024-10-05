@@ -12,10 +12,10 @@
           </div>
         </div>
         <div class="navbar-nav w-100">
-          <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-          <a href="TodaysQuote.html" class="nav-item nav-link"><i class="fa-solid fa-quote-right me-2"></i>
+          <a href="{{url('/dashboard')}}" class="nav-item nav-link  {{ (request()->segment(1) == 'dashboard') ? 'active' : '' }}" ><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+          <a href="{{url('/customer/quotes')}}" class="nav-item nav-link {{ (request()->segment(1) == 'customer/quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
             Today's Quotes</a>
-          <a href="AllQuotes.html" class="nav-item nav-link"><i class="fa-solid fa-quote-left me-2"></i>All Quotes</a>
+          <a href="{{url('/customer/quotes')}}" class="nav-item nav-link {{ (request()->segment(1) == 'customer/quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>All Quotes</a>
           <a href="TodaysOrder.html" class="nav-item nav-link"><i class="fa-solid fa-box me-2"></i>Today's Orders</a>
           <a href="TodaysEditOrder.html" class="nav-item nav-link"><i class="fa-solid fa-box-open me-2"></i>Today's Edit
             Orders</a>

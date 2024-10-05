@@ -60,13 +60,7 @@
               <p class="my-2 h6">Today's Vectors</p>
             </div>
           </div>
-          <div class="col-sm-6 col-md-4 col-xl-3">
-            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-              <img src="{{asset('skypatch/img/icons/employee.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Employees</p>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-4 col-xl-3">
+           <div class="col-sm-6 col-md-4 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
               <img src="{{asset('skypatch/img/icons/All_Orders.png')}}" alt="" width="50px">
               <p class="my-2 h6">All Orders</p>
@@ -85,67 +79,32 @@
             </div>
           </div>
 
-          <div class="col-sm-6 col-md-4 col-xl-3">
+         <div class="col-sm-6 col-md-4 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
               <img src="{{asset('skypatch/img/icons/invoice.png')}}" alt="" width="50px">
               <p class="my-2 h6">Invoices</p>
             </div>
           </div>
-          <div class="col-sm-6 col-md-4 col-xl-3">
+        
+        
+         <div class="col-sm-6 col-md-4 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-              <img src="{{asset('skypatch/img/icons/All_Customer.png')}}" alt="" width="50px">
-              <p class="my-2 h6">All Customers</p>
+              <img src="{{asset('skypatch/img/icons/invoice.png')}}" alt="" width="50px">
+              <p class="my-2 h6">Contact Us</p>
             </div>
           </div>
+          
           <div class="col-sm-6 col-md-4 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-              <img src="{{asset('skypatch/img/icons/sales-team-report.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Sales Team Report</p>
+              <img src="{{asset('skypatch/img/icons/invoice.png')}}" alt="" width="50px">
+              <p class="my-2 h6">Profile</p>
             </div>
           </div>
-          <div class="col-sm-6 col-md-4 col-xl-3">
-            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-              <img src="{{asset('skypatch/img/icons/Annum_Report.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Record Annum</p>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-4 col-xl-3">
-            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-              <img src="{{asset('skypatch/img/icons/Sales_Annum_Report.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Sales Annum</p>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-4 col-xl-3">
-            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-              <img src="{{asset('skypatch/img/icons/Desinger_Report.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Designers Report</p>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-4 col-xl-3">
-            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-              <img src="{{asset('skypatch/img/icons/Accounts.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Accounts</p>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-4 col-xl-3">
-            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-              <img src="{{asset('skypatch/img/icons/sales_commission.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Sales Commission</p>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-4 col-xl-3">
-            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-              <img src="{{asset('skypatch/img/icons/designer_leader.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Desingers & Leaders</p>
-            </div>
-          </div>
+         
+         
+          
 
-          <div class="col-sm-6 col-md-4 col-xl-3">
-            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-              <img src="{{asset('skypatch/img/icons/edit_report.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Edit Reports</p>
-            </div>
-          </div>
+          
         </div>
       </div>
       <!-- Dashboard Cards End -->

@@ -21,9 +21,9 @@
   <!-- Customized Bootstrap Stylesheet -->
   <!-- <link href="css/bootstrap.min.css" rel="stylesheet" /> -->
 
-  <link rel="stylesheet" href="{{asset('skypatchcss/bootstrap.css')}}">
+  <link rel="stylesheet" href="{{asset('skypatch/css/bootstrap.css')}}">
   <!-- Template Stylesheet -->
-  <link href="{{asset('skypatchcss/style.css')}}" rel="stylesheet" />
+  <link href="{{asset('skypatch/css/style.css')}}" rel="stylesheet" />
 </head>
 <body>
     <div class="main-content">
