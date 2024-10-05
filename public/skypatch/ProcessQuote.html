@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>DASHMIN - Bootstrap Admin Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="keywords" />
+    <meta content="" name="description" />
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon" />
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Icon Font Stylesheet -->
+    <!-- <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+      rel="stylesheet"
+    /> -->
+
+    <script src="https://kit.fontawesome.com/6126233f1a.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <!-- <link href="css/bootstrap.min.css" rel="stylesheet" /> -->
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container-fluid position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-outer navbar-light d-flex flex-column align-items-center justify-content-center">
+                <div class="d-flex flex-column align-items-center justify-content-center">
+                    <a href="index.html" class="d-flex align-items-center justify-content-center">
+                        <img src="img/logo_resized.png" alt="skypatch_logo" />
+                    </a>
+
+                    <div class="my-3 d-flex flex-column align-items-center justify-content-center">
+                        <h6 class="mb-0 h4">Ibad Mirza</h6>
+                        <span class="h6 text-secondary fw-light">Follow Up</span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="index.html" class="nav-item nav-link active"><i
+                            class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="TodaysQuote.html" class="nav-item nav-link"><i class="fa-solid fa-quote-right me-2"></i>
+                        Today's Quotes</a>
+                    <a href="AllQuotes.html" class="nav-item nav-link"><i class="fa-solid fa-quote-left me-2"></i>All
+                        Quotes</a>
+                    <a href="TodaysOrder.html" class="nav-item nav-link"><i class="fa-solid fa-box me-2"></i>Today's
+                        Orders</a>
+                    <a href="TodaysEditOrder.html" class="nav-item nav-link"><i
+                            class="fa-solid fa-box-open me-2"></i>Today's Edit
+                        Orders</a>
+                    <a href="AllOrders.html" class="nav-item nav-link"><i class="fa-solid fa-boxes-stacked me-2"></i>All
+                        Orders</a>
+                    <a href="AllOrders.html" class="nav-item nav-link"><i
+                            class="fa-regular fa-pen-to-square me-2"></i>Today's
+                        Vector</a>
+                    <a href="AllOrders.html" class="nav-item nav-link"><i class="fa-solid fa-pen-to-square me-2"></i>All
+                        Vectors</a>
+                    <a href="widget.html" class="nav-item nav-link"><i
+                            class="fa-solid fa-right-from-bracket me-2"></i>Logout</a>
+
+
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-outer navbar-light sticky-top px-4 py-3">
+                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <img src="img/logo_resized.png" alt="" width="150px" />
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars h4 text-info"></i>
+                </a>
+            </nav>
+            <!-- Navbar End -->
+
+            <!-- All Content Goes inside this div -->
+            <div class=" container-fluid py-4 px-4">
+                <div class="row g-4 d-flex align-items-center justify-content-center">
+                    <div class="col-12">
+                        <div class="bg-table rounded h-100 p-4 mt-4">
+                            <div class="row bg-dark p-2">
+                                <h6 class="text-light fw-light text-center mb-0">Pricing Criteria</h1>
+                            </div>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Minimum Price</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Maximum Price</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>1000 Stitches</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Normal Delivery</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Editing/Changes</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Editing in stiches file</strong><br>
+                                            <span>lorem</span>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Commment Box 1</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Comment Box 2</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Comment Box 3</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Comment Box 4</strong><br>
+                                            <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni
+                                                possimus perspiciatis ad dicta, incidunt accusamus. Voluptatibus, veniam
+                                                laboriosam! Vitae, iure.</span>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="bg-table rounded h-100 p-4 mt-4">
+                            <div class="row bg-dark p-2">
+                                <h6 class="text-light fw-light text-center mb-0">For Digitzer's/Vector Teams</h1>
+                            </div>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong># of Machine(s)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Condition</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong># of Needles</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Thread</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Needle Brand</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing(Pique / Jersey)</strong><br>
+                                            <span>lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Brand</strong><br>
+                                            <span>psd</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing (Cotton / Twill)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing (Cap)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Backing</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Needle Number</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong># of Heads</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Comments</strong><br>
+                                            <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni
+                                                possimus perspiciatis ad dicta, incidunt accusamus. Voluptatibus, veniam
+                                                laboriosam! Vitae, iure.</span>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Modal for Reason -->
+                            <div class="modal fade" id="Reason" tabindex="-1" aria-labelledby="ReasonLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ReasonLabel">Reasons</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="">
+                                                <div class="row mb-3">
+                                                    <label for="reasonSelect"
+                                                        class="col-sm-4 col-form-label text-end">Select Reason *</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-select" id="reasonSelect"
+                                                            aria-label="Default select example">
+                                                            <option selected class='text-gray'>Select Format</option>
+                                                            <option value="1">Sales</option>
+                                                            <option value="2">Support</option>
+                                                            <option value="3">Accounts</option>
+                                                            <option value="4">Digitizer Leader</option>
+                                                            <option value="5">Digitizer</option>
+                                                            <option value="6">Vector Artist Leader</option>
+                                                            <option value="7">Vector Artist</option>
+                                                            <option value="8">Quote Digitizer Leader</option>
+                                                            <option value="9">Quote Digitizer</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal for Edit Reason Ends Here -->
+
+                            <!-- Modal for Edit Designer Start Here -->
+                            <div class="modal fade" id="Designer" tabindex="-1" aria-labelledby="DesignerLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="DesignerLabel">Designer Assignment</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="">
+                                                <div class="row mb-3">
+                                                    <label for="designerSelect"
+                                                        class="col-sm-4 col-form-label text-end">Select Designer
+                                                        *</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-select" id="designerSelect"
+                                                            aria-label="Default select example">
+                                                            <option selected class='text-gray'>Select Designer</option>
+                                                            <option value="1">Designer 1</option>
+                                                            <option value="2">Designer 2</option>
+                                                            <option value="3">Designer 3</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal for Edit Designer Ends Here -->
+
+                        </div>
+
+                        <div class="bg-table rounded h-100 p-4 mt-4">
+                            <div class="row bg-dark p-2">
+                                <h6 class="text-light fw-light text-center mb-0">Job Information</h1>
+                            </div>
+                            <div class="row">
+                                <div class="col-7">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr class="row">
+                                                <td class="col-3">
+                                                    <strong>Number</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Date & Time</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Customer Nick</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Desing Namw/PO</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td class="col-3">
+                                                    <strong>Height</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Width</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Required Format</strong><br>
+                                                    <span>lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Placement</strong><br>
+                                                    <span>lorem</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td class="col-3">
+                                                    <strong>Number of Colors</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Fabric Type</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-6">
+                                                    <strong>Design Type</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td class="col-12">
+                                                    <strong>Customer Instructions</strong><br>
+                                                    <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                                                        Magni
+                                                        possimus perspiciatis ad dicta, incidunt accusamus.
+                                                        Voluptatibus,
+                                                        veniam
+                                                        laboriosam! Vitae, iure.</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td class="col-12">
+                                                    <strong>Admin Instructions</strong><br>
+                                                    <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                                                        Magni
+                                                        possimus perspiciatis ad dicta, incidunt accusamus.
+                                                        Voluptatibus,
+                                                        veniam
+                                                        laboriosam! Vitae, iure.</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-5">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr class="row d-flex align-items-center justify-content-center">
+                                                <td class="col-2">
+                                                    Height
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                            </tr>
+                                            <tr class="row d-flex align-items-center justify-content-center">
+                                                <td class="col-2">
+                                                    Width
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                            </tr>
+                                            <tr class="row d-flex align-items-center justify-content-center">
+                                                <td class="col-2">
+                                                    Stitches
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                            </tr>
+                                            <tr class="row d-flex align-items-center justify-content-center">
+                                                <td class="col-2">
+                                                    Price
+                                                </td>
+                                                <td class="col-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text" id="basic-addon1">$</span>
+                                                        <input type="text" class="form-control" placeholder="Price"
+                                                            aria-label="Username" aria-describedby="basic-addon1">
+                                                    </div>
+                                                </td>
+                                                <td class="col-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text" id="basic-addon1">$</span>
+                                                        <input type="text" class="form-control" placeholder="Price"
+                                                            aria-label="Username" aria-describedby="basic-addon1">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="row d-flex align-items-center justify-content-center">
+                                                <td class="col-2">
+                                                    Total
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-table rounded h-100 p-4 mt-4">
+                            <div class="row">
+                                <div class="col-6 border-end">
+                                    <div class="row bg-dark p-2">
+                                        <h6 class="text-light fw-light text-center mb-0">Option A</h1>
+                                    </div>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr class="row">
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-primary rounded-pill m-2">Upload Files</button>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td>
+                                                    <strong>Comment</strong><br>
+                                                    <textarea class="form-control" placeholder="Leave a comment here"
+                                                        id="floatingTextarea" style="height: 150px;"></textarea>
+
+                                                    <div class="mt-3">
+                                                        <legend class="fs-6"><strong>Mail To:</strong></legend>
+                                                        <br>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="gridCheck1">
+                                                            <label class="form-check-label" for="gridCheck1">
+                                                                email@domain.com
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="gridCheck1">
+                                                            <label class="form-check-label" for="gridCheck1">
+                                                                email@domain.com
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="gridCheck1">
+                                                            <label class="form-check-label" for="gridCheck1">
+                                                                email@domain.com
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-6 border-start">
+                                    <div class="row bg-dark p-2">
+                                        <h6 class="text-light fw-light text-center mb-0">Option B</h1>
+                                    </div>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr class="row">
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-primary rounded-pill m-2">Upload Files</button>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td>
+                                                    <strong>Comment</strong><br>
+                                                    <textarea class="form-control" placeholder="Leave a comment here"
+                                                        id="floatingTextarea" style="height: 150px;"></textarea>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="row d-flex justify-content-end align-items-center">
+                                <div class="col-2 d-flex">
+                                    <button type="button" class="btn btn-primary rounded-pill m-2">Send</button>
+                                    <button type="button" class="btn btn-dark rounded-pill m-2">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <!-- Content Div Ends here End -->
+
+
+
+            <!-- Footer Start -->
+            <!-- <div class="container-fluid pt-4 px-4">
+                <div class="bg-outer rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            &copy; <a href="https://www.skypatches.com/">Sky Patch and Digitizers</a>, All Right
+                            Reserved.
+                        </div>
+
+                    </div>
+                </div>
+            </div> -->
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg bg-box btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/chart/chart.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

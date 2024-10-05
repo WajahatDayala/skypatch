@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DASHMIN - Bootstrap Admin Template</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="" name="keywords" />
+  <meta content="" name="description" />
+
+  <!-- Favicon -->
+  <link href="img/favicon.ico" rel="icon" />
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Icon Font Stylesheet -->
+  <!-- <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+      rel="stylesheet"
+    /> -->
+
+  <script src="https://kit.fontawesome.com/6126233f1a.js" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- Libraries Stylesheet -->
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+  <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Template Stylesheet -->
+  <link href="css/style.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="container-fluid  position-relative bg-white d-flex p-0">
+    <!-- Spinner Start -->
+    <div id="spinner"
+      class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Sidebar Start -->
+    <div class="sidebar pe-4 pb-3">
+      <nav class="navbar bg-light navbar-light d-flex flex-column align-items-center justify-content-center">
+        <div class="d-flex flex-column align-items-center justify-content-center">
+          <a href="index.html" class="d-flex align-items-center justify-content-center">
+            <img src="img/logo_resized.png" alt="skypatch_logo" />
+          </a>
+
+          <div class="my-3 d-flex flex-column align-items-center justify-content-center">
+            <h6 class="mb-0 h4">Ibad Mirza</h6>
+            <span class="h6 text-secondary fw-light">Follow Up</span>
+          </div>
+        </div>
+        <div class="navbar-nav w-100">
+          <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+          <a href="TodaysQuote.html" class="nav-item nav-link"><i class="fa-solid fa-quote-right me-2"></i>
+            Today's Quotes</a>
+          <a href="AllQuotes.html" class="nav-item nav-link"><i class="fa-solid fa-quote-left me-2"></i>All Quotes</a>
+          <a href="TodaysOrder.html" class="nav-item nav-link"><i class="fa-solid fa-box me-2"></i>Today's Orders</a>
+          <a href="TodaysEditOrder.html" class="nav-item nav-link"><i class="fa-solid fa-box-open me-2"></i>Today's Edit
+            Orders</a>
+          <a href="AllOrders.html" class="nav-item nav-link"><i class="fa-solid fa-boxes-stacked me-2"></i>All
+            Orders</a>
+          <a href="TodaysVectors.html" class="nav-item nav-link active"><i
+              class="fa-regular fa-pen-to-square me-2"></i></i>Today's Vector</a>
+          <a href="AllVectors.html" class="nav-item nav-link"><i class="fa-solid fa-pen-to-square me-2"></i>All
+            Vectors</a>
+          <a href="#" class="nav-item nav-link"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</a>
+
+
+        </div>
+      </nav>
+    </div>
+    <!-- Sidebar End -->
+
+
+    <!-- Content Start -->
+    <div class="content">
+      <!-- Navbar Start -->
+      <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-3">
+        <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+          <img src="img/logo_resized.png" alt="" width="150px" />
+        </a>
+        <a href="#" class="sidebar-toggler flex-shrink-0">
+          <i class="fa fa-bars"></i>
+        </a>
+      </nav>
+      <!-- Navbar End -->
+
+      <div class="vh100 d-flex flex-column justify-content-between align-items-center">
+        <!-- Blank Start -->
+        <div class="container-fluid pt-4 px-4">
+          <div class="row bg-light rounded align-items-center justify-content-center mx-0">
+            <!-- Recent Sales Start -->
+            <div class="container-fluid">
+              <div class="bg-light text-center rounded p-4">
+                <div class="d-flex flex-column align-items-start justify-content-between mb-4">
+                  <h6 class="mb-0">Today's Vector</h6>
+
+                </div>
+                <div class="row d-flex">
+                  <div class="col-6">
+                    <form action="">
+                      <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Show: </label>
+                        <div class="w-50">
+                          <select class="form-select mb-3" aria-label="Default select example">
+                            <option selected>Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                          </select>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-6 mb-4 d-flex justify-content-end">
+                    <form class="d-flex align-items-center justify-content-end">
+                      <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label me-3">Search: </label>
+                        <div class="w-75">
+                          <input type="text" class="form-control" id="search">
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                      <tr class="text-dark">
+                        <th scope="col"> Sr# </th>
+                        <th scope="col"> OR# </th>
+                        <th scope="col"> Rcv'd Date </th>
+                        <th scope="col"> Sent Date </th>
+                        <th scope="col"> Design Name </th>
+                        <th scope="col"> Customer Nick </th>
+                        <th scope="col"> Billing </th>
+                        <th scope="col"> Designer </th>
+                        <th scope="col"> Status </th>
+                        <th scope="col"> Action </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-secondary fw-bold">Joseph Ibraham</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-success rounded-pill m-2" href="">Delivered</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> 1 </td>
+                        <td>OR-0123</td>
+                        <td>02 Jan 2045</td>
+                        <td>01 Jan 2045</td>
+                        <td>Custom Design</td>
+                        <td>John Doe</td>
+                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
+                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>
+                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        </td>
+                        <td>
+                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- Recent Sales End -->
+          </div>
+        </div>
+        <!-- Blank End -->
+
+
+        <!-- Footer Start -->
+        <div class=" container-fluid pt-4 px-4">
+          <div class="bg-light container-fluid px-4 rounded-top p-4">
+
+            <div class="row">
+              <div class="col-12 text-center">
+                &copy; <a href="https://www.skypatches.com/">Sky Patch and Digitizers</a>, All Right
+                Reserved.
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        <!-- Footer End -->
+      </div>
+    </div>
+    <!-- Content End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+  </div>
+
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/chart/chart.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/waypoints/waypoints.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="lib/tempusdominus/js/moment.min.js"></script>
+  <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+  <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+  <!-- Template Javascript -->
+  <script src="js/main.js"></script>
+</body>
+
+</html>
