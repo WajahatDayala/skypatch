@@ -24,6 +24,17 @@
   <link rel="stylesheet" href="{{asset('skypatch/css/bootstrap.css')}}">
   <!-- Template Stylesheet -->
   <link href="{{asset('skypatch/css/style.css')}}" rel="stylesheet" />
+
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css.map">
+
+
+   
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/5.0.3/css/fixedColumns.dataTables.min.css">
+
+
 </head>
 <body>
     <div class="main-content">
@@ -58,23 +69,33 @@
   <script src="{{ asset('skypatch/lib/tempusdominus/js/moment.min.js')}}"></script>
   <script src="{{ asset('skypatch/lib/tempusdominus/js/moment-timezone.min.js')}}"></script>
   <script src="{{ asset('skypatch/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js')}}"></script>
-
+  <script  type="text/css" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <!-- Template Javascript -->
   <script src="{{ asset('skypatch/js/main.js')}}"></script>
  
- <script type="text/javascript">
-     
-
-
+  <script>
+    
 $(document).ready( function () {
     $('#dataTable').DataTable();
 } );
 
-
- </script>
-
+</script>
 
 <!-- new scripted for admintheme -->
+
+  
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/5.0.3/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
 
 </body>
 

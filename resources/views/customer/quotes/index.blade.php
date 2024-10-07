@@ -19,9 +19,9 @@
                 <div class="row">
 		<div class="col-lg-4"></div>
 		<div class="col-lg-4 "></div>
-		<div class="col-lg-4  p-10"><a style="color:#fff;" class="btn btn-rounded btn-primary mb-3" href="{{url('customer/quotes/create')}}"><i class="fa fa-plus">Add New</i></a></div>
-	</div>
-                <div class="row d-flex">
+		<div class="col-lg-4"><a style="color:#fff; margin-left:70%;" class="btn btn-rounded btn-primary mb-3" href="{{url('customer/quotes/create')}}"><i class="fa fa-plus">Add New</i></a></div>
+	        </div>
+                <!-- <div class="row d-flex">
                   <div class="col-6">
                     <form action="">
                       <div class="row mb-3">
@@ -47,232 +47,45 @@
                       </div>
                     </form>
                   </div>
-                </div>
+                </div> -->
                 <div class="table-responsive">
-                  <table class="table text-start align-middle table-bordered table-hover mb-0">
+                  <table id="dataTable" class="table  text-start align-middle table-bordered table-hover mb-0">
                     <thead>
                       <tr class="text-dark">
                         <th scope="col"> Sr# </th>
-                        <th scope="col"> OR# </th>
+                        <th scope="col"> OT# </th>
                         <th scope="col"> Rcv'd Date </th>
                         <th scope="col"> Sent Date </th>
                         <th scope="col"> Design Name </th>
                         <th scope="col"> Customer Nick </th>
-                        <th scope="col"> Billing </th>
-                        <th scope="col"> Designer </th>
                         <th scope="col"> Status </th>
                         <th scope="col"> Action </th>
                       </tr>
                     </thead>
                     <tbody>
+                      @foreach($quotes as $q)
                       <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>OR-{{$q->order_id}}</td>
+                        <td>{{$q->created_at}}</td>
+                        <td>{{$q->date_finalized}}</td>
+                        <td>{{$q->design_name}}</td>
+                        <td>{{$q->customer_name}}</td>
+                        
                         <td>
                           <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
                         </td>
                         <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
+                        <a class="btn btn-sm btn-primary rounded-pill m-2" href="{{ route('quotes.show', ['quote' => $q->order_id]) }}">Details</a>
                         </td>
                       </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-secondary fw-bold">Joseph Ibraham</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-success rounded-pill m-2" href="">Delivered</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 1 </td>
-                        <td>OR-0123</td>
-                        <td>02 Jan 2045</td>
-                        <td>01 Jan 2045</td>
-                        <td>Custom Design</td>
-                        <td>John Doe</td>
-                        <td><span class="btn btn-sm btn-primary rounded-pill m-2"> CC </span></td>
-                        <td><a href="" class="text-danger fw-bold">Not Assigned</a></td>
-                        <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
-                        </td>
-                        <td>
-                          <span class="btn btn-sm btn-primary rounded-pill m-2" href="">Details</span>
-                        </td>
-                      </tr>
+                      @endforeach
+                      
+                     
+                    
+                     
+                    
+                      
                     </tbody>
                   </table>
                 </div>
