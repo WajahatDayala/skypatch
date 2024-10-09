@@ -4,7 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Role;
+use Illuminate\Support\Facades\DB;
+
 class RolesTableSeeder extends Seeder
 {
     /**
@@ -13,21 +14,24 @@ class RolesTableSeeder extends Seeder
     public function run(): void
     {
         //
-        Role::create(['roles' => 'superAdmin']);
-        Role::create(['roles' => 'admin']);
-        Role::create(['roles' => 'followUp']);
-        Role::create(['roles' => 'sales']);
-        Role::create(['roles' => 'leader']);
-        Role::create(['roles' => 'support']);
-        Role::create(['roles' => 'accounts']);
+        $roles = [
+            'Admin',
+            'Employee',
+            'Quote Digitizer Leader',
+            'Quote Digitizer Worker',
+            'Order Digitizer Leader',
+            'Order Digitizer Worker',
+            'Vector Digitizer Leader',
+            'Vector Digitizer Worker',
+            
+        ];
 
-        Role::create(['roles' => 'quoteDigitizerLeader']);
-        Role::create(['roles' => 'quoteDigitizerWorker']);
-       
-        Role::create(['roles' => 'orderDigitizerLeader']);
-        Role::create(['roles' => 'orderDigitizerWorker']);
-
-        Role::create(['roles' => 'vectorDigitizerLeader']);
-        Role::create(['roles' => 'vectorDigitizerWorker']);
+        foreach ($roles as $role) {
+            DB::table('roles')->insert([
+                'name' => $role,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

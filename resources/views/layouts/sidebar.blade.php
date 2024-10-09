@@ -13,9 +13,9 @@
         </div>
         <div class="navbar-nav w-100">
           <a href="{{url('/dashboard')}}" class="nav-item nav-link  {{ request()->is('dashboard') ? 'active' : '' }}" ><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-          <a href="{{url('/customer/quotes')}}" class="nav-item nav-link {{ request()->is('customer/quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
+          <a href="{{url('/customer/today-quotes')}}" class="nav-item nav-link {{ request()->is('customer/today-quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
             Today's Quotes</a>
-          <a href="{{url('/customer/quotes')}}" class="nav-item nav-link {{ (request()->is(1) == 'customer/quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>All Quotes</a>
+          <a href="{{url('/customer/quotes')}}" class="nav-item nav-link {{ request()->is('customer/quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>All Quotes</a>
           <a href="TodaysOrder.html" class="nav-item nav-link"><i class="fa-solid fa-box me-2"></i>Today's Orders</a>
           <a href="TodaysEditOrder.html" class="nav-item nav-link"><i class="fa-solid fa-box-open me-2"></i>Today's Edit
             Orders</a>
@@ -25,7 +25,7 @@
             Vector</a>
           <a href="AllOrders.html" class="nav-item nav-link"><i class="fa-solid fa-pen-to-square me-2"></i>All
             Vectors</a>
-          <a href="widget.html" class="nav-item nav-link"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</a>
+          <a onclick="event.preventDefault();document.getElementById('logout-form').submit();" href="{{ route('logout') }}" class="nav-item nav-link"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</a>
 
 
         </div>

@@ -15,8 +15,8 @@ class RequiredFormatSeeder extends Seeder
         //
         $names = [
             'cdr', 'cnd', 'dsb', 'dst', 'dsz', 'emb', 
-            'exp', 'jef', 'ksm', 'ofm', 'pes', 'p x f', 
-            'p o f', 't a p', 'x x x', 'others'
+            'exp', 'jef', 'ksm', 'ofm', 'pes', 'pdf', 
+            'pof', 'tap', 'xxx', 'others'
         ];
 
         // Clear existing records to avoid duplicates

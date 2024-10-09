@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('employee', function (Blueprint $table) {
-            //
-            $table->foreignId('role_id')->constrained('roles')->after('id'); // Adjust 'after' if necessary
+        Schema::create('option_types', function (Blueprint $table) {
+            $table->id();
+            $table->text("name")->unique();
+            $table->timestamps();
         });
     }
 
@@ -22,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('option_types');
     }
 };

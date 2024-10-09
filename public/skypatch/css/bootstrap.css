@@ -5,6 +5,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 :root {
+  --highlight:rgba(255, 193, 7, 0.6);
   --outer-color: #777777;
   --bg-box: #e3e3e3;
   --bg-table: #eaeaea;
@@ -6853,6 +6854,9 @@ fieldset:disabled .btn {
 }
 .bg-outer {
   background-color: var(--outer-color) !important;
+}
+.highlight {
+  background-color: var(--highlight);
 }
 .bg-box {
   background-color: var(--bg-box) !important;

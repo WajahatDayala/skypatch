@@ -9,6 +9,10 @@ use App\Models\Fabric;
 use App\Models\Placement;
 use App\Models\Quote;
 use App\Models\QuoteFileLog;
+use App\Models\Instruction;
+use App\Models\Status;
+use Validator;
+
 use Illuminate\Support\Facades\DB;
 
 use Auth;
@@ -26,12 +30,31 @@ class QuotesController extends Controller
     public function index()
     {
         //
-        $quotes = Quote::select('*','quotes.id as order_id','users.name as customer_name','quotes.name as design_name')
+        $quotes = Quote::select('*',
+        'quotes.id as order_id',
+        'users.name as customer_name',
+        'quotes.name as design_name'
+        )
         ->join('users','quotes.customer_id','=','users.id')
         ->where('customer_id',Auth::id())
         ->get();
         return view('customer/quotes/index',['quotes'=>$quotes]);
     }
+
+    public function todayDayQuote()
+    {
+        $quotes = Quote::select('*', 
+        'quotes.id as order_id', 
+        'users.name as customer_name', 
+        'quotes.name as design_name')
+            ->join('users', 'quotes.customer_id', '=', 'users.id')
+            ->where('customer_id', Auth::id())
+            ->whereDate('quotes.created_at', today()) 
+            ->get();
+
+        return view('customer.quotes.today', ['quotes' => $quotes]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -42,12 +65,12 @@ class QuotesController extends Controller
         $requiredFormat = RequiredFormat::all();
         $fabric = Fabric::all();
         $placement = Placement::all();
-
+       
         return view('customer/quotes/add',
         compact(
             'requiredFormat',
             'fabric',
-            'placement'
+            'placement',
         ));
     }
 
@@ -57,18 +80,17 @@ class QuotesController extends Controller
     public function store(Request $request)
     {
         // Validate the request
-        // $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'required_format_id' => 'required|exists:required_formats,id',
-        //     'fabric_id' => 'required|exists:fabrics,id',
-        //     'placement_id' => 'required|exists:placements,id',
-        //     'height' => 'nullable|numeric',
-        //     'width' => 'nullable|numeric',
-        //     'number_of_colors' => 'nullable|integer',
-        //     'additional_instruction' => 'nullable|string',
-        //     'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf', // Validate multiple files
-        //     'super_urgent' => 'boolean',
-        // ]);
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'required_format_id' => 'required',
+            'fabric_id' => 'required',
+            'placement_id' => 'required'
+        ], [
+            'name.required' => 'Name is required.',
+            'required_format_id.required' => 'Format is required.',
+            'fabric_id.required' => 'Fabric is required.',
+            'placement_id.required' => 'Placement is required.'
+        ]);
 
         // Start a database transaction
         DB::beginTransaction();
@@ -80,11 +102,11 @@ class QuotesController extends Controller
                 'required_format_id' => $request->required_format_id,
                 'fabric_id' => $request->fabric_id,
                 'placement_id' => $request->placement_id,
+                'status_id' => $request->status,
                 'name' => $request->name,
                 'height' => $request->height,
                 'width' => $request->width,
                 'number_of_colors' => $request->number_of_colors,
-                'additional_instruction' => $request->additional_instruction,
                 'super_urgent' => $request->has('super_urgent'),
             ]);
 
@@ -97,19 +119,32 @@ class QuotesController extends Controller
                         // Insert into QuoteFileLog
                         QuoteFileLog::create([
                             'quote_id' => $quote->id,
+                            'cust_id' => Auth::id(),
                             'files' => $filePath,
                         ]);
                     }
                 }
 
+                //check additonal fields
+                if($request->filled('additional_instruction')){
+                    Instruction::create([
+                        'cust_id' => Auth::id(),
+                        'description' => $request->additional_instruction,
+                        'quote_id' => $quote->id,
+                    ]);
+                }
+
+
             // Commit the transaction
             DB::commit();
+            
+            $request->session()->flash('quote',$request['name']);
 
             return redirect()->route('quotes.index')->with('success', 'Quote created successfully!');
             
         } catch (\Exception $e) {
             // Rollback the transaction if there's an error
-            DB::rollBack();
+           // DB::rollBack();
             
             // Log the error
             \Log::error('Error creating quote: ' . $e->getMessage());
@@ -127,8 +162,24 @@ class QuotesController extends Controller
       
         $quote = Quote::findOrFail($id);
 
-        $quote = Quote::select('*', 'quotes.id as order_id', 'users.name as customer_name', 'quotes.name as design_name')
+        $quote = Quote::select('*', 
+        'quotes.id as order_id',
+        'quotes.name as design_name',
+        'users.name as customer_name', 
+        'statuses.name as status',
+        'fabrics.name as fabric_name',
+        'required_formats.name as format',
+        'placements.name as placement',
+        'users.name as customer_name',
+        'instructions.description',
+        'quotes.created_at as received_date',
+        'quotes.name as design_name')
         ->join('users', 'quotes.customer_id', '=', 'users.id')
+        ->join('statuses','quotes.status_id','=','statuses.id')
+        ->join('fabrics','quotes.fabric_id','=','fabrics.id')
+        ->join('placements','quotes.placement_id','=','placements.id')
+        ->join('required_formats','quotes.required_format_id','=','required_formats.id')
+        ->leftjoin('instructions','quotes.customer_id','=','instructions.cust_id')
         ->where('customer_id', Auth::id())
         ->where('quotes.id', $quote->id) 
         ->first(); 
@@ -143,6 +194,45 @@ class QuotesController extends Controller
     public function edit(string $id)
     {
         //
+        $quote = Quote::findOrFail($id);
+
+        $requiredFormat = RequiredFormat::all();
+        $fabric = Fabric::all();
+        $placement = Placement::all();
+       
+       
+
+        $quote = Quote::select('*', 
+        'quotes.id as quote_id',
+        'quotes.name as design_name',
+        'users.name as customer_name', 
+        'statuses.name as status',
+        'fabrics.name as fabric_name',
+        'required_formats.name as format',
+        'placements.name as placement',
+        'users.name as customer_name',
+        'instructions.description',
+        'quotes.created_at as received_date',
+        'quotes.name as design_name')
+        ->join('users', 'quotes.customer_id', '=', 'users.id')
+        ->join('statuses','quotes.status_id','=','statuses.id')
+        ->join('fabrics','quotes.fabric_id','=','fabrics.id')
+        ->join('placements','quotes.placement_id','=','placements.id')
+        ->join('required_formats','quotes.required_format_id','=','required_formats.id')
+        ->leftjoin('instructions','quotes.customer_id','=','instructions.cust_id')
+        ->where('customer_id', Auth::id())
+        ->where('quotes.id', $quote->id) 
+        ->first(); 
+
+
+
+
+        return view('customer/quotes/edit',compact(
+            'quote',
+            'requiredFormat',
+            'fabric',
+            'placement'
+        ));
     }
 
     /**

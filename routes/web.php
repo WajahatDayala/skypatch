@@ -19,7 +19,10 @@ Route::middleware('auth')->group(function () {
     
 
     //customer 
-    route::resource('/customer/quotes',QuotesController::class);
+    
+    Route::resource('/customer/quotes',QuotesController::class);
+    Route::get('/customer/today-quotes', [QuotesController::class, 'todayDayQuote']);
+
 });
 
 

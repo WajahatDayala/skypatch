@@ -14,11 +14,11 @@ class Quote extends Model
         'required_format_id',
         'fabric_id',
         'placement_id',
+        'status_id',
         'name',
         'height',
         'width',
         'number_of_colors',
-        'additional_instruction',
         'super_urgent',
     ];
 }

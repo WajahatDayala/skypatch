@@ -7,25 +7,44 @@
                     <div class="col-8">
                         <div class="bg-light rounded h-100 p-4">
                             <h6 class="mb-4">Send Quotation</h6>
+                            @if ($errors->any())
+                            <div class="alert alert-danger">
+                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                             <ul>
+                               @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                               @endforeach
+                             </ul>
+                            </div>
+                             @endif
                             <form action="{{ route('quotes.store') }}" method="POST"  enctype="multipart/form-data">
                                  @csrf
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Name/PO *</label>
                                     <div class="col-sm-8">
-                                        <input type="text" name="name" class="form-control" id="inputEmail3" required>
+                                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" >
+                                    @error('name')
+                                        <span class="text-danger">{{ $message }}</span>
+                                        </span>
+                                     @enderror   
                                     </div>
+                                   
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Required Format
                                         *</label>
                                     <div class="col-sm-8">
-                                        <select class="form-select" name="required_format_id" aria-label="Default select example">
-                                            <option selected class='text-gray'>Select Format</option>
+                                        <select class="form-select @error('required_format_id') is-invalid @enderror" name="required_format_id" aria-label="Default select example">
+                                            <option value="" selected class='text-gray'>Select Format</option>
                                             @foreach($requiredFormat as $f)
                                             <option value="{{$f->id}}">{{$f->name}}</option>
                                             @endforeach
                                           
                                         </select>
+                                        @error('required_format_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                        </span>
+                                         @enderror   
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -44,25 +63,34 @@
                                     <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Fabric
                                         *</label>
                                     <div class="col-sm-8">
-                                        <select class="form-select" name="fabric_id" aria-label="Default select example">
-                                            <option selected class='text-gray'>Select Fabric</option>
+                                        <select class="form-select @error('fabric_id') is-invalid @enderror" name="fabric_id" aria-label="Default select example">
+                                            <option value="" selected class='text-gray'>Select Fabric</option>
                                             @foreach($fabric as $f)
                                             <option value="{{$f->id}}">{{$f->name}}</option>
                                             @endforeach
-
                                         </select>
+                                        @error('fabric_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                        </span>
+                                         @enderror   
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Placement
                                         *</label>
                                     <div class="col-sm-8">
-                                        <select class="form-select" name="placement_id" aria-label="Default select example">
-                                            <option selected class='text-gray'>Select Placement</option>
+                                        <select class="form-select @error('placement_id') is-invalid @enderror" name="placement_id" aria-label="Default select example">
+                                            <option value="" selected class='text-gray'>Select Placement</option>
                                             @foreach($placement as $p)
                                             <option value="{{$p->id}}">{{$p->name}}</option>
                                             @endforeach
                                         </select>
+                                        <input type="hidden" name="status" value="2">
+
+                                        @error('placement_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                        </span>
+                                         @enderror
                                     </div>
                                 </div>
                                 <div class="row mb-3">
