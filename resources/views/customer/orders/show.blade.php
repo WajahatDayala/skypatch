@@ -8,85 +8,86 @@
             <div class="bg-table rounded h-100 p-4">
                 <div class="row mb-4">
                     <div class="col-6 d-flex justify-content-start align-items-center">
-                        <h6 class="h6 mb-0">Quote Details</h6>
+                        <h6 class="h6 mb-0">Order Details</h6>
                     </div>
                     <div class="col-6 d-flex align-items-center justify-content-end">
                         <!-- <button type="button"
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button> -->
-                        <a type="button" href="{{ route('quotes.edit', ['quote' => $quote->order_id]) }}"
-                            class="btn btn-sm btn-dark rounded-pill ">Edit</a>
+                        <a type="button" href="{{ route('orders.edit', ['order' => $order->order_id]) }}"
+                                        class="btn btn-sm btn-dark rounded-pill ">Edit</a>
                     </div>
                 </div>
                 <table class="table table-bordered">
                     <tbody>
                         <tr class="row">
                             <td class="col-3">
-                                <strong>Quote Number</strong><br>
-                                <span>QT-{{$quote->order_id}}</span>
+                                <strong>Order Number</strong><br>
+                                <span>OR-{{$order->order_id}}</span>
                             </td>
                             <td class="col-3">
                                 <strong>Status</strong><br>
-                                @if($quote->status_id ==2)
-                                <span>{{$quote->status}}</span>
-                                @elseif($quote->status_id ==1)
-                                <span>{{$quote->status}}</span>
+                                @if($order->status_id ==2)
+                                <span>{{$order->status}}</span>
+                                @elseif($order->status_id ==1)
+                                <span>{{$order->status}}</span>
 
                                 @endif
 
                             </td>
                             <td class="col-3">
                                 <strong>Release Date</strong><br>
-                                <span>@if(!$quote->date_finalized)
+                                <span>@if(!$order->date_finalized)
                                     N/A
                                     @endif
-                                    {{$quote->date_finalized}}</span>
+                                    {{$order->date_finalized}}</span>
                             </td>
                             <td class="col-3">
                                 <strong>Received Date</strong><br>
-                                <span>{{$quote->received_date}}</span>
+                                <span>{{$order->received_date}}</span>
                             </td>
                         </tr>
                         <tr class="row">
                             <td class="col-3">
                                 <strong>Design Name/PO</strong><br>
-                                <span>{{$quote->design_name}}
-                                    @foreach($quoteEdit as $e)
-                                    @if($quote->order_id == $e->quote_id)
-                                        (QT-{{$e->quoteEditId}})
+                                <span>{{$order->design_name}}
+                                    
+                                    @foreach($orderEdit as $e)
+                                    @if($order->order_id == $e->order_id)
+                                    (OR-{{$e->orderEditId}})
                                     @endif
                                     @endforeach
                                 </span>
                             </td>
                             <td class="col-3">
                                 <strong>Height</strong><br>
-                                <span>{{$quote->height}}"</span>
+                                <span>{{$order->height}}"</span>
                             </td>
                             <td class="col-3">
                                 <strong>Width</strong><br>
-                                <span>{{$quote->width}}</span>
+                                <span>{{$order->width}}</span>
                             </td>
                             <td class="col-3">
                                 <strong>Format</strong><br>
-                                <span>{{$quote->format}}</span>
+                                <span>{{$order->format}}</span>
                             </td>
                         </tr>
                         <tr class="row">
 
                             <td class="col-3">
                                 <strong>Fabric</strong><br>
-                                <span>{{$quote->fabric_name}}</span>
+                                <span>{{$order->fabric_name}}</span>
                             </td>
                             <td class="col-3">
                                 <strong>Number of Colors</strong><br>
-                                <span>{{$quote->number_of_colors}}</span>
+                                <span>{{$order->number_of_colors}}</span>
                             </td>
                             <td class="col-3">
                                 <strong>Placement</strong><br>
-                                <span>{{$quote->placement}}</span>
+                                <span>{{$order->placement}}</span>
                             </td>
                             <td class="col-3">
                                 <strong>Customer Nick</strong><br>
-                                <span>{{$quote->customer_name}}</span>
+                                <span>{{$order->customer_name}}</span>
                             </td>
                         </tr>
 
@@ -94,7 +95,7 @@
                             <td class="col-6">
                                 <strong class="">Customer Instruction</strong><br>
                                 <p>
-                                    {{$quoteInstruction->instruction}}
+                                    {{$orderInstruction->instruction}}
                                     <!-- <button type="button"
                                                     class="btn btn-sm rounded-pill btn-primary m-2">Update</button> -->
                                 </p>
@@ -102,7 +103,7 @@
                             <td class="col-6">
                                 <strong>Admin Instruction</strong><br>
                                 <p>
-                                    {{$quote->instruction}}
+                                    {{$order->instruction}}
 
                                 </p>
                             </td>

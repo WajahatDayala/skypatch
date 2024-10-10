@@ -16,14 +16,14 @@
           <a href="{{url('/customer/today-quotes')}}" class="nav-item nav-link {{ request()->is('customer/today-quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
             Today's Quotes</a>
           <a href="{{url('/customer/quotes')}}" class="nav-item nav-link {{ request()->is('customer/quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>All Quotes</a>
-          <a href="TodaysOrder.html" class="nav-item nav-link"><i class="fa-solid fa-box me-2"></i>Today's Orders</a>
-          <a href="TodaysEditOrder.html" class="nav-item nav-link"><i class="fa-solid fa-box-open me-2"></i>Today's Edit
+          <a href="{{url('/customer/today-orders')}}" class="nav-item nav-link {{ request()->is('customer/today-orders') ? 'active' : '' }}"><i class="fa-solid fa-box me-2"></i>Today's Orders</a>
+            <!-- <a href="TodaysEditOrder.html" class="nav-item nav-link"><i class="fa-solid fa-box-open me-2"></i>Today's Edit
+              Orders</a> -->
+          <a href="{{url('/customer/orders')}}" class="nav-item nav-link {{ request()->is('customer/orders') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked me-2"></i>All
             Orders</a>
-          <a href="AllOrders.html" class="nav-item nav-link"><i class="fa-solid fa-boxes-stacked me-2"></i>All
-            Orders</a>
-          <a href="AllOrders.html" class="nav-item nav-link"><i class="fa-regular fa-pen-to-square me-2"></i></i>Today's
+          <a href="" class="nav-item nav-link"><i class="fa-regular fa-pen-to-square me-2"></i></i>Today's
             Vector</a>
-          <a href="AllOrders.html" class="nav-item nav-link"><i class="fa-solid fa-pen-to-square me-2"></i>All
+          <a href="" class="nav-item nav-link"><i class="fa-solid fa-pen-to-square me-2"></i>All
             Vectors</a>
           <a onclick="event.preventDefault();document.getElementById('logout-form').submit();" href="{{ route('logout') }}" class="nav-item nav-link"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</a>
 

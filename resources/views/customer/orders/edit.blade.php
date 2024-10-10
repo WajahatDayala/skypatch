@@ -6,7 +6,7 @@
                 <div class="row g-4 d-flex align-items-center justify-content-center">
                     <div class="col-8">
                         <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">Edit Quote QT-{{$quote->quote_id}}</h6> 
+                            <h6 class="mb-4">Edit Order OR-{{$order->order_id}}</h6> 
                             @if ($errors->any())
                             <div class="alert alert-danger">
                             <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -17,13 +17,13 @@
                              </ul>
                             </div>
                              @endif
-                             <form action="{{ route('quotes.update', $quote->quote_id) }}" method="POST" enctype="multipart/form-data">
+                             <form action="{{ route('orders.update', $order->order_id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT') <!-- Use PUT method for updating -->
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Name/PO *</label>
                                     <div class="col-sm-8">
-                                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{$quote->design_name}}">
+                                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{$order->design_name}}">
                                     @error('name')
                                         <span class="text-danger">{{ $message }}</span>
                                         </span>
@@ -39,7 +39,7 @@
                                             <option value="" selected class='text-gray'>Select Format</option>
                                             @foreach($requiredFormat as $f)
                                             <option value="{{ $f->id }}" 
-                                            {{ $quote->format == $f->name ? 'selected' : '' }}>
+                                            {{ $order->format == $f->name ? 'selected' : '' }}>
                                              {{ $f->name }}
                                             </option>
                                             @endforeach
@@ -54,13 +54,13 @@
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Height</label>
                                     <div class="col-sm-8">
-                                        <input type="text" name="height" class="form-control" id="inputEmail3" value="{{$quote->height}}">
+                                        <input type="text" name="height" class="form-control" id="inputEmail3" value="{{$order->height}}">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Width</label>
                                     <div class="col-sm-8">
-                                        <input type="text" name="width" class="form-control" id="inputEmail3" value="{{$quote->width}}">
+                                        <input type="text" name="width" class="form-control" id="inputEmail3" value="{{$order->width}}">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -70,7 +70,7 @@
                                         <select class="form-select @error('fabric_id') is-invalid @enderror" name="fabric_id" aria-label="Default select example">
                                             <option value="" selected class='text-gray'>Select Fabric</option>
                                             @foreach($fabric as $f)
-                                            <option value="{{$f->id}}" {{ $quote->fabric_name == $f->name ? 'selected' : '' }}>{{$f->name}}</option>
+                                            <option value="{{$f->id}}" {{ $order->fabric_name == $f->name ? 'selected' : '' }}>{{$f->name}}</option>
                                             @endforeach
                                         </select>
                                         @error('fabric_id')
@@ -86,7 +86,7 @@
                                         <select class="form-select @error('placement_id') is-invalid @enderror" name="placement_id" aria-label="Default select example">
                                             <option value="" selected class='text-gray'>Select Placement</option>
                                             @foreach($placement as $p)
-                                            <option value="{{$p->id}}" {{ $quote->placement == $p->name ? 'selected' : '' }}>{{$p->name}}</option>
+                                            <option value="{{$p->id}}" {{ $order->placement == $p->name ? 'selected' : '' }}>{{$p->name}}</option>
                                             @endforeach
                                         </select>
                                         <input type="hidden" name="status" value="2">
@@ -101,7 +101,7 @@
                                     <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Number of
                                         Colors</label>
                                     <div class="col-sm-8">
-                                        <input type="text" name="number_of_colors" class="form-control" id="inputPassword3" value="{{$quote->number_of_colors}}">
+                                        <input type="text" name="number_of_colors" class="form-control" id="inputPassword3" value="{{$order->number_of_colors}}">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -109,7 +109,7 @@
                                         Instruction</label>
                                     <div class="col-sm-8">
                                         <textarea class="form-control" name="additional_instruction" placeholder="Leave a comment here"
-                                            id="floatingTextarea" style="height: 150px;">{{$quoteInstruction->instruction}}</textarea>
+                                            id="floatingTextarea" style="height: 150px;">{{$orderInstruction->instruction}}</textarea>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -131,7 +131,7 @@
                                     <div class="col-sm-8">
                                         <div class="form-check">
                                             <input class="form-check-input" name="super_urgent"  type="checkbox" id="gridCheck1"
-                                            value="1" {{ old('super_urgent', $quote->super_urgent ?? 1) ? 'checked' : '' }}>
+                                            value="1" {{ old('super_urgent', $order->super_urgent ?? 1) ? 'checked' : '' }}>
                                             
                                             <label class="form-check-label" for="gridCheck1">
                                                 Let us know if your order is super urgent!
@@ -147,7 +147,7 @@
                                     <div class="col-sm-4">
                                     </div>
                                     <div class="col-sm-8">
-                                        <button type="submit" class="btn btn-primary">Update Quote</button>
+                                        <button type="submit" class="btn btn-primary">Update Order</button>
                                     </div>
                                 </div>
                             </form>

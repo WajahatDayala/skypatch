@@ -11,7 +11,9 @@ use App\Models\Quote;
 use App\Models\QuoteFileLog;
 use App\Models\Instruction;
 use App\Models\Status;
+use App\Models\QuoteEditID;
 use Validator;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
 
@@ -38,7 +40,11 @@ class QuotesController extends Controller
         ->join('users','quotes.customer_id','=','users.id')
         ->where('customer_id',Auth::id())
         ->get();
-        return view('customer/quotes/index',['quotes'=>$quotes]);
+
+        $quoteEdit =QuoteEditID::select('*','quote_edit_i_d_s.id as quoteEditId')
+        ->join('quotes','quote_edit_i_d_s.quote_id','=','quotes.id')
+        ->get();
+        return view('customer/quotes/index',['quotes'=>$quotes,'quoteEdit'=>$quoteEdit]);
     }
 
     public function todayDayQuote()
@@ -52,7 +58,11 @@ class QuotesController extends Controller
             ->whereDate('quotes.created_at', today()) 
             ->get();
 
-        return view('customer.quotes.today', ['quotes' => $quotes]);
+            $quoteEdit =QuoteEditID::select('*','quote_edit_i_d_s.id as quoteEditId')
+            ->join('quotes','quote_edit_i_d_s.quote_id','=','quotes.id')
+            ->get();
+
+        return view('customer.quotes.today', ['quotes' => $quotes,'quoteEdit'=>$quoteEdit]);
     }
 
 
@@ -98,7 +108,7 @@ class QuotesController extends Controller
         try {
             // Create a new Quote
             $quote = Quote::create([
-                'customer_id' => Auth::id(), // Get the authenticated user's ID
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
                 'required_format_id' => $request->required_format_id,
                 'fabric_id' => $request->fabric_id,
                 'placement_id' => $request->placement_id,
@@ -119,7 +129,7 @@ class QuotesController extends Controller
                         // Insert into QuoteFileLog
                         QuoteFileLog::create([
                             'quote_id' => $quote->id,
-                            'cust_id' => Auth::id(),
+                            'cust_id' => $request->customer_id,
                             'files' => $filePath,
                         ]);
                     }
@@ -128,7 +138,7 @@ class QuotesController extends Controller
                 //check additonal fields
                 if($request->filled('additional_instruction')){
                     Instruction::create([
-                        'cust_id' => Auth::id(),
+                        'cust_id' => $request->customer_id,
                         'description' => $request->additional_instruction,
                         'quote_id' => $quote->id,
                     ]);
@@ -171,7 +181,6 @@ class QuotesController extends Controller
         'required_formats.name as format',
         'placements.name as placement',
         'users.name as customer_name',
-        'instructions.description',
         'quotes.created_at as received_date',
         'quotes.name as design_name')
         ->join('users', 'quotes.customer_id', '=', 'users.id')
@@ -179,13 +188,28 @@ class QuotesController extends Controller
         ->join('fabrics','quotes.fabric_id','=','fabrics.id')
         ->join('placements','quotes.placement_id','=','placements.id')
         ->join('required_formats','quotes.required_format_id','=','required_formats.id')
-        ->leftjoin('instructions','quotes.customer_id','=','instructions.cust_id')
         ->where('customer_id', Auth::id())
         ->where('quotes.id', $quote->id) 
         ->first(); 
 
 
-        return view('customer/quotes/show',compact('quote'));
+        $quoteEdit =QuoteEditID::select('*','quote_edit_i_d_s.id as quoteEditId')
+        ->join('quotes','quote_edit_i_d_s.quote_id','=','quotes.id')
+        ->get();
+
+         //instruction
+         $quoteInstruction = Quote::select('*','instructions.description as instruction') 
+         ->leftjoin('instructions','instructions.quote_id','=','quotes.id')
+         ->where('instructions.quote_id',$quote->order_id)
+         ->first();
+
+        
+
+        return view('customer/quotes/show',compact(
+            'quote',
+            'quoteInstruction',
+            'quoteEdit'
+        ));
     }
 
     /**
@@ -211,7 +235,6 @@ class QuotesController extends Controller
         'required_formats.name as format',
         'placements.name as placement',
         'users.name as customer_name',
-        'instructions.description',
         'quotes.created_at as received_date',
         'quotes.name as design_name')
         ->join('users', 'quotes.customer_id', '=', 'users.id')
@@ -219,18 +242,29 @@ class QuotesController extends Controller
         ->join('fabrics','quotes.fabric_id','=','fabrics.id')
         ->join('placements','quotes.placement_id','=','placements.id')
         ->join('required_formats','quotes.required_format_id','=','required_formats.id')
-        ->leftjoin('instructions','quotes.customer_id','=','instructions.cust_id')
         ->where('customer_id', Auth::id())
         ->where('quotes.id', $quote->id) 
         ->first(); 
 
+        //quote files
+        $quoteFiles =QuoteFileLog::select('*')
+        ->join('quotes','quote_file_logs.quote_id','=','quotes.id')
+        ->where('quote_file_logs.quote_id',$quote->quote_id)
+        ->get();
 
+      //instruction
+      $quoteInstruction = Quote::select('*','instructions.description as instruction') 
+      ->leftjoin('instructions','instructions.quote_id','=','quotes.id')
+      ->where('instructions.quote_id',$quote->quote_id)
+      ->first();
 
 
         return view('customer/quotes/edit',compact(
             'quote',
+            'quoteFiles',
             'requiredFormat',
             'fabric',
+            'quoteInstruction',
             'placement'
         ));
     }
@@ -240,8 +274,79 @@ class QuotesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validate the request
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'required_format_id' => 'required',
+            'fabric_id' => 'required',
+            'placement_id' => 'required'
+        ], [
+            'name.required' => 'Name is required.',
+            'required_format_id.required' => 'Format is required.',
+            'fabric_id.required' => 'Fabric is required.',
+            'placement_id.required' => 'Placement is required.'
+        ]);
+    
+        DB::beginTransaction();
+        $quote = Quote::findOrFail($id);
+    
+        try {
+            $quote->update([
+                'required_format_id' => $request->required_format_id,
+                'fabric_id' => $request->fabric_id,
+                'placement_id' => $request->placement_id,
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'height' => $request->height,
+                'width' => $request->width,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+            ]);
+    
+
+            //quote edit Id
+            $quoteId =  new QuoteEditID();
+            $quoteId->quote_id = $quote->id;
+            $quoteId->save();
+
+            // Handle file uploads
+            if ($request->hasFile('files')) {
+                // Fetch and delete existing files
+                $existingFiles = QuoteFileLog::where('quote_id', $quote->id)->get();
+                foreach ($existingFiles as $fileLog) {
+                    Storage::disk('public')->delete($fileLog->files);
+                    $fileLog->delete();
+                }
+    
+                // Store new files
+                foreach ($request->file('files') as $file) {
+                    $filePath = $file->store('uploads/quotes', 'public');
+                    QuoteFileLog::create([
+                        'quote_id' => $quote->id,
+                        'cust_id' => Auth::id(),
+                        'files' => $filePath,
+                    ]);
+                }
+            }
+    
+            // Update additional instructions
+            if ($request->filled('additional_instruction')) {
+                Instruction::updateOrCreate(
+                    ['quote_id' => $quote->id],
+                    ['description' => $request->additional_instruction]
+                );
+            }
+    
+            DB::commit();
+            
+            return redirect()->route('quotes.edit', $quote->id)->with('success', 'Quote updated successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Error updating quote: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'An error occurred while updating the quote.']);
+        }
     }
+    
 
     /**
      * Remove the specified resource from storage.

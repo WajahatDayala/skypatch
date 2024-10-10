@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('fabric_id')->constrained('fabrics')->onDelete('cascade')->onUpdate('cascade'); // Foreign key to fabrics table
             $table->foreignId('placement_id')->constrained('placements')->onDelete('cascade')->onUpdate('cascade'); // Foreign key to placements table
             $table->string('edit_order_id')->nullable(); // Editable quote ID
-            $table->foreignId('edit_reason_id')->constrained('reason_edits')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('edit_reason_id')->nullable()->constrained('reason_edits')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('status_id')->constrained('statuses')->onDelete('cascade')->onUpdate('cascade'); // Foreign key to statuses table
             $table->timestamp('date_received')->nullable(); // Auto-generated timestamp convert from quote
             $table->string('name'); // Name

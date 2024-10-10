@@ -68,7 +68,7 @@
                       <tr class="bg-danger bg-gradient text-white">
                       @endif
                         <td>{{ $loop->iteration }}</td>
-                        <td>OR-{{$q->order_id}}</td>
+                        <td>OT-{{$q->order_id}}</td>
                         <td>{{$q->created_at}}</td>
                         <td>
                           @if(!$q->date_finalized)
@@ -76,7 +76,13 @@
                           @endif
                           {{$q->date_finalized}}
                         </td>
-                        <td>{{$q->design_name}}</td>
+                        <td>{{$q->design_name}}
+                          @foreach($quoteEdit as $e)   
+                          @if($q->order_id == $e->quote_id)
+                          (QT-{{$e->quoteEditId}})
+                          @endif
+                          @endforeach
+                        </td>
                         <td>{{$q->customer_name}}</td>
                         
                         <td>
