@@ -35,9 +35,11 @@ class QuotesController extends Controller
         $quotes = Quote::select('*',
         'quotes.id as order_id',
         'users.name as customer_name',
-        'quotes.name as design_name'
+        'quotes.name as design_name',
+        'statuses.name as status'
         )
         ->join('users','quotes.customer_id','=','users.id')
+        ->join('statuses','quotes.status_id','statuses.id')
         ->where('customer_id',Auth::id())
         ->get();
 
@@ -202,6 +204,7 @@ class QuotesController extends Controller
          ->leftjoin('instructions','instructions.quote_id','=','quotes.id')
          ->where('instructions.quote_id',$quote->order_id)
          ->first();
+
 
         
 

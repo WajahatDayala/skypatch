@@ -93,11 +93,10 @@
                         <tr class="row">
                             <td class="col-6">
                                 <strong class="">Customer Instruction</strong><br>
-                                <p>
-                                    {{$quoteInstruction->instruction}}
+                                <p>{{ $quoteInstruction ? $quoteInstruction->instruction : 'No instruction available.' }}</p>
                                     <!-- <button type="button"
                                                     class="btn btn-sm rounded-pill btn-primary m-2">Update</button> -->
-                                </p>
+
                             </td>
                             <td class="col-6">
                                 <strong>Admin Instruction</strong><br>

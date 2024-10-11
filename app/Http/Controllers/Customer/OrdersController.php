@@ -36,10 +36,10 @@ class OrdersController extends Controller
         'orders.id as order_id',
         'users.name as customer_name',
         'orders.name as design_name',
-        'delivery_types.type as deliveryType'
+        'statuses.name as status'
         )
         ->join('users','orders.customer_id','=','users.id')
-        ->join('delivery_types','orders.delivery_type_id','delivery_types.id')
+        ->join('statuses','orders.status_id','statuses.id')
         ->where('customer_id',Auth::id())
         ->get();
 
@@ -356,7 +356,7 @@ class OrdersController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Error updating Order: ' . $e->getMessage());
-            return back()->withErrors(['error' => 'An error occurred while updating the quote.']);
+            return back()->withErrors(['error' => 'An error occurred while updating the Order.']);
         }
     }
 

@@ -14,7 +14,7 @@ class QuoteFileLog extends Model
         'vector_order_id',
         'cust_id',
         'emp_id',
-        'files',
+        'files'
         
     ];
 }

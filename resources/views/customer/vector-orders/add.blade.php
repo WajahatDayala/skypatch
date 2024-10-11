@@ -17,7 +17,7 @@
                              </ul>
                             </div>
                              @endif
-                            <form action="{{ route('orders.store') }}" method="POST"  enctype="multipart/form-data">
+                            <form action="{{ route('vector-orders.store') }}" method="POST"  enctype="multipart/form-data">
                                  @csrf
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Name/PO *</label>
@@ -47,52 +47,10 @@
                                          @enderror   
                                     </div>
                                 </div>
-                                <div class="row mb-3">
-                                    <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Height</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" name="height" class="form-control" id="inputEmail3">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Width</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" name="width" class="form-control" id="inputEmail3">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Fabric
-                                        *</label>
-                                    <div class="col-sm-8">
-                                        <select class="form-select @error('fabric_id') is-invalid @enderror" name="fabric_id" aria-label="Default select example">
-                                            <option value="" selected class='text-gray'>Select Fabric</option>
-                                            @foreach($fabric as $f)
-                                            <option value="{{$f->id}}">{{$f->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('fabric_id')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        </span>
-                                         @enderror   
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Placement
-                                        *</label>
-                                    <div class="col-sm-8">
-                                        <select class="form-select @error('placement_id') is-invalid @enderror" name="placement_id" aria-label="Default select example">
-                                            <option value="" selected class='text-gray'>Select Placement</option>
-                                            @foreach($placement as $p)
-                                            <option value="{{$p->id}}">{{$p->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        <input type="hidden" name="status" value="2">
-
-                                        @error('placement_id')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        </span>
-                                         @enderror
-                                    </div>
-                                </div>
+                                
+                               
+                              
+                                
                                 <div class="row mb-3">
                                     <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Number of
                                         Colors</label>
@@ -126,7 +84,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input type="hidden" name="delivery_type" value="2">
+                                <input type="hidden" name="status" value="2">
                                 <input type="hidden" name="customer_id" value="{{ Auth::id() }}">
 
                                 <div class="row mb-3">

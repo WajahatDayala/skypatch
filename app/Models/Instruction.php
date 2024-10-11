@@ -15,5 +15,6 @@ class Instruction extends Model
         'quote_id',
         'order_id',
         'vector_id',
+        'vector_order_id'
     ];
 }

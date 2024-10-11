@@ -11,11 +11,11 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="header-title">Users</h4>
-           					     <div class="row">
+           					     <!-- <div class="row">
                                  <div class="col-lg-4"></div>
                                  <div class="col-lg-4 "></div>
                                 <div class="col-lg-4 col-xs-offset-right-12"><a style="margin-left: 70%; color:#fff;" class="btn btn-rounded btn-submit_new mb-3" href="{{url('users/create')}}"><i class="fa fa-plus">Add New</i></a></div>
-                                </div>
+                                </div> -->
 	  
                                
                                 <div class="data-tables">

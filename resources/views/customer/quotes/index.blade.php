@@ -13,14 +13,14 @@
             <div class="container-fluid">
               <div class="bg-light text-center rounded p-4">
                 <div class="d-flex flex-column align-items-start justify-content-between mb-4">
-                  <h6 class="mb-0">All Quotes</h6>
+                  <h6 class="mb-0">Quotes Record</h6>
 
                 </div>
-                <div class="row">
+                <!-- <div class="row">
 		<div class="col-lg-4"></div>
 		<div class="col-lg-4 "></div>
 		<div class="col-lg-4"><a style="color:#fff; margin-left:70%;" class="btn btn-rounded btn-primary mb-3" href="{{url('customer/quotes/create')}}"><i class="fa fa-plus">Add New</i></a></div>
-	        </div>
+	        </div> -->
                 <!-- <div class="row d-flex">
                   <div class="col-6">
                     <form action="">
@@ -87,7 +87,7 @@
                         <td>{{$q->customer_name}}</td>
                         
                         <td>
-                          <span class="btn btn-sm btn-secondary rounded-pill m-2" href="">Processing</span>
+                        <span class="btn btn-sm {{ $q->status == 1 ? 'btn-success' : 'btn-secondary' }} rounded-pill m-2" href="">{{$q->status}}</span>
                         </td>
                         <td>
                         <a class="btn btn-sm btn-primary rounded-pill m-2" href="{{ route('quotes.show', ['quote' => $q->order_id]) }}">Details</a>

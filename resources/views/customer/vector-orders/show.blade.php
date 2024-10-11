@@ -8,12 +8,12 @@
             <div class="bg-table rounded h-100 p-4">
                 <div class="row mb-4">
                     <div class="col-6 d-flex justify-content-start align-items-center">
-                        <h6 class="h6 mb-0">Order Details</h6>
+                        <h6 class="h6 mb-0">Vector Order Details</h6>
                     </div>
                     <div class="col-6 d-flex align-items-center justify-content-end">
                         <!-- <button type="button"
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button> -->
-                        <a type="button" href="{{ route('orders.edit', ['order' => $order->order_id]) }}"
+                        <a type="button" href="{{ route('vector-orders.edit', ['vector_order' => $order->order_id]) }}"
                                         class="btn btn-sm btn-dark rounded-pill ">Edit</a>
                     </div>
                 </div>
@@ -21,8 +21,8 @@
                     <tbody>
                         <tr class="row">
                             <td class="col-3">
-                                <strong>Order Number</strong><br>
-                                <span>OR-{{$order->order_id}}</span>
+                                <strong>Vector Order Number</strong><br>
+                                <span>VO-{{$order->order_id}}</span>
                             </td>
                             <td class="col-3">
                                 <strong>Status</strong><br>
@@ -51,50 +51,37 @@
                                 <strong>Design Name/PO</strong><br>
                                 <span>{{$order->design_name}}
                                     
-                                    @foreach($orderEdit as $e)
-                                    @if($order->order_id == $e->order_id)
-                                    (OR-{{$e->orderEditId}})
+                                    @foreach($orderVectorEdit as $e)
+                                    @if($order->order_id == $e->vector_order_id)
+                                    (VO-{{$e->orderEditId}})
                                     @endif
                                     @endforeach
                                 </span>
                             </td>
-                            <td class="col-3">
-                                <strong>Height</strong><br>
-                                <span>{{$order->height}}"</span>
-                            </td>
-                            <td class="col-3">
-                                <strong>Width</strong><br>
-                                <span>{{$order->width}}</span>
-                            </td>
+                            
                             <td class="col-3">
                                 <strong>Format</strong><br>
                                 <span>{{$order->format}}</span>
-                            </td>
-                        </tr>
-                        <tr class="row">
-
-                            <td class="col-3">
-                                <strong>Fabric</strong><br>
-                                <span>{{$order->fabric_name}}</span>
                             </td>
                             <td class="col-3">
                                 <strong>Number of Colors</strong><br>
                                 <span>{{$order->number_of_colors}}</span>
                             </td>
-                            <td class="col-3">
-                                <strong>Placement</strong><br>
-                                <span>{{$order->placement}}</span>
-                            </td>
+                          
                             <td class="col-3">
                                 <strong>Customer Nick</strong><br>
                                 <span>{{$order->customer_name}}</span>
-                            </td>
+                            </td>   
                         </tr>
-
+                        
                         <tr class="row">
                             <td class="col-6">
                                 <strong class="">Customer Instruction</strong><br>
                                 <p>{{ $orderInstruction ? $orderInstruction->instruction : 'No instruction available.' }}</p>
+                                    
+                                    <!-- <button type="button"
+                                                    class="btn btn-sm rounded-pill btn-primary m-2">Update</button> -->
+                                
                             </td>
                             <td class="col-6">
                                 <strong>Admin Instruction</strong><br>

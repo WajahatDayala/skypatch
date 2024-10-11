@@ -109,7 +109,7 @@
                                         Instruction</label>
                                     <div class="col-sm-8">
                                         <textarea class="form-control" name="additional_instruction" placeholder="Leave a comment here"
-                                            id="floatingTextarea" style="height: 150px;">{{$quoteInstruction->instruction}}</textarea>
+                                            id="floatingTextarea" style="height: 150px;">{{$quoteInstruction?$quoteInstruction->instruction:''}}</textarea>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
