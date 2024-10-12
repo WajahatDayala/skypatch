@@ -24,43 +24,44 @@
                                 <tbody>
                                     <tr class="table-info">
                                         <td colspan="2" class="text-center">Personal Information
-                                            <a href="" class="btn btn-sm btn-primary">Update</a>
+                                            <a href="{{ route('my-profile.edit', ['my_profile' => $user->id]) }}" class="btn btn-sm btn-primary">Update</a>
                                         </td>
                                     </tr>
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">ID</b><br>
-                                            2
+                                            {{$user->id}}
                                         </td>
                                         <td><b class="fw-bold">Name</b><br>
-                                            David
+                                            {{$user->name}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Company Name
                                             </b><br>
-                                            1234
+                                            {{$user->company_name}}
                                         </td>
                                         <td><b class="fw-bold">Company Type
                                             </b><br>
-                                            David
+                                            {{$user->company_type}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Phone
                                             </b><br>
-                                            1234
+                                            {{$user->phone}}
                                         </td>
                                         <td><b class="fw-bold">Cell
                                             </b><br>
-                                            David
+                                            {{$user->cell}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td colspan="2"><b class="fw-bold">Fax
                                             </b><br>
+                                            {{$user->fax}}
                                         </td>
                                     </tr>
 
@@ -68,55 +69,55 @@
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Email Address#1
                                             </b><br>
-                                            david12@test.com
+                                            {{$user->email_1}}
                                         </td>
                                         <td><b class="fw-bold">Email Address#2
                                             </b><br>
-                                            david2@test.com
+                                            {{$user->email_2}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Email Address#3
                                             </b><br>
-                                            david3@test.com
+                                            {{$user->email_3}}
                                         </td>
                                         <td><b class="fw-bold">Email Address#4
                                             </b><br>
-                                            david4@test.com
+                                            {{$user->email_4}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Address
                                             </b><br>
-
+                                            {{$user->address}}
                                         </td>
                                         <td><b class="fw-bold">City
                                             </b><br>
-
+                                            {{$user->city}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">State
                                             </b><br>
-
+                                            {{$user->state}}
                                         </td>
                                         <td><b class="fw-bold">Zipcode
                                             </b><br>
-
+                                            {{$user->zipcode}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Country
                                             </b><br>
-
+                                            {{$user->country}}
                                         </td>
                                         <td><b class="fw-bold">Registration Date
                                             </b><br>
-
+                                            {{$user->created_at}}
                                         </td>
                                     </tr>
 
@@ -126,9 +127,9 @@
                                             </b><br>
                                             david@skypatch.com
                                         </td>
-                                        <td><b class="fw-bold">Password
+                                        <td><b class="fw-bold">
                                             </b><br>
-                                            test12345
+                                           
                                         </td>
                                     </tr>
 

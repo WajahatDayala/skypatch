@@ -12,6 +12,7 @@ use App\Models\QuoteFileLog;
 use App\Models\Instruction;
 use App\Models\Status;
 use App\Models\QuoteEditID;
+use App\Models\Order;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -46,8 +47,20 @@ class QuotesController extends Controller
         $quoteEdit =QuoteEditID::select('*','quote_edit_i_d_s.id as quoteEditId')
         ->join('quotes','quote_edit_i_d_s.quote_id','=','quotes.id')
         ->get();
-        return view('customer/quotes/index',['quotes'=>$quotes,'quoteEdit'=>$quoteEdit]);
-    }
+
+        //convertQuotes
+        $quoteConvertedOrder = Order::select('*','orders.quote_id as orderQuoteId')
+        ->join('quotes','orders.quote_id','=','quotes.id')
+        ->get();
+
+
+        return view('customer/quotes/index',
+        ['quotes'=>$quotes,
+        'quoteEdit'=>$quoteEdit,
+        'quoteConvertedOrder' => $quoteConvertedOrder 
+        ]);
+   
+}
 
     public function todayDayQuote()
     {
@@ -350,6 +363,41 @@ class QuotesController extends Controller
         }
     }
     
+    public function convertToOrder($quoteId)
+    {
+        // Retrieve the quote using the provided ID
+        $quote = Quote::find($quoteId);
+    
+        if (!$quote) {
+            return response()->json(['status' => 'not_found'], 404);
+        }
+    
+        // Create a new order based on the quote data
+        $order = new Order();
+        $order->customer_id = $quote->customer_id; // Assuming customer_id exists
+        $order->quote_id  = $quote->id;; // Assuming customer_id exists
+        $order->required_format_id = $quote->required_format_id;
+        $order->fabric_id = $quote->fabric_id;
+        $order->placement_id = $quote->placement_id;
+        $order->status_id = $quote->status_id; // Set the initial status
+    
+        $order->name = $quote->name; // Adjust as needed
+        $order->height = $quote->height;
+        $order->width = $quote->width;
+        $order->number_of_colors = $quote->number_of_colors;
+        $order->super_urgent = $quote->super_urgent;
+    
+        // Save the order
+        $order->save();
+    
+        // Optionally, update the quote status or perform other actions
+    
+        return response()->json(['status' => 'converted']);
+    }
+    
+
+
+
 
     /**
      * Remove the specified resource from storage.

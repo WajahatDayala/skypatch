@@ -33,6 +33,9 @@ Route::middleware('auth')->group(function () {
     //vector orders
     Route::resource('/customer/vector-orders',VectorsController::class);
  
+    //convert quotes to order
+    Route::post('/customer/convert-quote/{quoteId}', [QuotesController::class, 'convertToOrder']);
+
     
 });
 

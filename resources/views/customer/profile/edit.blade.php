@@ -1,0 +1,173 @@
+@extends('customer.profile.base')
+@section('action-content')
+
+<!-- Blank Start -->
+<div class="container-fluid py-4 px-4">
+    <div class="row g-4 d-flex align-items-center justify-content-center">
+        <div class="col-8">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4 text-center">Update Personal Information</h6> 
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route('my-profile.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT') <!-- Use PUT method for updating -->
+
+                    <div class="row mb-3">
+                        <label for="name" class="col-sm-4 col-form-label text-end">Name*</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ $user->name }}" required>
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror   
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="email" class="col-sm-4 col-form-label text-end">Email*</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="email" class="form-control" id="email" value="{{ $user->email }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="new_password" class="col-sm-4 col-form-label text-end">New Password</label>
+                        <div class="col-sm-8">
+                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="new_password" placeholder="Leave blank to keep current password">
+                            @error('password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="contact_name" class="col-sm-4 col-form-label text-end">Contact Name*</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="contact_name" class="form-control" id="contact_name" value="{{ $user->contact_name }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="company_name" class="col-sm-4 col-form-label text-end">Company Name*</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="company_name" class="form-control" id="company_name" value="{{ $user->company_name }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="company_type" class="col-sm-4 col-form-label text-end">Company Type*</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="company_type" class="form-control" id="company_type" value="{{ $user->company_type }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="phone" class="col-sm-4 col-form-label text-end">Phone*</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="phone" class="form-control" id="phone" value="{{ $user->phone }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="cell" class="col-sm-4 col-form-label text-end">Cell</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="cell" class="form-control" id="cell" value="{{ $user->cell }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="fax" class="col-sm-4 col-form-label text-end">Fax</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="fax" class="form-control" id="fax" value="{{ $user->fax }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="email_1" class="col-sm-4 col-form-label text-end">Email 1*</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="email_1" class="form-control" id="email_1" value="{{ $user->email_1 }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="email_2" class="col-sm-4 col-form-label text-end">Email 2</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="email_2" class="form-control" id="email_2" value="{{ $user->email_2 }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="email_3" class="col-sm-4 col-form-label text-end">Email 3</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="email_3" class="form-control" id="email_3" value="{{ $user->email_3 }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="email_4" class="col-sm-4 col-form-label text-end">Email 4</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="email_4" class="form-control" id="email_4" value="{{ $user->email_4 }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="address" class="col-sm-4 col-form-label text-end">Address</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="address" class="form-control" id="address" value="{{ $user->address }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="city" class="col-sm-4 col-form-label text-end">City</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="city" class="form-control" id="city" value="{{ $user->city }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="state" class="col-sm-4 col-form-label text-end">State</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="state" class="form-control" id="state" value="{{ $user->state }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="zipcode" class="col-sm-4 col-form-label text-end">Zipcode</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="zipcode" class="form-control" id="zipcode" value="{{ $user->zipcode }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="country" class="col-sm-4 col-form-label text-end">Country</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="country" class="form-control" id="country" value="{{ $user->country }}">
+                        </div>
+                    </div>
+
+                    
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-8">
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Blank End -->
+
+@endsection
