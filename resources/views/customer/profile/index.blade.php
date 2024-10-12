@@ -13,132 +13,230 @@
         <div class="container-fluid">
             <div class="bg-light text-center rounded p-4">
                 <div class="d-flex flex-column align-items-start justify-content-between mb-4">
-                    
+                    <h6 class="mb-0"></h6>
                 </div>
-                <!-- Profile Info Panel -->
-        <div class="row">
-        <div class="col-md-6">
-            <div class="card  bg-light mb-4">
-                <div class="card-header bg-default">
-                    <h5>Profile Information</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
-                        <tbody>
-                            <tr>
-                                <td><strong>ID:</strong></td>
-                                <td>123</td>
-                                <td><strong>Name:</strong></td>
-                                <td>ab</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Company Name:</strong></td>
-                                <td>abc</td>
-                                <td><strong>Company Type:</strong></td>
-                                <td>dd</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Phone:</strong></td>
-                                <td>032-</td>
-                                <td><strong>Cell:</strong></td>
-                                <td>dd</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Fax:</strong></td>
-                                <td></td>
-                                <td><strong>Email Address 1:</strong></td>
-                                <td>ad@ad.com</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Email Address 2:</strong></td>
-                                <td>ad@d.com</td>
-                                <td><strong>Email Address 3:</strong></td>
-                                <td>Office@dddddd.com</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Email Address 4:</strong></td>
-                                <td>ali@ddddddd.com</td>
-                                <td><strong>Address:</strong></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><strong>City:</strong></td>
-                                <td></td>
-                                <td><strong>State:</strong></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Zipcode:</strong></td>
-                                <td></td>
-                                <td><strong>Country:</strong></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Registration Date:</strong></td>
-                                <td>2013-10-01 23:05:12</td>
-                                <td><strong>Username:</strong></td>
-                                <td>anv</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Password:</strong></td>
-                                <td>dd</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+                <div class="row">
+                    <!--profile info-->
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table class="table table-fixed text-start align-middle table-bordered mb-0">
 
-        <!-- Billing Info Panel -->
-        <div class="col-md-6">
-            <div class="card bg-light mb-4">
-                <div class="card-header">
-                    <h5>Billing Information</h5>
+                                <tbody>
+                                    <tr class="table-info">
+                                        <td colspan="2" class="text-center">Personal Information
+                                            <a href="" class="btn btn-sm btn-primary">Update</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">ID</b><br>
+                                            2
+                                        </td>
+                                        <td><b class="fw-bold">Name</b><br>
+                                            David
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">Company Name
+                                            </b><br>
+                                            1234
+                                        </td>
+                                        <td><b class="fw-bold">Company Type
+                                            </b><br>
+                                            David
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">Phone
+                                            </b><br>
+                                            1234
+                                        </td>
+                                        <td><b class="fw-bold">Cell
+                                            </b><br>
+                                            David
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bg-white">
+                                        <td colspan="2"><b class="fw-bold">Fax
+                                            </b><br>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">Email Address#1
+                                            </b><br>
+                                            david12@test.com
+                                        </td>
+                                        <td><b class="fw-bold">Email Address#2
+                                            </b><br>
+                                            david2@test.com
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">Email Address#3
+                                            </b><br>
+                                            david3@test.com
+                                        </td>
+                                        <td><b class="fw-bold">Email Address#4
+                                            </b><br>
+                                            david4@test.com
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">Address
+                                            </b><br>
+
+                                        </td>
+                                        <td><b class="fw-bold">City
+                                            </b><br>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">State
+                                            </b><br>
+
+                                        </td>
+                                        <td><b class="fw-bold">Zipcode
+                                            </b><br>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">Country
+                                            </b><br>
+
+                                        </td>
+                                        <td><b class="fw-bold">Registration Date
+                                            </b><br>
+
+                                        </td>
+                                    </tr>
+
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">Email
+                                            </b><br>
+                                            david@skypatch.com
+                                        </td>
+                                        <td><b class="fw-bold">Password
+                                            </b><br>
+                                            test12345
+                                        </td>
+                                    </tr>
+
+
+
+
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!--profile info-->
+
+
+                    <!--bill info-->
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table class="table table-fixed text-start align-middle table-bordered mb-0">
+
+                                <tbody>
+                                    <tr class="table-info">
+                                        <td colspan="2" class="text-center">Bill Information
+                                            <a href="" class="btn btn-sm btn-primary">Update</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">Card Holder's Name
+                                        </b><br>
+                                            
+                                        </td>
+                                        <td><b class="fw-bold">Card Type
+                                        </b><br>
+                                            Select Card Type
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">Card Number
+                                            </b><br>
+                                            
+                                        </td>
+                                        <td><b class="fw-bold">Card Expiry
+                                            </b><br>
+                                            /
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">VCC
+                                            </b><br>
+                                            
+                                        </td>
+                                        <td><b class="fw-bold">Address
+                                            </b><br>
+                                            
+                                        </td>
+                                    </tr>
+
+
+
+                        
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">City
+                                            </b><br>
+
+                                        </td>
+                                        <td><b class="fw-bold">State
+                                            </b><br>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bg-white">
+                                        <td><b class="fw-bold">Zipcode
+                                            </b><br>
+
+                                        </td>
+                                        <td><b class="fw-bold">Country
+                                            </b><br>
+
+                                        </td>
+                                    </tr>
+
+                          
+
+                               
+
+
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!--bill info-->
+
                 </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
-                        <tbody>
-                            <tr>
-                                <td><strong>Card Holder's Name:</strong></td>
-                                <td></td>
-                                <td><strong>Card Type:</strong></td>
-                                <td>Select Card Type</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Card Number:</strong></td>
-                                <td></td>
-                                <td><strong>Card Expiry:</strong></td>
-                                <td>/</td>
-                            </tr>
-                            <tr>
-                                <td><strong>VCC:</strong></td>
-                                <td></td>
-                                <td><strong>Address:</strong></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><strong>City:</strong></td>
-                                <td></td>
-                                <td><strong>State:</strong></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Zipcode:</strong></td>
-                                <td></td>
-                                <td><strong>Country:</strong></td>
-                                <td>pk</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+
+
+
+
             </div>
         </div>
         <!-- Recent Sales End -->
-        </div>
     </div>
 </div>
 <!-- Blank End -->
