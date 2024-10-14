@@ -46,14 +46,19 @@
                                     @endif
                                     {{$q->date_finalized}}
                                 </td>
-                                <td>{{$q->design_name}}
+                                @if($q->quote_id_edit ==null)
+                                <td>{{$q->design_name}}</td>
+                                @else
+                                      <td>{{$q->design_name}}
 
                                     @foreach($quoteEdit as $e)
-                                    @if($q->order_id == $e->quote_id)
-                                    (QT-{{$e->quoteEditId}})
+                                    @if($q->order_id == $e->quoteEditedId)
+                                    (QT-{{$e->quoteEditedId}})
                                     @endif
                                     @endforeach
                                 </td>
+                                @endif
+                              
                                 <td>{{$q->customer_name}}</td>
 
                                 <td>
@@ -75,7 +80,7 @@
                                     @endphp
 
                                     @if($isConverted)
-                                    <span class="m-2">Converted</span>
+                                    <span class=" m-2">Converted</span>
                                     @else
                                     <button class="btn btn-sm btn-primary rounded-pill m-2"
                                         onclick="convertQuote({{ $q->order_id }})">

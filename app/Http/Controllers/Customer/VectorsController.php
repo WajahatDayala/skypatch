@@ -298,7 +298,9 @@ class VectorsController extends Controller
     
             DB::commit();
             
-            return redirect()->route('vector-orders.edit', $order->id)->with('success', 'Order updated successfully!');
+           // return redirect()->route('vector-orders.edit', $order->id)->with('success', 'Order updated successfully!');
+
+           return redirect()->route('vector-orders.index')->with('success', 'Order updated successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Error updating Order: ' . $e->getMessage());

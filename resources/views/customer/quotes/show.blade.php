@@ -90,6 +90,24 @@
                             </td>
                         </tr>
 
+
+                        <tr class="row">
+                            <td class="col-6">
+                                <strong class="">Price</strong><br>
+                                <p></p>
+                                    <!-- <button type="button"
+                                                    class="btn btn-sm rounded-pill btn-primary m-2">Update</button> -->
+
+                            </td>
+                            <td class="col-6">
+                                <strong>Stitching </strong><br>
+                                <p>
+                                   
+
+                                </p>
+                            </td>
+                        </tr>
+
                         <tr class="row">
                             <td class="col-6">
                                 <strong class="">Customer Instruction</strong><br>

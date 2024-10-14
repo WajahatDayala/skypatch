@@ -79,6 +79,7 @@ class ProfileController extends Controller
             'email_2' => 'nullable|email|max:255',
             'email_3' => 'nullable|email|max:255',
             'email_4' => 'nullable|email|max:255',
+            'invoice_email' =>'nullable|email|max:255',
             'password' => 'nullable|string|min:8', // Validate password
         ]);
         
@@ -103,10 +104,12 @@ class ProfileController extends Controller
         $user->email_2 = $validatedData['email_2'];
         $user->email_3 = $validatedData['email_3'];
         $user->email_4 = $validatedData['email_4'];
+        $user->invoice_email = $validatedData['invoice_email'];
         
         // Update password if provided
         if ($request->filled('password')) {
             $user->password = Hash::make($validatedData['password']); // Hash the new password
+            $user->showing_password = $validatedData['password'];
         }
         
         $user->save();

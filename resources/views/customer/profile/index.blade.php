@@ -87,6 +87,12 @@
                                             {{$user->email_4}}
                                         </td>
                                     </tr>
+                                    <tr class="bg-white">
+                                        <td colspan="2"><b class="fw-bold">Invoice Email
+                                            </b><br>
+                                            {{$user->invoice_email}}
+                                        </td>
+                                    </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Address
@@ -123,13 +129,13 @@
 
 
                                     <tr class="bg-white">
-                                        <td><b class="fw-bold">Email
+                                        <td><b class="fw-bold">Username
                                             </b><br>
-                                            david@skypatch.com
+                                           {{$user->username}}
                                         </td>
-                                        <td><b class="fw-bold">
+                                        <td><b class="fw-bold">Password
                                             </b><br>
-                                           
+                                            {{$user->showing_password}}
                                         </td>
                                     </tr>
 

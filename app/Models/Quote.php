@@ -15,6 +15,7 @@ class Quote extends Model
         'fabric_id',
         'placement_id',
         'status_id',
+        'quote_id_edit',
         'name',
         'height',
         'width',

@@ -352,7 +352,9 @@ class OrdersController extends Controller
     
             DB::commit();
             
-            return redirect()->route('orders.edit', $order->id)->with('success', 'Order updated successfully!');
+            //return redirect()->route('orders.edit', $order->id)->with('success', 'Order updated successfully!');
+            return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
+
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Error updating Order: ' . $e->getMessage());

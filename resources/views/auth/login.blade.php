@@ -38,14 +38,31 @@
         @csrf
 
         <!-- Email Address -->
-        <div class="form-floating mb-3">
+        <!-- <div class="form-floating mb-3">
            
             <x-text-input  class="block mt-1 w-full" 
             class="form-control" id="floatingInput"
             type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="name@example.com" />
             <x-input-error :messages="$errors->get('email')" class="mt-2"  />
             <x-input-label for="email" :value="__('Email')" />
-        </div>
+        </div> -->
+
+        <!-- Username -->
+        <div class="form-floating mb-3">
+                                <x-text-input
+                                    class="form-control block mt-1 w-full"
+                                    id="floatingInput"
+                                    type="text"
+                                    name="username"
+                                    :value="old('username')"
+                                    required
+                                    autofocus
+                                    autocomplete="username"
+                                    placeholder="Username" 
+                                />
+                                <x-input-error :messages="$errors->get('username')" class="mt-2" />
+                                <x-input-label for="username" :value="__('Username')" />
+                            </div>
 
         <!-- Password -->
         <div class="form-floating mb-4">

@@ -6,10 +6,14 @@ use App\Http\Controllers\customer\VectorsController;
 //use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\customer\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
+
 
 Route::get('/', function () {
+
     return view('auth/login');
 });
+
 
 Route::get('/dashboard', function () {
     return view('customer/dashboard');

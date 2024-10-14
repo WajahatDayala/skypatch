@@ -23,6 +23,17 @@
                     @csrf
                     @method('PUT') <!-- Use PUT method for updating -->
 
+
+                    <div class="row mb-3">
+                        <label for="userId" class="col-sm-4 col-form-label text-end">ID</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="userId" class="form-control @error('userId') is-invalid @enderror" id="id" value="{{ $user->id }}" readonly>
+                            @error('userId')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror   
+                        </div>
+                    </div>
+
                     <div class="row mb-3">
                         <label for="name" class="col-sm-4 col-form-label text-end">Name*</label>
                         <div class="col-sm-8">
@@ -37,6 +48,25 @@
                         <label for="email" class="col-sm-4 col-form-label text-end">Email*</label>
                         <div class="col-sm-8">
                             <input type="email" name="email" class="form-control" id="email" value="{{ $user->email }}" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="username" class="col-sm-4 col-form-label text-end">Username</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="username" class="form-control @error('userId') is-invalid @enderror" id="username" value="{{ $user->username }}" readonly>
+                            @error('username')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror   
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="showing_password" class="col-sm-4 col-form-label text-end">Current Password</label>
+                        <div class="col-sm-8">
+                            <input type="text" readonly  name="showing_password" class="form-control @error('showing_password') is-invalid @enderror" id="showing_password" value="{{$user->showing_password}}">
+                            @error('showing_password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 
@@ -117,6 +147,12 @@
                         <label for="email_4" class="col-sm-4 col-form-label text-end">Email 4</label>
                         <div class="col-sm-8">
                             <input type="email" name="email_4" class="form-control" id="email_4" value="{{ $user->email_4 }}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="invoice_email" class="col-sm-4 col-form-label text-end">Invoice Email</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="invoice_email" class="form-control" id="invoice_email" value="{{ $user->invoice_email }}">
                         </div>
                     </div>
 

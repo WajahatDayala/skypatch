@@ -11,7 +11,7 @@ use App\Models\Quote;
 use App\Models\QuoteFileLog;
 use App\Models\Instruction;
 use App\Models\Status;
-use App\Models\QuoteEditID;
+//use App\Models\QuoteEditID;
 use App\Models\Order;
 use Validator;
 use Illuminate\Support\Facades\Storage;
@@ -44,9 +44,13 @@ class QuotesController extends Controller
         ->where('customer_id',Auth::id())
         ->get();
 
-        $quoteEdit =QuoteEditID::select('*','quote_edit_i_d_s.id as quoteEditId')
-        ->join('quotes','quote_edit_i_d_s.quote_id','=','quotes.id')
+        // $quoteEdit =QuoteEditID::select('*','quote_edit_i_d_s.id as quoteEditId')
+        // ->join('quotes','quote_edit_i_d_s.quote_id','=','quotes.id')
+        // ->get();
+
+        $quoteEdit = Quote::select('quote_id_edit as quoteEditedId')
         ->get();
+
 
         //convertQuotes
         $quoteConvertedOrder = Order::select('*','orders.quote_id as orderQuoteId')
@@ -55,8 +59,9 @@ class QuotesController extends Controller
 
 
         return view('customer/quotes/index',
-        ['quotes'=>$quotes,
-        'quoteEdit'=>$quoteEdit,
+        [
+        'quotes'=>$quotes,
+        'quoteEdit' =>$quoteEdit,    
         'quoteConvertedOrder' => $quoteConvertedOrder 
         ]);
    
@@ -307,23 +312,39 @@ class QuotesController extends Controller
         $quote = Quote::findOrFail($id);
     
         try {
-            $quote->update([
-                'required_format_id' => $request->required_format_id,
-                'fabric_id' => $request->fabric_id,
-                'placement_id' => $request->placement_id,
-                'status_id' => $request->status,
-                'name' => $request->name,
-                'height' => $request->height,
-                'width' => $request->width,
-                'number_of_colors' => $request->number_of_colors,
-                'super_urgent' => $request->has('super_urgent'),
-            ]);
+            // $quote->update([
+            //     'required_format_id' => $request->required_format_id,
+            //     'fabric_id' => $request->fabric_id,
+            //     'placement_id' => $request->placement_id,
+            //     'status_id' => $request->status,
+            //     'name' => $request->name,
+            //     'height' => $request->height,
+            //     'width' => $request->width,
+            //     'number_of_colors' => $request->number_of_colors,
+            //     'super_urgent' => $request->has('super_urgent'),
+            // ]);
+
+
+                // Create a new Quote
+                $quote = Quote::create([
+                    'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                    'required_format_id' => $request->required_format_id,
+                    'fabric_id' => $request->fabric_id,
+                    'placement_id' => $request->placement_id,
+                    'status_id' => $request->status,
+                    'quote_id_edit' =>$quote->id,
+                    'name' => $request->name,
+                    'height' => $request->height,
+                    'width' => $request->width,
+                    'number_of_colors' => $request->number_of_colors,
+                    'super_urgent' => $request->has('super_urgent'),
+                ]);
     
 
-            //quote edit Id
-            $quoteId =  new QuoteEditID();
-            $quoteId->quote_id = $quote->id;
-            $quoteId->save();
+            //removed quote edit Id
+            // $quoteId =  new QuoteEditID();
+            // $quoteId->quote_id = $quote->id;
+            // $quoteId->save();
 
             // Handle file uploads
             if ($request->hasFile('files')) {
@@ -355,7 +376,8 @@ class QuotesController extends Controller
     
             DB::commit();
             
-            return redirect()->route('quotes.edit', $quote->id)->with('success', 'Quote updated successfully!');
+            //return redirect()->route('quotes.edit', $quote->id)->with('success', 'Quote updated successfully!');
+            return redirect()->route('quotes.index')->with('success', 'Quote updated successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Error updating quote: ' . $e->getMessage());
