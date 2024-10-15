@@ -13,8 +13,10 @@
                     <div class="col-6 d-flex align-items-center justify-content-end">
                         <!-- <button type="button"
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button> -->
+                        @if($quote->edit_status == 1)
                         <a type="button" href="{{ route('quotes.edit', ['quote' => $quote->order_id]) }}"
                             class="btn btn-sm btn-dark rounded-pill ">Edit</a>
+                        @endif
                     </div>
                 </div>
                 <table class="table table-bordered">
@@ -50,11 +52,7 @@
                             <td class="col-3">
                                 <strong>Design Name/PO</strong><br>
                                 <span>{{$quote->design_name}}
-                                    @foreach($quoteEdit as $e)
-                                    @if($quote->order_id == $e->quote_id)
-                                        (QT-{{$e->quoteEditId}})
-                                    @endif
-                                    @endforeach
+                                 
                                 </span>
                             </td>
                             <td class="col-3">

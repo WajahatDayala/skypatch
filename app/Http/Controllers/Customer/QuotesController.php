@@ -48,9 +48,7 @@ class QuotesController extends Controller
         // ->join('quotes','quote_edit_i_d_s.quote_id','=','quotes.id')
         // ->get();
 
-        $quoteEdit = Quote::select('quote_id_edit as quoteEditedId')
-        ->get();
-
+    
 
         //convertQuotes
         $quoteConvertedOrder = Order::select('*','orders.quote_id as orderQuoteId')
@@ -60,8 +58,7 @@ class QuotesController extends Controller
 
         return view('customer/quotes/index',
         [
-        'quotes'=>$quotes,
-        'quoteEdit' =>$quoteEdit,    
+        'quotes'=>$quotes,   
         'quoteConvertedOrder' => $quoteConvertedOrder 
         ]);
    
@@ -213,9 +210,7 @@ class QuotesController extends Controller
         ->first(); 
 
 
-        $quoteEdit =QuoteEditID::select('*','quote_edit_i_d_s.id as quoteEditId')
-        ->join('quotes','quote_edit_i_d_s.quote_id','=','quotes.id')
-        ->get();
+       
 
          //instruction
          $quoteInstruction = Quote::select('*','instructions.description as instruction') 
@@ -228,8 +223,7 @@ class QuotesController extends Controller
 
         return view('customer/quotes/show',compact(
             'quote',
-            'quoteInstruction',
-            'quoteEdit'
+            'quoteInstruction'
         ));
     }
 
@@ -325,7 +319,14 @@ class QuotesController extends Controller
             // ]);
 
 
+            $quote->update(['edit_status' => 0]);
+
+            //get all quote info 
+          
+
+
                 // Create a new Quote
+                if($quote->quote_id == null){
                 $quote = Quote::create([
                     'customer_id' => $request->customer_id, // Get the authenticated user's ID
                     'required_format_id' => $request->required_format_id,
@@ -333,12 +334,34 @@ class QuotesController extends Controller
                     'placement_id' => $request->placement_id,
                     'status_id' => $request->status,
                     'quote_id_edit' =>$quote->id,
-                    'name' => $request->name,
+                    'edit_status' => 1,
+                    'name' => $request->name.' ',('QT-'.$quote->id),
                     'height' => $request->height,
                     'width' => $request->width,
                     'number_of_colors' => $request->number_of_colors,
                     'super_urgent' => $request->has('super_urgent'),
                 ]);
+            }
+            else {
+
+                
+                $quote = Quote::create([
+                    'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                    'required_format_id' => $request->required_format_id,
+                    'fabric_id' => $request->fabric_id,
+                    'placement_id' => $request->placement_id,
+                    'status_id' => $request->status,
+                    'quote_id_edit' =>$quote->id,
+                    'edit_status' => 1,
+                    'name' => $request->name.' ', 'QT-'.$id.','.'QT-'.$quote->id,
+                    
+                    'height' => $request->height,
+                    'width' => $request->width,
+                    'number_of_colors' => $request->number_of_colors,
+                    'super_urgent' => $request->has('super_urgent'),
+                ]);
+
+            }
     
 
             //removed quote edit Id

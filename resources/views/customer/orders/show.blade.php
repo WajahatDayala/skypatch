@@ -13,6 +13,7 @@
                     <div class="col-6 d-flex align-items-center justify-content-end">
                         <!-- <button type="button"
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button> -->
+                        
                         <a type="button" href="{{ route('orders.edit', ['order' => $order->order_id]) }}"
                                         class="btn btn-sm btn-dark rounded-pill ">Edit</a>
                     </div>

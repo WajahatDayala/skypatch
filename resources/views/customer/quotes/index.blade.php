@@ -46,18 +46,9 @@
                                     @endif
                                     {{$q->date_finalized}}
                                 </td>
-                                @if($q->quote_id_edit ==null)
+                              
                                 <td>{{$q->design_name}}</td>
-                                @else
-                                      <td>{{$q->design_name}}
-
-                                    @foreach($quoteEdit as $e)
-                                    @if($q->order_id == $e->quoteEditedId)
-                                    (QT-{{$e->quoteEditedId}})
-                                    @endif
-                                    @endforeach
-                                </td>
-                                @endif
+                               
                               
                                 <td>{{$q->customer_name}}</td>
 
