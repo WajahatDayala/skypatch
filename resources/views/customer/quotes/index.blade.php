@@ -47,8 +47,13 @@
                                     {{$q->date_finalized}}
                                 </td>
                               
-                                <td>{{$q->design_name}}</td>
                                
+                                <td>
+                                
+                                {{$q->design_name}}
+
+                                </td>
+                                
                               
                                 <td>{{$q->customer_name}}</td>
 

@@ -42,6 +42,7 @@ class QuotesController extends Controller
         ->join('users','quotes.customer_id','=','users.id')
         ->join('statuses','quotes.status_id','statuses.id')
         ->where('customer_id',Auth::id())
+        ->orderBy('design_name','ASC')
         ->get();
 
         // $quoteEdit =QuoteEditID::select('*','quote_edit_i_d_s.id as quoteEditId')
@@ -321,28 +322,26 @@ class QuotesController extends Controller
 
             $quote->update(['edit_status' => 0]);
 
-            //get all quote info 
-          
 
-
-                // Create a new Quote
-                if($quote->quote_id == null){
+            // Create a new Quote
+            if ($quote->quote_id == null) {
                 $quote = Quote::create([
                     'customer_id' => $request->customer_id, // Get the authenticated user's ID
                     'required_format_id' => $request->required_format_id,
                     'fabric_id' => $request->fabric_id,
                     'placement_id' => $request->placement_id,
                     'status_id' => $request->status,
-                    'quote_id_edit' =>$quote->id,
+                    'quote_id_edit' => $quote->id,
                     'edit_status' => 1,
-                    'name' => $request->name.' ',('QT-'.$quote->id),
+                   
+                    'name' => $request->name . '(' . 'QT-' . $quote->id.')',
+              
                     'height' => $request->height,
                     'width' => $request->width,
                     'number_of_colors' => $request->number_of_colors,
                     'super_urgent' => $request->has('super_urgent'),
                 ]);
-            }
-            else {
+            } else {
 
                 
                 $quote = Quote::create([
@@ -351,10 +350,12 @@ class QuotesController extends Controller
                     'fabric_id' => $request->fabric_id,
                     'placement_id' => $request->placement_id,
                     'status_id' => $request->status,
-                    'quote_id_edit' =>$quote->id,
+                    'quote_id_edit' => $quote->id,
                     'edit_status' => 1,
-                    'name' => $request->name.' ', 'QT-'.$id.','.'QT-'.$quote->id,
                     
+                    //'name' => $request->name . '(QT-'.''.$id.'),('.'QT-'.$quote->id.')',
+                    'name' => $request->name . '(QT-' . (string)$id . '),(QT-' . (string)$quote->id . ')',
+
                     'height' => $request->height,
                     'width' => $request->width,
                     'number_of_colors' => $request->number_of_colors,
