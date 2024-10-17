@@ -71,13 +71,9 @@
                                 <td>OR-{{$q->order_id}}</td>
                                
                                 
-                                <td>{{$q->design_name}}
+                                <td>{{$q->design_name}} {{$q->description}} 
 
-                                    @foreach($orderEdit as $e)
-                                    @if($q->order_id == $e->order_id)
-                                    (OR-{{$e->orderEditId}})
-                                    @endif
-                                    @endforeach
+                                 
                                 </td>
                               
                                 <td>{{$q->created_at}}</td>

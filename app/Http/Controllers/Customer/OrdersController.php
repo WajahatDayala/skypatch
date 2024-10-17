@@ -41,12 +41,11 @@ class OrdersController extends Controller
         ->join('users','orders.customer_id','=','users.id')
         ->join('statuses','orders.status_id','statuses.id')
         ->where('customer_id',Auth::id())
+        ->orderBy('design_name','ASC')
         ->get();
 
-        $orderEdit =OrderEditID::select('*','order_edit_i_d_s.id as orderEditId')
-        ->join('orders','order_edit_i_d_s.order_id','=','orders.id')
-        ->get();
-        return view('customer/orders/index',['orders'=>$orders,'orderEdit'=>$orderEdit]);
+       
+        return view('customer/orders/index',['orders'=>$orders]);
     }
 
     public function todayDayQuote()
@@ -304,23 +303,63 @@ class OrdersController extends Controller
         $order = Order::findOrFail($id);
     
         try {
-            $order->update([
+
+             
+            // $order->update([
+            //     'required_format_id' => $request->required_format_id,
+            //     'fabric_id' => $request->fabric_id,
+            //     'placement_id' => $request->placement_id,
+            //     'status_id' => $request->status,
+            //     'name' => $request->name,
+            //     'height' => $request->height,
+            //     'width' => $request->width,
+            //     'number_of_colors' => $request->number_of_colors,
+            //     'super_urgent' => $request->has('super_urgent'),
+            // ]);
+
+        //status update 
+        $order->update(['edit_status' => 0]);
+
+            
+        if ($order->order_id == null) {
+
+            $order = order::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
                 'required_format_id' => $request->required_format_id,
                 'fabric_id' => $request->fabric_id,
                 'placement_id' => $request->placement_id,
+                'edit_order_id' => $order->id,
+                'edit_status' => 1,
+                'description' => $request->desc . '(' . 'OR-' . $order->id.')',
                 'status_id' => $request->status,
                 'name' => $request->name,
                 'height' => $request->height,
                 'width' => $request->width,
                 'number_of_colors' => $request->number_of_colors,
                 'super_urgent' => $request->has('super_urgent'),
-            ]);
-    
 
-            //order edit Id
-            $orderId =  new OrderEditID();
-            $orderId->order_id = $order->id;
-            $orderId->save();
+            ]);
+        }
+        else{
+            $order = order::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'fabric_id' => $request->fabric_id,
+                'placement_id' => $request->placement_id,
+                'edit_order_id' => $order->id,
+                'edit_status' => 1,
+                
+                'description' => $request->desc . '(OR-' . (string)$id . '),(OR-' . (string)$order->id . ')',
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'height' => $request->height,
+                'width' => $request->width,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+
+            ]);
+        }
+           
 
             // Handle file uploads
             if ($request->hasFile('files')) {

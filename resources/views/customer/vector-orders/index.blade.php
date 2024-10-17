@@ -71,13 +71,7 @@
                                 <td>VO-{{$q->order_id}}</td>
                                
                                 
-                                <td>{{$q->design_name}}
-
-                                    @foreach($orderVectorEdit as $e)
-                                    @if($q->order_id == $e->vector_order_id)
-                                    (VO-{{$e->orderEditId}})
-                                    @endif
-                                    @endforeach
+                                <td>{{$q->design_name}} {{$q->description}}
                                 </td>
                               
                                 <td>{{$q->created_at}}</td>

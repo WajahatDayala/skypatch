@@ -39,6 +39,7 @@ class VectorsController extends Controller
         ->join('users','vector_orders.customer_id','=','users.id')
         ->join('statuses','vector_orders.status_id','statuses.id')
         ->where('customer_id',Auth::id())
+        ->orderBy('design_name','asc')
         ->get();
 
         $orderVectorEdit =VectorEditID::select('*','vector_edit_i_d_s.id as orderEditId')
@@ -252,21 +253,54 @@ class VectorsController extends Controller
     
         DB::beginTransaction();
         $order = VectorOrder::findOrFail($id);
+
+        //status update 
+        $order->update(['edit_status' => 0]);
     
         try {
-            $order->update([
+            // $order->update([
+            //     'required_format_id' => $request->required_format_id,
+            //     'status_id' => $request->status,
+            //     'name' => $request->name,
+            //     'number_of_colors' => $request->number_of_colors,
+            //     'super_urgent' => $request->has('super_urgent'),
+            // ]);
+    
+                      
+        if ($order->order_id == null) {
+
+            $order = VectorOrder::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
                 'required_format_id' => $request->required_format_id,
+                'edit_vector_id' => $order->id,
+                'edit_status' => 1,
+                'description' => $request->desc . '(' . 'VO-' . $order->id.')',
                 'status_id' => $request->status,
                 'name' => $request->name,
                 'number_of_colors' => $request->number_of_colors,
                 'super_urgent' => $request->has('super_urgent'),
-            ]);
-    
 
-            //order edit Id
-            $orderId =  new VectorEditID();
-            $orderId->vector_order_id = $order->id;
-            $orderId->save();
+            ]);
+
+        }
+        else{
+
+            $order = VectorOrder::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'edit_vector_id' => $order->id,
+                'edit_status' => 1,
+                'description' => $request->desc . '(VO-' . (string)$id . '),(VO-' . (string)$order->id . ')',
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+
+            ]);
+
+
+        }
+        
 
             // Handle file uploads
             if ($request->hasFile('files')) {

@@ -29,7 +29,7 @@
                                         </span>
                                      @enderror   
                                     </div>
-                                   
+                                    <input hidden type="text" name="desc" class="form-control" value="{{$order->description}}">
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Required Format

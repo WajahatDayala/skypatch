@@ -307,17 +307,7 @@ class QuotesController extends Controller
         $quote = Quote::findOrFail($id);
     
         try {
-            // $quote->update([
-            //     'required_format_id' => $request->required_format_id,
-            //     'fabric_id' => $request->fabric_id,
-            //     'placement_id' => $request->placement_id,
-            //     'status_id' => $request->status,
-            //     'name' => $request->name,
-            //     'height' => $request->height,
-            //     'width' => $request->width,
-            //     'number_of_colors' => $request->number_of_colors,
-            //     'super_urgent' => $request->has('super_urgent'),
-            // ]);
+      
 
 
             $quote->update(['edit_status' => 0]);
@@ -333,8 +323,8 @@ class QuotesController extends Controller
                     'status_id' => $request->status,
                     'quote_id_edit' => $quote->id,
                     'edit_status' => 1,
-                   
-                    'name' => $request->name . '(' . 'QT-' . $quote->id.')',
+                    'description' => $request->desc . '(' . 'QT-' . $quote->id.')',
+                    'name' => $request->name,
               
                     'height' => $request->height,
                     'width' => $request->width,
@@ -352,9 +342,9 @@ class QuotesController extends Controller
                     'status_id' => $request->status,
                     'quote_id_edit' => $quote->id,
                     'edit_status' => 1,
-                    
+                    'description' => $request->desc . '(QT-' . (string)$id . '),(QT-' . (string)$quote->id . ')',
                     //'name' => $request->name . '(QT-'.''.$id.'),('.'QT-'.$quote->id.')',
-                    'name' => $request->name . '(QT-' . (string)$id . '),(QT-' . (string)$quote->id . ')',
+                    'name' => $request->name,
 
                     'height' => $request->height,
                     'width' => $request->width,

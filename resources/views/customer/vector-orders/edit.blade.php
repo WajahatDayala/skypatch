@@ -29,6 +29,7 @@
                                         </span>
                                      @enderror   
                                     </div>
+                                    <input hidden type="text" name="desc" class="form-control" value="{{$order->description}}">
                                    
                                 </div>
                                 <div class="row mb-3">

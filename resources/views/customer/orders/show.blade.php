@@ -13,9 +13,10 @@
                     <div class="col-6 d-flex align-items-center justify-content-end">
                         <!-- <button type="button"
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button> -->
-                        
+                        @if($order->edit_status == 1)
                         <a type="button" href="{{ route('orders.edit', ['order' => $order->order_id]) }}"
                                         class="btn btn-sm btn-dark rounded-pill ">Edit</a>
+                        @endif
                     </div>
                 </div>
                 <table class="table table-bordered">
@@ -50,13 +51,7 @@
                         <tr class="row">
                             <td class="col-3">
                                 <strong>Design Name/PO</strong><br>
-                                <span>{{$order->design_name}}
-                                    
-                                    @foreach($orderEdit as $e)
-                                    @if($order->order_id == $e->order_id)
-                                    (OR-{{$e->orderEditId}})
-                                    @endif
-                                    @endforeach
+                                <span>{{$order->design_name}} {{$order->description}}
                                 </span>
                             </td>
                             <td class="col-3">

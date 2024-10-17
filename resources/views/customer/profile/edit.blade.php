@@ -97,7 +97,31 @@
                     <div class="row mb-3">
                         <label for="company_type" class="col-sm-4 col-form-label text-end">Company Type*</label>
                         <div class="col-sm-8">
-                            <input type="text" name="company_type" class="form-control" id="company_type" value="{{ $user->company_type }}" required>
+                            <!-- <input type="text" name="company_type" class="form-control" id="company_type" value="{{ $user->company_type }}" required> -->
+                                         <select class="form-select" name="company_type" aria-label="Default select example">
+                                            <option value="" selected class='text-gray'>Company Type</option>
+                                          
+                                            <option value="Embroider" 
+                                            {{ $user->company_type == 'Embroider' ? 'selected' : '' }}>
+                                                Embroider
+                                            </option>
+                                           
+                                            <option value="Distributor" 
+                                            {{ $user->company_type == 'Distributor' ? 'selected' : '' }}>Distributor</option>
+                                            <option value="Promotional" 
+                                            {{ $user->company_type == 'Promotional' ? 'selected' : '' }}>Promotional</option>
+                                            <option value="Marketing" 
+                                            {{ $user->company_type == 'Marketing' ? 'selected' : '' }}>Marketing</option>
+                                            <option value="Manufacturers" 
+                                            {{ $user->company_type == 'Manufacturers' ? 'selected' : '' }}>Manufacturers</option>
+                                            <option value="Uniform/Apparels" 
+                                            {{ $user->company_type == 'Uniform/Apparels' ? 'selected' : '' }}>Uniform/Apparels</option>
+                                            <option value="Others" 
+                                            {{ $user->company_type == 'Others' ? 'selected' : '' }}>Others</option>
+
+                                           
+                                            </select>
+
                         </div>
                     </div>
 
@@ -187,7 +211,16 @@
                     <div class="row mb-3">
                         <label for="country" class="col-sm-4 col-form-label text-end">Country</label>
                         <div class="col-sm-8">
-                            <input type="text" name="country" class="form-control" id="country" value="{{ $user->country }}">
+                            <!-- <input type="text" name="country" class="form-control" id="country" value="{{ $user->country }}"> -->
+                            <select class="form-select" name="country" aria-label="Default select example">
+                                            <option value="" selected class='text-gray'>Select Country</option>
+                                            @foreach($country as $f)
+                                            <option value="{{ $f->name }}" 
+                                            {{ $user->country == $f->name ? 'selected' : '' }}>
+                                             {{ $f->name }}
+                                            </option>
+                                            @endforeach
+                                            </select>
                         </div>
                     </div>
 

@@ -50,7 +50,7 @@
                                
                                 <td>
                                 
-                                {{$q->design_name}}
+                                {{$q->design_name}} {{$q->description}}
 
                                 </td>
                                 

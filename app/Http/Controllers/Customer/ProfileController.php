@@ -8,6 +8,7 @@ use App\Models\User;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Country;
 class ProfileController extends Controller
 {
     /**
@@ -53,7 +54,8 @@ class ProfileController extends Controller
     {
         //
         $user = User::find($id);
-        return view('customer.profile.edit',compact('user'));
+        $country = Country::all();
+        return view('customer.profile.edit',compact('user','country'));
     }
 
     /**

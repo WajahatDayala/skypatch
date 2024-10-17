@@ -11,6 +11,9 @@ class VectorOrder extends Model
     protected $fillable = [
         'customer_id',
         'required_format_id',
+        'edit_vector_id',
+        'edit_status',
+        'description',
         'status_id',
         'name',
         'number_of_colors',

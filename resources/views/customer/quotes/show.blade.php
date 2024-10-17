@@ -51,7 +51,7 @@
                         <tr class="row">
                             <td class="col-3">
                                 <strong>Design Name/PO</strong><br>
-                                <span>{{$quote->design_name}}
+                                <span>{{$quote->design_name}} {{$quote->description}}
                                  
                                 </span>
                             </td>
