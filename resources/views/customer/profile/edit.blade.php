@@ -34,22 +34,9 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
-                        <label for="name" class="col-sm-4 col-form-label text-end">Name*</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ $user->name }}" required>
-                            @error('name')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror   
-                        </div>
-                    </div>
+                  
 
-                    <div class="row mb-3">
-                        <label for="email" class="col-sm-4 col-form-label text-end">Email*</label>
-                        <div class="col-sm-8">
-                            <input type="email" name="email" class="form-control" id="email" value="{{ $user->email }}" readonly>
-                        </div>
-                    </div>
+                  
                     <div class="row mb-3">
                         <label for="username" class="col-sm-4 col-form-label text-end">Username</label>
                         <div class="col-sm-8">
@@ -81,9 +68,12 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="contact_name" class="col-sm-4 col-form-label text-end">Contact Name*</label>
+                        <label for="name" class="col-sm-4 col-form-label text-end">Contact Name*</label>
                         <div class="col-sm-8">
-                            <input type="text" name="contact_name" class="form-control" id="contact_name" value="{{ $user->contact_name }}" required>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ $user->name }}" required>
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror   
                         </div>
                     </div>
 
@@ -147,32 +137,38 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="email_1" class="col-sm-4 col-form-label text-end">Email 1*</label>
+                        <label for="email" class="col-sm-4 col-form-label text-end">Email 1*</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="email" class="form-control  @error('email') is-invalid @enderror" id="email" value="{{ $user->email }}" readonly>
+                        </div>
+                        @error('email')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror   
+                    </div>
+
+                    <!--Email 2 -->
+                    <div class="row mb-3">
+                        <label for="email_1" class="col-sm-4 col-form-label text-end">Email 2</label>
                         <div class="col-sm-8">
                             <input type="email" name="email_1" class="form-control" id="email_1" value="{{ $user->email_1 }}" required>
                         </div>
                     </div>
-
+                      <!--Email 3 -->
                     <div class="row mb-3">
-                        <label for="email_2" class="col-sm-4 col-form-label text-end">Email 2</label>
+                        <label for="email_2" class="col-sm-4 col-form-label text-end">Email 3</label>
                         <div class="col-sm-8">
                             <input type="email" name="email_2" class="form-control" id="email_2" value="{{ $user->email_2 }}">
                         </div>
                     </div>
-
+                    <!--Email 4 -->
                     <div class="row mb-3">
-                        <label for="email_3" class="col-sm-4 col-form-label text-end">Email 3</label>
+                        <label for="email_3" class="col-sm-4 col-form-label text-end">Email 4</label>
                         <div class="col-sm-8">
                             <input type="email" name="email_3" class="form-control" id="email_3" value="{{ $user->email_3 }}">
                         </div>
                     </div>
 
-                    <div class="row mb-3">
-                        <label for="email_4" class="col-sm-4 col-form-label text-end">Email 4</label>
-                        <div class="col-sm-8">
-                            <input type="email" name="email_4" class="form-control" id="email_4" value="{{ $user->email_4 }}">
-                        </div>
-                    </div>
+                  
                     <div class="row mb-3">
                         <label for="invoice_email" class="col-sm-4 col-form-label text-end">Invoice Email</label>
                         <div class="col-sm-8">

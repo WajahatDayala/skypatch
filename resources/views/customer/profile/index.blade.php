@@ -31,7 +31,7 @@
                                         <td><b class="fw-bold">ID</b><br>
                                             {{$user->id}}
                                         </td>
-                                        <td><b class="fw-bold">Name</b><br>
+                                        <td><b class="fw-bold">Contact Name</b><br>
                                             {{$user->name}}
                                         </td>
                                     </tr>
@@ -69,22 +69,22 @@
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Email Address#1
                                             </b><br>
-                                            {{$user->email_1}}
+                                            {{$user->email}}
                                         </td>
                                         <td><b class="fw-bold">Email Address#2
                                             </b><br>
-                                            {{$user->email_2}}
+                                            {{$user->email_1}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Email Address#3
                                             </b><br>
-                                            {{$user->email_3}}
+                                            {{$user->email_2}}
                                         </td>
                                         <td><b class="fw-bold">Email Address#4
                                             </b><br>
-                                            {{$user->email_4}}
+                                            {{$user->email_3}}
                                         </td>
                                     </tr>
                                     <tr class="bg-white">

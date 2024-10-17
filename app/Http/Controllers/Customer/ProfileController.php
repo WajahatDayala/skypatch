@@ -66,7 +66,6 @@ class ProfileController extends Controller
         //
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'contact_name' => 'required|string|max:255',
             'company_name' => 'required|string|max:255',
             'company_type' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
@@ -80,7 +79,6 @@ class ProfileController extends Controller
             'email_1' => 'required|email|max:255', // New required email field
             'email_2' => 'nullable|email|max:255',
             'email_3' => 'nullable|email|max:255',
-            'email_4' => 'nullable|email|max:255',
             'invoice_email' =>'nullable|email|max:255',
             'password' => 'nullable|string|min:8', // Validate password
         ]);
@@ -89,7 +87,6 @@ class ProfileController extends Controller
         
         // Update fields except email
         $user->name = $validatedData['name'];
-        $user->contact_name = $validatedData['contact_name'];
         $user->company_name = $validatedData['company_name'];
         $user->company_type = $validatedData['company_type'];
         $user->phone = $validatedData['phone'];
@@ -105,7 +102,6 @@ class ProfileController extends Controller
         $user->email_1 = $validatedData['email_1'];
         $user->email_2 = $validatedData['email_2'];
         $user->email_3 = $validatedData['email_3'];
-        $user->email_4 = $validatedData['email_4'];
         $user->invoice_email = $validatedData['invoice_email'];
         
         // Update password if provided

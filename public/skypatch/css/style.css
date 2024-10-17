@@ -318,7 +318,7 @@ outline: none;
   background-image: url(../img/bg-img-usa.webp);
   background-position: center;
   background-size: cover;
-  height: 100vh;
+  height: auto;
   z-index: 1;
 }
 
