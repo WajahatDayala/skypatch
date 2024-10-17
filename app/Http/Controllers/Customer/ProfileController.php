@@ -76,10 +76,10 @@ class ProfileController extends Controller
             'state' => 'nullable|string|max:255',
             'zipcode' => 'nullable|string|max:255',
             'country' => 'nullable|string|max:255',
-            'email_1' => 'required|email|max:255', // New required email field
-            'email_2' => 'nullable|email|max:255',
-            'email_3' => 'nullable|email|max:255',
-            'invoice_email' =>'nullable|email|max:255',
+            'email_2' => 'nullable|string|max:255', // New required email field
+            'email_3' => 'nullable|string|max:255',
+            'email_4' => 'nullable|string|max:255',
+            'invoice_email' =>'nullable|string|max:255',
             'password' => 'nullable|string|min:8', // Validate password
         ]);
         
@@ -99,9 +99,9 @@ class ProfileController extends Controller
         $user->country = $validatedData['country'];
         
         // Update email fields
-        $user->email_1 = $validatedData['email_1'];
         $user->email_2 = $validatedData['email_2'];
         $user->email_3 = $validatedData['email_3'];
+        $user->email_4 = $validatedData['email_4'];
         $user->invoice_email = $validatedData['invoice_email'];
         
         // Update password if provided

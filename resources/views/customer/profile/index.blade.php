@@ -73,18 +73,18 @@
                                         </td>
                                         <td><b class="fw-bold">Email Address#2
                                             </b><br>
-                                            {{$user->email_1}}
+                                            {{$user->email_2}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Email Address#3
                                             </b><br>
-                                            {{$user->email_2}}
+                                            {{$user->email_3}}
                                         </td>
                                         <td><b class="fw-bold">Email Address#4
                                             </b><br>
-                                            {{$user->email_3}}
+                                            {{$user->email_4}}
                                         </td>
                                     </tr>
                                     <tr class="bg-white">

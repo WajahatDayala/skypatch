@@ -89,7 +89,7 @@
                         <div class="col-sm-8">
                             <!-- <input type="text" name="company_type" class="form-control" id="company_type" value="{{ $user->company_type }}" required> -->
                                          <select class="form-select" name="company_type" aria-label="Default select example">
-                                            <option value="" selected class='text-gray'>Company Type</option>
+                                        <option value="{{$user->company_type}}" selected class='text-gray'>Company Type</option>
                                           
                                             <option value="Embroider" 
                                             {{ $user->company_type == 'Embroider' ? 'selected' : '' }}>
@@ -148,23 +148,23 @@
 
                     <!--Email 2 -->
                     <div class="row mb-3">
-                        <label for="email_1" class="col-sm-4 col-form-label text-end">Email 2</label>
+                        <label for="email_2" class="col-sm-4 col-form-label text-end">Email 2</label>
                         <div class="col-sm-8">
-                            <input type="email" name="email_1" class="form-control" id="email_1" value="{{ $user->email_1 }}" required>
+                            <input type="email" name="email_2" class="form-control" id="email_2" value="{{ $user->email_2 }}" >
                         </div>
                     </div>
                       <!--Email 3 -->
                     <div class="row mb-3">
-                        <label for="email_2" class="col-sm-4 col-form-label text-end">Email 3</label>
+                        <label for="email_3" class="col-sm-4 col-form-label text-end">Email 3</label>
                         <div class="col-sm-8">
-                            <input type="email" name="email_2" class="form-control" id="email_2" value="{{ $user->email_2 }}">
+                            <input type="email" name="email_3" class="form-control" id="email_3" value="{{ $user->email_3 }}">
                         </div>
                     </div>
                     <!--Email 4 -->
                     <div class="row mb-3">
-                        <label for="email_3" class="col-sm-4 col-form-label text-end">Email 4</label>
+                        <label for="email_email_43" class="col-sm-4 col-form-label text-end">Email 4</label>
                         <div class="col-sm-8">
-                            <input type="email" name="email_3" class="form-control" id="email_3" value="{{ $user->email_3 }}">
+                            <input type="email" name="email_4" class="form-control" id="email_4" value="{{ $user->email_4 }}">
                         </div>
                     </div>
 

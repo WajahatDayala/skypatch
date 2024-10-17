@@ -8,6 +8,8 @@ use App\Http\Controllers\customer\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 
+use App\Http\Controllers\Auth\AdminAuthController;
+
 
 Route::get('/', function () {
 
@@ -44,6 +46,17 @@ Route::middleware('auth')->group(function () {
 });
 
 
+/* Admin Auth */
+Route::prefix('admin')->group(function () {
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/login', [AdminAuthController::class, 'login']);
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
+    Route::middleware(['auth:admin', 'role:Admin'])->group(function () {
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        });
+    });
+});
 
 require __DIR__.'/auth.php';

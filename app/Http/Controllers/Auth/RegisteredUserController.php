@@ -48,14 +48,15 @@ class RegisteredUserController extends Controller
             'phone' => $request->phone,
             'cell' => $request->cell,
             'fax' => $request->fax,
-            'email1' => $request->email1,
-            'email2' => $request->email2,
-            'email3' => $request->email3,
+            'email_2' => $request->email2,
+            'email_3' => $request->email3,
+            'email_4' => $request->email4,
             'address' => $request->address,
             'city' => $request->city,
             'state' => $request->state,
             'zipcode' => $request->zipcode,
             'country' => $request->country,
+            'reference' =>$request->reference,
 
         ]);
 

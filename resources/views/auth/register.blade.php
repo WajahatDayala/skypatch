@@ -48,6 +48,22 @@
         <x-input-label for="company_name" :value="__('Company Name')" />
     </div>
 
+     <!-- Company Type -->
+     <div class="form-floating mb-3">
+        <select class="form-control" name="company_type" required>
+            <option value="" disabled selected>Select Company Type</option>
+            <option value="Embroider">Embroider</option>
+            <option value="Distributor">Distributor</option>
+            <option value="Promotional">Promotional</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Manufacturers">Manufacturers</option>
+            <option value="Uniform/Apparels">Uniform/Apparels</option>
+            <option value="Others">Others</option>
+        </select>
+        <x-input-label for="company_type" :value="__('Company Type')" />
+        <x-input-error :messages="$errors->get('company_type')" class="mt-2" />
+    </div>
+
     <!-- Phone -->
     <div class="form-floating mb-3">
         <x-text-input class="form-control" id="phone" type="text" name="phone" :value="old('phone')" required autocomplete="tel" />
@@ -79,7 +95,7 @@
      <!-- Email Address 3 -->
      <div class="form-floating mb-3">
         <x-text-input class="form-control" id="email1" type="email1" name="email1" />
-        <x-input-label for="email1" :value="__('Email Address 2*')" />
+        <x-input-label for="email1" :value="__('Email Address 2')" />
     </div>
 
       <!-- Email Address 2 -->
@@ -96,21 +112,7 @@
 
     
 
-    <!-- Company Type -->
-    <div class="form-floating mb-3">
-        <select class="form-control" name="company_type" required>
-            <option value="" disabled selected>Select Company Type</option>
-            <option>Embroider</option>
-            <option>Distributor</option>
-            <option>Promotional</option>
-            <option>Marketing</option>
-            <option>Manufacturers</option>
-            <option>Uniform/Apparels</option>
-            <option>Others</option>
-        </select>
-        <x-input-label for="company_type" :value="__('Company Type')" />
-        <x-input-error :messages="$errors->get('company_type')" class="mt-2" />
-    </div>
+   
 
     <!-- Address Fields -->
     <div class="form-floating mb-3">
