@@ -14,7 +14,7 @@ class RoleMiddleware
     {
         $user = $request->user('admin');
         if (!$user || !in_array($user->role->name, $roles)) {
-            return redirect('/'); // Redirect if unauthorized
+            return redirect('/admin/login'); // Redirect if unauthorized
         }
 
 

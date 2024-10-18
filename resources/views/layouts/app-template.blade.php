@@ -46,7 +46,12 @@
   <!-- Main Header -->
     @include('layouts.header')
     <!-- Sidebar -->
+    @if(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Admin')
+    @include('layouts.admin.sidebar')
+    @else
     @include('layouts.sidebar')
+    @endif
+    
     @yield('content')
     <!-- /.content-wrapper -->
     <!-- Footer -->

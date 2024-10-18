@@ -120,4 +120,11 @@
     <!--form-->
 
     </div>
+    <script>
+    window.onload = function() {
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    }
+</script>
 </x-guest-layout>

@@ -4,9 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-
-class RolesTableSeeder extends Seeder
+use App\Models\Role;
+class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -25,15 +24,13 @@ class RolesTableSeeder extends Seeder
             'Order Digitizer Worker',
             'Vector Digitizer Leader',
             'Vector Digitizer Worker',
-            
         ];
 
-        foreach ($roles as $role) {
-            DB::table('roles')->insert([
-                'name' => $role,
-                'created_at' => now(),
-                'updated_at' => now(),
+        foreach ($roles as $roleName) {
+            Role::create([
+                'name' => $roleName, // Use 'role' instead of 'name'
             ]);
         }
+
     }
 }
