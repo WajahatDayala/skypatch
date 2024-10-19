@@ -9,8 +9,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 
 use App\Http\Controllers\Auth\AdminAuthController;
-use App\Http\Controllers\admin\AdminDashboardController;
-
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\AllQuotesController;
+use App\Http\Controllers\Admin\AllOrdersController;
+use App\Http\Controllers\Admin\AllVectorController;
 
 Route::get('/', function () {
 
@@ -33,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/customer/my-profile',ProfileController::class);
     //quotes
     Route::resource('/customer/quotes',QuotesController::class);
-    Route::get('/customer/today-quotes', [QuotesController::class, 'todayDayQuote']);
+  
     //orders
     Route::resource('/customer/orders',OrdersController::class);
     Route::get('/customer/today-orders', [OrdersController::class, 'todayDayQuote']);
@@ -54,7 +57,25 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admi
 
 Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-});
+    //customer
+    Route::resource('/admin/customers',CustomerController::class);
+    Route::get('/admin/allcustomers', [CustomerController::class, 'allCustomer']);
+    //all quotes
+    Route::resource('/admin/allquotes',AllQuotesController::class);
+    Route::get('/admin/today-quotes', [AllQuotesController::class, 'todayDayQuote']);
+    //all orders
+    Route::resource('/admin/allorders',AllOrdersController::class);
+    Route::get('/admin/today-orders', [AllOrdersController::class, 'todayDayOrders']);
+    Route::get('/admin/today-edit-orders', [AllOrdersController::class, 'todayDayEditOrders']);
 
+    
+    //all vectors
+     Route::resource('/admin/allvectors',AllVectorController::class);
+     Route::get('/admin/today-vector', [AllVectorController::class, 'todayDayVector']);
+
+     
+
+});
+/*end admin routing  */
 
 require __DIR__.'/auth.php';

@@ -34,11 +34,18 @@
                         <form method="POST" action="{{ route('register') }}">
     @csrf
 
-    <!-- Contact Name -->
+    <!-- Name -->
     <div class="form-floating mb-3">
         <x-text-input class="form-control" id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
         <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        <x-input-label for="name" :value="__('Contact Name')" />
+        <x-input-label for="name" :value="__('Name')" />
+    </div>
+
+    <!-- contact Person -->
+    <div class="form-floating mb-3">
+        <x-text-input class="form-control" id="contact_name" type="text" name="contact_name" :value="old('contact_name')" required autofocus autocomplete="contact_name" />
+        <x-input-error :messages="$errors->get('contact_name')" class="mt-2" />
+        <x-input-label for="contact_name" :value="__('Contact Person')" />
     </div>
 
     <!-- Company Name -->

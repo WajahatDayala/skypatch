@@ -3,86 +3,138 @@
 
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
-        <!-- Row 1 -->
+        <!-- Today's Section -->
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-                <img src="{{asset('skypatch/img/icons/invoice.png')}}" alt="" width="50px">
-                <p class="my-2 h6">Invoices</p>
+                <img src="{{asset('skypatch/img/admin/today_quote.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Today's Quote</p>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-                <img src="{{asset('skypatch/img/icons/contact-us.png')}}" alt="" width="50px">
-                <p class="my-2 h6">Contact Us</p>
+                <img src="{{asset('skypatch/img/admin/today_order.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Today's Order</p>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-                <a href="/customer/my-profile"><img src="{{asset('skypatch/img/icons/profile.png')}}" alt="" width="50px">
-                <p class="my-2 h6">Profile</p></a>
+                <img src="{{asset('skypatch/img/admin/today_vector.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Today's Vector</p>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
-            <!-- Empty Column -->
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <img src="{{asset('skypatch/img/admin/Employees.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Employees</p>
+            </div>
         </div>
     </div>
 
     <div class="row g-4 mt-3">
-        <!-- Row 2 -->
+        <!-- All Records Section -->
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-            <a href="/customer/orders/create"><img src="{{asset('skypatch/img/icons/place_order.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Place Orders</p></a>
+                <a href="/all-orders"><img src="{{asset('skypatch/img/admin/all_orders.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">All Orders</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
-        <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-        <a href="/customer/quotes/create"><img src="{{asset('skypatch/img/icons/send-quote.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Send Quote</p></a>
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <a href="/all-quotes"><img src="{{asset('skypatch/img/admin/all_quotes.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">All Quotes</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
-        <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-        <a href="/customer/vector-orders/create"> <img src="{{asset('skypatch/img/icons/add-vector.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Vectors Order</p></a>
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <a href="/all-vectors"><img src="{{asset('skypatch/img/admin/all_vectors.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">All Vectors</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
-            <!-- Empty Column -->
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <a href="/invoices"><img src="{{asset('skypatch/img/admin/invoice.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Invoices</p></a>
+            </div>
         </div>
     </div>
 
     <div class="row g-4 mt-3">
-        <!-- Row 3 -->
+        <!-- Customer and Reports Section -->
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-            <a href="/customer/orders"> <img src="{{asset('skypatch/img/icons/All_Orders.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Order Records</p></a>
+                <a href="/customers"><img src="{{asset('skypatch/img/admin/allcustomers.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">All Customers</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
-          <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-          <a href="/customer/quotes">  <img src="{{asset('skypatch/img/icons/All_Quotes.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Quote Records</p></a>
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <a href="/sales-report"><img src="{{asset('skypatch/img/admin/sale_Team_Report.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Sales Team Report</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
-          <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-          <a href="/customer/vector-orders">  <img src="{{asset('skypatch/img/icons/All_Vector.png')}}" alt="" width="50px">
-              <p class="my-2 h6">Vector Records</p></a>
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <a href="/record-annum"><img src="{{asset('skypatch/img/admin/record_annum.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Record Annum</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
-            <!-- Empty Column -->
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <a href="/sales-annum"><img src="{{asset('skypatch/img/admin/Sales_Annum.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Sales Annum</p></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-3">
+        <!-- Designer and Accounts Section -->
+        <div class="col-sm-6 col-md-3 col-xl-3">
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <a href="/designer-reports"><img src="{{asset('skypatch/img/admin/designer_reports.png')}}" alt="" width="50px">
+                <p class="my-2 h6">Designer Reports</p></a>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-xl-3">
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <a href="/accounts"><img src="{{asset('skypatch/img/admin/account.png')}}" alt="" width="50px">
+                <p class="my-2 h6">Accounts</p></a>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-xl-3">
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <a href="/sales-commission"><img src="{{asset('skypatch/img/admin/Commission.png')}}" alt="" width="50px">
+                <p class="my-2 h6">Sales Commission</p></a>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3 col-xl-3">
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <a href="/designer-leader"><img src="{{asset('skypatch/img/admin/designer_leader.png')}}" alt="" width="50px">
+                <p class="my-2 h6">Designer & Leader</p></a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row g-4 mt-3">
+        <!-- Designer and Accounts Section --> 
+
+        <div class="col-sm-6 col-md-3 col-xl-3">
+            <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
+                <a href="/designer-leader"><img src="{{asset('skypatch/img/admin/edit.png')}}" alt="" width="50px">
+                <p class="my-2 h6">Edit Report</p></a>
+            </div>
         </div>
     </div>
 </div>

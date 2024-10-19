@@ -31,11 +31,11 @@
                                         <td><b class="fw-bold">ID</b><br>
                                             {{$user->id}}
                                         </td>
-                                        <td><b class="fw-bold">Contact Name</b><br>
+                                        <td><b class="fw-bold">Name</b><br>
                                             {{$user->name}}
                                         </td>
                                     </tr>
-
+                                    
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Company Name
                                             </b><br>

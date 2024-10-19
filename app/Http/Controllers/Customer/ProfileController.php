@@ -66,6 +66,7 @@ class ProfileController extends Controller
         //
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'contact_name' =>'required|string|max:255',
             'company_name' => 'required|string|max:255',
             'company_type' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
@@ -87,6 +88,7 @@ class ProfileController extends Controller
         
         // Update fields except email
         $user->name = $validatedData['name'];
+        $user->contact_name = $validatedData['contact_name'];
         $user->company_name = $validatedData['company_name'];
         $user->company_type = $validatedData['company_type'];
         $user->phone = $validatedData['phone'];

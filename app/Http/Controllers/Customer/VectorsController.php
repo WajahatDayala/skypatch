@@ -42,14 +42,11 @@ class VectorsController extends Controller
         ->orderBy('design_name','asc')
         ->get();
 
-        $orderVectorEdit =VectorEditID::select('*','vector_edit_i_d_s.id as orderEditId')
-        ->join('vector_orders','vector_edit_i_d_s.vector_order_id','=','vector_orders.id')
-        ->get();
+      
 
         return view('customer/vector-orders/index',
         [
-            'orders'=>$orders,
-            'orderVectorEdit'=>$orderVectorEdit
+            'orders'=>$orders
         ]);
 
     }

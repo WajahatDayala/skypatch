@@ -68,14 +68,22 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="name" class="col-sm-4 col-form-label text-end">Contact Name*</label>
+                        <label for="name" class="col-sm-4 col-form-label text-end">Name*</label>
                         <div class="col-sm-8">
                             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ $user->name }}" required>
                             @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror   
                         </div>
+                    </div>	
+
+                    <div class="row mb-3">
+                        <label for="contact_name" class="col-sm-4 col-form-label text-end">Contact Person*</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="contact_name" class="form-control" id="contact_name" value="{{ $user->contact_name }}" required>
+                        </div>
                     </div>
+
 
                     <div class="row mb-3">
                         <label for="company_name" class="col-sm-4 col-form-label text-end">Company Name*</label>
