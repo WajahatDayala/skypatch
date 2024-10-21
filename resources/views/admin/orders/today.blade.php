@@ -56,8 +56,12 @@
                             <tr class="text-dark">
                                 <th scope="col"> Sr# </th>
                                 <th scope="col"> OR# </th>
-                                <th scope="col"> Design Name </th>
                                 <th scope="col"> Rcv'd Date </th>
+                                <th scope="col"> Sent Date </th>
+                                <th scope="col"> Design Name </th>
+                                <th scope="col"> Customer Nick </th>
+                                <th scope="col"> Billing </th>
+                                <th scope="col"> Designer </th>
                                 <th scope="col"> Status </th>
                                 <th scope="col"> Action </th>
                             </tr>
@@ -69,20 +73,21 @@
                                 @endif
                                 <td>{{ $loop->iteration }}</td>
                                 <td>OR-{{$q->order_id}}</td>
-                               
-                                
+                                <td>{{$q->created_at}}</td>
+                                <td></td>
                                 <td>{{$q->design_name}} {{$q->description}} 
-
-                                 
+                                <td>{{$q->customer_name}}</td>
+                                <td><a class="bg-primary text-white rounded-pill" href=""> cc</a></td>
+                                <td><span class="text-danger">Not Assigned</span></td>
                                 </td>
                               
-                                <td>{{$q->created_at}}</td>
+                               
                                 <td>
-                                <span class="btn btn-sm {{ $q->status == 1 ? 'btn-success' : 'btn-secondary' }} rounded-pill m-2" href="">{{$q->status}}</span>
+                                <span class="btn btn-sm {{ $q->status_id == 1 ? 'btn-success' : 'btn-secondary' }} rounded-pill m-2" href="">{{$q->status}}</span>
                                 </td>
                                 <td>
                                     <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="{{ route('orders.show', ['order' => $q->order_id]) }}">Details</a>
+                                        href="{{ route('allorders.show', ['allorder' => $q->order_id]) }}">Details</a>
                                 </td>
                             </tr>
                             @endforeach

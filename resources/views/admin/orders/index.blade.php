@@ -82,7 +82,8 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="{{ route('orders.show', ['order' => $q->order_id]) }}">Details</a>
+                            
+                                    href="{{ route('allorders.show', ['allorder' => $q->order_id]) }}">Details</a>
                                 </td>
                             </tr>
                             @endforeach

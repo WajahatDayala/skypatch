@@ -68,8 +68,15 @@ class AllQuotesController extends Controller
             ->whereDate('quotes.created_at', today()) 
             ->get();
 
+      //convertQuotes
+      $quoteConvertedOrder = Order::select('*','orders.quote_id as orderQuoteId')
+      ->join('quotes','orders.quote_id','=','quotes.id')
+      ->get();
       
-        return view('admin.quotes.today', ['quotes' => $quotes]);
+        return view('admin.quotes.today', [
+            'quotes' => $quotes,
+            'quoteConvertedOrder' => $quoteConvertedOrder 
+        ]);
     }
 
     /**
@@ -119,4 +126,37 @@ class AllQuotesController extends Controller
     {
         //
     }
+    public function convertToOrder($quoteId)
+    {
+        // Retrieve the quote using the provided ID
+        $quote = Quote::find($quoteId);
+    
+        if (!$quote) {
+            return response()->json(['status' => 'not_found'], 404);
+        }
+    
+        // Create a new order based on the quote data
+        $order = new Order();
+        $order->customer_id = $quote->customer_id; // Assuming customer_id exists
+        $order->quote_id  = $quote->id;; // Assuming customer_id exists
+        $order->required_format_id = $quote->required_format_id;
+        $order->fabric_id = $quote->fabric_id;
+        $order->placement_id = $quote->placement_id;
+        $order->status_id = $quote->status_id; // Set the initial status
+    
+        $order->name = $quote->name; // Adjust as needed
+        $order->height = $quote->height;
+        $order->width = $quote->width;
+        $order->number_of_colors = $quote->number_of_colors;
+        $order->super_urgent = $quote->super_urgent;
+    
+        // Save the order
+        $order->save();
+    
+        // Optionally, update the quote status or perform other actions
+    
+        return response()->json(['status' => 'converted']);
+    }
+    
 }
+

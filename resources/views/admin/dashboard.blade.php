@@ -6,29 +6,29 @@
         <!-- Today's Section -->
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-                <img src="{{asset('skypatch/img/admin/today_quote.png')}}" alt="" height="70px" width="50px">
-                <p class="my-2 h6">Today's Quote</p>
+                <a href="/admin/today-quotes"><img src="{{asset('skypatch/img/admin/today_quote.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Today's Quote</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-                <img src="{{asset('skypatch/img/admin/today_order.png')}}" alt="" height="70px" width="50px">
-                <p class="my-2 h6">Today's Order</p>
+            <a href="/admin/today-orders"><img src="{{asset('skypatch/img/admin/today_order.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Today's Order</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-                <img src="{{asset('skypatch/img/admin/today_vector.png')}}" alt="" height="70px" width="50px">
-                <p class="my-2 h6">Today's Vector</p>
+                <a href="/admin/today-vector"><img src="{{asset('skypatch/img/admin/today_vector.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Today's Vector</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-                <img src="{{asset('skypatch/img/admin/Employees.png')}}" alt="" height="70px" width="50px">
-                <p class="my-2 h6">Employees</p>
+            <a href="/admin/employees"> <img src="{{asset('skypatch/img/admin/Employees.png')}}" alt="" height="70px" width="50px">
+                <p class="my-2 h6">Employees</p></a>
             </div>
         </div>
     </div>

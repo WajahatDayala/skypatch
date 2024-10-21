@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 
-class CustomerController extends Controller
+class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    protected $redirectTo = '/customers';
+    protected $redirectTo = '/employees';
     public function __construct()
     {
         $this->middleware('auth')->only(["index", "create", "store", "edit", "update", "search", "destroy"]);
@@ -19,31 +18,7 @@ class CustomerController extends Controller
     public function index()
     {
         //
-       // $customers = User::all();
-        
-        $customers = User::select("*",
-        'users.name as customer_nick',
-        'users.created_at as createdDate'
-        
-        )
-        ->join('orders','orders.customer_id','=','orders.id')
-        ->get();
-       return view('admin.customers.index',[
-            'customers'=>$customers
-        ]);
-
     }
-
-    public function allCustomer()
-    {
-        //
-        $customers = User::all();
-        return view('admin.customers.allcustomer',[
-            'customers'=>$customers
-        ]);
-
-    }
-    
 
     /**
      * Show the form for creating a new resource.

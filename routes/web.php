@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\AllQuotesController;
 use App\Http\Controllers\Admin\AllOrdersController;
 use App\Http\Controllers\Admin\AllVectorController;
+use App\Http\Controllers\Admin\EmployeeController;
+
 
 Route::get('/', function () {
 
@@ -72,6 +74,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //all vectors
      Route::resource('/admin/allvectors',AllVectorController::class);
      Route::get('/admin/today-vector', [AllVectorController::class, 'todayDayVector']);
+
+      //all employees
+      Route::resource('/admin/employees',EmployeeController::class);
 
      
 

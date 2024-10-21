@@ -11,12 +11,12 @@
                         <h6 class="h6 mb-0">Order Details</h6>
                     </div>
                     <div class="col-6 d-flex align-items-center justify-content-end">
-                        <!-- <button type="button"
-                                        class="btn btn-sm btn-primary rounded-pill me-2">Print</button> -->
-                        @if($order->edit_status == 1)
-                        <a type="button" href="{{ route('orders.edit', ['order' => $order->order_id]) }}"
-                                        class="btn btn-sm btn-dark rounded-pill ">Edit</a>
-                        @endif
+                        <button type="button"
+                                        class="btn btn-sm btn-primary rounded-pill me-2">Print</button> 
+                     
+                        <a type="button" href="{{ route('allorders.edit', ['allorder' => $order->order_id]) }}"
+                                        class="btn btn-sm btn-dark rounded-pill ">Process</a>
+                     
                     </div>
                 </div>
                 <table class="table table-bordered">
@@ -118,7 +118,7 @@
                                 </p>
                             </td>
                         </tr>
-                        <!-- <tr class="row">
+                       <tr class="row">
                                         <td class="col-3">
                                             <h6>
                                                 <strong><a href="" class="text-danger" data-bs-toggle="modal"
@@ -154,7 +154,7 @@
                                             <button type="button" class="btn btn-sm rounded-pill btn-primary m-2">Attech
                                                 Files</button>
                                         </td>
-                                    </tr> -->
+                                    </tr>
                         <tr class="row">
                             <td class="col-6">
                                 <strong class="">Option A</strong><br>
@@ -245,6 +245,162 @@
 
             </div>
 
+            <div class="bg-table rounded h-100 p-4 mt-4">
+                            <div class="row bg-info p-2">
+                                <h6 class="text-secondary text-center mb-0">For Digitzer's/Vector Teams</h1>
+                            </div>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong># of Machine(s)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Condition</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong># of Needles</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Thread</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Needle Brand</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing(Pique / Jersey)</strong><br>
+                                            <span>lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Brand</strong><br>
+                                            <span>psd</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing (Cotton / Twill)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing (Cap)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Backing</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Needle Number</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong># of Heads</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Comments</strong><br>
+                                            <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni
+                                                possimus perspiciatis ad dicta, incidunt accusamus. Voluptatibus, veniam
+                                                laboriosam! Vitae, iure.</span>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Modal for Reason -->
+                            <div class="modal fade" id="Reason" tabindex="-1" aria-labelledby="ReasonLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ReasonLabel">Reasons</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="">
+                                                <div class="row mb-3">
+                                                    <label for="reasonSelect"
+                                                        class="col-sm-4 col-form-label text-end">Select Reason *</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-select" id="reasonSelect"
+                                                            aria-label="Default select example">
+                                                            <option selected class='text-gray'>Select Format</option>
+                                                            <option value="1">Sales</option>
+                                                            <option value="2">Support</option>
+                                                            <option value="3">Accounts</option>
+                                                            <option value="4">Digitizer Leader</option>
+                                                            <option value="5">Digitizer</option>
+                                                            <option value="6">Vector Artist Leader</option>
+                                                            <option value="7">Vector Artist</option>
+                                                            <option value="8">Quote Digitizer Leader</option>
+                                                            <option value="9">Quote Digitizer</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal for Edit Reason Ends Here -->
+
+                            <!-- Modal for Edit Designer Start Here -->
+                            <div class="modal fade" id="Designer" tabindex="-1" aria-labelledby="DesignerLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="DesignerLabel">Designer Assignment</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="">
+                                                <div class="row mb-3">
+                                                    <label for="designerSelect"
+                                                        class="col-sm-4 col-form-label text-end">Select Designer
+                                                        *</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-select" id="designerSelect"
+                                                            aria-label="Default select example">
+                                                            <option selected class='text-gray'>Select Designer</option>
+                                                            <option value="1">Designer 1</option>
+                                                            <option value="2">Designer 2</option>
+                                                            <option value="3">Designer 3</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal for Edit Designer Ends Here -->
+
+                        </div>
 
         </div>
     </div>

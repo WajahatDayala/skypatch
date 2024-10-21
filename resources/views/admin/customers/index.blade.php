@@ -41,9 +41,9 @@
                               
                                 <td>{{ $loop->iteration }}</td>
                                 <td>ID-{{$c->id}}</td>
-                                <td>{{$c->name}}</td>
+                                <td>{{$c->customer_nick}}</td>
                                 <td>{{$c->contact_name}}</td>
-                                <td>{{$c->created_at}}</td>
+                                <td>{{$c->createdDate}}</td>
                                 <td>{{$c->company_name}}</td>
                                 <td>{{$c->phone}}</td>
                                 <td>{{$c->email}}</td>
