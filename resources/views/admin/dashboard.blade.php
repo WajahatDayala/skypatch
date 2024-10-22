@@ -120,7 +120,7 @@
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-                <a href="/designer-leader"><img src="{{asset('skypatch/img/admin/designer_leader.png')}}" alt="" width="50px">
+                <a href="/admin/assign-leaders"><img src="{{asset('skypatch/img/admin/designer_leader.png')}}" alt="" width="50px">
                 <p class="my-2 h6">Designer & Leader</p></a>
             </div>
         </div>

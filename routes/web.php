@@ -8,6 +8,7 @@ use App\Http\Controllers\customer\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 
+//admin 
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CustomerController;
@@ -15,7 +16,7 @@ use App\Http\Controllers\Admin\AllQuotesController;
 use App\Http\Controllers\Admin\AllOrdersController;
 use App\Http\Controllers\Admin\AllVectorController;
 use App\Http\Controllers\Admin\EmployeeController;
-
+use App\Http\Controllers\Admin\AsignLeaderController;
 
 Route::get('/', function () {
 
@@ -77,6 +78,12 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
       //all employees
       Route::resource('/admin/employees',EmployeeController::class);
+      
+      //asign leaders
+      Route::resource('/admin/assign-leaders',AsignLeaderController::class);
+      Route::post('/admin/assign-leaders/{id}/assign-leader', [AsignLeaderController::class, 'assignLeader'])->name('assign-leaders.assign-leader');
+
+      
 
      
 
