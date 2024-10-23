@@ -13,10 +13,10 @@
                     <div class="col-6 d-flex align-items-center justify-content-end">
                         <button type="button"
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button> 
-                     
+                        @if($order->edit_status ==1)
                         <a type="button" href="{{ route('allorders.edit', ['allorder' => $order->order_id]) }}"
                                         class="btn btn-sm btn-dark rounded-pill ">Process</a>
-                     
+                        @endif
                     </div>
                 </div>
                 <table class="table table-bordered">
@@ -119,40 +119,123 @@
                             </td>
                         </tr>
                        <tr class="row">
-                                        <td class="col-3">
+
+                       @if($order->edit_status ==1) 
+                       <td class="col-3">
                                             <h6>
-                                                <strong><a href="" class="text-danger" data-bs-toggle="modal"
+                                                <!-- <strong><a href="" class="text-danger" data-bs-toggle="modal"
                                                         data-bs-target="#Designer">Not Assigned</a></strong><br>
                                                 <strong class="text-info"><a href="" data-bs-toggle="modal"
-                                                        data-bs-target="#Designer">Assigned</a></strong><br>
+                                                        data-bs-target="#Designer">Assigned</a></strong><br> -->
+                               
+                                                      
+                                @if(!$order->designer_id)
+                               
+                                 <strong>
+                                <a href="#" class="text-danger" 
+                                     data-bs-toggle="modal" 
+                                     data-bs-target="#Designer" 
+                                     data-id="{{ $order->order_id }}">Not Assigned</a>
+                                </strong>
+                                 @else
+                                 <strong class="text-info" 
+                                 data-bs-toggle="modal" 
+                                 data-bs-target="#Designer" 
+                                 data-id="{{ $order->order_id }}" 
+                                 data-leader-id="{{ $order->designer_id }}">
+                                {{ $order->designer_name }}
+                                </strong>
+                                @endif
                                             </h6>
-                                            <p>John Doe</p>
-                                        </td>
+                                            <!-- <p>John Doe</p> -->
+                            </td>
+                            @else
+                            <td class="col-3">
+                                            <h6>
+                                                <!-- <strong><a href="" class="text-danger" data-bs-toggle="modal"
+                                                        data-bs-target="#Designer">Not Assigned</a></strong><br>
+                                                <strong class="text-info"><a href="" data-bs-toggle="modal"
+                                                        data-bs-target="#Designer">Assigned</a></strong><br> -->
+                               
+                                                      
+                                @if(!$order->designer_id)
+                               
+                                <strong class="text-danger">
+                                    Not Assign
+                                </strong>
+                                 @else
+                                 <strong class="text-info">
+                                {{ $order->designer_name }}
+                                </strong>
+                                @endif
+                                            </h6>
+                                            <!-- <p>John Doe</p> -->
+                            </td>
+                            
+                            @endif
+
+
+
+                                        @if($order->edit_status ==1)
                                         <td class="col-3">
                                             <h6>
                                                 <strong>Order Status</strong><br>
                                             </h6>
                                             <p class="mb-2">New |
+                                                
                                                 <button type="button"
                                                     class="btn btn-sm rounded-pill btn-dark ms-2">Update</button>
-                                            </p>
+                                                    
+                                                </p>
                                             <p class="mb-0">Reason |
                                                 <button type="button" class="btn btn-sm rounded-pill btn-primary"
                                                     data-bs-toggle="modal" data-bs-target="#Reason">
+                                                  
                                                     Reason Not Specified
+                                                    
                                                 </button>
                                             </p>
                                         </td>
+                                        @else
+                                        <td class="col-3">
+                                        <h6>
+                                                <strong>Order Status</strong><br>
+                                            </h6>
+                                            <p class="mb-2">New |
+                                                
+                                               
+                                                    
+                                                </p>
+                                            <p class="mb-0">Reason |
+                                                
+                                                  
+                                                    Reason Not Specified
+                                                    
+                                               
+                                            </p>
+
+                                        </td>
+                                        @endif
                                         <td class="col-6">
                                             <strong>Files</strong><br>
-                                            <span class="text-info">QT-54325-filename.psd | <button type="button"
+                                            @foreach($orderFiles as $f)
+                                            @php
+                                            $fileData = json_decode($f->files, true); // Decode the JSON
+                                            $filePath = $fileData['path'] ?? 'No file'; // Get the file path
+                                            $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
+                                            @endphp
+                                            <span class="text-info"><!--QT-54325-filename.psd--> {{ $originalFilename }} 
+                                            @if($order->edit_status ==1) | 
+                                            <button type="button"
                                                     class="btn btn-sm rounded-pill btn-danger m-2">Delete</button></span><br>
-                                            <span class="text-info">QT-54325-filename.psd | <button type="button"
-                                                    class="btn btn-sm rounded-pill btn-danger m-2">Delete</button></span><br>
+                                            @endif
+                                            @endforeach
+                                            <!-- <span class="text-info">QT-54325-filename.psd | <button type="button"
+                                                     class="btn btn-sm rounded-pill btn-danger m-2">Delete</button></span><br>
                                             <span class="text-info">QT-54325-filename.psd | <button type="button"
                                                     class="btn btn-sm rounded-pill btn-danger m-2">Delete</button></span><br>
                                             <button type="button" class="btn btn-sm rounded-pill btn-primary m-2">Attech
-                                                Files</button>
+                                                Files</button> -->
                                         </td>
                                     </tr>
                         <tr class="row">
@@ -208,39 +291,39 @@
                 <!-- Modal for Edit Reason Ends Here -->
 
                 <!-- Modal for Edit Designer Start Here -->
-                <div class="modal fade" id="Designer" tabindex="-1" aria-labelledby="DesignerLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="DesignerLabel">Designer Assignment</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="">
-                                    <div class="row mb-3">
-                                        <label for="designerSelect" class="col-sm-4 col-form-label text-end">Select
-                                            Designer
-                                            *</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-select" id="designerSelect"
-                                                aria-label="Default select example">
-                                                <option selected class='text-gray'>Select Designer</option>
-                                                <option value="1">Designer 1</option>
-                                                <option value="2">Designer 2</option>
-                                                <option value="3">Designer 3</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
+                                           
+
+<div class="modal fade" id="Designer" tabindex="-1" aria-labelledby="DesignerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="DesignerLabel">Designer Assignment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="assignLeaderForm" method="POST">
+                    @csrf
+                    <input type="hidden" name="employee_id" id="employee_id">
+                    <div class="row mb-3">
+                        <label for="designerSelect" class="col-sm-4 col-form-label text-end">Select Designer *</label>
+                        <div class="col-sm-8">
+                            <select name="designer_id" class="form-select" id="designerSelect" required>
+                                <option selected class='text-gray' value="">Select Designer</option>
+                                @foreach($designer as $l)
+                                <option value="{{ $l->designer_id }}">{{ $l->designerName }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
-                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChangesButton">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
                 <!-- Modal for Edit Designer Ends Here -->
 
             </div>
@@ -406,6 +489,31 @@
     </div>
 </div>
 <!-- Content Div Ends here End -->
+
+<script>
+    var designerModal = document.getElementById('Designer');
+    designerModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var employeeId = button.getAttribute('data-id'); // Extract employee ID
+        var leaderId = button.getAttribute('data-leader-id'); // Extract leader ID if assigned
+
+        // Set the employee ID in the form
+        document.getElementById('employee_id').value = employeeId;
+
+        // Set the selected leader if already assigned
+        var designerSelect = document.getElementById('designerSelect');
+        designerSelect.value = leaderId || ''; // Set to selected leader or reset
+
+        // Set the form action URL for updating the leader
+        var form = document.getElementById('assignLeaderForm');
+        form.action = '{{ url('admin/allorders') }}/' + employeeId + '/allorder';
+    });
+
+    document.getElementById('saveChangesButton').addEventListener('click', function () {
+        document.getElementById('assignLeaderForm').submit(); // Submit the form
+    });
+</script>
+
 
 
 

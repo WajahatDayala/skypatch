@@ -12,6 +12,7 @@ use App\Models\QuoteFileLog;
 use App\Models\Instruction;
 use App\Models\Status;
 use App\Models\OrderEditID;
+use App\Models\Admin;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,11 +34,14 @@ class AllOrdersController extends Controller
         $orders = Order::select('*',
         'orders.id as order_id',
         'users.name as customer_name',
+        'admins.name as designerName',
         'orders.name as design_name',
-        'statuses.name as status'
+        'statuses.name as status',
+        'orders.created_at as createdAt'
         )
         ->join('users','orders.customer_id','=','users.id')
         ->join('statuses','orders.status_id','statuses.id')
+        ->leftjoin('admins','orders.designer_id','=','admins.id')
         ->orderBy('design_name','ASC')
         ->get();
 
@@ -50,14 +54,18 @@ class AllOrdersController extends Controller
         $orders = Order::select('*',
         'orders.id as order_id',
         'users.name as customer_name',
+        'admins.name as designerName',
         'orders.name as design_name',
         'delivery_types.type as deliveryType',
-        'statuses.name as status'
+        'statuses.name as status',
+        'orders.created_at as createdAt'
         )
         ->join('users','orders.customer_id','=','users.id')
         ->join('delivery_types','orders.delivery_type_id','delivery_types.id')
         ->join('statuses','orders.status_id','=','statuses.id')
+        ->leftjoin('admins','orders.designer_id','=','admins.id')
         ->whereDate('orders.created_at', today())
+        ->orderBy('orders.id','Asc')
         ->get();
 
     
@@ -69,11 +77,14 @@ class AllOrdersController extends Controller
         $orders = Order::select('*',
         'orders.id as order_id',
         'users.name as customer_name',
+        'admins.name as designerName',
         'orders.name as design_name',
-        'delivery_types.type as deliveryType'
+        'delivery_types.type as deliveryType',
+        'orders.created_at as createdAt'
         )
         ->join('users','orders.customer_id','=','users.id')
         ->join('delivery_types','orders.delivery_type_id','delivery_types.id')
+        ->leftjoin('admins','orders.designer_id','admins.id')
         ->whereNotNull('edit_order_id')
         ->whereDate('orders.created_at', today())
         ->get();
@@ -110,7 +121,9 @@ class AllOrdersController extends Controller
         $order = Order::select('*', 
         'orders.id as order_id',
         'orders.name as design_name',
-        'users.name as customer_name', 
+        'users.name as customer_name',
+        'admins.id as designer_id',
+        'admins.name as designer_name',
         'statuses.name as status',
         'fabrics.name as fabric_name',
         'required_formats.name as format',
@@ -123,13 +136,12 @@ class AllOrdersController extends Controller
         ->join('fabrics','orders.fabric_id','=','fabrics.id')
         ->join('placements','orders.placement_id','=','placements.id')
         ->join('required_formats','orders.required_format_id','=','required_formats.id')
+        ->leftjoin('admins','orders.designer_id','=','admins.id')
         ->where('orders.id', $order->id) 
         ->first(); 
 
 
-        $orderEdit =OrderEditID::select('*','order_edit_i_d_s.id as orderEditId')
-        ->join('orders','order_edit_i_d_s.order_id','=','orders.id')
-        ->get();
+     
 
         //instruction
         $orderInstruction = Order::select('*','instructions.description as instruction') 
@@ -137,12 +149,41 @@ class AllOrdersController extends Controller
         ->where('instructions.order_id',$order->order_id)
         ->first();
 
+        //files
+        $orderFiles =QuoteFileLog::select('*')->where('order_id',$order->order_id)->get();
+    
+
+
+        //designer
+        $designer = Admin::select('*','admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
+        ->join('roles', 'admins.role_id', '=', 'roles.id')
+        ->whereIn('roles.name',
+         ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
+        ->get();
+
+
+
+
         return view('admin/orders/show',compact(
             'order',
-            'orderEdit',
+            'designer',
+            'orderFiles',
             'orderInstruction'
         ));
     }
+        //assign designer
+        public function assignDesigner(Request $request, $id)
+        {
+            $request->validate([
+                'designer_id' => 'required|exists:admins,id', // Adjust according to your leaders table
+              ]);
+        
+              $order = Order::findOrFail($id);
+              $order->designer_id = $request->designer_id;
+              $order->save();
+        
+             return redirect()->back()->with('success', 'Leader assigned successfully!');
+        }
 
     /**
      * Show the form for editing the specified resource.

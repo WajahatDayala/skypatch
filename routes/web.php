@@ -70,7 +70,8 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::resource('/admin/allorders',AllOrdersController::class);
     Route::get('/admin/today-orders', [AllOrdersController::class, 'todayDayOrders']);
     Route::get('/admin/today-edit-orders', [AllOrdersController::class, 'todayDayEditOrders']);
-
+    Route::post('/admin/allorders/{id}/allorder', [AllOrdersController::class, 'assignDesigner'])->name('allorders.allorder');
+   
     
     //all vectors
      Route::resource('/admin/allvectors',AllVectorController::class);

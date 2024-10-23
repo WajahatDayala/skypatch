@@ -21,7 +21,11 @@ class AsignLeaderController extends Controller
     public function index()
     {
         //
-        $employee = Admin::select('*','admins.id as employeeId', 'admins.name as employeeName', 'roles.name as roles','admins.leader_id', 'leaders.name as leaderName')
+        $employee = Admin::select('*',
+        'admins.id as employeeId',
+         'admins.name as employeeName', 
+         'roles.name as roles','admins.leader_id', 
+         'leaders.name as leaderName')
         ->leftJoin('admins as leaders', 'admins.leader_id', '=', 'leaders.id') // Join to get leader name
         ->join('roles', 'admins.role_id', '=', 'roles.id')
         ->whereIn('roles.name', 
@@ -41,7 +45,7 @@ class AsignLeaderController extends Controller
         ]);
     }
 
-    //asign Leader
+    //assign Leader
     public function assignLeader(Request $request, $id)
     {
         $request->validate([

@@ -49,12 +49,22 @@
 
                                         <a class="btn btn-sm btn-primary rounded-pill m-2"
                                         href="">records</a> -->
-                                    @if(!$e->leader_id)
-                                    <strong><a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#Designer" data-id="{{ $e->employeeId }}">Not Assigned</a></strong>
-                                    @else
-                                    <!-- <strong class="text-info"><a href="#" data-bs-toggle="modal" data-bs-target="#Designer" data-id="{{ $e->employeeId }}" data-leader-id="{{ $e->leader_id }}">{{ $e->leaderName }}</a></strong> -->
-                                    <strong class="text-info" data-bs-toggle="modal" data-bs-target="#Designer" data-id="{{ $e->EmployeeId }}" data-leader-id="{{ $e->leader_id }}">{{$e->leaderName}}</strong>
-                                    @endif
+                                @if(!$e->leader_id)
+                                 <strong>
+                                <a href="#" class="text-danger" 
+                                     data-bs-toggle="modal" 
+                                     data-bs-target="#Designer" 
+                                     data-id="{{ $e->employeeId }}">Not Assigned</a>
+                                </strong>
+                                 @else
+                                 <strong class="text-info" 
+                                 data-bs-toggle="modal" 
+                                 data-bs-target="#Designer" 
+                                 data-id="{{ $e->employeeId }}" 
+                                 data-leader-id="{{ $e->leader_id }}">
+                                {{ $e->leaderName }}
+                                </strong>
+                                @endif
                                      
                                 </td>
                             </tr>
@@ -122,9 +132,20 @@
         // Set the form action URL for updating the leader
         var form = document.getElementById('assignLeaderForm');
         form.action = '{{ url('admin/assign-leaders') }}/' + employeeId + '/assign-leader';
+
+        // Debugging outputs
+        console.log("Employee ID:", employeeId);
+        console.log("Leader ID:", leaderId);
+        console.log("Form Action:", form.action);
     });
 
     document.getElementById('saveChangesButton').addEventListener('click', function () {
+        var selectedLeaderId = document.getElementById('designerSelect').value;
+        if (!selectedLeaderId) {
+            alert("Please select a leader."); // Notify user to select a leader
+            return;
+        }
+
         document.getElementById('assignLeaderForm').submit(); // Submit the form
     });
 </script>

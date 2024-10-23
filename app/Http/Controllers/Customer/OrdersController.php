@@ -137,11 +137,24 @@ class OrdersController extends Controller
                         // Store the file and get its path
                         $filePath = $file->store('uploads/quotes', 'public'); // Store in public/uploads/quotes
                         
+
+
+                           
+                   // Get the original filename
+                  $originalFilename = $file->getClientOriginalName();
+
+                // Create a structured string or array to store in the files column
+                    $fileData = [
+                     'path' => $filePath,
+                     'original_name' => $originalFilename,
+                    ];
+
+
                         // Insert into QuoteFileLog
                         QuoteFileLog::create([
                             'order_id' => $quote->id,
                             'cust_id' => $request->customer_id,
-                            'files' => $filePath,
+                            'files' => json_encode($fileData),
                         ]);
                     }
                 }
@@ -305,18 +318,7 @@ class OrdersController extends Controller
         try {
 
              
-            // $order->update([
-            //     'required_format_id' => $request->required_format_id,
-            //     'fabric_id' => $request->fabric_id,
-            //     'placement_id' => $request->placement_id,
-            //     'status_id' => $request->status,
-            //     'name' => $request->name,
-            //     'height' => $request->height,
-            //     'width' => $request->width,
-            //     'number_of_colors' => $request->number_of_colors,
-            //     'super_urgent' => $request->has('super_urgent'),
-            // ]);
-
+            
         //status update 
         $order->update(['edit_status' => 0]);
 
@@ -368,15 +370,26 @@ class OrdersController extends Controller
                 foreach ($existingFiles as $fileLog) {
                     Storage::disk('public')->delete($fileLog->files);
                     $fileLog->delete();
+                 
                 }
     
                 // Store new files
-                foreach ($request->file('files') as $file) {
+            foreach ($request->file('files') as $file) {
                     $filePath = $file->store('uploads/quotes', 'public');
+
+                    // Get the original filename
+                    $originalFilename = $file->getClientOriginalName();
+
+        // Create a structured string to store both path and original filename
+            $fileData = [
+                        'path' => $filePath,
+                        'original_name' => $originalFilename,
+                        ];
+                 
                     QuoteFileLog::create([
                         'order_id' => $order->id,
                         'cust_id' => Auth::id(),
-                        'files' => $filePath,
+                        'files' => json_encode($fileData),
                     ]);
                 }
             }

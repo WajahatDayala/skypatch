@@ -78,7 +78,14 @@
                                 <td>{{$q->design_name}} {{$q->description}} 
                                 <td>{{$q->customer_name}}</td>
                                 <td><a class="bg-primary text-white rounded-pill" href=""> cc</a></td>
-                                <td><span class="text-danger">Not Assigned</span></td>
+                                <td>
+                                @if(!$q->designer_id)
+                                <span class="{{ $q->super_urgent == 1 ? 'text-white' : 'text-black' }}">Not Assigned</span>
+                                @else
+                                <strong>{{$q->designerName}}</strong>
+                                @endif
+                                
+                                </td> 
                                 </td>
                               
                                

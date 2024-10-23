@@ -22,6 +22,7 @@ class Order extends Model
         'width',
         'number_of_colors',
         'super_urgent',
-        'delivery_type_id'
+        'delivery_type_id',
+        'designer_id',
     ];
 }
