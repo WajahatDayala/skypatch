@@ -71,7 +71,10 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin/today-orders', [AllOrdersController::class, 'todayDayOrders']);
     Route::get('/admin/today-edit-orders', [AllOrdersController::class, 'todayDayEditOrders']);
     Route::post('/admin/allorders/{id}/allorder', [AllOrdersController::class, 'assignDesigner'])->name('allorders.allorder');
-   
+    Route::post('/admin/allorders/addInstruction', [AllOrdersController::class, 'storeInstruction'])->name('allorders.addInstruction');
+    Route::post('/admin/allorders/adminInstruction', [AllOrdersController::class, 'storeAdminInstruction'])->name('allorders.adminInstruction');
+    Route::post('/admin/allorders/uploadFile', [AllOrdersController::class, 'storeFile'])->name('allorders.uploadFile');
+    Route::post('/admin/allorders/deleteFile', [AllOrdersController::class, 'deleteFile'])->name('allorders.deleteFile'); 
     
     //all vectors
      Route::resource('/admin/allvectors',AllVectorController::class);
@@ -84,7 +87,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
       Route::resource('/admin/assign-leaders',AsignLeaderController::class);
       Route::post('/admin/assign-leaders/{id}/assign-leader', [AsignLeaderController::class, 'assignLeader'])->name('assign-leaders.assign-leader');
 
-      
+
 
      
 

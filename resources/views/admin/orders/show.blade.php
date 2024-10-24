@@ -108,14 +108,93 @@
                         <tr class="row">
                             <td class="col-6">
                                 <strong class="">Customer Instruction</strong><br>
-                                <p>{{ $orderInstruction ? $orderInstruction->instruction : 'No instruction available.' }}</p>
+                                <p>{{ $orderInstruction ? $orderInstruction->instruction : 'No instruction available.' }}
+                                <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#instructionModal">
+ Update
+</button>
+</p>
+<!-- Modal -->
+<div class="modal fade" id="instructionModal" tabindex="-1" role="dialog" aria-labelledby="instructionModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="instructionModalLabel">Customer Instruction</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <!-- <span aria-hidden="true">&times;</span> -->
+        </button>
+      </div>
+      <form id="instructionForm" method="POST" action="{{ route('allorders.addInstruction') }}">
+        @csrf
+        <div class="modal-body">
+          <div class="form-group">
+            <label hidden for="customer_id">Customer ID</label>
+            <input type="text" class="form-control" hidden id="customer_id" name="customer_id" required value="{{$order->customer_id}}">
+          </div>
+          <div class="form-group">
+            <label hidden for="order_id">Order ID</label>
+            <input type="text" class="form-control" hidden id="order_id" name="order_id" required value="{{$order->order_id}}">
+          </div>
+          <div class="form-group">
+            <label for="instruction">Instruction</label>
+            <textarea class="form-control" id="instruction" name="instruction" rows="3" required>{{ $orderInstruction ? $orderInstruction->instruction : 'No instruction available.' }}</textarea>
+          </div>
+          <input type="hidden" name="emp_id" value="{{ auth()->user()->id }}">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
                             </td>
                             <td class="col-6">
                                 <strong>Admin Instruction</strong><br>
-                                <p>
-                                    {{$order->instruction}}
+                                
+                                    <p>{{ $adminInstruction ? $adminInstruction->instruction : 'No instruction available.' }} 
+                                    <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#adminInstructionModal">
+Update
+</button></p>
+<!-- Modal -->
+<div class="modal fade" id="adminInstructionModal" tabindex="-1" role="dialog" aria-labelledby="adminInstructionModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="adminInstructionModalLabel">Add Admin Instruction</h5>
+        <button type="button"  class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <!-- <span aria-hidden="true">&times;</span> -->
+        </button>
+      </div>
+      <form id="adminInstructionForm" method="POST" action="{{ route('allorders.adminInstruction')}}">
+        @csrf
+        <div class="modal-body">
+        <div class="form-group">
+            <label hidden for="customer_id">Customer ID</label>
+            <input type="text" class="form-control" hidden id="customer_id" name="customer_id" required value="{{$order->customer_id}}">
+          </div>
+          <div class="form-group">
+            <label hidden for="order_id">Order ID</label>
+            <input type="text" class="form-control" hidden id="order_id" name="order_id" required value="{{$order->order_id}}">
+          </div>
+          <div class="form-group">
+            <label for="admin_instruction">Instruction</label>
+            <textarea class="form-control" id="admin_instruction" name="admin_instruction" rows="3" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-                                </p>
+
                             </td>
                         </tr>
                        <tr class="row">
@@ -220,22 +299,81 @@
                                             <strong>Files</strong><br>
                                             @foreach($orderFiles as $f)
                                             @php
+                                            $fileId = $f->id;
                                             $fileData = json_decode($f->files, true); // Decode the JSON
                                             $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                                             $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
                                             @endphp
                                             <span class="text-info"><!--QT-54325-filename.psd--> {{ $originalFilename }} 
                                             @if($order->edit_status ==1) | 
-                                            <button type="button"
-                                                    class="btn btn-sm rounded-pill btn-danger m-2">Delete</button></span><br>
-                                            @endif
-                                            @endforeach
+                                            <button type="button" class="btn btn-sm rounded-pill btn-danger m-2" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileModal">Delete</button><br>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteFileModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFileModalLabel">Delete File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this file?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteFileForm" method="POST" action="{{ route('allorders.deleteFile') }}" >
+                    @csrf
+                    <input type="hidden" id="file_id" name="file_id" value="{{ $fileId }}">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+@endforeach
+                                          
                                             <!-- <span class="text-info">QT-54325-filename.psd | <button type="button"
                                                      class="btn btn-sm rounded-pill btn-danger m-2">Delete</button></span><br>
                                             <span class="text-info">QT-54325-filename.psd | <button type="button"
-                                                    class="btn btn-sm rounded-pill btn-danger m-2">Delete</button></span><br>
-                                            <button type="button" class="btn btn-sm rounded-pill btn-primary m-2">Attech
-                                                Files</button> -->
+                                                    class="btn btn-sm rounded-pill btn-danger m-2">Delete</button></span> -->
+                                                    <!-- Button to Open the File Upload Modal -->
+<button type="button" class="btn btn-sm rounded-pill btn-primary m-2" data-bs-toggle="modal" data-bs-target="#fileUploadModal">Attach Files</button>
+
+<!-- Modal for Multiple File Upload -->
+<div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="fileUploadModalLabel">Upload Files</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="fileUploadForm" method="POST" action="{{ route('allorders.uploadFile')}}" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-body">
+          <div class="form-group">
+            <label hidden for="customer_id">Customer ID</label>
+            <input type="text" class="form-control" hidden id="customer_id" name="customer_id" required value="{{$order->customer_id}}">
+          </div>
+          <div class="form-group">
+            <label hidden for="order_id">Order ID</label>
+            <input type="text" class="form-control" hidden id="order_id" name="order_id" required value="{{$order->order_id}}">
+          </div>
+          <div class="form-group">
+            <label for="files">Choose Files</label>
+            <input type="file" class="form-control" id="files" name="files[]" multiple required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- end file upload-->
                                         </td>
                                     </tr>
                         <tr class="row">
@@ -489,6 +627,9 @@
     </div>
 </div>
 <!-- Content Div Ends here End -->
+
+
+
 
 <script>
     var designerModal = document.getElementById('Designer');
