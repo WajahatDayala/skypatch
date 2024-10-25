@@ -13,9 +13,8 @@
                     <div class="col-6 d-flex align-items-center justify-content-end">
                         <button type="button"
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button> 
-                        @if($order->edit_status ==1)
-                        <a type="button" href="{{ route('allorders.edit', ['allorder' => $order->order_id]) }}"
-                                        class="btn btn-sm btn-dark rounded-pill ">Process</a>
+                        @if($order->edit_status == 1)
+                       <a href="{{route('allorders.edit',['allorder',$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
                         @endif
                     </div>
                 </div>
@@ -110,9 +109,11 @@
                                 <strong class="">Customer Instruction</strong><br>
                                 <p>{{ $orderInstruction ? $orderInstruction->instruction : 'No instruction available.' }}
                                 <!-- Button trigger modal -->
+@if($order->edit_status == 1)
 <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#instructionModal">
  Update
 </button>
+@endif
 </p>
 <!-- Modal -->
 <div class="modal fade" id="instructionModal" tabindex="-1" role="dialog" aria-labelledby="instructionModalLabel" aria-hidden="true">
@@ -156,9 +157,12 @@
                                 
                                     <p>{{ $adminInstruction ? $adminInstruction->instruction : 'No instruction available.' }} 
                                     <!-- Button trigger modal -->
+                                    @if($order->edit_status == 1)
 <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#adminInstructionModal">
 Update
-</button></p>
+</button>
+@endif
+</p>
 <!-- Modal -->
 <div class="modal fade" id="adminInstructionModal" tabindex="-1" role="dialog" aria-labelledby="adminInstructionModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -182,7 +186,7 @@ Update
           </div>
           <div class="form-group">
             <label for="admin_instruction">Instruction</label>
-            <textarea class="form-control" id="admin_instruction" name="admin_instruction" rows="3" required></textarea>
+            <textarea class="form-control" id="admin_instruction" name="admin_instruction" rows="3" required>{{ $adminInstruction ? $adminInstruction->instruction : 'No instruction available.' }} </textarea>
           </div>
         </div>
         <div class="modal-footer">
@@ -260,19 +264,98 @@ Update
                                             <h6>
                                                 <strong>Order Status</strong><br>
                                             </h6>
-                                            <p class="mb-2">New |
+                                            <p class="mb-2">{{$order->order_status_name}} |
                                                 
                                                 <button type="button"
-                                                    class="btn btn-sm rounded-pill btn-dark ms-2">Update</button>
+                                                    class="btn btn-sm rounded-pill btn-dark ms-2" data-file-id="" data-bs-toggle="modal" data-bs-target="#orderStatusModal">Update</button>
                                                     
+
+                                                    <!-- Modal Order Status -->
+<div class="modal fade" id="orderStatusModal" tabindex="-1" role="dialog" aria-labelledby="orderStatusModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderStatusModalLabel">Update Order Status</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="orderStatusForm" method="POST" action="{{ route('allorders.updateStatus')}}">
+        @csrf
+        <div class="modal-body">
+          <div class="form-group">
+            <label hidden for="customer_id">Customer ID</label>
+            <input type="text" class="form-control" hidden id="customer_id" name="customer_id" required value="{{ $order->customer_id }}">
+          </div>
+          <div class="form-group">
+            <label hidden for="order_id">Order ID</label>
+            <input type="text" class="form-control" hidden id="order_id" name="order_id" required value="{{ $order->order_id }}">
+          </div>
+          <div class="form-group">
+            <label for="order_status">Order Status</label>
+            <select class="form-control" id="order_status" name="order_status" required>
+            @foreach($orderStatus as $s)
+            <option value="{{$s->id}}" {{ $s->id == $order->order_status ? 'selected' : '' }}>{{$s->name}}</option>
+            @endforeach
+              <!-- Add more statuses as needed -->
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- order status end-->
                                                 </p>
-                                            <p class="mb-0">Reason |
+                                            <p class="mb-0">{{$order->reason_name ? $order->reason_name : 'Reason' }} |
                                                 <button type="button" class="btn btn-sm rounded-pill btn-primary"
-                                                    data-bs-toggle="modal" data-bs-target="#Reason">
+                                                    data-bs-toggle="modal" data-bs-target="#reasonModal">
                                                   
                                                     Reason Not Specified
                                                     
                                                 </button>
+                                                <!-- Modal Reason -->
+<div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reasonModalLabel">Update Reason</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="reasonForm" method="POST" action="{{route('allorders.updateReason')}}">
+        @csrf
+        <div class="modal-body">
+          <div class="form-group">
+            <label hidden for="customer_id_reason">Customer ID</label>
+            <input type="text" class="form-control" hidden id="customer_id_reason" name="customer_id" required value="{{ $order->customer_id }}">
+          </div>
+          <div class="form-group">
+            <label hidden for="order_id_reason">Order ID</label>
+            <input type="text" class="form-control" hidden id="order_id_reason" name="order_id" required value="{{ $order->order_id }}">
+          </div>
+          <div class="form-group">
+            <label for="reason_id">Reason</label>
+            <select class="form-control" id="reason_id" name="reason_id" required>
+              @foreach($allReasons as $reason)
+                <option 
+                value="{{$reason->id}}" {{ $reason->id == $order->edit_reason_id  ? 'selected' : '' }}
+                >{{ $reason->reason }}</option>
+              @endforeach
+              <!-- Add more reasons as needed -->
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- end reasons -->
                                             </p>
                                         </td>
                                         @else
@@ -298,15 +381,18 @@ Update
                                         <td class="col-6">
                                             <strong>Files</strong><br>
                                             @foreach($orderFiles as $f)
-                                            @php
-                                            $fileId = $f->id;
-                                            $fileData = json_decode($f->files, true); // Decode the JSON
-                                            $filePath = $fileData['path'] ?? 'No file'; // Get the file path
-                                            $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
-                                            @endphp
-                                            <span class="text-info"><!--QT-54325-filename.psd--> {{ $originalFilename }} 
-                                            @if($order->edit_status ==1) | 
-                                            <button type="button" class="btn btn-sm rounded-pill btn-danger m-2" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileModal">Delete</button><br>
+    @php
+        $fileId = $f->fileId;
+        $fileData = json_decode($f->files, true); // Decode the JSON
+        $filePath = $fileData['path'] ?? 'No file'; // Get the file path
+        $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
+    @endphp
+    <span class="text-info">{{ $originalFilename }} 
+    @if($order->edit_status == 1) | 
+        <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileModal">Delete</button><br>
+    @endif
+    </span>
+@endforeach
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteFileModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
@@ -321,25 +407,24 @@ Update
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="deleteFileForm" method="POST" action="{{ route('allorders.deleteFile') }}" >
+                <form id="deleteFileForm" method="POST" action="{{ route('allorders.deleteFile') }}">
                     @csrf
-                    <input type="hidden" id="file_id" name="file_id" value="{{ $fileId }}">
+                    <input type="text" hidden id="file_id" name="file_id" value="">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-@endif
-@endforeach
                                           
                                             <!-- <span class="text-info">QT-54325-filename.psd | <button type="button"
                                                      class="btn btn-sm rounded-pill btn-danger m-2">Delete</button></span><br>
                                             <span class="text-info">QT-54325-filename.psd | <button type="button"
                                                     class="btn btn-sm rounded-pill btn-danger m-2">Delete</button></span> -->
                                                     <!-- Button to Open the File Upload Modal -->
-<button type="button" class="btn btn-sm rounded-pill btn-primary m-2" data-bs-toggle="modal" data-bs-target="#fileUploadModal">Attach Files</button>
-
+                                                    @if($order->edit_status == 1)
+                                                    <button type="button" class="btn btn-sm rounded-pill btn-primary m-2" data-bs-toggle="modal" data-bs-target="#fileUploadModal">Attach Files</button>
+                                                    @endif
 <!-- Modal for Multiple File Upload -->
 <div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -629,7 +714,18 @@ Update
 <!-- Content Div Ends here End -->
 
 
+<!-- JavaScript to handle the modal -->
+<script>
+    const deleteFileButtons = document.querySelectorAll('.delete-file-btn');
+    const fileIdInput = document.getElementById('file_id');
 
+    deleteFileButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const fileId = this.getAttribute('data-file-id');
+            fileIdInput.value = fileId; // Set the file ID in the hidden input
+        });
+    });
+</script>
 
 <script>
     var designerModal = document.getElementById('Designer');

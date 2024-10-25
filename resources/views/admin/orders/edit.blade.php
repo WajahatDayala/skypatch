@@ -2,159 +2,473 @@
 @section('action-content')
 
 
-<div class=" container-fluid py-4 px-4">
+
+         <!-- All Content Goes inside this div -->
+         <div class=" container-fluid py-4 px-4">
                 <div class="row g-4 d-flex align-items-center justify-content-center">
-                    <div class="col-8">
-                        <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">Edit Order OR-{{$order->order_id}}</h6> 
-                            @if ($errors->any())
-                            <div class="alert alert-danger">
-                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                             <ul>
-                               @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                               @endforeach
-                             </ul>
+                    <div class="col-12">
+                        <div class="bg-table rounded h-100 p-4 mt-4">
+                            <div class="row bg-dark p-2">
+                                <h6 class="text-light fw-light text-center mb-0">Pricing Criteria</h1>
                             </div>
-                             @endif
-                             <form action="{{ route('orders.update', $order->order_id) }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                @method('PUT') <!-- Use PUT method for updating -->
-                                <div class="row mb-3">
-                                    <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Name/PO *</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{$order->design_name}}">
-                                    @error('name')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        </span>
-                                     @enderror   
-                                    </div>
-                                    <input hidden type="text" name="desc" class="form-control" value="{{$order->description}}">
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Required Format
-                                        *</label>
-                                    <div class="col-sm-8">
-                                        <select class="form-select @error('required_format_id') is-invalid @enderror" name="required_format_id" aria-label="Default select example">
-                                            <option value="" selected class='text-gray'>Select Format</option>
-                                            @foreach($requiredFormat as $f)
-                                            <option value="{{ $f->id }}" 
-                                            {{ $order->format == $f->name ? 'selected' : '' }}>
-                                             {{ $f->name }}
-                                            </option>
-                                            @endforeach
-                                          
-                                        </select>
-                                        @error('required_format_id')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        </span>
-                                         @enderror   
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Height</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" name="height" class="form-control" id="inputEmail3" value="{{$order->height}}">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Width</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" name="width" class="form-control" id="inputEmail3" value="{{$order->width}}">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Fabric
-                                        *</label>
-                                    <div class="col-sm-8">
-                                        <select class="form-select @error('fabric_id') is-invalid @enderror" name="fabric_id" aria-label="Default select example">
-                                            <option value="" selected class='text-gray'>Select Fabric</option>
-                                            @foreach($fabric as $f)
-                                            <option value="{{$f->id}}" {{ $order->fabric_name == $f->name ? 'selected' : '' }}>{{$f->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('fabric_id')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        </span>
-                                         @enderror   
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Placement
-                                        *</label>
-                                    <div class="col-sm-8">
-                                        <select class="form-select @error('placement_id') is-invalid @enderror" name="placement_id" aria-label="Default select example">
-                                            <option value="" selected class='text-gray'>Select Placement</option>
-                                            @foreach($placement as $p)
-                                            <option value="{{$p->id}}" {{ $order->placement == $p->name ? 'selected' : '' }}>{{$p->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        <input type="hidden" name="status" value="2">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Minimum Price</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Maximum Price</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>1000 Stitches</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Normal Delivery</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Editing/Changes</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Editing in stiches file</strong><br>
+                                            <span>lorem</span>
+                                        </td>
+                                    </tr>
 
-                                        @error('placement_id')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        </span>
-                                         @enderror
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Number of
-                                        Colors</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" name="number_of_colors" class="form-control" id="inputPassword3" value="{{$order->number_of_colors}}">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputPassword3" class="col-sm-4 col-form-label text-end">Additional
-                                        Instruction</label>
-                                    <div class="col-sm-8">
-                                        <textarea class="form-control" name="additional_instruction" placeholder="Leave a comment here"
-                                            id="floatingTextarea" style="height: 150px;">{{$orderInstruction? $orderInstruction->instruction:''}}</textarea>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Select
-                                        Files</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" name="files[]" type="file" id="formFileMultiple" multiple>
-                                    </div>
-                                    
-                                    <!--read files-->
-                                    @foreach($quoteFiles as $f)
-                                    <input type="hidden" name="read_files" value="{{$f->files}}"/>
-                                    @endforeach
-                                
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Commment Box 1</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Comment Box 2</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Comment Box 3</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Comment Box 4</strong><br>
+                                            <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni
+                                                possimus perspiciatis ad dicta, incidunt accusamus. Voluptatibus, veniam
+                                                laboriosam! Vitae, iure.</span>
+                                        </td>
 
-                                </div>
-                                <div class="row mb-3">
-                                    <legend class="col-form-label col-sm-4 pt-0 text-end">Super Urgent</legend>
-                                    <div class="col-sm-8">
-                                        <div class="form-check">
-                                            <input class="form-check-input" name="super_urgent"  type="checkbox" id="gridCheck1"
-                                            value="1" {{ old('super_urgent', $order->super_urgent ?? 1) ? 'checked' : '' }}>
-                                            
-                                            <label class="form-check-label" for="gridCheck1">
-                                                Let us know if your order is super urgent!
-                                            </label>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="bg-table rounded h-100 p-4 mt-4">
+                            <div class="row bg-dark p-2">
+                                <h6 class="text-light fw-light text-center mb-0">For Digitzer's/Vector Teams</h1>
+                            </div>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong># of Machine(s)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Condition</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong># of Needles</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Thread</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Needle Brand</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing(Pique / Jersey)</strong><br>
+                                            <span>lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Brand</strong><br>
+                                            <span>psd</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing (Cotton / Twill)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing (Cap)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Backing</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Needle Number</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong># of Heads</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Comments</strong><br>
+                                            <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni
+                                                possimus perspiciatis ad dicta, incidunt accusamus. Voluptatibus, veniam
+                                                laboriosam! Vitae, iure.</span>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Modal for Reason -->
+                            <div class="modal fade" id="Reason" tabindex="-1" aria-labelledby="ReasonLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ReasonLabel">Reasons</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="">
+                                                <div class="row mb-3">
+                                                    <label for="reasonSelect"
+                                                        class="col-sm-4 col-form-label text-end">Select Reason *</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-select" id="reasonSelect"
+                                                            aria-label="Default select example">
+                                                            <option selected class='text-gray'>Select Format</option>
+                                                            <option value="1">Sales</option>
+                                                            <option value="2">Support</option>
+                                                            <option value="3">Accounts</option>
+                                                            <option value="4">Digitizer Leader</option>
+                                                            <option value="5">Digitizer</option>
+                                                            <option value="6">Vector Artist Leader</option>
+                                                            <option value="7">Vector Artist</option>
+                                                            <option value="8">Quote Digitizer Leader</option>
+                                                            <option value="9">Quote Digitizer</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <!-- Modal for Edit Reason Ends Here -->
 
-                               
-
-                                <input type="hidden" name="customer_id" value="{{Auth()->user()->id}}">
-                                <div class="row mb-3">
-                                    <div class="col-sm-4">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <button type="submit" class="btn btn-primary">Update Order</button>
+                            <!-- Modal for Edit Designer Start Here -->
+                            <div class="modal fade" id="Designer" tabindex="-1" aria-labelledby="DesignerLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="DesignerLabel">Designer Assignment</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="">
+                                                <div class="row mb-3">
+                                                    <label for="designerSelect"
+                                                        class="col-sm-4 col-form-label text-end">Select Designer
+                                                        *</label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-select" id="designerSelect"
+                                                            aria-label="Default select example">
+                                                            <option selected class='text-gray'>Select Designer</option>
+                                                            <option value="1">Designer 1</option>
+                                                            <option value="2">Designer 2</option>
+                                                            <option value="3">Designer 3</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                            <!-- Modal for Edit Designer Ends Here -->
+
                         </div>
+
+                        <div class="bg-table rounded h-100 p-4 mt-4">
+                            <div class="row bg-dark p-2">
+                                <h6 class="text-light fw-light text-center mb-0">Job Information</h1>
+                            </div>
+                            <div class="row">
+                                <div class="col-7">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr class="row">
+                                                <td class="col-3">
+                                                    <strong>Number</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Date & Time</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Customer Nick</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Desing Namw/PO</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td class="col-3">
+                                                    <strong>Height</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Width</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Required Format</strong><br>
+                                                    <span>lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Placement</strong><br>
+                                                    <span>lorem</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td class="col-3">
+                                                    <strong>Number of Colors</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-3">
+                                                    <strong>Fabric Type</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                                <td class="col-6">
+                                                    <strong>Design Type</strong><br>
+                                                    <span>Lorem</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td class="col-12">
+                                                    <strong>Customer Instructions</strong><br>
+                                                    <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                                                        Magni
+                                                        possimus perspiciatis ad dicta, incidunt accusamus.
+                                                        Voluptatibus,
+                                                        veniam
+                                                        laboriosam! Vitae, iure.</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td class="col-12">
+                                                    <strong>Admin Instructions</strong><br>
+                                                    <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                                                        Magni
+                                                        possimus perspiciatis ad dicta, incidunt accusamus.
+                                                        Voluptatibus,
+                                                        veniam
+                                                        laboriosam! Vitae, iure.</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-5">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr class="row d-flex align-items-center justify-content-center">
+                                                <td class="col-2">
+                                                    Height
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                            </tr>
+                                            <tr class="row d-flex align-items-center justify-content-center">
+                                                <td class="col-2">
+                                                    Width
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                            </tr>
+                                            <tr class="row d-flex align-items-center justify-content-center">
+                                                <td class="col-2">
+                                                    Stitches
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                            </tr>
+                                            <tr class="row d-flex align-items-center justify-content-center">
+                                                <td class="col-2">
+                                                    Price
+                                                </td>
+                                                <td class="col-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text" id="basic-addon1">$</span>
+                                                        <input type="text" class="form-control" placeholder="Price"
+                                                            aria-label="Username" aria-describedby="basic-addon1">
+                                                    </div>
+                                                </td>
+                                                <td class="col-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text" id="basic-addon1">$</span>
+                                                        <input type="text" class="form-control" placeholder="Price"
+                                                            aria-label="Username" aria-describedby="basic-addon1">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="row d-flex align-items-center justify-content-center">
+                                                <td class="col-2">
+                                                    Total
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                                <td class="col-5">
+                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-table rounded h-100 p-4 mt-4">
+                            <div class="row">
+                                <div class="col-6 border-end">
+                                    <div class="row bg-dark p-2">
+                                        <h6 class="text-light fw-light text-center mb-0">Option A</h1>
+                                    </div>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr class="row">
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-primary rounded-pill m-2">Upload Files</button>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td>
+                                                    <strong>Comment</strong><br>
+                                                    <textarea class="form-control" placeholder="Leave a comment here"
+                                                        id="floatingTextarea" style="height: 150px;"></textarea>
+
+                                                    <div class="mt-3">
+                                                        <legend class="fs-6"><strong>Mail To:</strong></legend>
+                                                        <br>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="gridCheck1">
+                                                            <label class="form-check-label" for="gridCheck1">
+                                                                email@domain.com
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="gridCheck1">
+                                                            <label class="form-check-label" for="gridCheck1">
+                                                                email@domain.com
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="gridCheck1">
+                                                            <label class="form-check-label" for="gridCheck1">
+                                                                email@domain.com
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-6 border-start">
+                                    <div class="row bg-dark p-2">
+                                        <h6 class="text-light fw-light text-center mb-0">Option B</h1>
+                                    </div>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr class="row">
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-primary rounded-pill m-2">Upload Files</button>
+                                                </td>
+                                            </tr>
+                                            <tr class="row">
+                                                <td>
+                                                    <strong>Comment</strong><br>
+                                                    <textarea class="form-control" placeholder="Leave a comment here"
+                                                        id="floatingTextarea" style="height: 150px;"></textarea>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="row d-flex justify-content-end align-items-center">
+                                <div class="col-2 d-flex">
+                                    <button type="button" class="btn btn-primary rounded-pill m-2">Send</button>
+                                    <button type="button" class="btn btn-dark rounded-pill m-2">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>
+            <!-- Content Div Ends here End -->
+
  
  
 @endsection

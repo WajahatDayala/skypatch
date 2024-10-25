@@ -13,6 +13,7 @@ use App\Models\Instruction;
 use App\Models\Status;
 //use App\Models\QuoteEditID;
 use App\Models\Order;
+use App\Models\Admin;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -36,10 +37,13 @@ class AllQuotesController extends Controller
         'quotes.id as order_id',
         'users.name as customer_name',
         'quotes.name as design_name',
-        'statuses.name as status'
+        'admins.name as designer_name',
+        'statuses.name as status',
+        'quotes.created_at as createdAt'
         )
         ->join('users','quotes.customer_id','=','users.id')
         ->join('statuses','quotes.status_id','statuses.id')
+        ->leftjoin('admins','quotes.designer_id','admins.id')
         ->orderBy('design_name','ASC')
         ->get();
 
@@ -53,29 +57,38 @@ class AllQuotesController extends Controller
 
         return view('admin/quotes/index',
         [
-        'quotes'=>$quotes,   
-        'quoteConvertedOrder' => $quoteConvertedOrder 
+        'quotes'=>$quotes
         ]);
     }
 
     public function todayDayQuote()
     {
-        $quotes = Quote::select('*', 
-        'quotes.id as order_id', 
-        'users.name as customer_name', 
-        'quotes.name as design_name')
-            ->join('users', 'quotes.customer_id', '=', 'users.id')
-            ->whereDate('quotes.created_at', today()) 
-            ->get();
+        $quotes = Quote::select('*',
+        'quotes.id as order_id',
+        'users.name as customer_name',
+        'quotes.name as design_name',
+        'admins.name as designer_name',
+        'statuses.name as status',
+        'quotes.created_at as createdAt'
+        )
+        ->join('users','quotes.customer_id','=','users.id')
+        ->join('statuses','quotes.status_id','statuses.id')
+        ->leftjoin('admins','quotes.designer_id','admins.id')
+        ->whereDate('quotes.created_at',today())
+        ->orderBy('design_name','ASC')
+        ->get();
 
-      //convertQuotes
-      $quoteConvertedOrder = Order::select('*','orders.quote_id as orderQuoteId')
-      ->join('quotes','orders.quote_id','=','quotes.id')
-      ->get();
-      
-        return view('admin.quotes.today', [
-            'quotes' => $quotes,
-            'quoteConvertedOrder' => $quoteConvertedOrder 
+       
+
+        //convertQuotes
+        $quoteConvertedOrder = Order::select('*','orders.quote_id as orderQuoteId')
+        ->join('quotes','orders.quote_id','=','quotes.id')
+        ->get();
+
+
+        return view('admin/quotes/today',
+        [
+        'quotes'=>$quotes
         ]);
     }
 
@@ -101,6 +114,74 @@ class AllQuotesController extends Controller
     public function show(string $id)
     {
         //
+        $order = Quote::findOrFail($id);
+
+        $order = Quote::select('*', 
+        'quotes.id as order_id',
+        'quotes.name as design_name',
+        'users.name as customer_name',
+        'admins.id as designer_id',
+        'admins.name as designer_name',
+        'statuses.name as status',
+        'ordersStatus.name as order_status_name',
+        'fabrics.name as fabric_name',
+        'required_formats.name as format',
+        'placements.name as placement',
+        'users.name as customer_name',
+        'quotes.created_at as received_date',
+        'quotes.name as design_name')
+        ->join('users', 'quotes.customer_id', '=', 'users.id')
+        ->join('statuses','quotes.status_id','=','statuses.id')
+        ->join('fabrics','quotes.fabric_id','=','fabrics.id')
+        ->join('placements','quotes.placement_id','=','placements.id')
+        ->join('required_formats','quotes.required_format_id','=','required_formats.id')
+        ->leftjoin('admins','quotes.designer_id','=','admins.id')
+        ->leftjoin('statuses as ordersStatus','quotes.quotes_status','ordersStatus.id')
+        ->where('quotes.id', $order->id) 
+        ->first(); 
+
+        //instruction
+        $orderInstruction = Quote::select('*','instructions.description as instruction') 
+        ->leftjoin('instructions','instructions.quote_id','=','quotes.id')
+        ->where('instructions.quote_id',$id)
+        ->first();
+
+
+        //admin instruction
+        $adminInstruction = Quote::select('*','instructions.description as instruction') 
+        ->join('instructions','instructions.quote_id','=','quotes.id')
+        ->leftjoin('admins','instructions.emp_id','admins.id')
+        ->leftjoin('roles','admins.role_id','roles.id')
+        ->where('instructions.quote_id',$id)
+        ->where('roles.name','Admin')
+        ->first();
+
+        //files
+        $orderFiles =QuoteFileLog::select('*','quote_file_logs.id as fileId')
+        ->where('quote_id',$id)->get();
+    
+        //order status
+        $orderStatus = Status::where('status_value',1)->get();
+
+      
+        //designer
+        $designer = Admin::select('*','admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
+        ->join('roles', 'admins.role_id', '=', 'roles.id')
+        ->whereIn('roles.name',
+         ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
+        ->get();
+
+
+
+
+        return view('admin/quotes/show',compact(
+            'order',
+            'designer',
+            'orderStatus',
+            'orderFiles',
+            'orderInstruction',
+            'adminInstruction'
+        ));
     }
 
     /**

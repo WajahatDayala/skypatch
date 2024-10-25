@@ -12,6 +12,7 @@ use App\Models\QuoteFileLog;
 use App\Models\Instruction;
 use App\Models\Status;
 use App\Models\OrderEditID;
+use App\Models\ReasonEdit;
 use App\Models\Admin;
 use Validator;
 use Illuminate\Support\Facades\Storage;
@@ -117,7 +118,7 @@ class AllOrdersController extends Controller
     public function show(string $id)
     {
         //
-        $order = Order::findOrFail($id);
+       $order = Order::findOrFail($id);
 
         $order = Order::select('*', 
         'orders.id as order_id',
@@ -126,11 +127,13 @@ class AllOrdersController extends Controller
         'admins.id as designer_id',
         'admins.name as designer_name',
         'statuses.name as status',
+        'ordersStatus.name as order_status_name',
         'fabrics.name as fabric_name',
         'required_formats.name as format',
         'placements.name as placement',
         'users.name as customer_name',
         'orders.created_at as received_date',
+        'reason_edits.reason as reason_name',
         'orders.name as design_name')
         ->join('users', 'orders.customer_id', '=', 'users.id')
         ->join('statuses','orders.status_id','=','statuses.id')
@@ -138,16 +141,15 @@ class AllOrdersController extends Controller
         ->join('placements','orders.placement_id','=','placements.id')
         ->join('required_formats','orders.required_format_id','=','required_formats.id')
         ->leftjoin('admins','orders.designer_id','=','admins.id')
+        ->leftjoin('statuses as ordersStatus','orders.order_status','ordersStatus.id')
+        ->leftjoin('reason_edits','orders.edit_reason_id','reason_edits.id')
         ->where('orders.id', $order->id) 
         ->first(); 
-
-
-     
 
         //instruction
         $orderInstruction = Order::select('*','instructions.description as instruction') 
         ->leftjoin('instructions','instructions.order_id','=','orders.id')
-        ->where('instructions.order_id',$order->order_id)
+        ->where('instructions.order_id',$id)
         ->first();
 
 
@@ -156,13 +158,19 @@ class AllOrdersController extends Controller
         ->join('instructions','instructions.order_id','=','orders.id')
         ->leftjoin('admins','instructions.emp_id','admins.id')
         ->leftjoin('roles','admins.role_id','roles.id')
-        ->where('instructions.order_id',$order->order_id)
+        ->where('instructions.order_id',$id)
         ->where('roles.name','Admin')
         ->first();
 
         //files
-        $orderFiles =QuoteFileLog::select('*')->where('order_id',$order->order_id)->get();
+        $orderFiles =QuoteFileLog::select('*','quote_file_logs.id as fileId')
+        ->where('order_id',$id)->get();
     
+        //order status
+        $orderStatus = Status::where('status_value',1)->get();
+
+        //Allreasons
+        $allReasons = ReasonEdit::all();
 
 
         //designer
@@ -178,9 +186,11 @@ class AllOrdersController extends Controller
         return view('admin/orders/show',compact(
             'order',
             'designer',
+            'orderStatus',
             'orderFiles',
             'orderInstruction',
-            'adminInstruction'
+            'adminInstruction',
+            'allReasons'
         ));
     }
         //assign designer
@@ -340,12 +350,76 @@ public function deleteFile(Request $request)
     return redirect()->back()->with('error', 'File deletion failed.');
 }
 
+    //update status
+    public function orderStatus(Request $request)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'customer_id' => 'required|integer',
+            'order_id' => 'required|integer|exists:orders,id', // Ensure the order ID exists
+            'order_status' => 'required|integer', // Add more validation based on your statuses
+        ]);
+
+        // Find the order by its ID
+        $order = Order::find($validatedData['order_id']);
+
+        if ($order) {
+            // Update the order status
+            $order->order_status = $validatedData['order_status'];
+            $order->save(); // Save the changes
+            
+            // Redirect back to the previous page
+          
+            return redirect()->back()->with('success', 'Order status updated successfully!');
+
+        } else {
+            
+            // Redirect back with error message
+          
+            return redirect()->back()->with('error', 'Order not found.');
+
+        }
+    }
+
+    //update status
+    public function addReason(Request $request)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'customer_id' => 'required|integer',
+            'order_id' => 'required|integer|exists:orders,id', // Ensure the order ID exists
+            'reason_id' => 'required|integer', // Add more validation based on your statuses
+        ]);
+
+        // Find the order by its ID
+        $order = Order::find($validatedData['order_id']);
+
+        if ($order) {
+            // Update the reason
+            $order->edit_reason_id  = $validatedData['reason_id'];
+            $order->save(); // Save the changes
+            
+            // Redirect back to the previous page
+          
+            return redirect()->back()->with('success', 'Reason updated successfully!');
+
+        } else {
+            
+            // Redirect back with error message
+          
+            return redirect()->back()->with('error', 'Reason not found.');
+
+        }
+    }
+
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
         //
+        return view('admin/orders/edit');
     }
 
     /**
