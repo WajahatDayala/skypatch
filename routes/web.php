@@ -4,6 +4,8 @@ use App\Http\Controllers\customer\QuotesController;
 use App\Http\Controllers\customer\OrdersController;
 use App\Http\Controllers\customer\VectorsController;
 //use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\customer\DashboardController;
+
 use App\Http\Controllers\customer\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
@@ -24,16 +26,19 @@ Route::get('/', function () {
 });
 
 
-Route::get('/dashboard', function () {
+Route::get('/customer/dashboard', function () {
     return view('customer/dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+// Route::middleware('auth')->group(function () {
+// User routes
+Route::group(['middleware' => 'auth:web'], function () {
+
    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
  //   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
-
+    
     //customer 
     ///profile
     Route::resource('/customer/my-profile',ProfileController::class);
@@ -66,6 +71,14 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //all quotes
     Route::resource('/admin/allquotes',AllQuotesController::class);
     Route::get('/admin/today-quotes', [AllQuotesController::class, 'todayDayQuote']);
+    Route::post('/admin/allquotes/{id}/allquote', [AllQuotesController::class, 'assignDesigner'])->name('allquotes.allquote');
+    Route::post('/admin/allquotes/addInstruction', [AllQuotesController::class, 'storeInstruction'])->name('allquotes.addInstruction');
+    Route::post('/admin/allquotes/adminInstruction', [AllQuotesController::class, 'storeAdminInstruction'])->name('allquotes.adminInstruction');
+    Route::post('/admin/allquotes/uploadFile', [AllQuotesController::class, 'storeFile'])->name('allquotes.uploadFile');
+    Route::post('/admin/allquotes/deleteFile', [AllQuotesController::class, 'deleteFile'])->name('allquotes.deleteFile'); 
+    Route::post('/admin/allquotes/updateStatus', [AllQuotesController::class, 'orderStatus'])->name('allquotes.updateStatus');
+  
+
     //all orders
     Route::resource('/admin/allorders',AllOrdersController::class);
     Route::get('/admin/today-orders', [AllOrdersController::class, 'todayDayOrders']);

@@ -193,25 +193,25 @@ class AllOrdersController extends Controller
             'allReasons'
         ));
     }
-        //assign designer
-        public function assignDesigner(Request $request, $id)
-        {
-            $request->validate([
-                'designer_id' => 'required|exists:admins,id', // Adjust according to your leaders table
-              ]);
-        
-              $order = Order::findOrFail($id);
-              $order->designer_id = $request->designer_id;
-              $order->save();
-        
-             return redirect()->back()->with('success', 'Leader assigned successfully!');
-        }
+    //assign designer
+    public function assignDesigner(Request $request, $id)
+    {
+        $request->validate([
+            'designer_id' => 'required|exists:admins,id', // Adjust according to your leaders table
+        ]);
+
+        $order = Order::findOrFail($id);
+        $order->designer_id = $request->designer_id;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Leader assigned successfully!');
+    }
 
 
-        //add customer instruction..
-        public function storeInstruction(Request $request)
-        {
-                 // Validate the incoming request data
+    //add customer instruction..
+    public function storeInstruction(Request $request)
+    {
+        // Validate the incoming request data
         $request->validate([
             'customer_id' => 'required|integer',
             'order_id' => 'required|integer',
@@ -220,18 +220,17 @@ class AllOrdersController extends Controller
 
         // Check if the instruction already exists for this customer and order
         $instruction = Instruction::where('order_id', $request->order_id)
-                                  ->where('cust_id', $request->customer_id)
-                                  ->first();
+            ->where('cust_id', $request->customer_id)
+            ->first();
 
         if ($instruction) {
             // If it exists, update the instruction
             $instruction->description = $request->instruction;
-         //   $instruction->emp_id = Auth::id(); // Update emp_id if necessary
+            //   $instruction->emp_id = Auth::id(); // Update emp_id if necessary
             $instruction->save();
 
             return redirect()->back()->with('success', 'Instruction updated successfully!');
-        } 
-        else {
+        } else {
             // If it doesn't exist, create a new instruction
             $instruction = new Instruction();
             $instruction->cust_id = $request->customer_id;
@@ -316,39 +315,39 @@ class AllOrdersController extends Controller
     
         return redirect()->back()->with('error', 'No files uploaded.');
     }
-    
 
-//delete FIle 
-public function deleteFile(Request $request)
-{
-    $request->validate([
-        'file_id' => 'required|integer|exists:quote_file_logs,id',
-    ]);
 
-    // Find the file entry in the database
-    $fileLog = QuoteFileLog::find($request->file_id);
+    //delete FIle 
+    public function deleteFile(Request $request)
+    {
+        $request->validate([
+            'file_id' => 'required|integer|exists:quote_file_logs,id',
+        ]);
 
-    if ($fileLog) {
-        // Decode the file path from JSON
-        $fileData = json_decode($fileLog->files, true);
-        $filePath = $fileData['path'] ?? '';
-        $fileName = basename($filePath); // Get the file name
-        $fullPath = storage_path('app/public/' . $filePath); // Full path to the file
+        // Find the file entry in the database
+        $fileLog = QuoteFileLog::find($request->file_id);
 
-        // Check if the file exists and delete it
-        if (file_exists($fullPath)) {
-            unlink($fullPath);
-        } else {
-            return redirect()->back()->with('error', 'File does not exist.');
+        if ($fileLog) {
+            // Decode the file path from JSON
+            $fileData = json_decode($fileLog->files, true);
+            $filePath = $fileData['path'] ?? '';
+            $fileName = basename($filePath); // Get the file name
+            $fullPath = storage_path('app/public/' . $filePath); // Full path to the file
+
+            // Check if the file exists and delete it
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
+            } else {
+                return redirect()->back()->with('error', 'File does not exist.');
+            }
+
+            // Delete the database record
+            $fileLog->delete();
+            return redirect()->back()->with('success', 'File deleted successfully!');
         }
 
-        // Delete the database record
-        $fileLog->delete();
-        return redirect()->back()->with('success', 'File deleted successfully!');
+        return redirect()->back()->with('error', 'File deletion failed.');
     }
-
-    return redirect()->back()->with('error', 'File deletion failed.');
-}
 
     //update status
     public function orderStatus(Request $request)

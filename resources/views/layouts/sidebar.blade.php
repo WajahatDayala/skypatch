@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="navbar-nav w-100">
-          <a href="{{url('/dashboard')}}" class="nav-item nav-link  {{ request()->is('dashboard') ? 'active' : '' }}" ><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+          <a href="{{url('/customer/dashboard')}}" class="nav-item nav-link  {{ request()->is('customer/dashboard') ? 'active' : '' }}" ><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
           <!-- <a href="{{url('/customer/today-quotes')}}" class="nav-item nav-link {{ request()->is('customer/today-quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
             Today's Quotes</a> -->
             <a href="{{url('/customer/quotes/create')}}" class="nav-item nav-link {{ request()->is('customer/quotes/create') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>

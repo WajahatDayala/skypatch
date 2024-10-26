@@ -18,6 +18,7 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class AllQuotesController extends Controller
 {
@@ -184,6 +185,194 @@ class AllQuotesController extends Controller
         ));
     }
 
+     //assign designer
+     public function assignDesigner(Request $request, $id)
+     {
+         $request->validate([
+             'designer_id' => 'required|exists:admins,id', // Adjust according to your leaders table
+         ]);
+ 
+         $order = Quote::findOrFail($id);
+         $order->designer_id = $request->designer_id;
+         $order->save();
+ 
+         return redirect()->back()->with('success', 'Leader assigned successfully!');
+     }
+ 
+ 
+     //add customer instruction..
+     public function storeInstruction(Request $request)
+     {
+         // Validate the incoming request data
+         $request->validate([
+             'customer_id' => 'required|integer',
+             'order_id' => 'required|integer',
+             'instruction' => 'required|string',
+         ]);
+ 
+         // Check if the instruction already exists for this customer and order
+         $instruction = Instruction::where('quote_id', $request->order_id)
+             ->where('cust_id', $request->customer_id)
+             ->first();
+ 
+         if ($instruction) {
+             // If it exists, update the instruction
+             $instruction->description = $request->instruction;
+             //   $instruction->emp_id = Auth::id(); // Update emp_id if necessary
+             $instruction->save();
+ 
+             return redirect()->back()->with('success', 'Instruction updated successfully!');
+         } else {
+             // If it doesn't exist, create a new instruction
+             $instruction = new Instruction();
+             $instruction->cust_id = $request->customer_id;
+             //$instruction->emp_id = Auth::id(); // Get the authenticated employee ID
+             $instruction->description = $request->instruction;
+             $instruction->quote_id = $request->order_id;
+             $instruction->save();
+ 
+             return redirect()->back()->with('success', 'Instruction created successfully!');
+         }
+ 
+     }
+ 
+     //admin instruction
+     public function storeAdminInstruction(Request $request)
+     {
+         // Validate the incoming request data
+         $request->validate([
+             'order_id' => 'required|integer',
+             'admin_instruction' => 'required|string',
+         ]);
+ 
+         // Check if the instruction already exists for this customer and order
+         $instruction = Instruction::where('instructions.emp_id',Auth::id())
+                                   ->where('instructions.quote_id',$request->order_id)
+                                   ->first();
+                                  
+ 
+         if ($instruction) {
+             // If it exists, update the instruction
+             $instruction->description = $request->admin_instruction;
+            // $instruction->emp_id = Auth::id(); // Update emp_id if necessary
+             $instruction->save();
+ 
+             return redirect()->back()->with('success', 'Admin instruction updated successfully!');
+         } else {
+             // If it doesn't exist, create a new instruction
+             $instruction = new Instruction();
+             $instruction->cust_id = $request->customer_id;
+             $instruction->emp_id = Auth::id(); // Get the authenticated employee ID
+             $instruction->description = $request->admin_instruction;
+             $instruction->quote_id = $request->order_id;
+             $instruction->save();
+         
+ 
+             return redirect()->back()->with('success', 'Admin instruction created successfully!');
+         }
+     }
+ 
+     public function storeFile(Request $request)
+     {
+         // Validate the incoming request
+         $request->validate([
+             'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+         ]);
+     
+         // Handle file uploads
+         if ($request->hasFile('files')) {
+             // Store new files
+             foreach ($request->file('files') as $file) {
+                 $filePath = $file->store('/uploads/quotes', 'public');
+     
+                 // Get the original filename
+                 $originalFilename = $file->getClientOriginalName();
+     
+                 // Create a structured string to store both path and original filename
+                 $fileData = [
+                     'path' => $filePath,
+                     'original_name' => $originalFilename,
+                 ];
+     
+                 QuoteFileLog::create([
+                     'quote_id' => $request->order_id,
+                     'cust_id' => $request->customer_id,
+                     'emp_id' => Auth::id(),
+                     'files' => json_encode($fileData),
+                 ]);
+             }
+     
+             return redirect()->back()->with('success', 'Files uploaded successfully!');
+         }
+     
+         return redirect()->back()->with('error', 'No files uploaded.');
+     }
+ 
+ 
+     //delete FIle 
+     public function deleteFile(Request $request)
+     {
+         $request->validate([
+             'file_id' => 'required|integer|exists:quote_file_logs,id',
+         ]);
+ 
+         // Find the file entry in the database
+         $fileLog = QuoteFileLog::find($request->file_id);
+ 
+         if ($fileLog) {
+             // Decode the file path from JSON
+             $fileData = json_decode($fileLog->files, true);
+             $filePath = $fileData['path'] ?? '';
+             $fileName = basename($filePath); // Get the file name
+             $fullPath = storage_path('app/public/' . $filePath); // Full path to the file
+ 
+             // Check if the file exists and delete it
+             if (file_exists($fullPath)) {
+                 unlink($fullPath);
+             } else {
+                 return redirect()->back()->with('error', 'File does not exist.');
+             }
+ 
+             // Delete the database record
+             $fileLog->delete();
+             return redirect()->back()->with('success', 'File deleted successfully!');
+         }
+ 
+         return redirect()->back()->with('error', 'File deletion failed.');
+     }
+ 
+     //update status
+     public function orderStatus(Request $request)
+     {
+         // Validate the incoming request data
+         $validatedData = $request->validate([
+             'customer_id' => 'required|integer',
+             'order_id' => 'required|integer|exists:orders,id', // Ensure the order ID exists
+             'order_status' => 'required|integer', // Add more validation based on your statuses
+         ]);
+ 
+         // Find the order by its ID
+         $order = Quote::find($validatedData['order_id']);
+ 
+         if ($order) {
+             // Update the order status
+             $order->quotes_status = $validatedData['order_status'];
+             $order->save(); // Save the changes
+             
+             // Redirect back to the previous page
+           
+             return redirect()->back()->with('success', 'Quote status updated successfully!');
+ 
+         } else {
+             
+             // Redirect back with error message
+           
+             return redirect()->back()->with('error', 'Quote not found.');
+ 
+         }
+     }
+ 
+  
     /**
      * Show the form for editing the specified resource.
      */
@@ -207,37 +396,7 @@ class AllQuotesController extends Controller
     {
         //
     }
-    public function convertToOrder($quoteId)
-    {
-        // Retrieve the quote using the provided ID
-        $quote = Quote::find($quoteId);
-    
-        if (!$quote) {
-            return response()->json(['status' => 'not_found'], 404);
-        }
-    
-        // Create a new order based on the quote data
-        $order = new Order();
-        $order->customer_id = $quote->customer_id; // Assuming customer_id exists
-        $order->quote_id  = $quote->id;; // Assuming customer_id exists
-        $order->required_format_id = $quote->required_format_id;
-        $order->fabric_id = $quote->fabric_id;
-        $order->placement_id = $quote->placement_id;
-        $order->status_id = $quote->status_id; // Set the initial status
-    
-        $order->name = $quote->name; // Adjust as needed
-        $order->height = $quote->height;
-        $order->width = $quote->width;
-        $order->number_of_colors = $quote->number_of_colors;
-        $order->super_urgent = $quote->super_urgent;
-    
-        // Save the order
-        $order->save();
-    
-        // Optionally, update the quote status or perform other actions
-    
-        return response()->json(['status' => 'converted']);
-    }
+   
     
 }
 
