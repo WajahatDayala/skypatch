@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('vector_orders', function (Blueprint $table) {
             //
-            $table->integer('order_status')->default(3)->after('delivery_type_id'); // Integer type with default value of 1
+            $table->integer('vector_status')->default(3)->after('delivery_type_id'); // Specify the position
 
         });
     }
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('vector_orders', function (Blueprint $table) {
             //
         });
     }

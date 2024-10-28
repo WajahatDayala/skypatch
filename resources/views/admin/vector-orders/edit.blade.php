@@ -6,7 +6,7 @@
                 <div class="row g-4 d-flex align-items-center justify-content-center">
                     <div class="col-8">
                         <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">Edit Vector Order OR-{{$order->order_id}}</h6> 
+                            <h6 class="mb-4">Edit Vector VO-{{$order->order_id}}</h6> 
                             @if ($errors->any())
                             <div class="alert alert-danger">
                             <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -17,7 +17,7 @@
                              </ul>
                             </div>
                              @endif
-                             <form action="{{ route('vector-orders.update', $order->order_id) }}" method="POST" enctype="multipart/form-data">
+                             <form action="{{ route('allvectors.update', $order->order_id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT') <!-- Use PUT method for updating -->
                                 <div class="row mb-3">
@@ -100,7 +100,7 @@
 
                                
 
-                                <input type="hidden" name="customer_id" value="{{Auth()->user()->id}}">
+                                <input type="hidden" name="customer_id" value="{{$order->customer_id}}">
                                 <div class="row mb-3">
                                     <div class="col-sm-4">
                                     </div>

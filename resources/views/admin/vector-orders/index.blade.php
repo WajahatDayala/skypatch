@@ -23,8 +23,11 @@
                             <tr class="text-dark">
                                 <th scope="col"> Sr# </th>
                                 <th scope="col"> VO# </th>
-                                <th scope="col"> Design Name </th>
                                 <th scope="col"> Rcv'd Date </th>
+                                <th scope="col"> Sent Date </th>
+                                <th scope="col"> Design Name </th>
+                                <th scope="col"> Customer Nick </th>
+                                <th scope="col"> Designer</th>
                                 <th scope="col"> Status </th>
                                 <th scope="col"> Action </th>
                             </tr>
@@ -36,18 +39,23 @@
                                 @endif
                                 <td>{{ $loop->iteration }}</td>
                                 <td>VO-{{$q->order_id}}</td>
-                               
-                                
+                                <td>{{$q->created_at}}</td>
+                                <td>{{$q->created_at}}</td>
                                 <td>{{$q->design_name}} {{$q->description}}
                                 </td>
+                                <td>{{$q->customer_name}}</td>
+                                <td> @if($q->designer_name)
+                                    {{ $q->designer_name }}
+                                    @else
+                                    <strong class="text-danger">Not Assigned</strong>
+                                    @endif</td>
                               
-                                <td>{{$q->created_at}}</td>
                                 <td>
                                 <span class="btn btn-sm {{ $q->status_id == 1 ? 'btn-success' : 'btn-secondary' }} rounded-pill m-2" href="">{{$q->status}}</span>
                                 </td>
                                 <td>
                                     <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="{{ route('vector-orders.show',['vector_order'=>$q->order_id]) }}">Details</a>
+                                        href="{{ route('allvectors.show',['allvector'=>$q->order_id]) }}">Details</a>
                                 </td>
                             </tr>
                             @endforeach

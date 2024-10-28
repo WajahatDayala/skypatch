@@ -6,7 +6,7 @@
                 <div class="row g-4 d-flex align-items-center justify-content-center">
                     <div class="col-8">
                         <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">Add Order</h6>
+                            <h6 class="mb-4">Add Vector</h6>
                             @if ($errors->any())
                             <div class="alert alert-danger">
                             <strong>Whoops!</strong> There were some problems with your input.<br><br>

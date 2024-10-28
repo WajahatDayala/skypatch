@@ -17,7 +17,7 @@
                              </ul>
                             </div>
                              @endif
-                             <form action="{{ route('quotes.update', $quote->quote_id) }}" method="POST" enctype="multipart/form-data">
+                             <form action="{{ route('allquotes.update', $quote->quote_id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT') <!-- Use PUT method for updating -->
                                 <div class="row mb-3">
@@ -142,7 +142,7 @@
 
                                
 
-                                <input type="hidden" name="customer_id" value="{{Auth()->user()->id}}">
+                                <input type="hidden" name="customer_id" value="{{$quote->customer_id}}">
                                 <div class="row mb-3">
                                     <div class="col-sm-4">
                                     </div>

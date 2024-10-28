@@ -96,6 +96,15 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //all vectors
      Route::resource('/admin/allvectors',AllVectorController::class);
      Route::get('/admin/today-vector', [AllVectorController::class, 'todayDayVector']);
+     Route::post('/admin/allvectors/{id}/allvector', [AllVectorController::class, 'assignDesigner'])->name('allvectors.allvecto');
+     Route::post('/admin/allvectors/addInstruction', [AllVectorController::class, 'storeInstruction'])->name('allvectors.addInstruction');
+     Route::post('/admin/allvectors/adminInstruction', [AllVectorController::class, 'storeAdminInstruction'])->name('allvectors.adminInstruction');
+     Route::post('/admin/allvectors/uploadFile', [AllVectorController::class, 'storeFile'])->name('allvectors.uploadFile');
+     Route::post('/admin/allvectors/deleteFile', [AllVectorController::class, 'deleteFile'])->name('allvectors.deleteFile'); 
+     Route::post('/admin/allvectors/updateStatus', [AllVectorController::class, 'orderStatus'])->name('allvectors.updateStatus');
+   
+
+
 
       //all employees
       Route::resource('/admin/employees',EmployeeController::class);

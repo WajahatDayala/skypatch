@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('quotes', function (Blueprint $table) {
             //
-            $table->integer('quotes_status')->default(1)->after('delivery_type_id'); // Integer type with default value of 1
+            $table->integer('quotes_status')->default(3)->after('delivery_type_id'); // Integer type with default value of 1
         });
     }
 

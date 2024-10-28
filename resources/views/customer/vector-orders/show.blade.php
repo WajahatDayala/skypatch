@@ -8,7 +8,7 @@
             <div class="bg-table rounded h-100 p-4">
                 <div class="row mb-4">
                     <div class="col-6 d-flex justify-content-start align-items-center">
-                        <h6 class="h6 mb-0">Vector Order Details</h6>
+                        <h6 class="h6 mb-0">Vector Details</h6>
                     </div>
                     <div class="col-6 d-flex align-items-center justify-content-end">
                         <!-- <button type="button"
@@ -80,7 +80,7 @@
 
                             </td>
                             <td class="col-6">
-                                <strong>Stitching </strong><br>
+                                <!-- <strong>Stitching </strong><br> -->
                                 <p>
                                    
 
