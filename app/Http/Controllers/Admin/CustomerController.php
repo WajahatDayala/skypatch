@@ -8,6 +8,11 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\VectorOrder;
 use App\Models\Quote;
+use App\Models\Country;
+use App\Models\CustomerBillInfo;
+use App\Models\CardType;
+use Validator;
+
 use Illuminate\Support\Facades\DB;
 class CustomerController extends Controller
 {
@@ -103,6 +108,9 @@ class CustomerController extends Controller
     public function show(string $id)
     {
         //
+        $user = User::find($id);
+        return view('admin.customers.profile-details.index',compact('user'));
+
     }
 
     /**
@@ -111,7 +119,72 @@ class CustomerController extends Controller
     public function edit(string $id)
     {
         //
+        $country  = Country::all();
+        $user = User::find($id);
+        return view('admin.customers.profile-details.edit',
+        compact('user','country'));
     }
+
+    public function billInfo(string $id)
+    {
+        $country  = Country::all();
+        $cardType = CardType::all();
+        $user = User::select('*','users.id as customer_id')
+        ->leftjoin('customer_bill_infos','customer_bill_infos.customer_id','=','users.id')
+        ->leftjoin('card_types','customer_bill_infos.card_type_id','=','card_types.id')
+        ->where('users.id',$id)
+        ->first();
+
+       
+        return view('admin.customers.bill-details.edit',
+        compact('user','country','cardType'));
+
+    }
+
+    public function storeBillInfo(Request $request ,string $id)
+    {
+        $validatedData = $request->validate([
+            'card_holder_name' => 'required|string|max:255',
+            'card_type' => 'required', // Make sure this matches your input name
+            'credit_number' => 'required',
+            'billing_exp_month' => 'required',
+            'billing_exp_year' => 'required',
+            'verification_num' => 'required',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'zipcode' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+        ]);
+    
+        // Find the user by ID
+        $user = User::findOrFail($id);
+    
+        // Check if the billing info exists or create a new instance
+        $billInfo = CustomerBillInfo::firstOrNew(['customer_id' => $user->id]);
+    
+        // Update fields
+        $billInfo->card_holder_name = $validatedData['card_holder_name'];
+        $billInfo->card_type_id = $validatedData['card_type'];
+        $billInfo->card_number = $validatedData['credit_number'];
+        $billInfo->card_expiry = $validatedData['billing_exp_month'] . '/' . $validatedData['billing_exp_year'];
+        $billInfo->vcc = $validatedData['verification_num'];
+        $billInfo->address = $validatedData['address'];
+        $billInfo->city = $validatedData['city'];
+        $billInfo->state = $validatedData['state'];
+        $billInfo->zipcode = $validatedData['zipcode'];
+        $billInfo->country = $validatedData['country'];
+        
+        // Save the billing information
+        $billInfo->save();
+    
+        return redirect()->route('admin.customers.profile-details.index', $user->id)
+        ->with('success', 'Bill updated successfully!');
+
+    }
+    
+
+
 
     /**
      * Update the specified resource in storage.

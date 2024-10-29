@@ -1,4 +1,4 @@
-@extends('customer.profile.base')
+@extends('admin.customers.profile-details.base')
 @section('action-content')
 
 
@@ -24,7 +24,7 @@
                                 <tbody>
                                     <tr class="table-info">
                                         <td colspan="2" class="text-center">Personal Information
-                                            <a href="{{ route('my-profile.edit', ['my_profile' => $user->id]) }}" class="btn btn-sm btn-primary">Update</a>
+                                            <a href="{{ route('customers.edit', ['customer' => $user->id]) }}" class="btn btn-sm btn-primary">Update</a>
                                         </td>
                                     </tr>
                                     <tr class="bg-white">
@@ -160,7 +160,7 @@
                                 <tbody>
                                     <tr class="table-info">
                                         <td colspan="2" class="text-center">Bill Information
-                                            <a href="" class="btn btn-sm btn-primary">Update</a>
+                                            <a href="{{route('customers.billInfo',[$user->id])}}" class="btn btn-sm btn-primary">Update</a>
                                         </td>
                                     </tr>
                                     <tr class="bg-white">
@@ -245,6 +245,90 @@
         </div>
         <!-- Recent Sales End -->
     </div>
+
+
+
+
+
+
+<!--priceing -->
+    <div class="bg-table rounded h-100 p-4 mt-4">
+                            <div class="row bg-info p-2">
+                                <h6 class="text-light fw-light text-center mb-0">For Digitzer's/Vector Teams</h1>
+                            </div>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong># of Machine(s)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Condition</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong># of Needles</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Thread</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Needle Brand</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing(Pique / Jersey)</strong><br>
+                                            <span>lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Brand</strong><br>
+                                            <span>psd</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing (Cotton / Twill)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Backing (Cap)</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Backing</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong>Needle Number</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                        <td class="col-4">
+                                            <strong># of Heads</strong><br>
+                                            <span>Lorem</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="row">
+                                        <td class="col-4">
+                                            <strong>Comments</strong><br>
+                                            <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni
+                                                possimus perspiciatis ad dicta, incidunt accusamus. Voluptatibus, veniam
+                                                laboriosam! Vitae, iure.</span>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+</div>
+
+
+
 </div>
 <!-- Blank End -->
 

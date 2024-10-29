@@ -36,7 +36,8 @@ class AllVectorController extends Controller
         'users.name as customer_name',
         'vector_orders.name as design_name',
         'statuses.name as status',
-        'admins.name as designer_name'
+        'admins.name as designer_name',
+        'vector_orders.created_at as createdAt'
         )
         ->join('users','vector_orders.customer_id','=','users.id')
         ->join('statuses','vector_orders.status_id','statuses.id')
@@ -130,6 +131,7 @@ class AllVectorController extends Controller
         ->where('instructions.vector_id',$order->order_id)
         ->first();
 
+        
         
         //admin instruction
         $adminInstruction = VectorOrder::select('*','instructions.description as instruction') 

@@ -245,6 +245,12 @@
         </div>
         <!-- Recent Sales End -->
     </div>
+
+  
+
+
+
+
 </div>
 <!-- Blank End -->
 

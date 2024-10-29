@@ -68,6 +68,10 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //customer
     Route::resource('/admin/customers',CustomerController::class);
     Route::get('/admin/allcustomers', [CustomerController::class, 'allCustomer']);
+    Route::get('/admin/customers/{id}/billInfo', [CustomerController::class, 'billInfo'])->name('customers.billInfo');
+    Route::post('/admin/customers/{id}/updateBillInfo', [CustomerController::class, 'storeBillInfo'])->name('customers.updateBillInfo');
+
+
     //all quotes
     Route::resource('/admin/allquotes',AllQuotesController::class);
     Route::get('/admin/today-quotes', [AllQuotesController::class, 'todayDayQuote']);

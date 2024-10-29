@@ -39,8 +39,8 @@
                                 @endif
                                 <td>{{ $loop->iteration }}</td>
                                 <td>VO-{{$q->order_id}}</td>
-                                <td>{{$q->created_at}}</td>
-                                <td>{{$q->created_at}}</td>
+                                <td>{{$q->createdAt}}</td>
+                                <td>{{$q->date_finalized}}</td>
                                 <td>{{$q->design_name}} {{$q->description}}
                                 </td>
                                 <td>{{$q->customer_name}}</td>
