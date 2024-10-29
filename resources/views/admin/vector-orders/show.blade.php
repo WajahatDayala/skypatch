@@ -175,7 +175,7 @@ Update
           </div>
           <div class="form-group">
             <label for="admin_instruction">Instruction</label>
-            <textarea class="form-control" id="admin_instruction" name="admin_instruction" rows="3" required> </textarea>
+            <textarea class="form-control" id="admin_instruction" name="admin_instruction" rows="3" required>{{ $adminInstruction ? $adminInstruction->instruction : 'No instruction available.' }} </textarea>
           </div>
         </div>
         <div class="modal-footer">
@@ -279,10 +279,10 @@ Update
             <input type="text" class="form-control" hidden id="order_id" name="order_id" required value="{{ $order->order_id }}">
           </div>
           <div class="form-group">
-            <label for="order_status">Order Status</label>
+            <label for="order_status">Vector Status</label>
             <select class="form-control" id="order_status" name="order_status" required>
             @foreach($orderStatus as $s)
-            <option value="{{$s->id}}" {{ $s->id == $order->order_status ? 'selected' : '' }}>{{$s->name}}</option>
+            <option value="{{$s->id}}" {{ $s->id == $order->vector_status ? 'selected' : '' }}>{{$s->name}}</option>
             @endforeach
               <!-- Add more statuses as needed -->
             </select>
@@ -303,20 +303,20 @@ Update
                                         @else
                                         <td class="col-3">
                                         <h6>
-                                                <strong>Order Status</strong><br>
+                                                <strong>Vector Status</strong><br>
                                             </h6>
-                                            <p class="mb-2">New |
+                                            <p class="mb-2">{{$order->order_status_name}} 
                                                 
                                                
                                                     
                                                 </p>
-                                            <p class="mb-0">Reason |
+                                            <!-- <p class="mb-0">Reason |
                                                 
                                                   
                                                     Reason Not Specified
                                                     
                                                
-                                            </p>
+                                            </p> -->
 
                                         </td>
                                         @endif

@@ -327,18 +327,19 @@ class AllVectorController extends Controller
           // Validate the incoming request data
           $validatedData = $request->validate([
               'customer_id' => 'required|integer',
-              'order_id' => 'required|integer|exists:orders,id', // Ensure the order ID exists
+              'order_id' => 'required|integer|exists:vector_orders,id', // Ensure the order ID exists
               'order_status' => 'required|integer', // Add more validation based on your statuses
           ]);
   
           // Find the order by its ID
           $order = VectorOrder::find($validatedData['order_id']);
-  
+
+       
           if ($order) {
               // Update the order status
               $order->vector_status = $validatedData['order_status'];
               $order->save(); // Save the changes
-              
+           
               // Redirect back to the previous page
             
               return redirect()->back()->with('success', 'Vector status updated successfully!');
@@ -491,7 +492,7 @@ class AllVectorController extends Controller
     
 
                     QuoteFileLog::create([
-                        'vector_order_id' => $quote->id,
+                        'vector_order_id' => $order->id,
                         'cust_id'=>$request->customer_id,
                         'emp_id' => Auth::id(),
                         'files' => json_encode($fileData),
