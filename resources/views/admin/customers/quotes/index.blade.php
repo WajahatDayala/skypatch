@@ -112,7 +112,7 @@
 <script>
 function convertQuote(quoteId) {
     $.ajax({
-        url: '/customer/convert-quote/' + quoteId,
+        url: '/admin/customers/{{$user->id}}/all-quotes/convert-quote/' + quoteId,
         type: 'POST',
         data: {
             _token: '{{ csrf_token() }}'

@@ -343,6 +343,61 @@ class CustomerController extends Controller
 
     }
 
+    //editQuote from customer panel by admin..
+    public function editQuote(string $id)
+    {
+        //
+        $quote = Quote::findOrFail($id);
+
+        $requiredFormat = RequiredFormat::all();
+        $fabric = Fabric::all();
+        $placement = Placement::all();
+       
+       
+
+        $quote = Quote::select('*', 
+        'quotes.id as quote_id',
+        'quotes.name as design_name',
+        'users.name as customer_name', 
+        'statuses.name as status',
+        'fabrics.name as fabric_name',
+        'required_formats.name as format',
+        'placements.name as placement',
+        'users.name as customer_name',
+        'quotes.created_at as received_date',
+        'quotes.name as design_name')
+        ->join('users', 'quotes.customer_id', '=', 'users.id')
+        ->join('statuses','quotes.status_id','=','statuses.id')
+        ->join('fabrics','quotes.fabric_id','=','fabrics.id')
+        ->join('placements','quotes.placement_id','=','placements.id')
+        ->join('required_formats','quotes.required_format_id','=','required_formats.id')
+        ->where('quotes.id', $quote->id) 
+        ->first(); 
+
+        //quote files
+        $quoteFiles =QuoteFileLog::select('*')
+        ->join('quotes','quote_file_logs.quote_id','=','quotes.id')
+        ->where('quote_file_logs.quote_id',$quote->quote_id)
+        ->get();
+
+      //instruction
+      $quoteInstruction = Quote::select('*','instructions.description as instruction') 
+      ->leftjoin('instructions','instructions.quote_id','=','quotes.id')
+      ->where('instructions.quote_id',$quote->quote_id)
+      ->first();
+
+
+        return view('admin/customers/quotes/edit',compact(
+            'quote',
+            'quoteFiles',
+            'requiredFormat',
+            'fabric',
+            'quoteInstruction',
+            'placement'
+        ));
+    }
+
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -409,7 +464,40 @@ class CustomerController extends Controller
 
     }
     
-
+    //convert quotes to order by admin
+    //convert quotes by admin
+     
+    public function convertToOrder($quoteId)
+    {
+        // Retrieve the quote using the provided ID
+        $quote = Quote::find($quoteId);
+    
+        if (!$quote) {
+            return response()->json(['status' => 'not_found'], 404);
+        }
+    
+        // Create a new order based on the quote data
+        $order = new Order();
+        $order->customer_id = $quote->customer_id; // Assuming customer_id exists
+        $order->quote_id  = $quote->id;; // Assuming customer_id exists
+        $order->required_format_id = $quote->required_format_id;
+        $order->fabric_id = $quote->fabric_id;
+        $order->placement_id = $quote->placement_id;
+        $order->status_id = $quote->status_id; // Set the initial status
+    
+        $order->name = $quote->name; // Adjust as needed
+        $order->height = $quote->height;
+        $order->width = $quote->width;
+        $order->number_of_colors = $quote->number_of_colors;
+        $order->super_urgent = $quote->super_urgent;
+    
+        // Save the order
+        $order->save();
+    
+        // Optionally, update the quote status or perform other actions
+    
+        return response()->json(['status' => 'converted']);
+    }
 
 
     /**

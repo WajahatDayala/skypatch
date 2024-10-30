@@ -16,9 +16,9 @@
                         <button type="button"  
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button> 
                         @if($order->edit_status == 1)
-                        <a href="{{route('allquotes.edit',[$order->order_id])}}"
+                        <a href="{{route('customer.edit-quote',[$order->order_id])}}"
                         class="btn btn-sm btn-primary rounded-pill me-2">Edit</a> 
-                       <a href="{{route('allquotes.edit',['allquote',$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
+                       <a href="{{route('allquotes.edit',['id',$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
                         @endif
                     </div>
                 </div>

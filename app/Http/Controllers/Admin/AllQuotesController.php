@@ -347,7 +347,7 @@ class AllQuotesController extends Controller
          // Validate the incoming request data
          $validatedData = $request->validate([
              'customer_id' => 'required|integer',
-             'order_id' => 'required|integer|exists:orders,id', // Ensure the order ID exists
+             'order_id' => 'required|integer|exists:quotes,id', // Ensure the order ID exists
              'order_status' => 'required|integer', // Add more validation based on your statuses
          ]);
  
@@ -371,6 +371,10 @@ class AllQuotesController extends Controller
  
          }
      }
+
+     
+    
+
  
   
     /**

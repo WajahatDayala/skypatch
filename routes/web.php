@@ -78,6 +78,10 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/admin/customers/savedQuote', [CustomerController::class, 'storeQuote'])->name('customer.savedQuote');
     Route::get('/admin/customers/{id}/all-quotes',[CustomerController::class,'allQuotes'])->name('customer.all-quotes');
     Route::get('/admin/customers/{id}/show-quote',[CustomerController::class,'showQuote'])->name('customer.show-quote');
+    Route::get('/admin/customers/{id}/edit-quote',[CustomerController::class,'editQuote'])->name('customer.edit-quote');
+
+    Route::post('/admin/customers/{id}/all-quotes/convert-quote/{quoteId}', [CustomerController::class, 'convertToOrder']);
+
 
 
     //all quotes
@@ -90,7 +94,6 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/admin/allquotes/deleteFile', [AllQuotesController::class, 'deleteFile'])->name('allquotes.deleteFile'); 
     Route::post('/admin/allquotes/updateStatus', [AllQuotesController::class, 'orderStatus'])->name('allquotes.updateStatus');
   
-
     //all orders
     Route::resource('/admin/allorders',AllOrdersController::class);
     Route::get('/admin/today-orders', [AllOrdersController::class, 'todayDayOrders']);
