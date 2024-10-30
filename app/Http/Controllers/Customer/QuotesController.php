@@ -45,12 +45,6 @@ class QuotesController extends Controller
         ->orderBy('design_name','ASC')
         ->get();
 
-        // $quoteEdit =QuoteEditID::select('*','quote_edit_i_d_s.id as quoteEditId')
-        // ->join('quotes','quote_edit_i_d_s.quote_id','=','quotes.id')
-        // ->get();
-
-    
-
         //convertQuotes
         $quoteConvertedOrder = Order::select('*','orders.quote_id as orderQuoteId')
         ->join('quotes','orders.quote_id','=','quotes.id')
@@ -143,12 +137,20 @@ class QuotesController extends Controller
                     foreach ($request->file('files') as $file) {
                         // Store the file and get its path
                         $filePath = $file->store('uploads/quotes', 'public'); // Store in public/uploads/quotes
-                        
+                                       // Get the original filename
+                 $originalFilename = $file->getClientOriginalName();
+     
+                 // Create a structured string to store both path and original filename
+                 $fileData = [
+                     'path' => $filePath,
+                     'original_name' => $originalFilename,
+                 ];
+
                         // Insert into QuoteFileLog
                         QuoteFileLog::create([
                             'quote_id' => $quote->id,
                             'cust_id' => $request->customer_id,
-                            'files' => $filePath,
+                            'files' => json_encode($fileData),
                         ]);
                     }
                 }
@@ -372,10 +374,20 @@ class QuotesController extends Controller
                 // Store new files
                 foreach ($request->file('files') as $file) {
                     $filePath = $file->store('uploads/quotes', 'public');
+
+                                               // Get the original filename
+                 $originalFilename = $file->getClientOriginalName();
+     
+                 // Create a structured string to store both path and original filename
+                 $fileData = [
+                     'path' => $filePath,
+                     'original_name' => $originalFilename,
+                 ];
+
                     QuoteFileLog::create([
                         'quote_id' => $quote->id,
                         'cust_id' => Auth::id(),
-                        'files' => $filePath,
+                        'files' => json_encode($fileData),
                     ]);
                 }
             }

@@ -1,4 +1,4 @@
-@extends('customer.quotes.base')
+@extends('admin.customers.quotes.base')
 @section('action-content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -89,7 +89,7 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="{{ route('quotes.show', ['quote' => $q->order_id]) }}">Details</a>
+                                        href="{{ route('customer.show-quote', ['id' => $q->order_id]) }}">Details</a>
                                 </td>
                             </tr>
                             @endforeach

@@ -19,7 +19,8 @@ use App\Http\Controllers\Admin\AllOrdersController;
 use App\Http\Controllers\Admin\AllVectorController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\AsignLeaderController;
-use App\Http\Controllers\Admin\CustomerDashboardController;
+
+
 
 Route::get('/', function () {
 
@@ -72,6 +73,11 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin/customers/{id}/dashboard',[CustomerController::class,'showPanel'])->name('customer.dashboard');
     Route::get('/admin/customers/{id}/billInfo', [CustomerController::class, 'billInfo'])->name('customers.billInfo');
     Route::post('/admin/customers/updateBillInfo', [CustomerController::class, 'storeBillInfo'])->name('customers.updateBillInfo');
+    //customer orders from admin
+    Route::get('/admin/customers/{id}/quote',[CustomerController::class,'createQuote'])->name('customer.quote');
+    Route::post('/admin/customers/savedQuote', [CustomerController::class, 'storeQuote'])->name('customer.savedQuote');
+    Route::get('/admin/customers/{id}/all-quotes',[CustomerController::class,'allQuotes'])->name('customer.all-quotes');
+    Route::get('/admin/customers/{id}/show-quote',[CustomerController::class,'showQuote'])->name('customer.show-quote');
 
 
     //all quotes
@@ -109,11 +115,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
      Route::post('/admin/allvectors/deleteFile', [AllVectorController::class, 'deleteFile'])->name('allvectors.deleteFile'); 
      Route::post('/admin/allvectors/updateStatus', [AllVectorController::class, 'orderStatus'])->name('allvectors.updateStatus');
    
-    //customer panel
    
-   
-    //customer panel
-
 
       //all employees
       Route::resource('/admin/employees',EmployeeController::class);

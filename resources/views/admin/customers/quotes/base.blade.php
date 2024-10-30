@@ -1,4 +1,4 @@
-@extends('layouts.app-template')
+@extends('layouts.guest-template')
 <!-- Page header -->
 @section('content')
 

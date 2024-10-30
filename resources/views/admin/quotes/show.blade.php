@@ -130,7 +130,7 @@
           <!-- <span aria-hidden="true">&times;</span> -->
         </button>
       </div>
-      <form id="instructionForm" method="POST" action="{{ route('allorders.addInstruction') }}">
+      <form id="instructionForm" method="POST" action="{{ route('allquotes.addInstruction') }}">
         @csrf
         <div class="modal-body">
           <div class="form-group">
@@ -178,7 +178,7 @@ Update
           <!-- <span aria-hidden="true">&times;</span> -->
         </button>
       </div>
-      <form id="adminInstructionForm" method="POST" action="{{ route('allorders.adminInstruction')}}">
+      <form id="adminInstructionForm" method="POST" action="{{ route('allquotes.adminInstruction')}}">
         @csrf
         <div class="modal-body">
         <div class="form-group">
@@ -283,7 +283,7 @@ Update
         <h5 class="modal-title" id="orderStatusModalLabel">Update Order Status</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form id="orderStatusForm" method="POST" action="{{ route('allorders.updateStatus')}}">
+      <form id="orderStatusForm" method="POST" action="{{ route('allquotes.updateStatus')}}">
         @csrf
         <div class="modal-body">
           <div class="form-group">
@@ -298,7 +298,7 @@ Update
             <label for="order_status">Order Status</label>
             <select class="form-control" id="order_status" name="order_status" required>
             @foreach($orderStatus as $s)
-            <option value="{{$s->id}}" {{ $s->id == $order->order_status ? 'selected' : '' }}>{{$s->name}}</option>
+            <option value="{{$s->id}}" {{ $s->id == $order->quotes_status ? 'selected' : '' }}>{{$s->name}}</option>
             @endforeach
               <!-- Add more statuses as needed -->
             </select>
@@ -365,7 +365,7 @@ Update
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="deleteFileForm" method="POST" action="{{ route('allorders.deleteFile') }}">
+                <form id="deleteFileForm" method="POST" action="{{ route('allquotes.deleteFile') }}">
                     @csrf
                     <input type="text" hidden id="file_id" name="file_id" value="">
                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -391,7 +391,7 @@ Update
         <h5 class="modal-title" id="fileUploadModalLabel">Upload Files</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form id="fileUploadForm" method="POST" action="{{ route('allorders.uploadFile')}}" enctype="multipart/form-data">
+      <form id="fileUploadForm" method="POST" action="{{ route('allquotes.uploadFile')}}" enctype="multipart/form-data">
         @csrf
         <div class="modal-body">
           <div class="form-group">
@@ -701,7 +701,7 @@ Update
 
         // Set the form action URL for updating the leader
         var form = document.getElementById('assignLeaderForm');
-        form.action = '{{ url('admin/allorders') }}/' + employeeId + '/allorder';
+        form.action = '{{ url('admin/allquotes') }}/' + employeeId + '/allquote';
     });
 
     document.getElementById('saveChangesButton').addEventListener('click', function () {

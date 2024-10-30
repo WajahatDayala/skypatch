@@ -103,11 +103,19 @@ class VectorsController extends Controller
                         // Store the file and get its path
                         $filePath = $file->store('uploads/vector-order', 'public'); // Store in public/uploads/quotes
                         
+                              // Get the original filename
+                 $originalFilename = $file->getClientOriginalName();
+     
+                 // Create a structured string to store both path and original filename
+                 $fileData = [
+                     'path' => $filePath,
+                     'original_name' => $originalFilename,
+                 ];
                         // Insert into QuoteFileLog
                         QuoteFileLog::create([
                             'vector_order_id' => $order->id,
                             'cust_id' => $request->customer_id,
-                            'files' => $filePath,
+                            'files' => json_encode($fileData),
                         ]);
                     }
                 }
@@ -311,10 +319,20 @@ class VectorsController extends Controller
                 // Store new files
                 foreach ($request->file('files') as $file) {
                     $filePath = $file->store('uploads/vector-order', 'public');
+
+                        // Get the original filename
+                 $originalFilename = $file->getClientOriginalName();
+     
+                 // Create a structured string to store both path and original filename
+                 $fileData = [
+                     'path' => $filePath,
+                     'original_name' => $originalFilename,
+                 ];
+
                     QuoteFileLog::create([
                         'vector_order_id' => $order->id,
                         'cust_id' => Auth::id(),
-                        'files' => $filePath,
+                        'files' => json_encode($fileData),
                     ]);
                 }
             }

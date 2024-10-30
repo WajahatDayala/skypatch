@@ -41,7 +41,7 @@
 
         <div class="col-sm-6 col-md-3 col-xl-3">
         <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-        <a href="/customer/quotes/create"><img src="{{asset('skypatch/img/icons/send-quote.png')}}" alt="" width="50px">
+        <a href="{{ url('/admin/customers/' . $user->id . '/quote') }}"><img src="{{asset('skypatch/img/icons/send-quote.png')}}" alt="" width="50px">
               <p class="my-2 h6">Send Quote</p></a>
             </div>
         </div>
@@ -69,7 +69,7 @@
 
         <div class="col-sm-6 col-md-3 col-xl-3">
           <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-          <a href="/customer/quotes">  <img src="{{asset('skypatch/img/icons/All_Quotes.png')}}" alt="" width="50px">
+          <a href="{{ url('/admin/customers/' . $user->id . '/all-quotes') }}">  <img src="{{asset('skypatch/img/icons/All_Quotes.png')}}" alt="" width="50px">
               <p class="my-2 h6">Quote Records</p></a>
             </div>
         </div>
