@@ -4,15 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class CustomerDashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    protected $redirectTo = '/admin/customer/dashboard';
+    public function __construct()
+    {
+        $this->middleware('auth')->only(["index", "create", "store", "edit", "update", "search", "destroy"]);
+    }
     public function index()
     {
         //
+      
+       
     }
 
     /**
@@ -37,6 +45,9 @@ class CustomerDashboardController extends Controller
     public function show(string $id)
     {
         //
+        
+      
+        
     }
 
     /**

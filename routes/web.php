@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\AllOrdersController;
 use App\Http\Controllers\Admin\AllVectorController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\AsignLeaderController;
+use App\Http\Controllers\Admin\CustomerDashboardController;
 
 Route::get('/', function () {
 
@@ -68,8 +69,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //customer
     Route::resource('/admin/customers',CustomerController::class);
     Route::get('/admin/allcustomers', [CustomerController::class, 'allCustomer']);
+    Route::get('/admin/customers/{id}/dashboard',[CustomerController::class,'showPanel'])->name('customer.dashboard');
     Route::get('/admin/customers/{id}/billInfo', [CustomerController::class, 'billInfo'])->name('customers.billInfo');
-    Route::post('/admin/customers/{id}/updateBillInfo', [CustomerController::class, 'storeBillInfo'])->name('customers.updateBillInfo');
+    Route::post('/admin/customers/updateBillInfo', [CustomerController::class, 'storeBillInfo'])->name('customers.updateBillInfo');
 
 
     //all quotes
@@ -107,7 +109,10 @@ Route::group(['middleware' => 'auth:admin'], function () {
      Route::post('/admin/allvectors/deleteFile', [AllVectorController::class, 'deleteFile'])->name('allvectors.deleteFile'); 
      Route::post('/admin/allvectors/updateStatus', [AllVectorController::class, 'orderStatus'])->name('allvectors.updateStatus');
    
-
+    //customer panel
+   
+   
+    //customer panel
 
 
       //all employees

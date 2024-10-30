@@ -11,7 +11,7 @@
     <div class="row bg-light rounded align-items-center justify-content-center mx-0">
         <!-- Recent Sales Start -->
         <div class="container-fluid">
-            <div class="bg-light text-center rounded p-4">
+            <div class="tbg-ligh text-center rounded p-4">
                 <div class="d-flex flex-column align-items-start justify-content-between mb-4">
                     <h6 class="mb-0"></h6>
                 </div>
@@ -166,33 +166,33 @@
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Card Holder's Name
                                         </b><br>
-                                            
+                                            {{$billInfo->card_holder_name}}
                                         </td>
                                         <td><b class="fw-bold">Card Type
                                         </b><br>
-                                            Select Card Type
+                                        {{$billInfo->cardType}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Card Number
                                             </b><br>
-                                            
+                                            {{$billInfo->card_number}}
                                         </td>
                                         <td><b class="fw-bold">Card Expiry
                                             </b><br>
-                                            /
+                                            {{$billInfo->card_expiry}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">VCC
                                             </b><br>
-                                            
+                                            {{$billInfo->vcc}}
                                         </td>
                                         <td><b class="fw-bold">Address
                                             </b><br>
-                                            
+                                            {{$billInfo->address}}
                                         </td>
                                     </tr>
 
@@ -203,22 +203,22 @@
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">City
                                             </b><br>
-
+                                            {{$billInfo->address}}
                                         </td>
                                         <td><b class="fw-bold">State
                                             </b><br>
-
+                                            {{$billInfo->state}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Zipcode
                                             </b><br>
-
+                                            {{$billInfo->zipcode}}
                                         </td>
                                         <td><b class="fw-bold">Country
                                             </b><br>
-
+                                            {{$billInfo->country}}
                                         </td>
                                     </tr>
 
@@ -246,86 +246,147 @@
         <!-- Recent Sales End -->
     </div>
 
+<!-- Pricing Criteria -->
+
+<div class="row bg-light rounded align-items-center justify-content-center mx-0 p-4 mt-4">
+       
+        <table class="table table-fixed text-start align-middle table-bordered mb-0">
+            <tbody>
+                <tr class="table-info">
+                    <td colspan="3" class="text-center">Pricing Details
+                    <a href="" class="btn btn-sm btn-primary">Update</a>
+                    </td>
+                </tr>
+                <tr class="bg-white">
+                    <td class="col-4">
+                        <strong>Minimum Price</strong><br>
+                        <span></span>
+                    </td>
+                    <td class="col-4">
+                        <strong>Maximum Price</strong><br>
+                        <span></span>
+                    </td>
+                    <td class="col-4">
+                        <strong>1000 Stitches</strong><br>
+                        <span></span>
+                    </td>
+                </tr>
+                <tr class="bg-white">
+                    <td class="col-4">
+                        <strong>Normal Delivery</strong><br>
+                        <span></span>
+                    </td>
+                    <td class="col-4">
+                        <strong>Editing/Changes</strong><br>
+                        <span></span>
+                    </td>
+                    <td class="col-4">
+                        <strong>Editing in stitches file</strong><br>
+                        <span></span>
+                    </td>
+                </tr>
+                <tr class="bg-white">
+                    <td class="col-4">
+                        <strong>Comment Box 1</strong><br>
+                        <span></span>
+                    </td>
+                    <td class="col-4">
+                        <strong>Comment Box 2</strong><br>
+                        <span></span>
+                    </td>
+                    <td class="col-4">
+                        <strong>Comment Box 3</strong><br>
+                        <span></span>
+                    </td>
+                </tr>
+                <tr class="bg-white">
+                    <td class="col-4" colspan="3">
+                        <strong>Comment Box 4</strong><br>
+                        <span></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
 
-
-
-
-<!--priceing -->
-    <div class="bg-table rounded h-100 p-4 mt-4">
-                            <div class="row bg-info p-2">
-                                <h6 class="text-light fw-light text-center mb-0">For Digitzer's/Vector Teams</h1>
-                            </div>
-                            <table class="table table-bordered">
-                                <tbody>
-                                    <tr class="row">
-                                        <td class="col-4">
-                                            <strong># of Machine(s)</strong><br>
-                                            <span>Lorem</span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>Condition</strong><br>
-                                            <span>Lorem</span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong># of Needles</strong><br>
-                                            <span>Lorem</span>
-                                        </td>
-                                    </tr>
-                                    <tr class="row">
-                                        <td class="col-4">
-                                            <strong>Thread</strong><br>
-                                            <span>Lorem</span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>Needle Brand</strong><br>
-                                            <span>Lorem</span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>Backing(Pique / Jersey)</strong><br>
-                                            <span>lorem</span>
-                                        </td>
-                                    </tr>
-                                    <tr class="row">
-                                        <td class="col-4">
-                                            <strong>Brand</strong><br>
-                                            <span>psd</span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>Backing (Cotton / Twill)</strong><br>
-                                            <span>Lorem</span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>Backing (Cap)</strong><br>
-                                            <span>Lorem</span>
-                                        </td>
-                                    </tr>
-                                    <tr class="row">
-                                        <td class="col-4">
-                                            <strong>Backing</strong><br>
-                                            <span>Lorem</span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>Needle Number</strong><br>
-                                            <span>Lorem</span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong># of Heads</strong><br>
-                                            <span>Lorem</span>
-                                        </td>
-                                    </tr>
-                                    <tr class="row">
-                                        <td class="col-4">
-                                            <strong>Comments</strong><br>
-                                            <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni
-                                                possimus perspiciatis ad dicta, incidunt accusamus. Voluptatibus, veniam
-                                                laboriosam! Vitae, iure.</span>
-                                        </td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
+<!-- For Digitizer's/Vector Teams -->
+<div class="row bg-light rounded align-items-center justify-content-center mx-0 p-4 mt-4">
+   
+    <table class="table table-fixed text-start align-middle table-bordered mb-0">
+        <tbody>
+            <tr class="table-info">
+                <td colspan="3" class="text-center">Vector Details
+                <a href="" class="btn btn-sm btn-primary">Update</a>
+                </td>
+            </tr>
+            <tr class="bg-white">
+                <td class="col-4">
+                    <strong># of Machine(s)</strong><br>
+                    <span></span>
+                </td>
+                <td class="col-4">
+                    <strong>Condition</strong><br>
+                    <span></span>
+                </td>
+                <td class="col-4">
+                    <strong># of Needles</strong><br>
+                    <span></span>
+                </td>
+            </tr>
+            <tr class="bg-white">
+                <td class="col-4">
+                    <strong>Thread</strong><br>
+                    <span></span>
+                </td>
+                <td class="col-4">
+                    <strong>Needle Brand</strong><br>
+                    <span></span>
+                </td>
+                <td class="col-4">
+                    <strong>Backing (Pique / Jersey)</strong><br>
+                    <span></span>
+                </td>
+            </tr>
+            <tr class="bg-white">
+                <td class="col-4">
+                    <strong>Brand</strong><br>
+                    <span>psd</span>
+                </td>
+                <td class="col-4">
+                    <strong>Backing (Cotton / Twill)</strong><br>
+                    <span></span>
+                </td>
+                <td class="col-4">
+                    <strong>Backing (Cap)</strong><br>
+                    <span></span>
+                </td>
+            </tr>
+            <tr class="bg-white">
+                <td class="col-4">
+                    <strong>Backing</strong><br>
+                    <span></span>
+                </td>
+                <td class="col-4">
+                    <strong>Needle Number</strong><br>
+                    <span></span>
+                </td>
+                <td class="col-4">
+                    <strong># of Heads</strong><br>
+                    <span></span>
+                </td>
+            </tr>
+            <tr class="bg-white">
+                <td class="col-4" colspan="3">
+                    <strong>Comments</strong><br>
+                    <span></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+
+
 
 
 

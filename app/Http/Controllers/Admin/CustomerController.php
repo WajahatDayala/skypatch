@@ -59,8 +59,8 @@ class CustomerController extends Controller
         ->groupBy('users.id', 'users.name', 'users.contact_name', 'users.company_name', 'users.phone', 'users.email', 'users.created_at', 'users.reference') // Include reference in group by
         ->get();
 
-    
-    
+
+       
     
     
 
@@ -109,8 +109,22 @@ class CustomerController extends Controller
     {
         //
         $user = User::find($id);
-        return view('admin.customers.profile-details.index',compact('user'));
+        
+        $billInfo = CustomerBillInfo::select('*','card_types.name as cardType')
+        ->leftjoin('card_types','customer_bill_infos.card_type_id','=','card_types.id')
+        ->where('customer_bill_infos.customer_id',$id)
+        ->first();
+    
+    
+        return view('admin.customers.profile-details.index',compact('user','billInfo'));
 
+    }
+
+    //customer panel 
+    public function showPanel(string $id)
+    {
+        $user = User::find($id);
+        return view('admin.customers.customer-dashboard.dashboard',compact('user'));
     }
 
     /**
@@ -129,7 +143,7 @@ class CustomerController extends Controller
     {
         $country  = Country::all();
         $cardType = CardType::all();
-        $user = User::select('*','users.id as customer_id')
+        $user = User::select('*','users.id')
         ->leftjoin('customer_bill_infos','customer_bill_infos.customer_id','=','users.id')
         ->leftjoin('card_types','customer_bill_infos.card_type_id','=','card_types.id')
         ->where('users.id',$id)
@@ -141,7 +155,7 @@ class CustomerController extends Controller
 
     }
 
-    public function storeBillInfo(Request $request ,string $id)
+    public function storeBillInfo(Request $request)
     {
         $validatedData = $request->validate([
             'card_holder_name' => 'required|string|max:255',
@@ -157,13 +171,10 @@ class CustomerController extends Controller
             'country' => 'nullable|string|max:255',
         ]);
     
-        // Find the user by ID
-        $user = User::findOrFail($id);
-    
-        // Check if the billing info exists or create a new instance
+        $user  = User::findOrFail($request->customer_id);
+        
+          // Check if the billing info exists or create a new instance
         $billInfo = CustomerBillInfo::firstOrNew(['customer_id' => $user->id]);
-    
-        // Update fields
         $billInfo->card_holder_name = $validatedData['card_holder_name'];
         $billInfo->card_type_id = $validatedData['card_type'];
         $billInfo->card_number = $validatedData['credit_number'];
@@ -175,11 +186,10 @@ class CustomerController extends Controller
         $billInfo->zipcode = $validatedData['zipcode'];
         $billInfo->country = $validatedData['country'];
         
-        // Save the billing information
+      
         $billInfo->save();
-    
-        return redirect()->route('admin.customers.profile-details.index', $user->id)
-        ->with('success', 'Bill updated successfully!');
+        return redirect()->back()->with('success', 'Added updated successfully!');
+       
 
     }
     

@@ -55,7 +55,7 @@
                                         href="{{ route('customers.show', ['customer' => $c->id]) }}">Details</a>
 
                                         <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="">records</a>
+                                        href="{{ route('customer.dashboard', ['id' => $c->id]) }}"  target="_blank">records</a>
                                 </td>
                             </tr>
                             @endforeach
