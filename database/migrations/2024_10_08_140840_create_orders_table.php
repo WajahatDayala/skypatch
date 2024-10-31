@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('edit_order_id')->nullable(); // Editable quote ID
             $table->foreignId('edit_reason_id')->nullable()->constrained('reason_edits')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('status_id')->constrained('statuses')->onDelete('cascade')->onUpdate('cascade'); // Foreign key to statuses table
-            $table->timestamp('date_received')->nullable(); // Auto-generated timestamp convert from quote
+            $table->timestamp('sent_date')->nullable(); // Auto-generated timestamp convert from quote
             $table->string('name'); // Name
             $table->decimal('height', 8, 2)->nullable(); // Height
             $table->decimal('width', 8, 2)->nullable(); // Width

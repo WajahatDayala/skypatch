@@ -93,11 +93,17 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/admin/allquotes/uploadFile', [AllQuotesController::class, 'storeFile'])->name('allquotes.uploadFile');
     Route::post('/admin/allquotes/deleteFile', [AllQuotesController::class, 'deleteFile'])->name('allquotes.deleteFile'); 
     Route::post('/admin/allquotes/updateStatus', [AllQuotesController::class, 'orderStatus'])->name('allquotes.updateStatus');
-  
+    Route::get('/admin/allquotes/{id}/process', [AllQuotesController::class, 'showProcess'])->name('allquotes.process');
+
+
+
     //all orders
     Route::resource('/admin/allorders',AllOrdersController::class);
     Route::get('/admin/today-orders', [AllOrdersController::class, 'todayDayOrders']);
     Route::get('/admin/today-edit-orders', [AllOrdersController::class, 'todayDayEditOrders']);
+    Route::get('/admin/allorders/{id}/process', [AllOrdersController::class, 'processOrder'])->name('allorders.process');
+    Route::get('/admin/allorders/{id}/print', [AllOrdersController::class, 'printOrder'])->name('allorders.print');
+
     Route::post('/admin/allorders/{id}/allorder', [AllOrdersController::class, 'assignDesigner'])->name('allorders.allorder');
     Route::post('/admin/allorders/addInstruction', [AllOrdersController::class, 'storeInstruction'])->name('allorders.addInstruction');
     Route::post('/admin/allorders/adminInstruction', [AllOrdersController::class, 'storeAdminInstruction'])->name('allorders.adminInstruction');
@@ -105,9 +111,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/admin/allorders/deleteFile', [AllOrdersController::class, 'deleteFile'])->name('allorders.deleteFile'); 
     Route::post('/admin/allorders/updateStatus', [AllOrdersController::class, 'orderStatus'])->name('allorders.updateStatus');
     Route::post('/admin/allorders/updateReason', [AllOrdersController::class, 'addReason'])->name('allorders.updateReason');
-
     
-
+    
+    
     //all vectors
      Route::resource('/admin/allvectors',AllVectorController::class);
      Route::get('/admin/today-vector', [AllVectorController::class, 'todayDayVector']);

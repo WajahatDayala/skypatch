@@ -11,10 +11,10 @@
                         <h6 class="h6 mb-0">Order Details</h6>
                     </div>
                     <div class="col-6 d-flex align-items-center justify-content-end">
-                        <button type="button"
-                                        class="btn btn-sm btn-primary rounded-pill me-2">Print</button> 
+                        <a href="{{route('allorders.print',[$order->order_id])}}"
+                                      target="_blank"  class="btn btn-sm btn-primary rounded-pill me-2">Print</a> 
                         @if($order->edit_status == 1)
-                       <a href="{{route('allorders.edit',['allorder',$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
+                       <a href="{{route('allorders.process',[$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
                         @endif
                     </div>
                 </div>

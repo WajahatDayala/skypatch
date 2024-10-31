@@ -562,6 +562,16 @@ class AllQuotesController extends Controller
         }
     }
 
+    //process page quotes
+
+    public function showProcess(string $id)
+    {
+        return view('admin/quotes/process');
+    }
+
+
+
+
     /**
      * Remove the specified resource from storage.
      */
