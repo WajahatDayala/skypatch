@@ -90,11 +90,11 @@
         </tr>
         <tr>
             <td class="normal-width"><b>Customer Comments</b></td>
-            <td colspan="3">{{ $orderInstruction->instruction}}</td>
+            <td colspan="3">{{$orderInstruction ? $orderInstruction->instruction: ''}}</td>
         </tr>
         <tr>
             <td class="normal-width"><b>Additional Comments</b></td>
-            <td colspan="3">{{ $adminInstruction->instruction}}</td>
+            <td colspan="3">{{ $adminInstruction ? $adminInstruction->instruction : ''}}</td>
         </tr>
         <tr>
             <td class="normal-width"><b>Designer Note</b></td>
