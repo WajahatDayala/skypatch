@@ -3,7 +3,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
-<!-- Blank Start -->
+<!-- Blank Start --> 
 
 
 
@@ -112,16 +112,19 @@
 <script>
 function convertQuote(quoteId) {
     $.ajax({
-        url: '/admin/customers/{{$user->id}}/all-quotes/convert-quote/' + quoteId,
+        url: '/admin/customers/{{$user->id}}/all-quotes/convert-quotes/' + quoteId,
+       
         type: 'POST',
         data: {
             _token: '{{ csrf_token() }}'
         },
+        
         success: function(response) {
             if (response.status === 'converted') {
                 // Replace the specific button with the "Converted" text
                 $('button[onclick="convertQuote(' + quoteId + ')"]').replaceWith(
                     '<span class="text-success">Converted</span>');
+                   
             } else if (response.status === 'exists') {
                 alert('This quote has already been converted to an order.');
             } else if (response.status === 'not_found') {
@@ -133,6 +136,7 @@ function convertQuote(quoteId) {
         }
     });
 }
+
 </script>
 
 

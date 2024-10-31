@@ -80,7 +80,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin/customers/{id}/show-quote',[CustomerController::class,'showQuote'])->name('customer.show-quote');
     Route::get('/admin/customers/{id}/edit-quote',[CustomerController::class,'editQuote'])->name('customer.edit-quote');
 
-    Route::post('/admin/customers/{id}/all-quotes/convert-quote/{quoteId}', [CustomerController::class, 'convertToOrder']);
+    Route::post('/admin/customers/{id}/all-quotes/convert-quotes/{quoteId}', [CustomerController::class, 'convertToOrder']);
 
 
 
