@@ -32,7 +32,7 @@
           <a href="{{url('/admin/customer/vector-orders')}}" class="nav-item nav-link {{ request()->is('/admin/customer/vector-orders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
             Vector Records</a>
 
-            <a href="{{url('/admin/customer/my-profile')}}" class="nav-item nav-link {{ request()->is('/admin/customer/my-profile') ? 'active' : '' }}"><i class="fa-solid fa-user me-2"></i>
+            <a href="{{url('/admin/customers/'.$user->id.'/my-profile')}}" class="nav-item nav-link {{ request()->is('admin/customers/'.$user->id.'/my-profile') ? 'active' : '' }}"><i class="fa-solid fa-user me-2"></i>
             My Profile</a>
 
           <!-- <a onclick="event.preventDefault();document.getElementById('logout-form').submit();" href="{{ route('logout') }}" class="nav-item nav-link"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</a> -->

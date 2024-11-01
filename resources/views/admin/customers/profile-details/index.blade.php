@@ -166,33 +166,34 @@
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Card Holder's Name
                                         </b><br>
-                                            {{$billInfo->card_holder_name}}
+                                            {{$billInfo?$billInfo->card_holder_name : ''}}
                                         </td>
                                         <td><b class="fw-bold">Card Type
                                         </b><br>
-                                        {{$billInfo->cardType}}
+                                        {{$billInfo?$billInfo->cardType:''}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Card Number
                                             </b><br>
-                                            {{$billInfo->card_number}}
+                                            {{$billInfo?$billInfo->card_number:''}}
                                         </td>
                                         <td><b class="fw-bold">Card Expiry
                                             </b><br>
-                                            {{$billInfo->card_expiry}}
+                                            {{$billInfo?$billInfo->card_expiry:''}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">VCC
                                             </b><br>
-                                            {{$billInfo->vcc}}
+                                           
+                                            {{$billInfo?$billInfo->vcc:''}}
                                         </td>
                                         <td><b class="fw-bold">Address
                                             </b><br>
-                                            {{$billInfo->address}}
+                                            {{$billInfo?$billInfo->address:''}}
                                         </td>
                                     </tr>
 
@@ -203,22 +204,22 @@
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">City
                                             </b><br>
-                                            {{$billInfo->address}}
+                                            {{$billInfo?$billInfo->city:''}}
                                         </td>
                                         <td><b class="fw-bold">State
                                             </b><br>
-                                            {{$billInfo->state}}
+                                            {{$billInfo?$billInfo->state:''}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Zipcode
                                             </b><br>
-                                            {{$billInfo->zipcode}}
+                                            {{$billInfo?$billInfo->zipcode:''}}
                                         </td>
                                         <td><b class="fw-bold">Country
                                             </b><br>
-                                            {{$billInfo->country}}
+                                            {{$billInfo?$billInfo->country:''}}
                                         </td>
                                     </tr>
 

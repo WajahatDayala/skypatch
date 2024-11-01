@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\customer\QuotesController;
-use App\Http\Controllers\customer\OrdersController;
-use App\Http\Controllers\customer\VectorsController;
+use App\Http\Controllers\Customer\QuotesController;
+use App\Http\Controllers\Customer\OrdersController;
+use App\Http\Controllers\Customer\VectorsController;
 //use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\customer\DashboardController;
+use App\Http\Controllers\Customer\DashboardController;
 
-use App\Http\Controllers\customer\ProfileController;
+use App\Http\Controllers\Customer\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 
@@ -44,6 +44,8 @@ Route::group(['middleware' => 'auth:web'], function () {
     //customer 
     ///profile
     Route::resource('/customer/my-profile',ProfileController::class);
+    Route::get('customer/my-profile/{id}/billInfo',[ProfileController::class,'billInfo'])->name('my-profile.billInfo');
+    Route::post('customer/updateBill',[ProfileController::class,'storeBillInfo'])->name('customer.updateBill');
     //quotes
     Route::resource('/customer/quotes',QuotesController::class);
   
@@ -71,6 +73,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::resource('/admin/customers',CustomerController::class);
     Route::get('/admin/allcustomers', [CustomerController::class, 'allCustomer']);
     Route::get('/admin/customers/{id}/dashboard',[CustomerController::class,'showPanel'])->name('customer.dashboard');
+    //customer panel profile
+    Route::get('/admin/customers/{id}/my-profle',[CustomerController::class,'customerProfile'])->name('customer.my-profle');
+
     Route::get('/admin/customers/{id}/billInfo', [CustomerController::class, 'billInfo'])->name('customers.billInfo');
     Route::post('/admin/customers/updateBillInfo', [CustomerController::class, 'storeBillInfo'])->name('customers.updateBillInfo');
     //customer orders from admin
@@ -79,9 +84,8 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin/customers/{id}/all-quotes',[CustomerController::class,'allQuotes'])->name('customer.all-quotes');
     Route::get('/admin/customers/{id}/show-quote',[CustomerController::class,'showQuote'])->name('customer.show-quote');
     Route::get('/admin/customers/{id}/edit-quote',[CustomerController::class,'editQuote'])->name('customer.edit-quote');
-
     Route::post('/admin/customers/{id}/all-quotes/convert-quotes/{quoteId}', [CustomerController::class, 'convertToOrder']);
-
+   
 
 
     //all quotes

@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         table {
             width: 100%;
@@ -30,6 +33,14 @@
         .normal-width {
             width: auto; /* Normal width for other columns */
         }
+        *{
+		font-family: montserrat;
+		font-size: 14px;
+		}
+	td.heading {
+		font-size: 35px;
+		font-weight: 600;
+	}
     </style>
     <script>
         window.onload = function() {
@@ -41,10 +52,10 @@
 
     <table>
         <tr>
-            <td colspan="4" class="center" style="font-size: 42px;"><b>SKYPATCHES</b></td>
+        <td class="heading" colspan="4" class="center">SKYPATCHES</td>
         </tr>
         <tr>
-            <td colspan="4" class="center" style="font-size: 24px;"><b>Order - {{$order->order_status_name}}</b></td>
+            <td colspan="4" class="center" style="font-size: 5px;"><b>Order - {{$order->order_status_name}}</b></td>
         </tr>
         <tr>
 			<td class="normal-width"><b>Number</b></td>

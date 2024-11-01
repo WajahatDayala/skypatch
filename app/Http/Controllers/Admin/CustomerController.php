@@ -499,6 +499,23 @@ class CustomerController extends Controller
     return response()->json(['status' => 'converted']);
     }
 
+    //my-profile by customer panel
+    public function customerProfile(string $id)
+    {
+        //
+        $user = User::select('*')
+        ->where('id',$id)
+        ->first();
+
+            
+        $billInfo = CustomerBillInfo::select('*','card_types.name as cardType')
+        ->leftjoin('card_types','customer_bill_infos.card_type_id','=','card_types.id')
+        ->where('customer_bill_infos.customer_id',$id)
+        ->first();
+    
+        return view('admin.customers.profile.index',compact('user','billInfo'));
+    }
+
 
     /**
      * Update the specified resource in storage.

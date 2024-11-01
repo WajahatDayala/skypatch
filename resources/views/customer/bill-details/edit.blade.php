@@ -1,4 +1,4 @@
-@extends('admin.customers.bill-details.base')
+@extends('customer.bill-details.base')
 @section('action-content')
 
 <!-- Blank Start -->
@@ -19,7 +19,7 @@
                 </div>
                 @endif
 
-                <form action="{{ route('customers.updateBillInfo') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('customer.updateBill') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                
                   
