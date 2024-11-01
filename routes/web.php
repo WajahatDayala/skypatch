@@ -73,8 +73,13 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::resource('/admin/customers',CustomerController::class);
     Route::get('/admin/allcustomers', [CustomerController::class, 'allCustomer']);
     Route::get('/admin/customers/{id}/dashboard',[CustomerController::class,'showPanel'])->name('customer.dashboard');
-    //customer panel profile
-    Route::get('/admin/customers/{id}/my-profle',[CustomerController::class,'customerProfile'])->name('customer.my-profle');
+    //customer panel profile from admin panel
+    Route::get('/admin/customers/{id}/my-profile',[CustomerController::class,'customerProfile'])->name('customer.my-profile');
+    Route::get('/admin/customers/{id}/edit-profile',[CustomerController::class,'customerProfileEdit'])->name('customer.edit-profile');
+    Route::post('/admin/customers/{id}/update-profile',[CustomerController::class,'customerProfileUpdate'])->name('customer.update-profile');
+    Route::get('/admin/customers/{id}/editBillInfo',[CustomerController::class,'customerBillInfo'])->name('customer.editBillInfo');
+    // Route::get('/admin/customers/{id}/editBillInfo',[CustomerController::class,'customerProfileEdit'])->name('customer.edit-profile');
+    // Route::post('/admin/customers/{id}/update-billInfo',[CustomerController::class,'customerProfileUpdate'])->name('customer.update-profile');
 
     Route::get('/admin/customers/{id}/billInfo', [CustomerController::class, 'billInfo'])->name('customers.billInfo');
     Route::post('/admin/customers/updateBillInfo', [CustomerController::class, 'storeBillInfo'])->name('customers.updateBillInfo');

@@ -366,3 +366,9 @@ outline: none;
   font-weight: 600;
 }
 /* Jazib */
+.icon-img-dashboard{
+  margin: 0 auto;
+  display: block;
+  height: 50px;
+  width: 40px !important;
+}

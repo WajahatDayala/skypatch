@@ -19,10 +19,9 @@
                     </div>
                 @endif
 
-                <form action="{{ route('my-profile.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('customer.update-profile', $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    @method('PUT') <!-- Use PUT method for updating -->
-
+                 
 
                     <div class="row mb-3">
                         <label for="userId" class="col-sm-4 col-form-label text-end">ID</label>

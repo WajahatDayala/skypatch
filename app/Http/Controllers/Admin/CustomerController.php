@@ -20,7 +20,7 @@ use App\Models\RequiredFormat;
 use App\Models\Fabric;
 use App\Models\Placement;
 use App\Models\Admin;
-
+use Illuminate\Support\Facades\Hash;
 use Validator;
 
 use Illuminate\Support\Facades\Storage;
@@ -499,7 +499,7 @@ class CustomerController extends Controller
     return response()->json(['status' => 'converted']);
     }
 
-    //my-profile by customer panel
+    //customer profile by admin for customer panel
     public function customerProfile(string $id)
     {
         //
@@ -512,9 +512,100 @@ class CustomerController extends Controller
         ->leftjoin('card_types','customer_bill_infos.card_type_id','=','card_types.id')
         ->where('customer_bill_infos.customer_id',$id)
         ->first();
+
     
-        return view('admin.customers.profile.index',compact('user','billInfo'));
+        return view('admin.customers.panel-profile.index',compact('user','billInfo'));
     }
+     //customer profile edit by admin
+    public function customerProfileEdit(string $id)
+    {
+        //
+        $country  = Country::all();
+        $user = User::find($id);
+        
+        return view('admin.customers.panel-profile.edit',
+        compact('user','country'));
+
+    }
+    //customer profile update by admin
+    public function customerProfileUpdate(Request $request,string $id)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'contact_name' =>'required|string|max:255',
+            'company_name' => 'required|string|max:255',
+            'company_type' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'cell' => 'nullable|string|max:255',
+            'fax' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'zipcode' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'email_2' => 'nullable|string|max:255', // New required email field
+            'email_3' => 'nullable|string|max:255',
+            'email_4' => 'nullable|string|max:255',
+            'invoice_email' =>'nullable|string|max:255',
+            'password' => 'nullable|string|min:8', // Validate password
+        ]);
+        
+        $user = User::findOrFail($id);
+        
+        // Update fields except email
+        $user->name = $validatedData['name'];
+        $user->contact_name = $validatedData['contact_name'];
+        $user->company_name = $validatedData['company_name'];
+        $user->company_type = $validatedData['company_type'];
+        $user->phone = $validatedData['phone'];
+        $user->cell = $validatedData['cell'];
+        $user->fax = $validatedData['fax'];
+        $user->address = $validatedData['address'];
+        $user->city = $validatedData['city'];
+        $user->state = $validatedData['state'];
+        $user->zipcode = $validatedData['zipcode'];
+        $user->country = $validatedData['country'];
+        
+        // Update email fields
+        $user->email_2 = $validatedData['email_2'];
+        $user->email_3 = $validatedData['email_3'];
+        $user->email_4 = $validatedData['email_4'];
+        $user->invoice_email = $validatedData['invoice_email'];
+        
+        // Update password if provided
+        if ($request->filled('password')) {
+            $user->password = Hash::make($validatedData['password']); // Hash the new password
+            $user->showing_password = $validatedData['password'];
+        }
+        
+        $user->save();
+        
+        return redirect()->route('customer.my-profile', $user->id)->with('success', 'Profile updated successfully!');
+
+
+        //return redirect()->back()->with('success', 'Profile updated successfully!');
+    }
+
+     //customer billInfo by admin for customer panel
+     public function customerBillInfo(string $id)
+     {
+         //
+         $country  = Country::all();
+         $cardType = CardType::all();
+         $user = User::select('*','users.id','users.name as name')
+         ->leftjoin('customer_bill_infos','customer_bill_infos.customer_id','=','users.id')
+         ->leftjoin('card_types','customer_bill_infos.card_type_id','=','card_types.id')
+         ->where('users.id',$id)
+         ->first();
+ 
+        
+     
+         return view('admin.customers.panel-billinfo.edit',compact(
+            'user',
+            'cardType',
+            'country'
+        ));
+     }
 
 
     /**

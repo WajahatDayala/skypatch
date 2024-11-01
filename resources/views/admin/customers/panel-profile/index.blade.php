@@ -24,7 +24,7 @@
                                 <tbody>
                                     <tr class="table-info">
                                         <td colspan="2" class="text-center">Personal Information
-                                            <a href="{{ route('my-profile.edit', ['my_profile' => $user->id]) }}" class="btn btn-sm btn-primary">Update</a>
+                                            <a href="{{ route('customer.edit-profile', ['id' => $user->id]) }}" class="btn btn-sm btn-primary">Update</a>
                                         </td>
                                     </tr>
                                     <tr class="bg-white">
@@ -160,39 +160,40 @@
                                 <tbody>
                                     <tr class="table-info">
                                         <td colspan="2" class="text-center">Bill Information
-                                            <a href="" class="btn btn-sm btn-primary">Update</a>
+                                            <a href="{{ route('customer.editBillInfo', ['id' => $user->id]) }}" class="btn btn-sm btn-primary">Update</a>
                                         </td>
                                     </tr>
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Card Holder's Name
                                         </b><br>
-                                            
+                                            {{$billInfo?$billInfo->card_holder_name : ''}}
                                         </td>
                                         <td><b class="fw-bold">Card Type
                                         </b><br>
-                                            Select Card Type
+                                        {{$billInfo?$billInfo->cardType:''}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Card Number
                                             </b><br>
-                                            
+                                            {{$billInfo?$billInfo->card_number:''}}
                                         </td>
                                         <td><b class="fw-bold">Card Expiry
                                             </b><br>
-                                            /
+                                            {{$billInfo?$billInfo->card_expiry:''}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">VCC
                                             </b><br>
-                                            
+                                           
+                                            {{$billInfo?$billInfo->vcc:''}}
                                         </td>
                                         <td><b class="fw-bold">Address
                                             </b><br>
-                                            
+                                            {{$billInfo?$billInfo->address:''}}
                                         </td>
                                     </tr>
 
@@ -203,25 +204,28 @@
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">City
                                             </b><br>
-
+                                            {{$billInfo?$billInfo->city:''}}
                                         </td>
                                         <td><b class="fw-bold">State
                                             </b><br>
-
+                                            {{$billInfo?$billInfo->state:''}}
                                         </td>
                                     </tr>
 
                                     <tr class="bg-white">
                                         <td><b class="fw-bold">Zipcode
                                             </b><br>
-
+                                            {{$billInfo?$billInfo->zipcode:''}}
                                         </td>
                                         <td><b class="fw-bold">Country
                                             </b><br>
-
+                                            {{$billInfo?$billInfo->country:''}}
                                         </td>
                                     </tr>
 
+                          
+
+                               
                           
 
                                
