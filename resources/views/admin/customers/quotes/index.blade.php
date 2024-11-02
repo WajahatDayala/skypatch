@@ -113,6 +113,7 @@
 function convertQuote(quoteId) {
     $.ajax({
         url: '/admin/customers/{{$user->id}}/all-quotes/convert-quotes/' + quoteId,
+
        
         type: 'POST',
         data: {

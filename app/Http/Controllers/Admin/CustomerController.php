@@ -469,34 +469,40 @@ class CustomerController extends Controller
     //convert quotes to order by admin
     //convert quotes by admin
      
-    public function convertToOrder(string $quoteId)
+    public function convertToOrder(string $id, string $quoteId)
     {
-         // Retrieve the quote using the provided ID
-    $quote = Quote::find($quoteId);
-   
-    if (!$quote) {
-        return response()->json(['status' => 'not_found'], 404);
-    }
-
-    // Create a new order based on the quote data
-    $order = new Order();
-    $order->customer_id = $quote->customer_id; 
-    $order->quote_id  = $quoteId; 
-    $order->required_format_id = $quote->required_format_id;
-    $order->fabric_id = $quote->fabric_id;
-    $order->placement_id = $quote->placement_id;
-    $order->status_id = $quote->status_id; 
-
-    $order->name = $quote->name; 
-    $order->height = $quote->height;
-    $order->width = $quote->width;
-    $order->number_of_colors = $quote->number_of_colors;
-    $order->super_urgent = $quote->super_urgent;
-
-    // Save the order
-    $order->save();
-
-    return response()->json(['status' => 'converted']);
+        // Fetch the quote based on quoteId
+        $quote = Quote::find($quoteId);
+    
+        if (!$quote) {
+            return response()->json(['status' => 'not_found'], 404);
+        }
+    
+        // You can also perform checks with customerId if needed
+        if ($quote->customer_id != $id) {
+            return response()->json(['status' => 'forbidden'], 403);
+        }
+    
+        // Create the new order
+        $order = new Order();
+        $order->customer_id = $quote->customer_id; 
+        $order->quote_id = $quote->id; 
+        $order->required_format_id = $quote->required_format_id;
+        $order->fabric_id = $quote->fabric_id;
+        $order->placement_id = $quote->placement_id;
+        $order->status_id = $quote->status_id; // Set the initial status
+    
+        $order->name = $quote->name; // Adjust as needed
+        $order->height = $quote->height;
+        $order->width = $quote->width;
+        $order->number_of_colors = $quote->number_of_colors;
+        $order->super_urgent = $quote->super_urgent;
+    
+        // Save the order
+        $order->save();
+       
+    
+        return response()->json(['status' => 'converted']);
     }
 
     //customer profile by admin for customer panel
@@ -580,10 +586,10 @@ class CustomerController extends Controller
         
         $user->save();
         
-        return redirect()->route('customer.my-profile', $user->id)->with('success', 'Profile updated successfully!');
+       // return redirect()->route('customer.my-profile', $user->id)->with('success', 'Profile updated successfully!');
 
 
-        //return redirect()->back()->with('success', 'Profile updated successfully!');
+        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
 
      //customer billInfo by admin for customer panel

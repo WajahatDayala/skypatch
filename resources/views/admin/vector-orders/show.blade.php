@@ -20,7 +20,7 @@
                         @if($order->edit_status == 1)
                         <a href="{{route('allvectors.edit',[$order->order_id])}}"
                         class="btn btn-sm btn-primary rounded-pill me-2">Edit</a> 
-                       <a href="{{route('allvectors.edit',['allvector',$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
+                       <a href="" class="btn btn-sm btn-dark rounded-pill ">Process</a>
                         @endif
                     </div>
                 </div>

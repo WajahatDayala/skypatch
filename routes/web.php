@@ -78,9 +78,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin/customers/{id}/edit-profile',[CustomerController::class,'customerProfileEdit'])->name('customer.edit-profile');
     Route::post('/admin/customers/{id}/update-profile',[CustomerController::class,'customerProfileUpdate'])->name('customer.update-profile');
     Route::get('/admin/customers/{id}/editBillInfo',[CustomerController::class,'customerBillInfo'])->name('customer.editBillInfo');
-    // Route::get('/admin/customers/{id}/editBillInfo',[CustomerController::class,'customerProfileEdit'])->name('customer.edit-profile');
-    // Route::post('/admin/customers/{id}/update-billInfo',[CustomerController::class,'customerProfileUpdate'])->name('customer.update-profile');
-
+    
     Route::get('/admin/customers/{id}/billInfo', [CustomerController::class, 'billInfo'])->name('customers.billInfo');
     Route::post('/admin/customers/updateBillInfo', [CustomerController::class, 'storeBillInfo'])->name('customers.updateBillInfo');
     //customer orders from admin
