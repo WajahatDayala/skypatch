@@ -14,52 +14,50 @@
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong>Minimum Price</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Maximum Price</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong>1000 Stitches</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                     </tr>
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong>Normal Delivery</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Editing/Changes</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Editing in stiches file</strong><br>
-                                            <span>lorem</span>
+                                            <span></span>
                                         </td>
                                     </tr>
 
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong>Commment Box 1</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Comment Box 2</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Comment Box 3</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                     </tr>
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong>Comment Box 4</strong><br>
-                                            <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni
-                                                possimus perspiciatis ad dicta, incidunt accusamus. Voluptatibus, veniam
-                                                laboriosam! Vitae, iure.</span>
+                                            <span></span>
                                         </td>
 
                                     </tr>
@@ -76,29 +74,29 @@
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong># of Machine(s)</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Condition</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong># of Needles</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                     </tr>
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong>Thread</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Needle Brand</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Backing(Pique / Jersey)</strong><br>
-                                            <span>lorem</span>
+                                            <span></span>
                                         </td>
                                     </tr>
                                     <tr class="row">
@@ -108,33 +106,31 @@
                                         </td>
                                         <td class="col-4">
                                             <strong>Backing (Cotton / Twill)</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Backing (Cap)</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                     </tr>
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong>Backing</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Needle Number</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                         <td class="col-4">
                                             <strong># of Heads</strong><br>
-                                            <span>Lorem</span>
+                                            <span></span>
                                         </td>
                                     </tr>
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong>Comments</strong><br>
-                                            <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni
-                                                possimus perspiciatis ad dicta, incidunt accusamus. Voluptatibus, veniam
-                                                laboriosam! Vitae, iure.</span>
+                                            <span></span>
                                         </td>
 
                                     </tr>
@@ -235,73 +231,63 @@
                                             <tr class="row">
                                                 <td class="col-3">
                                                     <strong>Number</strong><br>
-                                                    <span>Lorem</span>
+                                                    <span>QT-{{$quote->quote_id}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Date & Time</strong><br>
-                                                    <span>Lorem</span>
+                                                    <span>{{$quote->received_date}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Customer Nick</strong><br>
-                                                    <span>Lorem</span>
+                                                    <span>{{$quote->customer_name}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Desing Namw/PO</strong><br>
-                                                    <span>Lorem</span>
+                                                    <span>{{$quote->design_name}}</span>
                                                 </td>
                                             </tr>
                                             <tr class="row">
                                                 <td class="col-3">
                                                     <strong>Height</strong><br>
-                                                    <span>Lorem</span>
+                                                    <span>{{$quote->height}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Width</strong><br>
-                                                    <span>Lorem</span>
+                                                    <span>{{$quote->width}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Required Format</strong><br>
-                                                    <span>lorem</span>
+                                                    <span>{{$quote->format}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Placement</strong><br>
-                                                    <span>lorem</span>
+                                                    <span>{{$quote->placement}}</span>
                                                 </td>
                                             </tr>
                                             <tr class="row">
                                                 <td class="col-3">
                                                     <strong>Number of Colors</strong><br>
-                                                    <span>Lorem</span>
+                                                    <span>{{$quote->number_of_colors}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Fabric Type</strong><br>
-                                                    <span>Lorem</span>
+                                                    <span>{{$quote->fabric_name}}</span>
                                                 </td>
                                                 <td class="col-6">
                                                     <strong>Design Type</strong><br>
-                                                    <span>Lorem</span>
+                                                    <span></span>
                                                 </td>
                                             </tr>
                                             <tr class="row">
                                                 <td class="col-12">
                                                     <strong>Customer Instructions</strong><br>
-                                                    <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                                                        Magni
-                                                        possimus perspiciatis ad dicta, incidunt accusamus.
-                                                        Voluptatibus,
-                                                        veniam
-                                                        laboriosam! Vitae, iure.</span>
+                                                    <span>{{ $quoteInstruction ? $quoteInstruction->instruction : 'No instruction available.' }}</span>
                                                 </td>
                                             </tr>
                                             <tr class="row">
                                                 <td class="col-12">
                                                     <strong>Admin Instructions</strong><br>
-                                                    <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                                                        Magni
-                                                        possimus perspiciatis ad dicta, incidunt accusamus.
-                                                        Voluptatibus,
-                                                        veniam
-                                                        laboriosam! Vitae, iure.</span>
+                                                    <span>{{ $adminInstruction ? $adminInstruction->instruction : 'No instruction available.' }} </span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -406,21 +392,35 @@
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
-                                                                email@domain.com
+                                                               {{$quote->email1}}
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
-                                                                email@domain.com
+                                                            {{$quote->email2}}
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
-                                                                email@domain.com
+                                                            {{$quote->email3}}
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="gridCheck1">
+                                                            <label class="form-check-label" for="gridCheck1">
+                                                            {{$quote->email4}}
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="gridCheck1">
+                                                            <label class="form-check-label" for="gridCheck1">
+                                                            {{$quote->invoceEmail}}
                                                             </label>
                                                         </div>
                                                     </div>

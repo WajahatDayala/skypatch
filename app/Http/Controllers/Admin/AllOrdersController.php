@@ -445,8 +445,7 @@ class AllOrdersController extends Controller
         'placements.name as placement',
         'users.name as customer_name',
         'orders.created_at as received_date',
-        'reason_edits.reason as reason_name',
-        'orders.name as design_name')
+        'reason_edits.reason as reason_name')
         ->join('users', 'orders.customer_id', '=', 'users.id')
         ->join('statuses','orders.status_id','=','statuses.id')
         ->join('fabrics','orders.fabric_id','=','fabrics.id')
