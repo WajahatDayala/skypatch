@@ -73,7 +73,7 @@
                                 @endif
                                 <td>{{ $loop->iteration }}</td>
                                 <td>OR-{{$q->order_id}}</td>
-                                <td>{{$q->created_at}}</td>
+                                <td>{{$q->createdAt}}</td>
                                 <td></td>
                                 <td>{{$q->design_name}} {{$q->description}} 
                                 <td>{{$q->customer_name}}</td>
