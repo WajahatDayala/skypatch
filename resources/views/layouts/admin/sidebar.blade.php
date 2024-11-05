@@ -16,8 +16,8 @@
           
         
 
-            <a href="{{url('/admin/customers')}}" class="nav-item nav-link {{ request()->is('admin/customers') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
-            Customers</a>
+            {{-- <a href="{{url('/admin/customers')}}" class="nav-item nav-link {{ request()->is('admin/customers') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
+            Customers</a> --}}
 
             <a href="{{url('/admin/allcustomers')}}" class="nav-item nav-link {{ request()->is('admin/allcustomers') ? 'active' : '' }}"><i class="fa-solid fa-box me-2"></i>All Customers</a>
          

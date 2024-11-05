@@ -73,7 +73,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::resource('/admin/customers',CustomerController::class);
     Route::get('/admin/allcustomers', [CustomerController::class, 'allCustomer']);
     Route::get('/admin/customers/{id}/dashboard',[CustomerController::class,'showPanel'])->name('customer.dashboard');
-    //customer panel profile from admin panel
+    //add invoice
+    Route::get('/admin/customers/{id}/addinvoice', [CustomerController::class, 'addInvoice'])->name('customer.addinvoice');
+    Route::post('/admin/customers/storeinvoice', [CustomerController::class, 'storeInvoice'])->name('customer.storeinvoice'); //customer panel profile from admin panel
     Route::get('/admin/customers/{id}/my-profile',[CustomerController::class,'customerProfile'])->name('customer.my-profile');
     Route::get('/admin/customers/{id}/edit-profile',[CustomerController::class,'customerProfileEdit'])->name('customer.edit-profile');
     Route::post('/admin/customers/{id}/update-profile',[CustomerController::class,'customerProfileUpdate'])->name('customer.update-profile');

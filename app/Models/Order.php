@@ -24,5 +24,7 @@ class Order extends Model
         'super_urgent',
         'delivery_type_id',
         'designer_id',
+        'payment_status',
+        'invoice_status',
     ];
 }

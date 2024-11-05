@@ -20,12 +20,16 @@ use App\Models\RequiredFormat;
 use App\Models\Fabric;
 use App\Models\Placement;
 use App\Models\Admin;
+use App\Models\Invoice;
+use App\Models\InvoiceDetail;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class CustomerController extends Controller
 {
@@ -80,6 +84,132 @@ class CustomerController extends Controller
 
     }
     
+    //add invoice 
+    public function addInvoice(string $id)
+    {
+        $orders = DB::table('orders')
+            ->select(
+                'orders.id as order_id',
+                'users.name as customer_name',
+                DB::raw("CONCAT('OR-', orders.id) as design_number"),
+                'orders.name as design_name',
+                'statuses.name as status',
+                DB::raw("'orders' as source_table") // Identify that this row is from the orders table
+            )
+            ->join('users', 'orders.customer_id', '=', 'users.id')
+            ->leftJoin('statuses', 'orders.status_id', '=', 'statuses.id')
+            ->where('orders.payment_status', 0)
+            ->where('orders.invoice_status',0)
+            ->where('orders.customer_id', $id)
+            ->where('orders.status_id', 1)
+            ->unionAll(
+                DB::table('vector_orders')
+                    ->select(
+                        'vector_orders.id as order_id',
+                        'users.name as customer_name',
+                        DB::raw("CONCAT('VO-', vector_orders.id) as design_number"),
+                        'vector_orders.name as design_name',
+                        'statuses.name as status',
+                        DB::raw("'vector_orders' as source_table") // Identify that this row is from the vector_orders table
+                    )
+                    ->join('users', 'vector_orders.customer_id', '=', 'users.id')
+                    ->leftJoin('statuses', 'vector_orders.status_id', '=', 'statuses.id')
+                    ->where('vector_orders.payment_status', 0)
+                    ->where('vector_orders.invoice_status',0)
+                    ->where('vector_orders.customer_id', $id)
+                    ->where('vector_orders.status_id', 1)
+            )
+            ->orderBy('design_number', 'ASC') // Sort by design_number to keep proper order
+            ->get();
+
+        // Get the last invoice number to calculate the next one
+        $lastInvoice = Invoice::latest()->first();
+        $nextInvoiceNumber = $lastInvoice ? 'INV-' . ($lastInvoice->id + 100000) : 'INV-100000';
+
+
+
+        return view('admin.customers.Invoice.add',compact('orders','nextInvoiceNumber'));
+    }
+    public function storeInvoice(Request $request)
+    {
+        // Validate incoming request data
+        // Step 1: Validate the incoming request
+    $request->validate([
+        'invoice-no' => 'required|string', // Ensure invoice number is provided
+        'selected_orders' => 'required|array|min:1', // Ensure at least one order is selected
+        'price' => 'required|array|min:1', // Ensure prices are provided for selected orders
+    ]);
+
+
+    
+        // Start a database transaction
+        DB::beginTransaction();
+    
+        try {
+            // Step 1: Create the invoice record
+            $invoice = Invoice::create([
+                'invoice_number' => $request->input('invoice-no'),
+                'invoice_status' => 0, // Default status (0 for pending)
+            ]);
+    
+            // Step 2: Process each selected order and its price
+            foreach ($request->input('selected_orders') as $index => $orderId) {
+                $price = $request->input('price')[$index]; // Get the corresponding price for the order
+    
+                // Step 3: Check if the order is from the 'orders' table
+                $order = Order::find($orderId);
+                if ($order) {
+                    // Insert into invoice details for order
+                    $invoice->details()->create([
+                        'invoice_id' => $invoice->id,
+                        'order_id' => $order->id,
+                        'vector_id' => null,
+                        'price' => $price,  // Insert the price as it is
+                    ]);
+                     // Step 4: Update the invoice status to '1' for the order in 'orders' table
+                    $order->update(['invoice_status' => 1]);  // Set the status as 1 (Paid/Completed)
+                } else {
+                    // If not found in 'orders', check 'vector_orders'
+                    $vectorOrder = VectorOrder::find($orderId);
+                    if ($vectorOrder) {
+                        // Insert into invoice details with vector_id
+                        $invoice->details()->create([
+                            'invoice_id' => $invoice->id,
+                            'order_id' => null,
+                            'vector_id' => $vectorOrder->id,
+                            'price' => $price,  // Insert the price as it is
+                        ]);
+                         // Step 5: Update the invoice status to '1' for the vector order in 'vector_orders' table
+                         $vectorOrder->update(['invoice_status' => 1]);  // Set the status as 1 (Paid/Completed)
+                    } else {
+                        throw new \Exception("Invalid order ID: $orderId, not found in either orders or vector_orders");
+                    }
+                }
+            }
+    
+            // Step 4: Commit the transaction
+            DB::commit();
+    
+            // Step 5: Redirect with success message
+            return redirect()->route('invoices.index')->with('success', 'Invoice created successfully!');
+        } catch (\Exception $e) {
+            // Step 6: Rollback in case of error
+            DB::rollBack();
+    
+            // Log and return error message
+            Log::error('Invoice creation failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong. Please try again. Error: ' . $e->getMessage());
+        }
+    }
+    
+    
+    
+
+    
+    
+    
+    
+
 
     /**
      * Show the form for creating a new resource.

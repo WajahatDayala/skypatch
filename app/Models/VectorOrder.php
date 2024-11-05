@@ -17,5 +17,7 @@ class VectorOrder extends Model
         'status_id',
         'name',
         'number_of_colors',
+        'payment_status',
+        'invoice_status',
     ];
 }
