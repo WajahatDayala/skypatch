@@ -134,11 +134,11 @@ class CustomerController extends Controller
     {
         // Validate incoming request data
         // Step 1: Validate the incoming request
-    $request->validate([
+        $request->validate([
         'invoice-no' => 'required|string', // Ensure invoice number is provided
         'selected_orders' => 'required|array|min:1', // Ensure at least one order is selected
         'price' => 'required|array|min:1', // Ensure prices are provided for selected orders
-    ]);
+        ]);
 
 
     

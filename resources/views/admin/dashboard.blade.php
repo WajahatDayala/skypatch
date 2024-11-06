@@ -60,7 +60,7 @@
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="bg-box rounded d-flex flex-column align-items-center justify-content-center p-4">
-                <a href=""><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/invoice.png')}}" alt="" >
+                <a href="/admin/invoices"><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/invoice.png')}}" alt="" >
                 <p class="my-2 h6">Invoices</p></a>
             </div>
         </div>

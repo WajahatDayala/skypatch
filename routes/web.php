@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\AllOrdersController;
 use App\Http\Controllers\Admin\AllVectorController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\AsignLeaderController;
+use App\Http\Controllers\Admin\InvoiceControlller;
 
 
 
@@ -132,8 +133,11 @@ Route::group(['middleware' => 'auth:admin'], function () {
      Route::post('/admin/allvectors/uploadFile', [AllVectorController::class, 'storeFile'])->name('allvectors.uploadFile');
      Route::post('/admin/allvectors/deleteFile', [AllVectorController::class, 'deleteFile'])->name('allvectors.deleteFile'); 
      Route::post('/admin/allvectors/updateStatus', [AllVectorController::class, 'orderStatus'])->name('allvectors.updateStatus');
-   
-   
+    
+     //invoices 
+     Route::resource('/admin/invoices',InvoiceControlller::class);
+     Route::get('/admin/invoice/{id}/download', [InvoiceControlller::class, 'downloadPDF'])->name('invoice.download');
+
 
       //all employees
       Route::resource('/admin/employees',EmployeeController::class);

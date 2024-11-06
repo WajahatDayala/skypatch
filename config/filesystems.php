@@ -33,8 +33,7 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
-            'throw' => false,
+            'throw' => false, // Prevents errors on failed disk operations
         ],
 
         'public' => [
