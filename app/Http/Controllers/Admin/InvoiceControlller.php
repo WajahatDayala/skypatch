@@ -80,7 +80,10 @@ class InvoiceControlller extends Controller
 
 
        // Pass data to the PDF view
-        $pdf = PDF::loadView('admin.customers.invoice.invoice_pdf', compact('invoice'));
+        $pdf = PDF::loadView('admin.customers.invoice.invoice_pdf', compact('invoice'))
+        ->setOption('isHtml5ParserEnabled', true)
+        ->setOption('isPhpEnabled', true);  // Option to enable PHP inside your PDF
+        ;
 
         // Return the generated PDF as a download
         return $pdf->download('invoice_'.$invoice->id.'.pdf');
