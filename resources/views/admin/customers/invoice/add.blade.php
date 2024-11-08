@@ -55,6 +55,19 @@
                                             </td>
                                         </tr>
                                     @endforeach
+                                    @foreach($vectorOrders as $v)
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="selected_vector_orders[]" value="{{ $v->vector_id }}" class="check-box" data-row="{{ $loop->iteration }}_vector">
+                                        </td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td><input type="text" name="designNumber[]" class="form-control" value="{{ $v->design_number }}" readonly /></td>
+                                        <td><input type="text" name="designName[]" class="form-control" value="{{ $v->design_name }}" readonly /></td>
+                                        <td class="col-sm-4 text-center">
+                                            <input type="number" name="price[]" class="form-control price-input" style="display: none;" data-row="{{ $loop->iteration }}_vector" />
+                                        </td>
+                                    </tr>
+                                    @endforeach
                                 </tbody>
                                 <tfoot>
                                     <tr>

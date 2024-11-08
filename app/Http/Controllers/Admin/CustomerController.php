@@ -102,23 +102,25 @@ class CustomerController extends Controller
             ->where('orders.invoice_status',0)
             ->where('orders.customer_id', $id)
             ->where('orders.status_id', 1)
-            ->unionAll(
-                DB::table('vector_orders')
-                    ->select(
-                        'vector_orders.id as order_id',
-                        'users.name as customer_name',
-                        DB::raw("CONCAT('VO-', vector_orders.id) as design_number"),
-                        'vector_orders.name as design_name',
-                        'statuses.name as status',
-                        DB::raw("'vector_orders' as source_table") // Identify that this row is from the vector_orders table
-                    )
-                    ->join('users', 'vector_orders.customer_id', '=', 'users.id')
-                    ->leftJoin('statuses', 'vector_orders.status_id', '=', 'statuses.id')
-                    ->where('vector_orders.payment_status', 0)
-                    ->where('vector_orders.invoice_status',0)
-                    ->where('vector_orders.customer_id', $id)
-                    ->where('vector_orders.status_id', 1)
+            ->orderBy('design_number', 'ASC') // Sort by design_number to keep proper order
+            ->get();
+
+
+            $vectorOrders =  DB::table('vector_orders')
+            ->select(
+                'vector_orders.id as vector_id',
+                'users.name as customer_name',
+                DB::raw("CONCAT('VO-', vector_orders.id) as design_number"),
+                'vector_orders.name as design_name',
+                'statuses.name as status',
+                DB::raw("'vector_orders' as source_table") // Identify that this row is from the orders table
             )
+            ->join('users', 'vector_orders.customer_id', '=', 'users.id')
+            ->leftJoin('statuses', 'vector_orders.status_id', '=', 'statuses.id')
+            ->where('vector_orders.payment_status', 0)
+            ->where('vector_orders.invoice_status',0)
+            ->where('vector_orders.customer_id', $id)
+            ->where('vector_orders.status_id', 1)
             ->orderBy('design_number', 'ASC') // Sort by design_number to keep proper order
             ->get();
 
@@ -128,79 +130,80 @@ class CustomerController extends Controller
 
 
 
-        return view('admin.customers.Invoice.add',compact('orders','nextInvoiceNumber'));
+        return view('admin.customers.Invoice.add',compact('orders','vectorOrders','nextInvoiceNumber'));
     }
-    public function storeInvoice(Request $request)
-    {
-        // Validate incoming request data
-        // Step 1: Validate the incoming request
-        $request->validate([
-        'invoice-no' => 'required|string', // Ensure invoice number is provided
-        'selected_orders' => 'required|array|min:1', // Ensure at least one order is selected
-        'price' => 'required|array|min:1', // Ensure prices are provided for selected orders
-        ]);
+  public function storeInvoice(Request $request)
+{
+     // Initialize the validation rules
+     $rules = [
+        'invoice-no' => 'required|string|max:255',
+    ];
 
-
-    
-        // Start a database transaction
-        DB::beginTransaction();
-    
-        try {
-            // Step 1: Create the invoice record
-            $invoice = Invoice::create([
-                'invoice_number' => $request->input('invoice-no'),
-                'invoice_status' => 0, // Default status (0 for pending)
-            ]);
-    
-            // Step 2: Process each selected order and its price
-            foreach ($request->input('selected_orders') as $index => $orderId) {
-                $price = $request->input('price')[$index]; // Get the corresponding price for the order
-    
-                // Step 3: Check if the order is from the 'orders' table
-                $order = Order::find($orderId);
-                if ($order) {
-                    // Insert into invoice details for order
-                    $invoice->details()->create([
-                        'invoice_id' => $invoice->id,
-                        'order_id' => $order->id,
-                        'vector_id' => null,
-                        'price' => $price,  // Insert the price as it is
-                    ]);
-                     // Step 4: Update the invoice status to '1' for the order in 'orders' table
-                    $order->update(['invoice_status' => 1]);  // Set the status as 1 (Paid/Completed)
-                } else {
-                    // If not found in 'orders', check 'vector_orders'
-                    $vectorOrder = VectorOrder::find($orderId);
-                    if ($vectorOrder) {
-                        // Insert into invoice details with vector_id
-                        $invoice->details()->create([
-                            'invoice_id' => $invoice->id,
-                            'order_id' => null,
-                            'vector_id' => $vectorOrder->id,
-                            'price' => $price,  // Insert the price as it is
-                        ]);
-                         // Step 5: Update the invoice status to '1' for the vector order in 'vector_orders' table
-                         $vectorOrder->update(['invoice_status' => 1]);  // Set the status as 1 (Paid/Completed)
-                    } else {
-                        throw new \Exception("Invalid order ID: $orderId, not found in either orders or vector_orders");
-                    }
-                }
-            }
-    
-            // Step 4: Commit the transaction
-            DB::commit();
-    
-            // Step 5: Redirect with success message
-            return redirect()->route('invoices.index')->with('success', 'Invoice created successfully!');
-        } catch (\Exception $e) {
-            // Step 6: Rollback in case of error
-            DB::rollBack();
-    
-            // Log and return error message
-            Log::error('Invoice creation failed: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Something went wrong. Please try again. Error: ' . $e->getMessage());
+    // Conditionally add validation for 'price' and 'vprice' based on checked boxes
+    // Validate 'selected_orders' and 'price' only if at least one order is selected
+    if ($request->has('selected_orders') && count($request->input('selected_orders')) > 0) {
+        foreach ($request->input('selected_orders') as $key => $orderId) {
+            $rules['price.' . $key] = 'required|numeric|min:0'; // Ensure price is required for checked orders
         }
     }
+
+    // Validate 'selected_vector_orders' and 'vprice' only if at least one vector order is selected
+    if ($request->has('selected_vector_orders') && count($request->input('selected_vector_orders')) > 0) {
+        foreach ($request->input('selected_vector_orders') as $key => $vectorId) {
+            $rules['price.' . $key] = 'required|numeric|min:0'; // Ensure vprice is required for checked vector orders
+        }
+    }
+
+    // Validate the request
+    $request->validate($rules);
+
+    // Log the request data for debugging
+    \Log::info($request->all());
+
+    // Create the invoice
+    $invoice = new Invoice();
+    $invoice->invoice_number = $request->input('invoice-no');
+    $invoice->invoice_status = 0; // Status set to 0 (e.g., 'pending')
+    $invoice->save();
+
+    // Insert associated order data (store price for each order in invoice_details)
+    if ($request->has('selected_orders') && count($request->input('selected_orders')) > 0) {
+        foreach ($request->input('selected_orders') as $key => $orderId) {
+            // Find the order by its ID
+            $order = Order::find($orderId);
+
+            // Check if the order exists and add price from the validated input
+            if ($order) {
+                InvoiceDetail::create([
+                    'invoice_id' => $invoice->id,
+                    'order_id' => $orderId,
+                    'price' => $request->input('price')[$key], // Row-wise price for the order
+                ]);
+            }
+        }
+    }
+
+    // Insert associated vector order data (store price for each vector order in invoice_details)
+    if ($request->has('selected_vector_orders') && count($request->input('selected_vector_orders')) > 0) {
+        foreach ($request->input('selected_vector_orders') as $key => $vectorId) {
+            // Find the vector order by its ID
+            $vectorOrder = VectorOrder::find($vectorId);
+
+            // Check if the vector order exists and add price from the validated input
+            if ($vectorOrder) {
+                InvoiceDetail::create([
+                    'invoice_id' => $invoice->id,
+                    'vector_id' => $vectorId,
+                    'price' => $request->input('price')[$key], // Row-wise price for the vector order
+                ]);
+            }
+        }
+    }
+}
+
+
+
+    
     
     
     
