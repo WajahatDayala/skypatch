@@ -24,6 +24,8 @@ use App\Models\Invoice;
 use App\Models\InvoiceDetail;
 use Illuminate\Support\Facades\Hash;
 use Validator;
+use Carbon\Carbon;
+
 
 use Illuminate\Support\Facades\Storage;
 
@@ -132,78 +134,230 @@ class CustomerController extends Controller
 
         return view('admin.customers.Invoice.add',compact('orders','vectorOrders','nextInvoiceNumber'));
     }
-  public function storeInvoice(Request $request)
+
+
+
+public function storeInvoice(Request $request)
 {
-     // Initialize the validation rules
-     $rules = [
-        'invoice-no' => 'required|string|max:255',
+    // Retrieve the last invoice and generate the next invoice number
+    $lastInvoice = DB::table('invoices')->latest()->first();
+    $nextInvoiceNumber = $lastInvoice ? 'INV-' . (intval(substr($lastInvoice->invoice_number, 4)) + 1) : 'INV-100000';
+
+    // Insert the invoice into the invoices table
+    $invoiceId = DB::table('invoices')->insertGetId([
+        'invoice_number' => $nextInvoiceNumber,
+        'invoice_status' => 0, // Assuming status is 0 initially
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    // Log the invoice details
+    //\Log::info("Created invoice ID: {$invoiceId}, Number: {$nextInvoiceNumber}");
+
+    // Debugging: Check if the selected orders and prices are passed correctly
+   // \Log::info("Selected Orders: " . json_encode($request->input('selected_orders')));
+   // \Log::info("Prices: " . json_encode($request->input('price')));
+   // \Log::info("Selected Vector Orders: " . json_encode($request->input('selected_vector_orders')));
+   // \Log::info("Vector Prices: " . json_encode($request->input('vector_price')));
+
+    // Insert selected orders into invoice_details table (for normal orders)
+    if ($request->has('selected_orders') && $request->has('price')) {
+        //$selectedOrders = $request->input('selected_orders');
+        //$prices = $request->input('price');
+
+        $orderPrice = $request->input('price');
+        $selectedOrders = $request->input('selected_orders');
+
+        $orderIds = $selectedOrders;
+
+        foreach ($orderIds as $index2 => $orderId) {
+            if ($orderId) {
+                $orderExists = DB::table('orders')->where('id', $orderId)->exists();
+                if (!$orderExists) {
+                  //  \Log::warning("Order ID {$orderId} does not exist.");
+                    continue; // Skip if the order doesn't exist
+                }
+            } else {
+               // \Log::warning("Order ID {$orderId} does not exist.");
+            }
+        
+        }
+
+        $orderPrs = $orderPrice;
+        
+        foreach ($orderPrs as $index => $priceval) {
+            // Log only if the price value is not null
+            if ($priceval !== null) {
+                //\Log::info("Order Price : {$priceval}");
+            }
+        }
+        
+        
+        // Step 1: Filter out null values from the $orderPrs (order prices) array
+    $orderPrs = array_filter($orderPrice, function($value) {
+        return $value !== null;  // Keep only non-null values
+    });
+
+    // Re-index the array to avoid non-sequential keys after filtering
+    $orderPrs = array_values($orderPrs);
+
+    // Step 2: Merge Order IDs and Prices arrays into one array
+    $mergedData = [
+        'OrderIDs' => $selectedOrders,        // Store order IDs under 'OrderIDs'
+        'OrderPrices' => $orderPrs           // Store filtered order prices under 'OrderPrices'
     ];
 
-    // Conditionally add validation for 'price' and 'vprice' based on checked boxes
-    // Validate 'selected_orders' and 'price' only if at least one order is selected
-    if ($request->has('selected_orders') && count($request->input('selected_orders')) > 0) {
-        foreach ($request->input('selected_orders') as $key => $orderId) {
-            $rules['price.' . $key] = 'required|numeric|min:0'; // Ensure price is required for checked orders
-        }
-    }
+    // Log the merged data if necessary (you can skip this if you don't need to log it)
+    $jsonData = json_encode($mergedData);
+   // \Log::info("Merged Data: {$jsonData}");
 
-    // Validate 'selected_vector_orders' and 'vprice' only if at least one vector order is selected
-    if ($request->has('selected_vector_orders') && count($request->input('selected_vector_orders')) > 0) {
-        foreach ($request->input('selected_vector_orders') as $key => $vectorId) {
-            $rules['price.' . $key] = 'required|numeric|min:0'; // Ensure vprice is required for checked vector orders
-        }
-    }
+    // Step 3: Iterate through the merged arrays and insert data into the 'invoice_details' table
+    foreach ($mergedData['OrderIDs'] as $index => $orderId) {
+        // Ensure there is a corresponding price for the current order
+        if (isset($mergedData['OrderPrices'][$index])) {
+            $orderPrice = $mergedData['OrderPrices'][$index];
 
-    // Validate the request
-    $request->validate($rules);
+            // Step 4: Check if the order exists in the 'orders' table
+            if ($orderId) {
+                $orderExists = DB::table('orders')->where('id', $orderId)->exists();
+                if (!$orderExists) {
+                   // \Log::warning("Order ID {$orderId} does not exist.");
+                    continue; // Skip if the order doesn't exist
+                }
+            } else {
+               // \Log::warning("Invalid Order ID: {$orderId}. Skipping insertion.");
+                continue;
+            }
 
-    // Log the request data for debugging
-    \Log::info($request->all());
-
-    // Create the invoice
-    $invoice = new Invoice();
-    $invoice->invoice_number = $request->input('invoice-no');
-    $invoice->invoice_status = 0; // Status set to 0 (e.g., 'pending')
-    $invoice->save();
-
-    // Insert associated order data (store price for each order in invoice_details)
-    if ($request->has('selected_orders') && count($request->input('selected_orders')) > 0) {
-        foreach ($request->input('selected_orders') as $key => $orderId) {
-            // Find the order by its ID
-            $order = Order::find($orderId);
-
-            // Check if the order exists and add price from the validated input
-            if ($order) {
-                InvoiceDetail::create([
-                    'invoice_id' => $invoice->id,
+            // Step 5: Ensure that the price is valid (not null or empty)
+            if ($orderPrice !== null && $orderPrice !== '') {
+                // Insert into the invoice_details table
+                DB::table('invoice_details')->insert([
+                    'invoice_id' => $invoiceId,
                     'order_id' => $orderId,
-                    'price' => $request->input('price')[$key], // Row-wise price for the order
+                    'price' => $orderPrice,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
+
+               // \Log::info("Inserted Order ID: {$orderId} with Price: {$orderPrice} into invoice_details.");
+            } else {
+               // \Log::warning("Invalid price for Order ID: {$orderId}. Skipping insertion.");
             }
+        } else {
+           // \Log::warning("No price found for Order ID: {$orderId}. Skipping insertion.");
         }
     }
 
-    // Insert associated vector order data (store price for each vector order in invoice_details)
-    if ($request->has('selected_vector_orders') && count($request->input('selected_vector_orders')) > 0) {
-        foreach ($request->input('selected_vector_orders') as $key => $vectorId) {
-            // Find the vector order by its ID
-            $vectorOrder = VectorOrder::find($vectorId);
 
-            // Check if the vector order exists and add price from the validated input
-            if ($vectorOrder) {
-                InvoiceDetail::create([
-                    'invoice_id' => $invoice->id,
-                    'vector_id' => $vectorId,
-                    'price' => $request->input('price')[$key], // Row-wise price for the vector order
-                ]);
+
+    }
+
+    // Insert selected vector orders into invoice_details table (for vector orders)
+    if ($request->has('selected_vector_orders') && $request->has('vector_price')) {
+            // Ensure vectorPrices and selectedVectorOrders are being passed correctly
+        $vectorPrices = $request->input('vector_price');
+        $selectedVectorOrders = $request->input('selected_vector_orders');
+
+       
+
+        $orderIds = $selectedVectorOrders;
+
+        foreach ($orderIds as $index2 => $orderId) {
+            if ($orderId) {
+                $orderExists = DB::table('vector_orders')->where('id', $orderId)->exists();
+                if (!$orderExists) {
+                    //\Log::warning("Order ID {$orderId} does not exist.");
+                    continue; // Skip if the order doesn't exist
+                }
+            } else {
+               // \Log::warning("Order ID {$orderId} does not exist.");
+            }
+        
+        }
+
+
+        $orderPrs = $vectorPrices;
+        
+        foreach ($orderPrs as $index => $priceval) {
+            // Log only if the price value is not null
+            if ($priceval !== null) {
+                //\Log::info("Order Price : {$priceval}");
             }
         }
+
+
+     
+        // Step 1: Filter out null values from the vectorPrices array
+$vectorPrices = array_filter($vectorPrices, function($value) {
+    return $value !== null;  // Keep only non-null values
+});
+
+// Re-index the array to avoid non-sequential keys after filtering
+$vectorPrices = array_values($vectorPrices);
+
+// Step 2: Ensure that there are no null values in selectedVectorOrders and align them with vectorPrices
+$selectedVectorOrders = array_values($selectedVectorOrders);
+
+// Step 3: Merge Vector IDs and Prices arrays into one associative array
+$mergedData = [
+    'VectorIDs' => $selectedVectorOrders,  // Store vector IDs under 'VectorIDs'
+    'VectorPrices' => $vectorPrices        // Store filtered vector prices under 'VectorPrices'
+];
+
+// Log the merged data if necessary (you can skip this if you don't need to log it)
+$jsonData = json_encode($mergedData);
+
+// Step 4: Iterate through the merged arrays and insert data into the 'invoice_details' table
+foreach ($mergedData['VectorIDs'] as $index => $vectorId) {
+    // Ensure there is a corresponding price for the current vectorId
+    if (isset($mergedData['VectorPrices'][$index])) {
+        $vectorPrice = $mergedData['VectorPrices'][$index];
+
+        // Step 5: Check if the vector order exists in the 'vector_orders' table
+        if ($vectorId) {
+            $vectorExists = DB::table('vector_orders')->where('id', $vectorId)->exists();
+            if (!$vectorExists) {
+                //\Log::warning("Vector Order ID {$vectorId} does not exist.");
+                continue; // Skip if the vector order doesn't exist
+            }
+        } else {
+            \Log::warning("Invalid Vector Order ID: {$vectorId}. Skipping insertion.");
+            continue;
+        }
+
+        // Step 6: Ensure that the price is valid (not null or empty)
+        if ($vectorPrice !== null && $vectorPrice !== '') {
+            // Insert into the invoice_details table for vector orders
+            DB::table('invoice_details')->insert([
+                'invoice_id' => $invoiceId,      // Assuming $invoiceId is set earlier
+                'vector_id' => $vectorId,        // Insert vector_id here
+                'price' => $vectorPrice,         // Insert the corresponding price
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+           // \Log::info("Inserted Vector Order ID: {$vectorId} with Price: {$vectorPrice} into invoice_details.");
+        } else {
+            //\Log::warning("Invalid price for Vector Order ID: {$vectorId}. Skipping insertion.");
+        }
+    } else {
+      //  \Log::warning("No price found for Vector Order ID: {$vectorId}. Skipping insertion.");
     }
+}
+        
+    }
+
+    // Return response (optional)
+    //return redirect()->route('customer.invoice.index')->with('success', 'Invoice created successfully!');
 }
 
 
 
-    
+
+
+
+
     
     
     
