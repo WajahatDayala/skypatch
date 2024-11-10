@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('invoice_details', function (Blueprint $table) {
+        Schema::table('invoices', function (Blueprint $table) {
             //
-            $table->bigInt('paid_on')->default(0)->after('updated_at');
-
+            $table->foreignId('customer_id')->nullable()->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+          
         });
     }
 
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('invoice_details', function (Blueprint $table) {
+        Schema::table('invoices', function (Blueprint $table) {
             //
         });
     }

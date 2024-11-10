@@ -6799,7 +6799,8 @@ fieldset:disabled .btn {
   color: #198754 !important;
 }
 .text-info {
-  color: #000 !important;
+  /*color: #000 !important;*/
+  color:#fff !important;
 }
 .text-warning {
   color: #ffc107 !important;
@@ -6853,7 +6854,8 @@ fieldset:disabled .btn {
   background-color: #f3f6f9 !important;
 }
 .bg-outer {
-  background-color: var(--outer-color) !important;
+ /* background-color: var(--outer-color) !important;*/
+ background-color: #0c1337;
 }
 .highlight {
   background-color: var(--highlight);

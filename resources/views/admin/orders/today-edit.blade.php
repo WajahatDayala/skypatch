@@ -70,7 +70,9 @@
                             @foreach($orders as $q)
                             @if($q->super_urgent ==1)
                             <tr class="bg-danger bg-gradient text-white">
-                                @endif
+                            @else
+                            @endif
+
                                 <td>{{ $loop->iteration }}</td>
                                 <td>OR-{{$q->order_id}}</td>
                                 <td>{{$q->createdAt}}</td>

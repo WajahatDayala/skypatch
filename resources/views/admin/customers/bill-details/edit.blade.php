@@ -19,10 +19,9 @@
                 </div>
                 @endif
 
-                <form action="{{ route('customers.updateBillInfo') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('customer.updatedBill') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-               
-                  
+                   
                     <div class="row mb-3">
                         <label for="name" class="col-sm-4 col-form-label text-end">Cardholder's Name</label>
                         <div class="col-sm-8">

@@ -14,7 +14,8 @@ use App\Models\Status;
 use App\Models\Invoice;
 use App\Models\InvoiceDetail;
 use PDF;
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 use Illuminate\Support\Facades\DB;
 
@@ -33,26 +34,17 @@ class InvoiceControlller extends Controller
         //
 
         $invoices = InvoiceDetail::select(
-            'invoice_details.invoice_id', // Group by invoice_id
-            'orders.payment_status as paymentStatus', // Include payment_status from orders
-            'vector_orders.payment_status as vectorPaymentStatus', // Include payment_status from vector_orders
+            'invoice_details.invoice_id',
+            'invoices.invoice_number as invoiceNumber', // Select invoice_number
             DB::raw('MIN(invoice_details.created_at) as createdAt'), // Aggregate for created_at
-            DB::raw('GROUP_CONCAT(orders.id) as orders_ids'), // Get concatenated list of order IDs
-            DB::raw('GROUP_CONCAT(vector_orders.id) as vector_orders_ids'), // Get concatenated list of vector order IDs
             DB::raw('SUM(invoice_details.price) as total_amount') // Sum the price/amount
         )
         ->join('invoices', 'invoice_details.invoice_id', '=', 'invoices.id')
-        ->leftJoin('orders', 'invoice_details.order_id', '=', 'orders.id')
-        ->leftJoin('vector_orders', 'invoice_details.vector_id', '=', 'vector_orders.id')
-        ->groupBy(
-            'invoice_details.invoice_id', 
-            'orders.payment_status', // Add orders.payment_status to GROUP BY
-            'vector_orders.payment_status' // Add vector_orders.payment_status to GROUP BY
-        )
+        ->groupBy('invoice_details.invoice_id', 'invoices.invoice_number') // Group by both invoice_id and invoice_number
         ->get();
 
 
-      
+
 
         
         return view('/admin/customers/invoice/index',compact('invoices'));
@@ -65,29 +57,65 @@ class InvoiceControlller extends Controller
     public function downloadPDF($id)
     {
         // Fetch the invoice by ID
-        $invoice = Invoice::findOrFail($id);
+    $invoice = Invoice::select('*')
+    ->join('users','invoices.customer_id','=','users.id')
+    ->where('invoices.id',$id)
+    ->first();
 
-        $invoiceDetails = InvoiceDetail::select(
-            'invoice_details.invoice_id',
-            'orders.payment_status as paymentStatus',
-            'vector_orders.payment_status as vectorPaymentStatus'
-        )
-        ->join('invoices', 'invoice_details.invoice_id', '=', 'invoices.id')
-        ->leftJoin('orders', 'invoice_details.order_id', '=', 'orders.id')
-        ->leftJoin('vector_orders', 'invoice_details.vector_id', '=', 'vector_orders.id')
-        ->where('invoice_details.invoice_id',$invoice->id)
-        ->get();
+    
+    // Fetch invoice details
+    $orderInvoice = InvoiceDetail::select('*',
+        'invoice_details.invoice_id',
+        'orders.payment_status as paymentStatus',
+        'invoice_details.order_id as orderId',
+        'invoice_details.vector_id as vectorId',
+        'orders.name as orderDesign',
+        'orders.created_at as ordersCreatedAt',
+        'orders.sent_date as orderSentDate', 
+        'vector_orders.name as vectorDesign',
+        'vector_orders.created_at as vectorCreatedAt',
+        'vector_orders.date_finalized as vectorSentDate'
+    )
+    ->leftjoin('orders', 'invoice_details.order_id', '=', 'orders.id')
+    ->leftjoin('vector_orders', 'invoice_details.vector_id', '=', 'vector_orders.id')
+    ->where('invoice_details.invoice_id', $id)
+    ->get();
+   
 
+ 
 
-       // Pass data to the PDF view
-        $pdf = PDF::loadView('admin.customers.invoice.invoice_pdf', compact('invoice'))
-        ->setOption('isHtml5ParserEnabled', true)
-        ->setOption('isPhpEnabled', true);  // Option to enable PHP inside your PDF
-        ;
+    // Initialize Dompdf
+    $dompdf = new Dompdf();
 
-        // Return the generated PDF as a download
-        return $pdf->download('invoice_'.$invoice->id.'.pdf');
+    // Set options
+    $options = new Options();
+    $options->set('isHtml5ParserEnabled', true);  // Enable HTML5 support
+    $options->set('isPhpEnabled', true);          // Enable PHP functions (optional)
+    $options->set('isExternalLinksEnabled', true); // Allow external links like image URLs
+    $dompdf->setOptions($options);
+
+    // Set base path for assets (important for resolving image paths)
+    $dompdf->setBasePath(public_path()); // Use public path to resolve image URLs
+
+    // Load HTML content for the PDF (passing $invoice and $invoiceDetails)
+    $htmlContent = view('admin.customers.invoice.invoice_pdf', compact(
+        'invoice', 
+        'orderInvoice'
+        ))->render();
+    $dompdf->loadHtml($htmlContent);
+
+    // // Render the PDF
+     $dompdf->render();
+
+    // // Stream the PDF to the browser (for download)
+     return $dompdf->stream("invoice_{$id}.pdf", array("Attachment" => true));  // Download the file
+
+    // return view('admin.customers.invoice.invoice_pdf', compact(
+    //      'invoice', 
+    //     'orderInvoice'));
+        
     }
+    
 
     /**
      * Show the form for creating a new resource.

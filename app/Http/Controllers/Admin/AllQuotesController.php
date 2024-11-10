@@ -554,11 +554,11 @@ class AllQuotesController extends Controller
     
             DB::commit();
             
-            return redirect()->route('allquotes.edit', $quote->id)->with('success', 'Quote updated successfully!');
-           // return redirect()->route('allquotes.index')->with('success', 'Quote updated successfully!');
+           // return redirect()->route('allquotes.edit', $quote->id)->with('success', 'Quote updated successfully!');
+            return redirect()->route('allquotes.index')->with('success', 'Quote updated successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Error updating quote: ' . $e->getMessage());
+           // \Log::error('Error updating quote: ' . $e->getMessage());
             return back()->withErrors(['error' => 'An error occurred while updating the quote.']);
         }
     }

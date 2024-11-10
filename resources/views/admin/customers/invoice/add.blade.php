@@ -26,6 +26,7 @@
             <span class="d-flex flex-column align-items-start">Invoice No#</span>
             <input type="text" class="form-control" name="invoice-no" value="{{ $nextInvoiceNumber }}" readonly />
         </div>
+        <input name="customerId" hidden type="text" value="{{$customer->id}}">
     </div>
 
     <div class="row">

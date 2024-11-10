@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
+
 return new class extends Migration
 {
     /**
@@ -28,6 +30,7 @@ return new class extends Migration
                 $table->boolean('super_urgent')->default(false); // Super urgent flag
                 $table->timestamps(); // Created at and updated at timestamps
             });
+            DB::statement("ALTER TABLE quotes AUTO_INCREMENT = 1000;");
     }
 
     /**

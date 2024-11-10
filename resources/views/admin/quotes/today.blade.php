@@ -13,7 +13,7 @@
         <div class="container-fluid">
             <div class="bg-light text-center rounded p-4">
                 <div class="d-flex flex-column align-items-start justify-content-between mb-4">
-                    <h6 class="mb-0">All Quotes</h6>
+                    <h6 class="mb-0">Today Quotes</h6>
 
                 </div>
                 <div class="table-responsive">

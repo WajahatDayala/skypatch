@@ -81,14 +81,17 @@ class AllOrdersController extends Controller
         'users.name as customer_name',
         'admins.name as designerName',
         'orders.name as design_name',
+        'statuses.name as status',
         'delivery_types.type as deliveryType',
         'orders.created_at as createdAt'
         )
         ->join('users','orders.customer_id','=','users.id')
         ->join('delivery_types','orders.delivery_type_id','delivery_types.id')
+        ->join('statuses','orders.status_id','=','statuses.id')
         ->leftjoin('admins','orders.designer_id','admins.id')
         ->whereNotNull('edit_order_id')
         ->whereDate('orders.created_at', today())
+        ->where('orders.status_id',1)
         ->get();
 
     

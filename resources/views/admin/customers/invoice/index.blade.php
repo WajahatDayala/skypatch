@@ -71,7 +71,7 @@
                                 <td>{{ $loop->iteration }}</td>
 
 
-                                <td>{{$i->invoice_id}}</td>
+                                <td>{{$i->invoiceNumber}}</td>
 
 
 
@@ -122,6 +122,23 @@
     </div>
 </div>
 <!-- Blank End -->
+<script>
+  document.getElementById('downloadBtn').addEventListener('click', function(event) {
+    event.preventDefault();  // Prevent the default link behavior (optional)
 
+    // Get the download URL from the button's href attribute
+    const downloadUrl = this.href;
+
+    // Create a link element to programmatically trigger the download
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'invoice.pdf';  // You can specify the filename here
+    link.target = '_blank';  // Optionally open in a new tab
+
+    // Programmatically click the link to trigger the download
+    link.click();
+});
+
+</script>
 
 @endsection

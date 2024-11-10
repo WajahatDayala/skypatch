@@ -122,7 +122,8 @@ class ProfileController extends Controller
        
       
         $billInfo->save();
-        return redirect()->back()->with('success', 'Added updated successfully!');
+        //return redirect()->back()->with('success', 'Added updated successfully!');
+        return redirect()->route('my-profile.index')->with('success', 'Bill updated successfully!');
     }
 
     /**

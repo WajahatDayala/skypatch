@@ -177,7 +177,7 @@ class QuotesController extends Controller
            // DB::rollBack();
             
             // Log the error
-            \Log::error('Error creating quote: ' . $e->getMessage());
+           //\Log::error('Error creating quote: ' . $e->getMessage());
 
             // Redirect back with error message
             return back()->withErrors(['error' => 'An error occurred while creating the quote.']);

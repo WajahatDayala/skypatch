@@ -142,7 +142,7 @@ class VectorsController extends Controller
             DB::rollBack();
             
             // Log the error
-            \Log::error('Error creating Order: ' . $e->getMessage());
+           // \Log::error('Error creating Order: ' . $e->getMessage());
 
             // Redirect back with error message
             return back()->withErrors(['error' => 'An error occurred while creating the Order.']);
@@ -352,7 +352,7 @@ class VectorsController extends Controller
            return redirect()->route('vector-orders.index')->with('success', 'Order updated successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Error updating Order: ' . $e->getMessage());
+            //\Log::error('Error updating Order: ' . $e->getMessage());
             return back()->withErrors(['error' => 'An error occurred while updating the Order.']);
         }
 

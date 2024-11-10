@@ -9,10 +9,10 @@
     */
 /*new css*/
     --primary: #d71f36; 
-    --light: #f3f6f9;
+    --light: #fff;
     --dark: #000;
-    --dark-gray: #777777;
-    --light-gray: #999999;
+    --dark-gray: #0c1337 ;
+    --light-gray: #ffff ;
 
   }
 
@@ -84,7 +84,8 @@
   width: 300px;
   height: 100vh;
   overflow-y: auto;
-  background: var(--dark-gray);
+  /*background: var(--dark-gray);*/
+  background-color: #0c1337;
   transition: 0.5s;
   z-index: 999;
 }
@@ -104,7 +105,7 @@
 {
 	border-radius: 10px;
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color: #555;
+	background-color: #353a5c ;
 }
 
 /* ::-webkit-scrollbar-button {
@@ -154,7 +155,7 @@
 /*** Navbar ***/
 .sidebar .navbar .navbar-nav .nav-link {
   padding: 7px 20px;
-  color: var(--dark);
+  color: #fff;
   font-weight: 500;
   border-left: 3px solid var(--light);
   border-radius: 0 30px 30px 0;
@@ -203,7 +204,7 @@
   border-radius: 0 30px 30px 0;
 }
 
-.content .navbar .navbar-nav .nav-link {
+.content .navbar .navbar-nav  {
  /* margin-left: 25px;
   padding: 12px 0;
   color: var(--dark);
@@ -212,13 +213,15 @@
 
 margin-left: 0;
 padding: 12px 0 12px 20px;
-color: var(--dark);
+color: #ffff;
 outline: none;  
 }
 
 .content .navbar .navbar-nav .nav-link:hover,
 .content .navbar .navbar-nav .nav-link.active {
-  color: var(--primary);
+  /*color: var(--primary);*/
+  color: #000;
+  background-color: #fff;
 }
 
 .content .navbar .sidebar-toggler,
@@ -228,7 +231,8 @@ outline: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
+  background: #112754;
+  
   border-radius: 40px;
 }
 
@@ -353,16 +357,20 @@ outline: none;
 
 /* Jazib */
 
-.content .navbar .navbar-nav .nav-link:hover i, .content .navbar .navbar-nav .nav-link.active i {
-  color: #000;
+.content .navbar .navbar-nav , .content .navbar .navbar-nav  {
+  color: #ffffff;
 }
 
-.content .navbar .navbar-nav .nav-link:hover, .content .navbar .navbar-nav .nav-link.active {
-  color: #000;
+.content .navbar .navbar-nav , .content .navbar .navbar-nav  {
+  color: #ffffff;
+}
+.nav-link:hover{
+  color: #d71f36;
+  background-color: #0c1337;
 }
 
 .ftr-ready, .ftr-ready a {
-  color: #000;
+  color: #ffffff ;
   font-weight: 600;
 }
 /* Jazib */
@@ -371,4 +379,30 @@ outline: none;
   display: block;
   height: 50px;
   width: 40px !important;
+}
+
+.content .navbar .navbar-nav {
+  margin-left: 0;
+  padding: 12px 0 12px 20px;
+  color: #ffffff;
+  outline: none;
+}
+
+.nav-link {
+  margin-left: 0;
+  padding: 12px 0 12px 20px;
+  color: #030202;
+  outline: none;
+}
+.nav-link:hover i{
+  color: #0c1337;
+}
+
+.nav-link.active {
+  background-color: #ffffff;
+  color: #ffffff;
+}
+
+.nav-link{
+  color: #ffff;
 }

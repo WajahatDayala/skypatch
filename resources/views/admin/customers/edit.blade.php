@@ -5,7 +5,9 @@
 <div class=" container-fluid py-4 px-4">
                 <div class="row g-4 d-flex align-items-center justify-content-center">
                     <div class="col-8">
-                        <div class="bg-light rounded h-100 p-4">
+                        {{-- <div class="bg-light rounded h-100 p-4"> --}}
+                            <div class="rounded h-100 p-4 card shadow-lg border">
+                           
                             <h6 class="mb-4">Edit Order OR-{{$order->order_id}}</h6> 
                             @if ($errors->any())
                             <div class="alert alert-danger">

@@ -20,7 +20,7 @@
                     <div class="col-md-6">
                         <div class="table-responsive">
                             <table class="table table-fixed text-start align-middle table-bordered mb-0">
-
+                               
                                 <tbody>
                                     <tr class="table-info">
                                         <td colspan="2" class="text-center">Personal Information

@@ -71,7 +71,7 @@ class AllVectorController extends Controller
 
       
 
-        return view('admin/vector-orders/index',
+        return view('admin/vector-orders/today',
         [
             'orders'=>$orders
            
@@ -516,12 +516,12 @@ class AllVectorController extends Controller
     
             DB::commit();
             
-            return redirect()->route('allvectors.edit', $order->id)->with('success', 'Vector updated successfully!');
+           // return redirect()->route('allvectors.edit', $order->id)->with('success', 'Vector updated successfully!');
 
-          // return redirect()->route('vector-orders.index')->with('success', 'Order updated successfully!');
+           return redirect()->route('allvectors.index')->with('success', 'Order updated successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Error updating Vector: ' . $e->getMessage());
+            //\Log::error('Error updating Vector: ' . $e->getMessage());
             return back()->withErrors(['error' => 'An error occurred while updating the Vector.']);
         }
     }

@@ -72,6 +72,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     //customer
     Route::resource('/admin/customers',CustomerController::class);
+    Route::post('/admin/customers/updateBill',[CustomerController::class,'updateBIlInfo'])->name('customer.updatedBill');
     Route::get('/admin/allcustomers', [CustomerController::class, 'allCustomer']);
     Route::get('/admin/customers/{id}/dashboard',[CustomerController::class,'showPanel'])->name('customer.dashboard');
     //add invoice
