@@ -21,7 +21,9 @@ use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\AsignLeaderController;
 use App\Http\Controllers\Admin\InvoiceControlller;
 
-
+//digitizer quote worker.
+use App\Http\Controllers\Digitizer\Quote\Worker\WorkerDashboardController;
+use App\Http\Controllers\Digitizer\Quote\Worker\WorkerQuoteController;
 
 Route::get('/', function () {
 
@@ -148,10 +150,23 @@ Route::group(['middleware' => 'auth:admin'], function () {
       Route::post('/admin/assign-leaders/{id}/assign-leader', [AsignLeaderController::class, 'assignLeader'])->name('assign-leaders.assign-leader');
 
 
+/* digitizer */
+//quote worker
+
+    Route::get('/quote-worker/dashboard',[WorkerDashboardController::class,'index'])->name('quote-worker.dashboard');
+    Route::resource('/quote-worker/all-worker-quotes',WorkerQuoteController::class);
+    Route::get('/quote-worker/today-worker-quotes',[WorkerQuoteController::class,'todayDayQuote'])->name('quote-worker.today-quotes');
+    
+
+
+/* digitizer */
 
      
 
 });
 /*end admin routing  */
+
+
+
 
 require __DIR__.'/auth.php';

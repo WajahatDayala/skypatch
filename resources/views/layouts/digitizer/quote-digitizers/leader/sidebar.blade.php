@@ -4,7 +4,6 @@
         <div class="d-flex flex-column align-items-center justify-content-center">
           <a href="index.html" class="d-flex align-items-center justify-content-center">
           <img src="{{asset('skypatch/img/logowhite.png')}}" alt="skypatch_logo" />
-
           </a>
           
           <div class="my-3 d-flex flex-column align-items-center justify-content-center">
