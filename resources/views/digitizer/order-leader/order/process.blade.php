@@ -1,4 +1,4 @@
-@extends('digitizer.quote-worker.quotes.base')
+@extends('digitizer.order-leader.base')
 @section('action-content')
 
          <!-- All Content Goes inside this div -->
@@ -231,47 +231,47 @@
                                             <tr class="row">
                                                 <td class="col-3">
                                                     <strong>Number</strong><br>
-                                                    <span>QT-{{$quote->quote_id}}</span>
+                                                    <span>OR-{{$order->order_id}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Date & Time</strong><br>
-                                                    <span>{{$quote->received_date}}</span>
+                                                    <span>{{$order->received_date}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Customer Nick</strong><br>
-                                                    <span>{{$quote->customer_name}}</span>
+                                                    <span>{{$order->customer_name}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Desing Namw/PO</strong><br>
-                                                    <span>{{$quote->design_name}}</span>
+                                                    <span>{{$order->design_name}}</span>
                                                 </td>
                                             </tr>
                                             <tr class="row">
                                                 <td class="col-3">
                                                     <strong>Height</strong><br>
-                                                    <span>{{$quote->height}}</span>
+                                                    <span>{{$order->height}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Width</strong><br>
-                                                    <span>{{$quote->width}}</span>
+                                                    <span>{{$order->width}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Required Format</strong><br>
-                                                    <span>{{$quote->format}}</span>
+                                                    <span>{{$order->format}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Placement</strong><br>
-                                                    <span>{{$quote->placement}}</span>
+                                                    <span>{{$order->placement}}</span>
                                                 </td>
                                             </tr>
                                             <tr class="row">
                                                 <td class="col-3">
                                                     <strong>Number of Colors</strong><br>
-                                                    <span>{{$quote->number_of_colors}}</span>
+                                                    <span>{{$order->number_of_colors}}</span>
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Fabric Type</strong><br>
-                                                    <span>{{$quote->fabric_name}}</span>
+                                                    <span>{{$order->fabric_name}}</span>
                                                 </td>
                                                 <td class="col-6">
                                                     <strong>Design Type</strong><br>
@@ -281,7 +281,7 @@
                                             <tr class="row">
                                                 <td class="col-12">
                                                     <strong>Customer Instructions</strong><br>
-                                                    <span>{{ $quoteInstruction ? $quoteInstruction->instruction : 'No instruction available.' }}</span>
+                                                    <span>{{ $orderInstruction ? $orderInstruction->instruction : 'No instruction available.' }}</span>
                                                 </td>
                                             </tr>
                                             <tr class="row">
@@ -388,7 +388,7 @@
                                     @endforeach<br>
 
 
-                                                    @if ($quote->edit_status == 1)
+                                                    @if ($order->edit_status == 1)
                                                     <button type="button" class="btn btn-sm rounded-pill btn-primary m-2"
                                                         data-bs-toggle="modal" data-bs-target="#fileUploadModal1">Upload Files</button>
                                                      @endif
@@ -403,7 +403,7 @@
                                                                        aria-label="Close"></button>
                                                                </div>
                                                                <form id="fileUploadForm1" method="POST"
-                                                                   action="{{route('allquotes.optionA')}}"
+                                                                   action="{{route('allorders.optionA')}}"
                                                                    enctype="multipart/form-data">
                                                                    @csrf
                                                                    <div class="modal-body">
@@ -412,7 +412,7 @@
                                                                            <label hidden for="order_id">Order ID</label>
                                                                            <input type="text" hidden class="form-control" 
                                                                                id="order_id" name="order_id" required
-                                                                               value="{{ $quote->quote_id }}">
+                                                                               value="{{ $order->order_id }}">
                                                                        </div>
                                                                        <div class="form-group">
                                                                            <label for="files">Choose Files</label>
@@ -447,35 +447,35 @@
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
-                                                               {{$quote->email1}}
+                                                               {{$order->email1}}
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
-                                                            {{$quote->email2}}
+                                                            {{$order->email2}}
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
-                                                            {{$quote->email3}}
+                                                            {{$order->email3}}
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
-                                                            {{$quote->email4}}
+                                                            {{$order->email4}}
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
-                                                            {{$quote->invoceEmail}}
+                                                            {{$order->invoceEmail}}
                                                             </label>
                                                         </div>
                                                     </div>--}}
@@ -506,7 +506,7 @@
                                                     {{-- <button type="button"
                                                         class="btn btn-primary rounded-pill m-2">Upload Files</button> --}}
 
-                                                        @if ($quote->edit_status == 1)
+                                                        @if ($order->edit_status == 1)
                                                         <button type="button" class="btn btn-sm rounded-pill btn-primary m-2"
                                                             data-bs-toggle="modal" data-bs-target="#fileUploadModal">Upload Files</button>
                                                        @endif
@@ -521,7 +521,7 @@
                                                                         aria-label="Close"></button>
                                                                 </div>
                                                                 <form id="fileUploadForm" method="POST"
-                                                                    action="{{route('allquotes.optionB')}}"
+                                                                    action="{{route('allorders.optionB')}}"
                                                                     enctype="multipart/form-data">
                                                                     @csrf
                                                                     <div class="modal-body">
@@ -530,7 +530,7 @@
                                                                             <label hidden for="order_id">Order ID</label>
                                                                             <input type="text" class="form-control" hidden
                                                                                 id="order_id" name="order_id" required
-                                                                                value="{{ $quote->quote_id }}">
+                                                                                value="{{ $order->order_id }}">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="files">Choose Files</label>

@@ -1,4 +1,4 @@
-@extends('digitizer.quote-worker.quotes.base')
+@extends('digitizer.order-leader.base')
 @section('action-content')
 
 
@@ -11,7 +11,7 @@
                 <div class="bg-table rounded h-100 p-4">
                     <div class="row mb-4">
                         <div class="col-6 d-flex justify-content-start align-items-center">
-                            <h6 class="h6 mb-0">Quote Details</h6>
+                            <h6 class="h6 mb-0">Orders Details</h6>
                         </div>
                         <div class="col-6 d-flex align-items-center justify-content-end">
                             {{-- <button type="button"  
@@ -19,7 +19,7 @@
                             @if ($order->edit_status == 1)
                                 {{-- <a href="{{route('allquotes.edit',[$order->order_id])}}"
                         class="btn btn-sm btn-primary rounded-pill me-2">Edit</a>  --}}
-                                <a href="{{ route('all-worker-quote.process', [$order->order_id]) }}"
+                                <a href="{{ route('all-leader-orders.process', [$order->order_id]) }}"
                                     class="btn btn-sm btn-dark rounded-pill ">Process</a>
                             @endif
                         </div>
@@ -28,8 +28,8 @@
                         <tbody>
                             <tr class="row">
                                 <td class="col-3">
-                                    <strong>Quote Number</strong><br>
-                                    <span>OT-{{ $order->order_id }}</span>
+                                    <strong>Order Number</strong><br>
+                                    <span>OR-{{ $order->order_id }}</span>
                                 </td>
                                 <td class="col-3">
                                     <strong>Status</strong><br>
@@ -279,7 +279,7 @@ Update
                                 @if ($order->edit_status == 1)
                                     <td class="col-3">
                                         <h6>
-                                            <strong>Quote Status</strong><br>
+                                            <strong>Order Status</strong><br>
                                         </h6>
                                         <p class="mb-2">{{ $order->order_status_name }}
 

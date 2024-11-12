@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Digitizer\Quote\Worker;
+namespace App\Http\Controllers\Digitizer\Quote\Leader;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -22,13 +22,12 @@ use Illuminate\Support\Facades\DB;
 use Auth;
 use App\Models\Option;
 
-class WorkerQuoteController extends Controller
+class LeaderQuoteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    protected $redirectTo = '/all-worker-quotes';
-   
+    protected $redirectTo = '/all-leader-quotes';
     public function index()
     {
         //
@@ -49,7 +48,7 @@ class WorkerQuoteController extends Controller
     
 
 
-        return view('digitizer/quote-worker/quotes/index',
+        return view('digitizer/quote-leader/quotes/index',
         [
         'quotes'=>$quotes
         ]);
@@ -81,7 +80,7 @@ class WorkerQuoteController extends Controller
         ->get();
 
 
-        return view('digitizer/quote-worker/quotes/today',
+        return view('digitizer/quote-leader/quotes/today',
         [
         'quotes'=>$quotes
         ]);
@@ -176,7 +175,7 @@ class WorkerQuoteController extends Controller
             ->get();
   
         
-          return view('digitizer/quote-worker/quotes/process',compact(
+          return view('digitizer/quote-leader/quotes/process',compact(
             'quote',
             'designer',
             'quoteStatus',
@@ -213,7 +212,6 @@ class WorkerQuoteController extends Controller
     public function show(string $id)
     {
         //
-
         $order = Quote::findOrFail($id);
 
         $order = Quote::select('*', 
@@ -288,7 +286,7 @@ class WorkerQuoteController extends Controller
 
 
 
-        return view('digitizer/quote-worker/quotes/show',compact(
+        return view('digitizer/quote-leader/quotes/show',compact(
             'order',
             'designer',
             'orderStatus',

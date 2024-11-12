@@ -46,13 +46,13 @@ class AdminAuthController extends Controller
                 case 'Accounts':
                     return redirect()->route('accounts.index'); // Accounts Dashboard
                 case 'Quote Digitizer Leader':
-                    return redirect()->route('quote.leader.index'); // Quote Leader Dashboard
+                    return redirect()->route('quote-leader.dashboard'); // Quote Leader Dashboard
                 case 'Quote Digitizer Worker':
                     return redirect()->route('quote-worker.dashboard'); // Quote Worker Dashboard
                 case 'Order Digitizer Leader':
-                    return redirect()->route('order.leader.index'); // Order Leader Dashboard
+                    return redirect()->route('order-leader.dashboard'); // Order Leader Dashboard
                 case 'Order Digitizer Worker':
-                    return redirect()->route('order.worker.index'); // Order Worker Dashboard
+                    return redirect()->route('order-worker.dashboard'); // Order Worker Dashboard
                 case 'Vector Digitizer Leader':
                     return redirect()->route('vector.leader.index'); // Vector Leader Dashboard
                 case 'Vector Digitizer Worker':

@@ -6799,8 +6799,8 @@ fieldset:disabled .btn {
   color: #198754 !important;
 }
 .text-info {
-  /*color: #000 !important;*/
-  color:#fff !important;
+  color: #000 !important;
+  /* color:#fff !important; */
 }
 .text-warning {
   color: #ffc107 !important;

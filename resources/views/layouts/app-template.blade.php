@@ -48,8 +48,22 @@
     <!-- Sidebar -->
     @if(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Admin')
     @include('layouts.admin.sidebar')
-    @elseif(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Quote Digitizer Worker')
+
+     <!--quote digitizer -->
+    @elseif(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Quote Digitizer Worker'
+    || Auth::user()->role->name === 'Quote Digitizer Leader'
+    )
     @include('layouts.digitizer.quote-digitizers.worker.sidebar')
+    <!-- end quote digitizer -->
+
+    <!--order digitizer -->
+    @elseif(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Order Digitizer Worker'
+    || Auth::user()->role->name === 'Order Digitizer Leader'
+    )
+    @include('layouts.digitizer.order-digitizer.sidebar')
+    <!-- end order digitizer -->
+
+
     @elseif(Auth::check() && Auth::user()->username)
     @include('layouts.sidebar')
     @endif

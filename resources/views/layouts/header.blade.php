@@ -22,7 +22,7 @@
           <img src="img/logo_resized.png" alt="" width="150px" />
         </a>
         <a href="#" class="sidebar-toggler flex-shrink-0">
-          <i class="fa fa-bars h4 text-info"></i>
+          <i class="fa fa-bars h4 text-white"></i>
         </a>
       </nav>
       <!-- Navbar End -->

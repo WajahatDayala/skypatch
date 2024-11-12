@@ -14,6 +14,7 @@ use App\Models\Status;
 use App\Models\OrderEditID;
 use App\Models\ReasonEdit;
 use App\Models\Admin;
+use App\Models\Option;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,72 +34,158 @@ class AllOrdersController extends Controller
     public function index()
     {
         //
-        $orders = Order::select('*',
-        'orders.id as order_id',
-        'users.name as customer_name',
-        'admins.name as designerName',
-        'orders.name as design_name',
-        'statuses.name as status',
-        'orders.created_at as createdAt'
+        $orders = Order::select(
+            '*',
+            'orders.id as order_id',
+            'users.name as customer_name',
+            'admins.name as designerName',
+            'orders.name as design_name',
+            'statuses.name as status',
+            'orders.created_at as createdAt'
         )
-        ->join('users','orders.customer_id','=','users.id')
-        ->join('statuses','orders.status_id','statuses.id')
-        ->leftjoin('admins','orders.designer_id','=','admins.id')
-        ->orderBy('design_name','ASC')
-        ->get();
+            ->join('users', 'orders.customer_id', '=', 'users.id')
+            ->join('statuses', 'orders.status_id', 'statuses.id')
+            ->leftjoin('admins', 'orders.designer_id', '=', 'admins.id')
+            ->orderBy('design_name', 'ASC')
+            ->get();
 
-       
-        return view('admin/orders/index',['orders'=>$orders]);
+
+        return view('admin/orders/index', ['orders' => $orders]);
     }
 
     public function todayDayOrders()
     {
-        $orders = Order::select('*',
-        'orders.id as order_id',
-        'users.name as customer_name',
-        'admins.name as designerName',
-        'orders.name as design_name',
-        'delivery_types.type as deliveryType',
-        'statuses.name as status',
-        'orders.created_at as createdAt'
+        $orders = Order::select(
+            '*',
+            'orders.id as order_id',
+            'users.name as customer_name',
+            'admins.name as designerName',
+            'orders.name as design_name',
+            'delivery_types.type as deliveryType',
+            'statuses.name as status',
+            'orders.created_at as createdAt'
         )
-        ->join('users','orders.customer_id','=','users.id')
-        ->join('delivery_types','orders.delivery_type_id','delivery_types.id')
-        ->join('statuses','orders.status_id','=','statuses.id')
-        ->leftjoin('admins','orders.designer_id','=','admins.id')
-        ->whereDate('orders.created_at', today())
-        ->orderBy('orders.id','Asc')
-        ->get();
+            ->join('users', 'orders.customer_id', '=', 'users.id')
+            ->join('delivery_types', 'orders.delivery_type_id', 'delivery_types.id')
+            ->join('statuses', 'orders.status_id', '=', 'statuses.id')
+            ->leftjoin('admins', 'orders.designer_id', '=', 'admins.id')
+            ->whereDate('orders.created_at', today())
+            ->orderBy('orders.id', 'Asc')
+            ->get();
 
-    
-        
+
+
         return view('admin.orders.today', ['orders' => $orders]);
     }
     public function todayDayEditOrders()
     {
-        $orders = Order::select('*',
-        'orders.id as order_id',
-        'users.name as customer_name',
-        'admins.name as designerName',
-        'orders.name as design_name',
-        'statuses.name as status',
-        'delivery_types.type as deliveryType',
-        'orders.created_at as createdAt'
+        $orders = Order::select(
+            '*',
+            'orders.id as order_id',
+            'users.name as customer_name',
+            'admins.name as designerName',
+            'orders.name as design_name',
+            'statuses.name as status',
+            'delivery_types.type as deliveryType',
+            'orders.created_at as createdAt'
         )
-        ->join('users','orders.customer_id','=','users.id')
-        ->join('delivery_types','orders.delivery_type_id','delivery_types.id')
-        ->join('statuses','orders.status_id','=','statuses.id')
-        ->leftjoin('admins','orders.designer_id','admins.id')
-        ->whereNotNull('edit_order_id')
-        ->whereDate('orders.created_at', today())
-        ->where('orders.status_id',1)
-        ->get();
+            ->join('users', 'orders.customer_id', '=', 'users.id')
+            ->join('delivery_types', 'orders.delivery_type_id', 'delivery_types.id')
+            ->join('statuses', 'orders.status_id', '=', 'statuses.id')
+            ->leftjoin('admins', 'orders.designer_id', 'admins.id')
+            ->whereNotNull('edit_order_id')
+            ->whereDate('orders.created_at', today())
+            ->where('orders.status_id', 1)
+            ->get();
 
-    
-        
+
+
         return view('admin.orders.today-edit', ['orders' => $orders]);
     }
-    
+
+
+
+    //optionA
+    public function storeOptionA(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+        ]);
+
+        // Handle file uploads
+        if ($request->hasFile('filesA')) {
+            // Store new files
+            foreach ($request->file('filesA') as $file) {
+                $filePath = $file->store('/uploads/orders-option/A', 'public');
+
+                // Get the original filename
+                $originalFilename = $file->getClientOriginalName();
+
+                // Create a structured string to store both path and original filename
+                $fileData = [
+                    'path' => $filePath,
+                    'original_name' => $originalFilename,
+                ];
+
+                Option::create([
+                    'role_id' => Auth::User()->role_id,
+                    'employee_id' => Auth::id(),
+                    'order_id' => $request->order_id,
+                    'option_type' => 'A',
+                    'comment' => $request->commentA,
+                    'file_upload' => json_encode($fileData),
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Files uploaded successfully!');
+        }
+
+        return redirect()->back()->with('error', 'No files uploaded.');
+    }
+
+    //optionB
+    public function storeOptionB(Request $request)
+    {
+        // Validate the incoming request
+// Validate the incoming request
+        $request->validate([
+            'filesB.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+        ]);
+
+        // Handle file uploads
+        if ($request->hasFile('filesB')) {
+            // Store new files
+            foreach ($request->file('filesB') as $file) {
+                $filePath = $file->store('/uploads/orders-option/B', 'public');
+
+                // Get the original filename
+                $originalFilename = $file->getClientOriginalName();
+
+                // Create a structured string to store both path and original filename
+                $fileData = [
+                    'path' => $filePath,
+                    'original_name' => $originalFilename,
+                ];
+
+                Option::create([
+                    'role_id' => Auth::User()->role_id,
+                    'employee_id' => Auth::id(),
+                    'order_id' => $request->order_id,
+                    'option_type' => 'B',
+                    'comment' => $request->commentB,
+                    'file_upload' => json_encode($fileData),
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Files uploaded successfully!');
+        }
+
+        return redirect()->back()->with('error', 'No files uploaded.');
+    }
+
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -121,72 +208,76 @@ class AllOrdersController extends Controller
     public function show(string $id)
     {
         //
-       $order = Order::findOrFail($id);
+        $order = Order::findOrFail($id);
 
-        $order = Order::select('*', 
-        'orders.id as order_id',
-        'orders.name as design_name',
-        'users.name as customer_name',
-        'admins.id as designer_id',
-        'admins.name as designer_name',
-        'statuses.name as status',
-        'ordersStatus.name as order_status_name',
-        'fabrics.name as fabric_name',
-        'required_formats.name as format',
-        'placements.name as placement',
-        'users.name as customer_name',
-        'orders.created_at as received_date',
-        'reason_edits.reason as reason_name',
-        'orders.name as design_name')
-        ->join('users', 'orders.customer_id', '=', 'users.id')
-        ->join('statuses','orders.status_id','=','statuses.id')
-        ->join('fabrics','orders.fabric_id','=','fabrics.id')
-        ->join('placements','orders.placement_id','=','placements.id')
-        ->join('required_formats','orders.required_format_id','=','required_formats.id')
-        ->leftjoin('admins','orders.designer_id','=','admins.id')
-        ->leftjoin('statuses as ordersStatus','orders.order_status','ordersStatus.id')
-        ->leftjoin('reason_edits','orders.edit_reason_id','reason_edits.id')
-        ->where('orders.id', $order->id) 
-        ->first(); 
+        $order = Order::select(
+            '*',
+            'orders.id as order_id',
+            'orders.name as design_name',
+            'users.name as customer_name',
+            'admins.id as designer_id',
+            'admins.name as designer_name',
+            'statuses.name as status',
+            'ordersStatus.name as order_status_name',
+            'fabrics.name as fabric_name',
+            'required_formats.name as format',
+            'placements.name as placement',
+            'users.name as customer_name',
+            'orders.created_at as received_date',
+            'reason_edits.reason as reason_name',
+            'orders.name as design_name'
+        )
+            ->join('users', 'orders.customer_id', '=', 'users.id')
+            ->join('statuses', 'orders.status_id', '=', 'statuses.id')
+            ->join('fabrics', 'orders.fabric_id', '=', 'fabrics.id')
+            ->join('placements', 'orders.placement_id', '=', 'placements.id')
+            ->join('required_formats', 'orders.required_format_id', '=', 'required_formats.id')
+            ->leftjoin('admins', 'orders.designer_id', '=', 'admins.id')
+            ->leftjoin('statuses as ordersStatus', 'orders.order_status', 'ordersStatus.id')
+            ->leftjoin('reason_edits', 'orders.edit_reason_id', 'reason_edits.id')
+            ->where('orders.id', $order->id)
+            ->first();
 
         //instruction
-        $orderInstruction = Order::select('*','instructions.description as instruction') 
-        ->leftjoin('instructions','instructions.order_id','=','orders.id')
-        ->where('instructions.order_id',$id)
-        ->first();
+        $orderInstruction = Order::select('*', 'instructions.description as instruction')
+            ->leftjoin('instructions', 'instructions.order_id', '=', 'orders.id')
+            ->where('instructions.order_id', $id)
+            ->first();
 
 
         //admin instruction
-        $adminInstruction = Order::select('*','instructions.description as instruction') 
-        ->join('instructions','instructions.order_id','=','orders.id')
-        ->leftjoin('admins','instructions.emp_id','admins.id')
-        ->leftjoin('roles','admins.role_id','roles.id')
-        ->where('instructions.order_id',$id)
-        ->where('roles.name','Admin')
-        ->first();
+        $adminInstruction = Order::select('*', 'instructions.description as instruction')
+            ->join('instructions', 'instructions.order_id', '=', 'orders.id')
+            ->leftjoin('admins', 'instructions.emp_id', 'admins.id')
+            ->leftjoin('roles', 'admins.role_id', 'roles.id')
+            ->where('instructions.order_id', $id)
+            ->where('roles.name', 'Admin')
+            ->first();
 
         //files
-        $orderFiles =QuoteFileLog::select('*','quote_file_logs.id as fileId')
-        ->where('order_id',$id)->get();
-    
+        $orderFiles = QuoteFileLog::select('*', 'quote_file_logs.id as fileId')
+            ->where('order_id', $id)->get();
+
         //order status
-        $orderStatus = Status::where('status_value',1)->get();
+        $orderStatus = Status::where('status_value', 1)->get();
 
         //Allreasons
         $allReasons = ReasonEdit::all();
 
 
         //designer
-        $designer = Admin::select('*','admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
-        ->join('roles', 'admins.role_id', '=', 'roles.id')
-        ->whereIn('roles.name',
-         ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
-        ->get();
+        $designer = Admin::select('*', 'admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
+            ->join('roles', 'admins.role_id', '=', 'roles.id')
+            ->whereIn(
+                'roles.name',
+                ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker']
+            )
+            ->get();
 
 
 
 
-        return view('admin/orders/show',compact(
+        return view('admin/orders/show', compact(
             'order',
             'designer',
             'orderStatus',
@@ -257,15 +348,15 @@ class AllOrdersController extends Controller
         ]);
 
         // Check if the instruction already exists for this customer and order
-        $instruction = Instruction::where('instructions.emp_id',Auth::id())
-                                  ->where('instructions.order_id',$request->order_id)
-                                  ->first();
-                                 
+        $instruction = Instruction::where('instructions.emp_id', Auth::id())
+            ->where('instructions.order_id', $request->order_id)
+            ->first();
+
 
         if ($instruction) {
             // If it exists, update the instruction
             $instruction->description = $request->admin_instruction;
-           // $instruction->emp_id = Auth::id(); // Update emp_id if necessary
+            // $instruction->emp_id = Auth::id(); // Update emp_id if necessary
             $instruction->save();
 
             return redirect()->back()->with('success', 'Admin instruction updated successfully!');
@@ -277,7 +368,7 @@ class AllOrdersController extends Controller
             $instruction->description = $request->admin_instruction;
             $instruction->order_id = $request->order_id;
             $instruction->save();
-        
+
 
             return redirect()->back()->with('success', 'Admin instruction created successfully!');
         }
@@ -289,22 +380,22 @@ class AllOrdersController extends Controller
         $request->validate([
             'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
         ]);
-    
+
         // Handle file uploads
         if ($request->hasFile('files')) {
             // Store new files
             foreach ($request->file('files') as $file) {
                 $filePath = $file->store('/uploads/quotes', 'public');
-    
+
                 // Get the original filename
                 $originalFilename = $file->getClientOriginalName();
-    
+
                 // Create a structured string to store both path and original filename
                 $fileData = [
                     'path' => $filePath,
                     'original_name' => $originalFilename,
                 ];
-    
+
                 QuoteFileLog::create([
                     'order_id' => $request->order_id,
                     'cust_id' => $request->customer_id,
@@ -312,10 +403,10 @@ class AllOrdersController extends Controller
                     'files' => json_encode($fileData),
                 ]);
             }
-    
+
             return redirect()->back()->with('success', 'Files uploaded successfully!');
         }
-    
+
         return redirect()->back()->with('error', 'No files uploaded.');
     }
 
@@ -369,15 +460,15 @@ class AllOrdersController extends Controller
             // Update the order status
             $order->order_status = $validatedData['order_status'];
             $order->save(); // Save the changes
-            
+
             // Redirect back to the previous page
-          
+
             return redirect()->back()->with('success', 'Order status updated successfully!');
 
         } else {
-            
+
             // Redirect back with error message
-          
+
             return redirect()->back()->with('error', 'Order not found.');
 
         }
@@ -398,17 +489,17 @@ class AllOrdersController extends Controller
 
         if ($order) {
             // Update the reason
-            $order->edit_reason_id  = $validatedData['reason_id'];
+            $order->edit_reason_id = $validatedData['reason_id'];
             $order->save(); // Save the changes
-            
+
             // Redirect back to the previous page
-          
+
             return redirect()->back()->with('success', 'Reason updated successfully!');
 
         } else {
-            
+
             // Redirect back with error message
-          
+
             return redirect()->back()->with('error', 'Reason not found.');
 
         }
@@ -421,7 +512,7 @@ class AllOrdersController extends Controller
     public function edit(string $id)
     {
         //
-       
+
     }
 
     //process for order
@@ -430,74 +521,78 @@ class AllOrdersController extends Controller
 
         $order = Order::findOrFail($id);
 
-        $order = Order::select('*', 
-        'orders.id as order_id',
-        'orders.name as design_name',
-        'users.name as customer_name',
-        'users.email as email1',
-        'users.email_2 as email2',
-        'users.email_3 as email3',
-        'users.email_4 as email4',
-        'users.invoice_email as invoceEmail',
-        'admins.id as designer_id',
-        'admins.name as designer_name',
-        'statuses.name as status',
-        'ordersStatus.name as order_status_name',
-        'fabrics.name as fabric_name',
-        'required_formats.name as format',
-        'placements.name as placement',
-        'users.name as customer_name',
-        'orders.created_at as received_date',
-        'reason_edits.reason as reason_name')
-        ->join('users', 'orders.customer_id', '=', 'users.id')
-        ->join('statuses','orders.status_id','=','statuses.id')
-        ->join('fabrics','orders.fabric_id','=','fabrics.id')
-        ->join('placements','orders.placement_id','=','placements.id')
-        ->join('required_formats','orders.required_format_id','=','required_formats.id')
-        ->leftjoin('admins','orders.designer_id','=','admins.id')
-        ->leftjoin('statuses as ordersStatus','orders.order_status','ordersStatus.id')
-        ->leftjoin('reason_edits','orders.edit_reason_id','reason_edits.id')
-        ->where('orders.id', $order->id) 
-        ->first(); 
+        $order = Order::select(
+            '*',
+            'orders.id as order_id',
+            'orders.name as design_name',
+            'users.name as customer_name',
+            'users.email as email1',
+            'users.email_2 as email2',
+            'users.email_3 as email3',
+            'users.email_4 as email4',
+            'users.invoice_email as invoceEmail',
+            'admins.id as designer_id',
+            'admins.name as designer_name',
+            'statuses.name as status',
+            'ordersStatus.name as order_status_name',
+            'fabrics.name as fabric_name',
+            'required_formats.name as format',
+            'placements.name as placement',
+            'users.name as customer_name',
+            'orders.created_at as received_date',
+            'reason_edits.reason as reason_name'
+        )
+            ->join('users', 'orders.customer_id', '=', 'users.id')
+            ->join('statuses', 'orders.status_id', '=', 'statuses.id')
+            ->join('fabrics', 'orders.fabric_id', '=', 'fabrics.id')
+            ->join('placements', 'orders.placement_id', '=', 'placements.id')
+            ->join('required_formats', 'orders.required_format_id', '=', 'required_formats.id')
+            ->leftjoin('admins', 'orders.designer_id', '=', 'admins.id')
+            ->leftjoin('statuses as ordersStatus', 'orders.order_status', 'ordersStatus.id')
+            ->leftjoin('reason_edits', 'orders.edit_reason_id', 'reason_edits.id')
+            ->where('orders.id', $order->id)
+            ->first();
 
         //instruction
-        $orderInstruction = Order::select('*','instructions.description as instruction') 
-        ->leftjoin('instructions','instructions.order_id','=','orders.id')
-        ->where('instructions.order_id',$id)
-        ->first();
+        $orderInstruction = Order::select('*', 'instructions.description as instruction')
+            ->leftjoin('instructions', 'instructions.order_id', '=', 'orders.id')
+            ->where('instructions.order_id', $id)
+            ->first();
 
 
         //admin instruction
-        $adminInstruction = Order::select('*','instructions.description as instruction') 
-        ->join('instructions','instructions.order_id','=','orders.id')
-        ->leftjoin('admins','instructions.emp_id','admins.id')
-        ->leftjoin('roles','admins.role_id','roles.id')
-        ->where('instructions.order_id',$id)
-        ->where('roles.name','Admin')
-        ->first();
+        $adminInstruction = Order::select('*', 'instructions.description as instruction')
+            ->join('instructions', 'instructions.order_id', '=', 'orders.id')
+            ->leftjoin('admins', 'instructions.emp_id', 'admins.id')
+            ->leftjoin('roles', 'admins.role_id', 'roles.id')
+            ->where('instructions.order_id', $id)
+            ->where('roles.name', 'Admin')
+            ->first();
 
         //files
-        $orderFiles =QuoteFileLog::select('*','quote_file_logs.id as fileId')
-        ->where('order_id',$id)->get();
-    
+        $orderFiles = QuoteFileLog::select('*', 'quote_file_logs.id as fileId')
+            ->where('order_id', $id)->get();
+
         //order status
-        $orderStatus = Status::where('status_value',1)->get();
+        $orderStatus = Status::where('status_value', 1)->get();
 
         //Allreasons
         $allReasons = ReasonEdit::all();
 
 
         //designer
-        $designer = Admin::select('*','admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
-        ->join('roles', 'admins.role_id', '=', 'roles.id')
-        ->whereIn('roles.name',
-         ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
-        ->get();
+        $designer = Admin::select('*', 'admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
+            ->join('roles', 'admins.role_id', '=', 'roles.id')
+            ->whereIn(
+                'roles.name',
+                ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker']
+            )
+            ->get();
 
 
 
 
-        return view('admin/orders/process',compact(
+        return view('admin/orders/process', compact(
             'order',
             'designer',
             'orderStatus',
@@ -513,76 +608,80 @@ class AllOrdersController extends Controller
 
         $order = Order::findOrFail($id);
 
-        $order = Order::select('*', 
-        'orders.id as order_id',
-        'orders.name as design_name',
-        'users.name as customer_name',
-        'users.id as customer_id',
-        'users.email as email1',
-        'users.email_2 as email2',
-        'users.email_3 as email3',
-        'users.email_4 as email4',
-        'users.invoice_email as invoceEmail',
-        'admins.id as designer_id',
-        'admins.name as designer_name',
-        'statuses.name as status',
-        'ordersStatus.name as order_status_name',
-        'fabrics.name as fabric_name',
-        'required_formats.name as format',
-        'placements.name as placement',
-        'users.name as customer_name',
-        'orders.created_at as received_date',
-        'reason_edits.reason as reason_name',
-        'orders.name as design_name')
-        ->join('users', 'orders.customer_id', '=', 'users.id')
-        ->join('statuses','orders.status_id','=','statuses.id')
-        ->join('fabrics','orders.fabric_id','=','fabrics.id')
-        ->join('placements','orders.placement_id','=','placements.id')
-        ->join('required_formats','orders.required_format_id','=','required_formats.id')
-        ->leftjoin('admins','orders.designer_id','=','admins.id')
-        ->leftjoin('statuses as ordersStatus','orders.order_status','ordersStatus.id')
-        ->leftjoin('reason_edits','orders.edit_reason_id','reason_edits.id')
-        ->where('orders.id', $order->id) 
-        ->first(); 
+        $order = Order::select(
+            '*',
+            'orders.id as order_id',
+            'orders.name as design_name',
+            'users.name as customer_name',
+            'users.id as customer_id',
+            'users.email as email1',
+            'users.email_2 as email2',
+            'users.email_3 as email3',
+            'users.email_4 as email4',
+            'users.invoice_email as invoceEmail',
+            'admins.id as designer_id',
+            'admins.name as designer_name',
+            'statuses.name as status',
+            'ordersStatus.name as order_status_name',
+            'fabrics.name as fabric_name',
+            'required_formats.name as format',
+            'placements.name as placement',
+            'users.name as customer_name',
+            'orders.created_at as received_date',
+            'reason_edits.reason as reason_name',
+            'orders.name as design_name'
+        )
+            ->join('users', 'orders.customer_id', '=', 'users.id')
+            ->join('statuses', 'orders.status_id', '=', 'statuses.id')
+            ->join('fabrics', 'orders.fabric_id', '=', 'fabrics.id')
+            ->join('placements', 'orders.placement_id', '=', 'placements.id')
+            ->join('required_formats', 'orders.required_format_id', '=', 'required_formats.id')
+            ->leftjoin('admins', 'orders.designer_id', '=', 'admins.id')
+            ->leftjoin('statuses as ordersStatus', 'orders.order_status', 'ordersStatus.id')
+            ->leftjoin('reason_edits', 'orders.edit_reason_id', 'reason_edits.id')
+            ->where('orders.id', $order->id)
+            ->first();
 
         //instruction
-        $orderInstruction = Order::select('*','instructions.description as instruction') 
-        ->leftjoin('instructions','instructions.order_id','=','orders.id')
-        ->where('instructions.order_id',$id)
-        ->first();
+        $orderInstruction = Order::select('*', 'instructions.description as instruction')
+            ->leftjoin('instructions', 'instructions.order_id', '=', 'orders.id')
+            ->where('instructions.order_id', $id)
+            ->first();
 
 
         //admin instruction
-        $adminInstruction = Order::select('*','instructions.description as instruction') 
-        ->join('instructions','instructions.order_id','=','orders.id')
-        ->leftjoin('admins','instructions.emp_id','admins.id')
-        ->leftjoin('roles','admins.role_id','roles.id')
-        ->where('instructions.order_id',$id)
-        ->where('roles.name','Admin')
-        ->first();
+        $adminInstruction = Order::select('*', 'instructions.description as instruction')
+            ->join('instructions', 'instructions.order_id', '=', 'orders.id')
+            ->leftjoin('admins', 'instructions.emp_id', 'admins.id')
+            ->leftjoin('roles', 'admins.role_id', 'roles.id')
+            ->where('instructions.order_id', $id)
+            ->where('roles.name', 'Admin')
+            ->first();
 
         //files
-        $orderFiles =QuoteFileLog::select('*','quote_file_logs.id as fileId')
-        ->where('order_id',$id)->get();
-    
+        $orderFiles = QuoteFileLog::select('*', 'quote_file_logs.id as fileId')
+            ->where('order_id', $id)->get();
+
         //order status
-        $orderStatus = Status::where('status_value',1)->get();
+        $orderStatus = Status::where('status_value', 1)->get();
 
         //Allreasons
         $allReasons = ReasonEdit::all();
 
 
         //designer
-        $designer = Admin::select('*','admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
-        ->join('roles', 'admins.role_id', '=', 'roles.id')
-        ->whereIn('roles.name',
-         ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
-        ->get();
+        $designer = Admin::select('*', 'admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
+            ->join('roles', 'admins.role_id', '=', 'roles.id')
+            ->whereIn(
+                'roles.name',
+                ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker']
+            )
+            ->get();
 
 
 
 
-        return view('admin/orders/printview',compact(
+        return view('admin/orders/printview', compact(
             'order',
             'designer',
             'orderStatus',
