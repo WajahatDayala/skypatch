@@ -63,6 +63,13 @@
     @include('layouts.digitizer.order-digitizer.sidebar')
     <!-- end order digitizer -->
 
+     <!--vector order digitizer -->
+     @elseif(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Vector Digitizer Worker'
+     || Auth::user()->role->name === 'Vector Digitizer Leader'
+     )
+     @include('layouts.digitizer.vector-digitizer.sidebar')
+     <!-- end vector order digitizer -->
+
 
     @elseif(Auth::check() && Auth::user()->username)
     @include('layouts.sidebar')

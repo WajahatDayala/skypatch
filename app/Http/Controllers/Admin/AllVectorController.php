@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Option;
 use Illuminate\Http\Request;
 use App\Models\VectorRequiredFormat;
 use App\Models\VectorOrder;
@@ -525,6 +526,87 @@ class AllVectorController extends Controller
             return back()->withErrors(['error' => 'An error occurred while updating the Vector.']);
         }
     }
+
+    
+    //optionA
+    public function storeOptionA(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+        ]);
+
+        // Handle file uploads
+        if ($request->hasFile('filesA')) {
+            // Store new files
+            foreach ($request->file('filesA') as $file) {
+                $filePath = $file->store('/uploads/vector-option/A', 'public');
+
+                // Get the original filename
+                $originalFilename = $file->getClientOriginalName();
+
+                // Create a structured string to store both path and original filename
+                $fileData = [
+                    'path' => $filePath,
+                    'original_name' => $originalFilename,
+                ];
+
+                Option::create([
+                    'role_id' => Auth::User()->role_id,
+                    'employee_id' => Auth::id(),
+                    'vector_order_id' => $request->order_id,
+                    'option_type' => 'A',
+                    'comment' => $request->commentA,
+                    'file_upload' => json_encode($fileData),
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Files uploaded successfully!');
+        }
+
+        return redirect()->back()->with('error', 'No files uploaded.');
+    }
+
+    //optionB
+    public function storeOptionB(Request $request)
+    {
+        // Validate the incoming request
+// Validate the incoming request
+        $request->validate([
+            'filesB.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+        ]);
+
+        // Handle file uploads
+        if ($request->hasFile('filesB')) {
+            // Store new files
+            foreach ($request->file('filesB') as $file) {
+                $filePath = $file->store('/uploads/vector-option/B', 'public');
+
+                // Get the original filename
+                $originalFilename = $file->getClientOriginalName();
+
+                // Create a structured string to store both path and original filename
+                $fileData = [
+                    'path' => $filePath,
+                    'original_name' => $originalFilename,
+                ];
+
+                Option::create([
+                    'role_id' => Auth::User()->role_id,
+                    'employee_id' => Auth::id(),
+                    'vector_order_id' => $request->order_id,
+                    'option_type' => 'B',
+                    'comment' => $request->commentB,
+                    'file_upload' => json_encode($fileData),
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Files uploaded successfully!');
+        }
+
+        return redirect()->back()->with('error', 'No files uploaded.');
+    }
+
 
     /**
      * Remove the specified resource from storage.

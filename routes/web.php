@@ -34,8 +34,9 @@ use App\Http\Controllers\Digitizer\Order\Worker\WorkerOrderController;
 use App\Http\Controllers\Digitizer\Order\Leader\OrderLeaderDashboardController;
 use App\Http\Controllers\Digitizer\Order\Leader\LeaderOrderController;
 //digitizer vector worker
-use App\Http\Controllers\Digitizer\Vector\Worker\VectorWorkerDashboardController;
+use App\Http\Controllers\Digitizer\Vector\Worker\VectorWorkersDashboardController;
 use App\Http\Controllers\Digitizer\Vector\Worker\VectorWorkerController;
+
 //digitizer vector leader
 use App\Http\Controllers\Digitizer\Vector\Leader\VectorLeaderDashboardController;
 use App\Http\Controllers\Digitizer\Vector\Leader\VectorLeaderController;
@@ -158,6 +159,13 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/admin/allvectors/deleteFile', [AllVectorController::class, 'deleteFile'])->name('allvectors.deleteFile');
     Route::post('/admin/allvectors/updateStatus', [AllVectorController::class, 'orderStatus'])->name('allvectors.updateStatus');
 
+    //option A B
+    Route::post('/admin/allvectors/optionA', [AllVectorController::class, 'storeOptionA'])->name('allvectors.optionA');
+    Route::post('/admin/allvectors/optionB', [AllVectorController::class, 'storeOptionB'])->name('allvectors.optionB');
+    
+    
+
+
     //invoices 
     Route::resource('/admin/invoices', InvoiceControlller::class);
     Route::get('/admin/invoice/{id}/download', [InvoiceControlller::class, 'downloadPDF'])->name('invoice.download');
@@ -196,8 +204,19 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/order-leader/all-leader-order/{id}/process', [LeaderOrderController::class, 'showProcess'])->name('all-leader-orders.process');
     
 
-
-
+    //vector leader
+    Route::get('/vector-leader/dashboard', [VectorLeaderDashboardController::class, 'index'])->name('vector-leader.dashboard');
+    Route::resource('/vector-leader/all-leader-vector-order', VectorLeaderController::class);
+    Route::get('/vector-leader/today-leader-vector-order', [VectorLeaderController::class, 'todayVectorOrders'])->name('vector-leader.today-leader-vector-order');
+    Route::get('/vector-leader/all-leader-vector/{id}/process', [VectorLeaderController::class, 'showProcess'])->name('all-leader-vectors.process');
+    
+    //vector worker
+    Route::get('/vector-worker/dashboard', [VectorWorkersDashboardController::class, 'index'])->name('vector-worker.dashboard');
+    Route::resource('/vector-worker/all-worker-vector-order', VectorWorkerController::class);
+    Route::get('/vector-worker/today-worker-vector-order', [VectorWorkerController::class, 'todayVectorOrders'])->name('vector-worker.today-worker-vector-order');
+    Route::get('/vector-worker/all-worker-vector/{id}/process', [VectorWorkerController::class, 'showProcess'])->name('all-worker-vectors.process');
+   
+    
     /* digitizer */
 
 

@@ -54,9 +54,9 @@ class AdminAuthController extends Controller
                 case 'Order Digitizer Worker':
                     return redirect()->route('order-worker.dashboard'); // Order Worker Dashboard
                 case 'Vector Digitizer Leader':
-                    return redirect()->route('vector.leader.index'); // Vector Leader Dashboard
+                    return redirect()->route('vector-leader.dashboard'); // Vector Leader Dashboard
                 case 'Vector Digitizer Worker':
-                    return redirect()->route('vector.worker.index'); // Vector Worker Dashboard
+                    return redirect()->route('vector-worker.dashboard'); // Vector Worker Dashboard
                 default:
                     return redirect('/admin/login'); // Fallback
             }
