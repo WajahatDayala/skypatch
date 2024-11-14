@@ -45,35 +45,41 @@
         *********************************************************************************************************************************************************** -->
   <!-- Main Header -->
     @include('layouts.header')
-    <!-- Sidebar -->
-    @if(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Admin')
-    @include('layouts.admin.sidebar')
+    @if(Auth::check() && Auth::user()->role)
+   
+    @if(Auth::user()->role->name === 'Admin')
+       
+        @include('layouts.admin.sidebar')
 
-     <!--quote digitizer -->
-    @elseif(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Quote Digitizer Worker'
-    || Auth::user()->role->name === 'Quote Digitizer Leader'
-    )
-    @include('layouts.digitizer.quote-digitizers.worker.sidebar')
-    <!-- end quote digitizer -->
+    <!-- Quote digitizer -->
+    @elseif(Auth::user()->role->name === 'Quote Digitizer Worker' || Auth::user()->role->name === 'Quote Digitizer Leader')
+       
+        @include('layouts.digitizer.quote-digitizers.worker.sidebar')
+    <!-- End quote digitizer -->
 
-    <!--order digitizer -->
-    @elseif(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Order Digitizer Worker'
-    || Auth::user()->role->name === 'Order Digitizer Leader'
-    )
-    @include('layouts.digitizer.order-digitizer.sidebar')
-    <!-- end order digitizer -->
+    <!-- Order digitizer -->
+    @elseif(Auth::user()->role->name === 'Order Digitizer Worker' || Auth::user()->role->name === 'Order Digitizer Leader')
+      
+        @include('layouts.digitizer.order-digitizer.sidebar')
+    <!-- End order digitizer -->
 
-     <!--vector order digitizer -->
-     @elseif(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Vector Digitizer Worker'
-     || Auth::user()->role->name === 'Vector Digitizer Leader'
-     )
-     @include('layouts.digitizer.vector-digitizer.sidebar')
-     <!-- end vector order digitizer -->
+    <!-- Vector order digitizer -->
+    @elseif(Auth::user()->role->name === 'Vector Digitizer Worker' || Auth::user()->role->name === 'Vector Digitizer Leader')
+       
+        @include('layouts.digitizer.vector-digitizer.sidebar')
+    <!-- End vector order digitizer -->
+
+    <!-- Default sidebar -->
 
 
-    @elseif(Auth::check() && Auth::user()->username)
-    @include('layouts.sidebar')
-    @endif
+@endif
+@else
+@include('layouts.sidebar')
+@endif
+
+   
+    
+
     
     @yield('content')
     <!-- /.content-wrapper -->

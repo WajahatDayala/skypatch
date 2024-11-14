@@ -34,15 +34,16 @@ class InvoiceControlller extends Controller
         //
 
         $invoices = InvoiceDetail::select(
-            'invoice_details.invoice_id',
+            'invoice_details.invoice_id as invoiceId',
             'invoices.invoice_number as invoiceNumber', // Select invoice_number
+            'users.invoice_email as invoiceEmail', // Select invoice_email
             DB::raw('MIN(invoice_details.created_at) as createdAt'), // Aggregate for created_at
             DB::raw('SUM(invoice_details.price) as total_amount') // Sum the price/amount
         )
         ->join('invoices', 'invoice_details.invoice_id', '=', 'invoices.id')
-        ->groupBy('invoice_details.invoice_id', 'invoices.invoice_number') // Group by both invoice_id and invoice_number
+        ->join('users', 'invoices.customer_id', '=', 'users.id') // Ensure this join is correct
+        ->groupBy('invoice_details.invoice_id', 'invoices.invoice_number', 'users.invoice_email') // Group by both invoice_id, invoice_number, and invoice_email
         ->get();
-
 
 
 
@@ -115,6 +116,7 @@ class InvoiceControlller extends Controller
     //     'orderInvoice'));
         
     }
+    
     
 
     /**

@@ -216,6 +216,8 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/vector-worker/today-worker-vector-order', [VectorWorkerController::class, 'todayVectorOrders'])->name('vector-worker.today-worker-vector-order');
     Route::get('/vector-worker/all-worker-vector/{id}/process', [VectorWorkerController::class, 'showProcess'])->name('all-worker-vectors.process');
    
+
+    
     
     /* digitizer */
 
