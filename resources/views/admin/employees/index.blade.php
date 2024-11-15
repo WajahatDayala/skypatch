@@ -31,7 +31,7 @@
                                 <th scope="col"> Username </th>
                                 <th scope="col"> Role </th>
                              
-                                <th scope="col"> Action </th>
+                                <!-- <th scope="col"> Action </th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -45,13 +45,13 @@
                                 <td>{{$e->username}}</td>
                                 <td>{{$e->roles}}</td>
                               
-                                <td>
-                                    <!-- <a class="btn btn-sm btn-primary rounded-pill m-2"
+                                <!-- <td>
+                                    <a class="btn btn-sm btn-primary rounded-pill m-2"
                                         href="{{ route('employees.show', ['employee' => $e->id]) }}">Details</a>
 
                                         <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="">records</a> -->
-                                </td>
+                                        href="">records</a>
+                                </td> -->
                             </tr>
                             @endforeach
 

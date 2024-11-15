@@ -33,30 +33,108 @@
 
 
                     <div class="row mb-3">
-                        <label for="username" class="col-sm-4 col-form-label text-end">CardType</label>
-                        <div class="col-sm-8">
-                            <select class="form-select" name="card_type" aria-label="Default select example">
-                                <option value="" selected class='text-gray'>Select Card Type</option>
-                                @foreach($cardType as $t)
-                                <option value="{{ $t->id }}" {{ $user->card_type_id == $t->id ? 'selected' : '' }}>
-                                    {{ $t->name }}
-                                </option>
-                                @endforeach
-                            </select>
+    <label for="username" class="col-sm-4 col-form-label text-end">Card Type</label>
+    <div class="col-sm-8">
+        <select class="form-select" name="card_type" id="card_type" aria-label="Default select example" onchange="validateCardNumber()">
+            <option value="" selected class='text-gray'>Select Card Type</option>
+            @foreach($cardType as $t)
+            <option value="{{ $t->id }}" {{ $user->card_type_id == $t->id ? 'selected' : '' }}>
+                {{ $t->name }}
+            </option>
+            @endforeach
+        </select>
+    </div>
+</div>
 
-                        </div>
-                    </div>
+<div class="row mb-3">
+    <label for="company_name" class="col-sm-4 col-form-label text-end">Credit Card Number</label>
+    <div class="col-sm-8">
+        <input type="text" name="credit_number" class="form-control" id="credit_number" value="{{ $user->card_number }}">
+    </div>
+</div>
 
 
+<script>
+// Card type validation rules (using regular expressions)
+const cardRules = {
+    'visa': /^4\d{12}(\d{3})?$/, // Visa: Starts with 4 and has 13 or 16 digits
+    'mastercard': /^5[1-5]\d{14}$/, // MasterCard: Starts with 5 and has 16 digits
+    'amex': /^3[47]\d{13}$/, // American Express: Starts with 34 or 37 and has 15 digits
+    'discover': /^6(?:011|5\d{2})\d{12}$/, // Discover: Starts with 6 and has 16 digits
+};
 
+// Function to validate the credit card number
+function validateCardNumber() {
+    const cardTypeElement = document.getElementById('card_type');
+    const cardTypeText = cardTypeElement.options[cardTypeElement.selectedIndex].text;  // Get the selected card type name
+    const cardNumber = document.getElementById('credit_number').value.trim();  // Get the card number input value
+    const cardNumberInput = document.getElementById('credit_number');
+    let isValid = false;
 
-                    <div class="row mb-3">
-                        <label for="company_name" class="col-sm-4 col-form-label text-end">Credit Card Number</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="credit_number" class="form-control" id="credit_number"
-                                value="{{ $user->card_number }}">
-                        </div>
-                    </div>
+    // Ensure a valid card type is selected
+    if (!cardTypeText || cardTypeText === 'Select Card Type') {
+        cardNumberInput.classList.remove('is-invalid');
+        cardNumberInput.classList.remove('is-valid');
+        return;
+    }
+
+    // Validate the card number based on the selected card type
+    switch (cardTypeText.toLowerCase()) {
+        case 'visa':
+            isValid = cardRules.visa.test(cardNumber);
+            break;
+        case 'mastercard':
+            isValid = cardRules.mastercard.test(cardNumber);
+            break;
+        case 'american express':
+            isValid = cardRules.amex.test(cardNumber);
+            break;
+        case 'discover':
+            isValid = cardRules.discover.test(cardNumber);
+            break;
+        default:
+            isValid = false;
+            break;
+    }
+
+    // Show an alert based on the result of the validation
+    if (isValid) {
+        cardNumberInput.classList.add('is-valid');
+        cardNumberInput.classList.remove('is-invalid');
+    } else {
+        cardNumberInput.classList.add('is-invalid');
+        cardNumberInput.classList.remove('is-valid');
+    }
+}
+
+// Function to format the credit card number as the user types
+function formatCardNumber() {
+    const cardNumberInput = document.getElementById('credit_number');
+    let formattedCardNumber = cardNumberInput.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+    // Add spaces between every 4 digits for readability
+    formattedCardNumber = formattedCardNumber.replace(/(.{4})(?=.)/g, '$1 ');
+
+    // Set the formatted value back to the input field
+    cardNumberInput.value = formattedCardNumber;
+
+    // Optional: You can call validation again after formatting (if you need)
+    validateCardNumber();
+}
+</script>
+
+<style>
+/* Styles to highlight invalid input */
+.is-invalid {
+    border-color: red;
+    box-shadow: 0 0 0 0.25rem rgba(255, 0, 0, 0.25);
+}
+
+.is-valid {
+    border-color: green;
+    box-shadow: 0 0 0 0.25rem rgba(0, 128, 0, 0.25);
+}
+</style>
 
                     <div class="row mb-3">
                         <label for="expiry" class="col-sm-4 col-form-label text-end">Credit Card Expiry</label>
@@ -197,5 +275,7 @@ if (!empty($savedValue) && strpos($savedValue, '/') !== false) {
 
 </div>
 <!-- Blank End -->
+
+
 
 @endsection
