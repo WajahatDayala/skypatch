@@ -222,7 +222,7 @@
                     <td>{{ $iterationCount }}</td>
                     <td>OR-{{ $o->orderId }}</td>
                     <td>{{ $o->orderDesign }}</td>  <!-- Display name from orders -->
-                    <td>{{ $o->orderPaymentStatus == 1 ? 'Paid' : 'UnPaid' }}</td>
+                    <td>{{ $o->paid_on == 1 ? 'Paid' : 'UnPaid' }}</td>
                     <td>{{ $o->ordersCreatedAt }}</td>
                     <td>{{ $o->orderSentDate }}</td>
                     <td>{{ $o->price }}</td>
@@ -239,7 +239,7 @@
                     <td>{{ $iterationCount }}</td>
                     <td>VO-{{ $o->vectorId }}</td>
                     <td>{{ $o->vectorDesign }}</td>  <!-- Display name from vector_orders -->
-                    <td>{{ $o->vectorPaymentStatus == 1 ? 'Paid' : 'UnPaid' }}</td>
+                    <td>{{ $o->paid_on == 1 ? 'Paid' : 'UnPaid' }}</td>
                     <td>{{ $o->vectorCreatedAt }}</td>
                     <td>{{ $o->vectorSentDate }}</td>
                     <td>{{ $o->price }}</td>

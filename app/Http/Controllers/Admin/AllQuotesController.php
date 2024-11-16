@@ -174,6 +174,19 @@ class AllQuotesController extends Controller
          ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
         ->get();
 
+        //options A
+        $optionA = Option::select('*')
+        ->join('quotes','options.quote_id','quotes.id')
+        ->where('option_type','A')
+        ->where('options.quote_id',$id)
+        ->get();
+
+          //options B
+        $optionB = Option::select('*')
+          ->join('quotes','options.quote_id','quotes.id')
+          ->where('option_type','B')
+          ->where('options.quote_id',$id)
+          ->get();
 
 
 
@@ -183,7 +196,9 @@ class AllQuotesController extends Controller
             'orderStatus',
             'orderFiles',
             'orderInstruction',
-            'adminInstruction'
+            'adminInstruction',
+            'optionA',
+            'optionB'
         ));
     }
 
@@ -714,6 +729,21 @@ class AllQuotesController extends Controller
            ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
           ->get();
 
+              //options A
+        $optionA = Option::select('*')
+        ->join('quotes','options.quote_id','quotes.id')
+        ->where('option_type','A')
+        ->where('options.quote_id',$id)
+        ->get();
+
+          //options B
+        $optionB = Option::select('*')
+          ->join('quotes','options.quote_id','quotes.id')
+          ->where('option_type','B')
+          ->where('options.quote_id',$id)
+          ->get();
+
+
         
         return view('admin/quotes/process',compact(
             'quote',
@@ -722,7 +752,9 @@ class AllQuotesController extends Controller
             'orderFiles',
             'quoteInstruction',
             'adminInstruction',
-            'allReasons'
+            'allReasons',
+            'optionA',
+            'optionB'
         ));
     }
 

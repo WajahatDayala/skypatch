@@ -1,6 +1,7 @@
 @extends('admin.customers.invoice.base')
 @section('action-content')
     <!-- Blank Start -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 
 
@@ -75,21 +76,16 @@
                                         <td>{{ $i->createdAt }}
                                         </td>
 
-                                        <td>{{ $i->paid_on ? $i->paid_on : 'N/A' }}</td>
+                                        <td>{{ $i->updatedAt == null? '-' :$i->updatedAt }}</td>
                                         <td>{{ $i->total_amount ? $i->total_amount : 0 }}</td>
 
 
                                         <td>
-                                            @if ($i->paymentStatus === 1)
+                                            @if ($i->invoice_status === 1)
                                                 <!-- Assuming 1 means Paid -->
                                                 <span>Paid</span>
-                                            @elseif($i->paymentStatus === 0)
+                                            @elseif($i->invoice_status === 0)
                                                 <!-- Assuming 0 means Unpaid -->
-                                                <span>Payable</span>
-                                            @elseif($i->vectorPaymentStatus === 1)
-                                                <!-- Check vector payment status if no order status -->
-                                                <span>Paid</span>
-                                            @elseif($i->vectorPaymentStatus === 0)
                                                 <span>Payable</span>
                                             @else
                                                 <span>N/A</span>
@@ -100,59 +96,50 @@
                                         <td>
                                             <a class="btn btn-sm btn-dark rounded-pill "
                                                 href="{{ route('invoice.download', $i->invoiceId) }}">Download</a>
-
-                                                <a class="btn btn-sm btn-danger rounded-pill" 
+                                            
+                                                <button  type="button" class="btn btn-sm btn-danger rounded-pill"
                                                 data-file-id="{{ $i->invoiceId }}"
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#orderStatusModal">
-                                                Payable
-                                             </a>
-                                            <!-- Modal Order Status -->
-                                            <div class="modal fade" id="orderStatusModal" tabindex="-1" role="dialog"
-                                                aria-labelledby="orderStatusModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="orderStatusModalLabel">Invoice
-                                                                  </h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <form id="orderStatusForm" method="POST"
-                                                            action="">
-                                                            @csrf
-                                                            <div class="modal-body">
-                                                                <div class="form-group">
-                                                                    <p>{{$i->invoiceEmail}} {{$i->invoiceId}}</p>
-                                                                </div>
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#orderStatusModal-{{ $i->invoiceId }}">
+                                            Payable
+                                        </button>
+                                        <div class="modal fade" id="orderStatusModal-{{ $i->invoiceId }}" tabindex="-1" role="dialog"
+                                            aria-labelledby="orderStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderStatusModalLabel">Invoice Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="orderStatusForm" method="POST" action="">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <p id="invoiceDetails"></p>
+                    </div>
+                    <p class="text-center"><strong id="invoiceStatus"></strong></p>
+                    <div class="form-group">
+                        <div class="text-center">
+                            <a class="btn btn-sm btn-primary rounded-pill" id="downloadInvoice" href="#">Download</a>
+                            <a class="btn btn-sm btn-dark rounded-pill" href=""><i class="fas fa-email"></i> Email</a>
+                            <a class="btn btn-sm btn-success rounded-pill" href=""><i class="fas fa-email"></i> Follow Up</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              
+                    <button type="button" class="btn btn-success" id="toggleStatusButton">Mark as {{$i->invoice_status ==1? 'unPaid':'Paid'}}</button>
+                 
+                    
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-                                                                <p class="text-center"><strong>{{$i->paid_on == 1?'This is Paid Invoice':'This is UnPaid Invoice'}}</strong></p>
-
-                                                                <div class="form-group">
-                                                                  <div class="text-center">
-                                                                  <a class="btn btn-sm btn-primary rounded-pill "
-                                                                  href="{{ route('invoice.download', $i->invoiceId) }}">Download</a>
-
-                                                                  <a class="btn btn-sm btn-dark rounded-pill "
-                                                                  href=""><i class="fas fa-email"></i> Email</a>
-
-                                                                  <a class="btn btn-sm btn-success rounded-pill "
-                                                                  href=""><i class="fas fa-email"></i> Follow Up</a>
-                                                                </div>
-                                                                </div>
-                                                              
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Close</button>
-                                                                {{-- <button type="submit" class="btn btn-primary">Save
-                                                                    changes</button> --}}
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- order status end-->
                                         </td>
                                     </tr>
                                 @endforeach
@@ -172,20 +159,96 @@
     </div>
     <!-- Blank End -->
     <script>
-        document.getElementById('downloadBtn').addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent the default link behavior (optional)
+document.querySelectorAll('.btn-danger').forEach(button => {
+    button.addEventListener('click', function() {
+        const invoiceId = this.getAttribute('data-file-id');  // Get the invoice ID
+        const modalId = `#orderStatusModal-${invoiceId}`; // Generate the modal ID dynamically
 
-            // Get the download URL from the button's href attribute
-            const downloadUrl = this.href;
+        // Perform AJAX request to fetch invoice details
+        fetch(`/admin/invoice/${invoiceId}/fetch-details`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const invoice = data.invoice;
 
-            // Create a link element to programmatically trigger the download
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.download = 'invoice.pdf'; // You can specify the filename here
-            link.target = '_blank'; // Optionally open in a new tab
+                    // Select the modal elements dynamically based on the modal ID
+                    const modalDetails = document.querySelector(`${modalId} #invoiceDetails`);
+                    const modalStatus = document.querySelector(`${modalId} #invoiceStatus`);
+                    const modalDownload = document.querySelector(`${modalId} #downloadInvoice`);
+                    const toggleButton = document.querySelector(`${modalId} #toggleStatusButton`);
 
-            // Programmatically click the link to trigger the download
-            link.click();
+                    // Populate modal with invoice details
+                    if (modalDetails) {
+                        modalDetails.textContent = `${invoice.invoice_email} `;
+                       // modalDetails.textContent = `${invoice.invoice_email} - Invoice ID: ${invoice.invoice_number}`;
+                    }
+
+                    const statusText = invoice.invoice_status === 1 
+                        ? 'This is a Paid Invoice' 
+                        : 'This is an Unpaid Invoice';
+                    if (modalStatus) {
+                        modalStatus.textContent = statusText;
+                    }
+
+                    // Set the download link
+                    if (modalDownload) {
+                        modalDownload.href = `/admin/invoice/${invoice.invoiceId}/download`;
+                    }
+
+                    // Save the invoice ID and status in the modal for later use
+                    if (toggleButton) {
+                        toggleButton.setAttribute('data-invoice-id', invoice.invoiceId);
+                        toggleButton.setAttribute('data-status', invoice.invoice_status);
+                    }
+                } else {
+                    alert('Failed to load invoice details.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while loading invoice details.');
+            });
+    });
+});
+
+// Handle the toggle of the invoice status (paid/unpaid)
+document.querySelectorAll('.btn-success').forEach(button => {
+    button.addEventListener('click', function() {
+        const invoiceId = this.getAttribute('data-invoice-id');
+        const currentStatus = parseInt(this.getAttribute('data-status'));
+        const newStatus = currentStatus === 1 ? 0 : 1; // Toggle between 1 (paid) and 0 (unpaid)
+
+        // Send the new status to the server via AJAX
+        fetch(`/admin/invoice/${invoiceId}/update-status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: JSON.stringify({ status: newStatus }) // Only sending status to update
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Update the modal with the new status
+                const statusText = newStatus === 1 ? 'This is a Paid Invoice' : 'This is an Unpaid Invoice';
+                const modalStatus = document.querySelector(`#orderStatusModal-${invoiceId} #invoiceStatus`);
+                if (modalStatus) {
+                    modalStatus.textContent = statusText;
+                }
+
+                // Optionally, you can reload the invoice list or update the table row
+                alert('Invoice status updated successfully!');
+            } else {
+                alert('Failed to update invoice status.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating the invoice status.');
         });
+    });
+});
+
     </script>
 @endsection

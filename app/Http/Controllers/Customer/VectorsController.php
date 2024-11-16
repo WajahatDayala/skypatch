@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Option;
 use Illuminate\Http\Request;
 use App\Models\VectorRequiredFormat;
 use App\Models\VectorOrder;
@@ -184,10 +185,27 @@ class VectorsController extends Controller
         ->where('instructions.vector_id',$order->order_id)
         ->first();
 
+         //options A
+         $optionA = Option::select('*')
+         ->join('vector_orders','options.vector_order_id','vector_orders.id')
+         ->where('option_type','A')
+         ->where('options.vector_order_id',$id)
+         ->get();
+
+           //options B
+         $optionB = Option::select('*')
+         ->join('vector_orders','options.vector_order_id','vector_orders.id')
+           ->where('option_type','B')
+           ->where('options.vector_order_id',$id)
+           ->get();
+
+
         return view('customer/vector-orders/show',compact(
             'order',
             'orderVectorEdit',
-            'orderInstruction'
+            'orderInstruction',
+            'optionA',
+            'optionB'
         )); 
     }
 

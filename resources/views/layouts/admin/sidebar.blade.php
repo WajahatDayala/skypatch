@@ -8,8 +8,8 @@
           </a>
           
           <div class="my-3 d-flex flex-column align-items-center justify-content-center">
-            <h6 class="mb-0 h4 customer-name">{{Auth()->user()->name}}</h6>
-            <span class="h6  text-light fw-light">{{Auth()->user()->role->name}}</span>
+            <h6 class="mb-0 h4 text-white customer-name">{{Auth()->user()->name}}</h6>
+            {{-- <span class="h6  text-light fw-light">{{Auth()->user()->role->name}}</span> --}}
           </div>
         </div>
         <div class="navbar-nav w-100">

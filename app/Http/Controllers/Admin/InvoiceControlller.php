@@ -16,6 +16,7 @@ use App\Models\InvoiceDetail;
 use PDF;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\DB;
 
@@ -35,14 +36,16 @@ class InvoiceControlller extends Controller
 
         $invoices = InvoiceDetail::select(
             'invoice_details.invoice_id as invoiceId',
+            'invoices.invoice_status',
             'invoices.invoice_number as invoiceNumber', // Select invoice_number
             'users.invoice_email as invoiceEmail', // Select invoice_email
             DB::raw('MIN(invoice_details.created_at) as createdAt'), // Aggregate for created_at
+            DB::raw('MIN(invoice_details.updated_at) as updatedAt'), // Aggregate for created_at
             DB::raw('SUM(invoice_details.price) as total_amount') // Sum the price/amount
         )
         ->join('invoices', 'invoice_details.invoice_id', '=', 'invoices.id')
         ->join('users', 'invoices.customer_id', '=', 'users.id') // Ensure this join is correct
-        ->groupBy('invoice_details.invoice_id', 'invoices.invoice_number', 'users.invoice_email') // Group by both invoice_id, invoice_number, and invoice_email
+        ->groupBy('invoice_details.invoice_id','invoices.invoice_status', 'invoices.invoice_number', 'users.invoice_email') // Group by both invoice_id, invoice_number, and invoice_email
         ->get();
 
 
@@ -117,6 +120,81 @@ class InvoiceControlller extends Controller
         
     }
     
+    // Fetch invoice details for modal
+    public function fetchInvoiceDetails($invoiceId)
+    {
+        //$invoice = InvoiceDetail::with('customer')->find($invoiceId);
+
+        $invoice = InvoiceDetail::select('*', 'users.invoice_email','invoices.invoice_status')
+        ->join('invoices', 'invoice_details.invoice_id', '=', 'invoices.id')
+        ->join('users', 'invoices.customer_id', '=', 'users.id')
+        ->where('invoice_details.invoice_id', $invoiceId)
+        ->first();
+
+    if ($invoice) {
+        return response()->json([
+            'status' => 'success',
+            'invoice' => [
+                'invoiceId' => $invoice->invoice_id,
+                'invoice_number' => $invoice->invoice_number,
+                'invoice_email' => $invoice->invoice_email, // Fix typo: "invoce_email" to "invoice_email"
+                'invoice_status' => $invoice->invoice_status,
+                'paid_on' => $invoice->paid_on,
+            ],
+        ]);
+    }
+
+    return response()->json(['status' => 'error', 'message' => 'Invoice not found'], 404);
+    }
+
+    // Update invoice status (paid/unpaid)
+    public function updateInvoiceStatus(Request $request, $invoiceId)
+    {
+        DB::beginTransaction();
+
+    try {
+        // Find the invoice
+        $invoice = Invoice::findOrFail($invoiceId);
+
+        // Get the new status (0 or 1)
+        $newStatus = $request->input('status'); 
+
+        // Update the invoice status
+        $invoice->invoice_status = $newStatus;
+
+        // If the status is 1 (Paid), set the paid_on date
+        //$invoice->updated_at = $newStatus === 1 ? now() : null;
+
+        // Save the invoice
+        $invoice->save();
+
+        // Update the corresponding invoice details
+        InvoiceDetail::where('invoice_id', $invoiceId)
+            ->update(['paid_on' => $newStatus === 1 ? : 0,'updated_at'=>$newStatus===1?now():null]);
+
+        DB::commit();   
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Invoice status updated successfully',
+        ]);
+    } catch (\Exception $e) {
+        DB::rollback();
+
+        // Log the error with context
+        Log::error('Error updating invoice status', [
+            'error' => $e->getMessage(),
+            'invoiceId' => $invoiceId,
+        ]);
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Failed to update invoice status',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+    }
+
     
 
     /**

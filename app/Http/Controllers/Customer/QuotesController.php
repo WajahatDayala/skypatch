@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Option;
 use Illuminate\Http\Request;
 use App\Models\RequiredFormat;
 use App\Models\Fabric;
@@ -222,11 +223,26 @@ class QuotesController extends Controller
          ->first();
 
 
+          //options A
+        $optionA = Option::select('*')
+        ->join('quotes','options.quote_id','quotes.id')
+        ->where('option_type','A')
+        ->where('options.quote_id',$id)
+        ->get();
+
+          //options B
+        $optionB = Option::select('*')
+          ->join('quotes','options.quote_id','quotes.id')
+          ->where('option_type','B')
+          ->where('options.quote_id',$id)
+          ->get();
         
 
         return view('customer/quotes/show',compact(
             'quote',
-            'quoteInstruction'
+            'quoteInstruction',
+            'optionA',
+            'optionB'
         ));
     }
 

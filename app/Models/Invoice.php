@@ -11,7 +11,8 @@ class Invoice extends Model
     use HasFactory;
 
     protected $fillable = [
-        'invoice_number'
+        'invoice_number',
+        'invoice_status'
     ];
 
      // Define the relationship with invoice_details

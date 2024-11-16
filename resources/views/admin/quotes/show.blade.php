@@ -422,9 +422,29 @@ Update
                         <tr class="row">
                             <td class="col-6">
                                 <strong class="">Option A</strong><br>
+                                @foreach ($optionA as $a)
+                                @php
+                                    $fileId = $a->fileId;
+                                    $fileData = json_decode($a->file_upload, true); // Decode the JSON
+                                    $filePath = $fileData['path'] ?? 'No file'; // Get the file path
+                                    $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
+                                @endphp
+                               
+                                {{ $originalFilename }}
+                                @endforeach
                             </td>
                             <td class="col-6">
                                 <strong>Option B</strong><br>
+                                @foreach ($optionB as $b)
+                                @php
+                                    $fileId = $b->fileId;
+                                    $fileData = json_decode($b->file_upload, true); // Decode the JSON
+                                    $filePath = $fileData['path'] ?? 'No file'; // Get the file path
+                                    $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
+                                @endphp
+                               
+                                {{ $originalFilename }}
+                                @endforeach
                             </td>
                         </tr>
                     </tbody>

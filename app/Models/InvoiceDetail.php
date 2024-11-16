@@ -11,7 +11,8 @@ class InvoiceDetail extends Model
             'invoice_id',
             'order_id',
             'vector_id',
-            'price'
+            'price',
+            'paid_on'
        
     ];
 

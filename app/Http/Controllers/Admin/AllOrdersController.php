@@ -274,6 +274,20 @@ class AllOrdersController extends Controller
             )
             ->get();
 
+            
+          //options A
+          $optionA = Option::select('*')
+          ->join('orders','options.order_id','orders.id')
+          ->where('option_type','A')
+          ->where('options.order_id',$id)
+          ->get();
+
+            //options B
+          $optionB = Option::select('*')
+           ->join('orders','options.order_id','orders.id')
+           ->where('option_type','B')
+           ->where('options.order_id',$id)
+            ->get();
 
 
 
@@ -284,7 +298,9 @@ class AllOrdersController extends Controller
             'orderFiles',
             'orderInstruction',
             'adminInstruction',
-            'allReasons'
+            'allReasons',
+            'optionA',
+            'optionB'
         ));
     }
     //assign designer
@@ -589,6 +605,22 @@ class AllOrdersController extends Controller
             )
             ->get();
 
+              //options A
+          $optionA = Option::select('*')
+          ->join('orders','options.order_id','orders.id')
+          ->where('option_type','A')
+          ->where('options.order_id',$id)
+          ->get();
+
+            //options B
+          $optionB = Option::select('*')
+           ->join('orders','options.order_id','orders.id')
+           ->where('option_type','B')
+           ->where('options.order_id',$id)
+            ->get();
+
+
+
 
 
 
@@ -599,7 +631,9 @@ class AllOrdersController extends Controller
             'orderFiles',
             'orderInstruction',
             'adminInstruction',
-            'allReasons'
+            'allReasons',
+            'optionA',
+            'optionB'
         ));
     }
 

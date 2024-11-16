@@ -336,14 +336,14 @@
                                                 <td class="col-5">
                                                     <div class="input-group">
                                                         <span class="input-group-text" id="basic-addon1">$</span>
-                                                        <input type="text" class="form-control" placeholder="Price"
+                                                        <input type="number" id="price_A" class="form-control" placeholder="Price"
                                                             aria-label="Username" aria-describedby="basic-addon1">
                                                     </div>
                                                 </td>
                                                 <td class="col-5">
                                                     <div class="input-group">
                                                         <span class="input-group-text" id="basic-addon1">$</span>
-                                                        <input type="text" class="form-control" placeholder="Price"
+                                                        <input type="number" id="price_B" class="form-control" placeholder="Price"
                                                             aria-label="Username" aria-describedby="basic-addon1">
                                                     </div>
                                                 </td>
@@ -353,10 +353,10 @@
                                                     Total
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                    <input type="number" class="form-control" id="total_A" readonly>
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                    <input type="number" class="form-control" id="total_B" readonly>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -373,7 +373,20 @@
                                     </div>
                                     <table class="table table-bordered">
                                         <tbody>
+                                            
                                             <tr class="row">
+                                                <td>
+                                                    @foreach ($optionA as $a)
+                                                    @php
+                                                        $fileId = $a->fileId;
+                                                        $fileData = json_decode($a->file_upload, true); // Decode the JSON
+                                                        $filePath = $fileData['path'] ?? 'No file'; // Get the file path
+                                                        $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
+                                                    @endphp
+                                                   
+                                                    {{ $originalFilename }}
+                                                    @endforeach
+                                                </td>
                                                 <td>
                                                     <button type="button"
                                                         class="btn btn-primary rounded-pill m-2">Upload Files</button>
@@ -389,39 +402,50 @@
                                                         <legend class="fs-6"><strong>Mail To:</strong></legend>
                                                         <br>
                                                         <div class="form-check">
+                                                            @if($quote->email1)
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
+                                                             
                                                                {{$quote->email1}}
                                                             </label>
+                                                            @endif
                                                         </div>
                                                         <div class="form-check">
+                                                            @if($quote->email2)
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
                                                             {{$quote->email2}}
                                                             </label>
+                                                            @endif
                                                         </div>
                                                         <div class="form-check">
+                                                            @if($quote->email4)
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
                                                             {{$quote->email3}}
                                                             </label>
+                                                            @endif
                                                         </div>
                                                         <div class="form-check">
+                                                            @if($quote->email4)
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
                                                             {{$quote->email4}}
                                                             </label>
+                                                            @endif
                                                         </div>
                                                         <div class="form-check">
+                                                            @if($quote->invoceEmail)
                                                             <input class="form-check-input" type="checkbox"
                                                                 id="gridCheck1">
                                                             <label class="form-check-label" for="gridCheck1">
                                                             {{$quote->invoceEmail}}
                                                             </label>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </td>
@@ -435,7 +459,21 @@
                                     </div>
                                     <table class="table table-bordered">
                                         <tbody>
+                                            
+                                                
                                             <tr class="row">
+                                                <td>
+                                                    @foreach ($optionB as $b)
+                                                    @php
+                                                        $fileId = $b->fileId;
+                                                        $fileData = json_decode($b->file_upload, true); // Decode the JSON
+                                                        $filePath = $fileData['path'] ?? 'No file'; // Get the file path
+                                                        $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
+                                                    @endphp
+                                                   
+                                                    {{ $originalFilename }}
+                                                    @endforeach
+                                                </td>
                                                 <td>
                                                     <button type="button"
                                                         class="btn btn-primary rounded-pill m-2">Upload Files</button>
@@ -466,4 +504,22 @@
                 </div>
             </div>
             <!-- Content Div Ends here End -->
+
+            <!-- Add this script to enable dynamic price updates -->
+<script>
+    // Get elements
+    const priceA = document.getElementById('price_A');
+    const priceB = document.getElementById('price_B');
+    const totalA = document.getElementById('total_A');
+    const totalB = document.getElementById('total_B');
+
+    // Add event listeners to update totals when prices change
+    priceA.addEventListener('input', function() {
+        totalA.value = priceA.value; // Set total A to the value of price A
+    });
+
+    priceB.addEventListener('input', function() {
+        totalB.value = priceB.value; // Set total B to the value of price B
+    });
+</script>
 @endsection

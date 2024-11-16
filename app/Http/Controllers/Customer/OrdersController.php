@@ -12,6 +12,7 @@ use App\Models\QuoteFileLog;
 use App\Models\Instruction;
 use App\Models\Status;
 use App\Models\OrderEditID;
+use App\Models\Option;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -228,10 +229,26 @@ class OrdersController extends Controller
         ->where('instructions.order_id',$order->order_id)
         ->first();
 
+            //options A
+            $optionA = Option::select('*')
+            ->join('orders','options.order_id','orders.id')
+            ->where('option_type','A')
+            ->where('options.order_id',$id)
+            ->get();
+  
+              //options B
+            $optionB = Option::select('*')
+             ->join('orders','options.order_id','orders.id')
+             ->where('option_type','B')
+             ->where('options.order_id',$id)
+              ->get();
+
         return view('customer/orders/show',compact(
             'order',
             'orderEdit',
-            'orderInstruction'
+            'orderInstruction',
+            'optionA',
+            'optionB'
         ));
     }
 

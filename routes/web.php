@@ -169,7 +169,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //invoices 
     Route::resource('/admin/invoices', InvoiceControlller::class);
     Route::get('/admin/invoice/{id}/download', [InvoiceControlller::class, 'downloadPDF'])->name('invoice.download');
+    Route::get('/admin/invoice/{invoiceId}/fetch-details', [InvoiceControlller::class, 'fetchInvoiceDetails']);
 
+    Route::post('/admin/invoice/{invoiceId}/update-status', [InvoiceControlller::class, 'updateInvoiceStatus'])->name('invoice.update-status');
 
     //all employees
     Route::resource('/admin/employees', EmployeeController::class);
