@@ -185,7 +185,7 @@ document.querySelectorAll('.btn-danger').forEach(button => {
 
                     const statusText = invoice.invoice_status === 1 
                         ? 'This is a Paid Invoice' 
-                        : 'This is an Unpaid Invoice';
+                        : 'This is a Payable Invoice';
                     if (modalStatus) {
                         modalStatus.textContent = statusText;
                     }
@@ -231,21 +231,21 @@ document.querySelectorAll('.btn-success').forEach(button => {
         .then(data => {
             if (data.status === 'success') {
                 // Update the modal with the new status
-                const statusText = newStatus === 1 ? 'This is a Paid Invoice' : 'This is an Unpaid Invoice';
+                const statusText = newStatus === 1 ? 'This is a Paid Invoice' : 'This is a Payable Invoice.';
                 const modalStatus = document.querySelector(`#orderStatusModal-${invoiceId} #invoiceStatus`);
                 if (modalStatus) {
                     modalStatus.textContent = statusText;
                 }
 
                 // Optionally, you can reload the invoice list or update the table row
-                alert('Invoice status updated successfully!');
+               // alert('Invoice status updated successfully!');
             } else {
-                alert('Failed to update invoice status.');
+               // alert('Failed to update invoice status.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('An error occurred while updating the invoice status.');
+            //alert('An error occurred while updating the invoice status.');
         });
     });
 });

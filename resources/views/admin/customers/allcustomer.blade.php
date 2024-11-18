@@ -50,7 +50,7 @@
                                 <td>cc</td>
                                 <td>{{$c->reference}}</td>
                              
-                                <td>
+                                <td class="d-flex justify-content-start">
                                     <a class="btn btn-sm btn-primary rounded-pill m-2"
                                         href="{{ route('customers.show', ['customer' => $c->id]) }}">Details</a>
 

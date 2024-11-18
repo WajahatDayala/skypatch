@@ -13,7 +13,7 @@
                     <div class="col-6 d-flex align-items-center justify-content-end">
                         <!-- <button type="button"
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button> -->
-                        @if($quote->edit_status == 1)
+                        @if($quote->edit_status == 1 && $quote->status_id==1)
                         <a type="button" href="{{ route('quotes.edit', ['quote' => $quote->order_id]) }}"
                             class="btn btn-sm btn-dark rounded-pill ">Edit</a>
                         @endif

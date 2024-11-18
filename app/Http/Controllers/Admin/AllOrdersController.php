@@ -53,7 +53,7 @@ class AllOrdersController extends Controller
         return view('admin/orders/index', ['orders' => $orders]);
     }
 
-    public function todayDayOrders()
+    public function toDayOrders()
     {
         $orders = Order::select(
             '*',
@@ -77,7 +77,7 @@ class AllOrdersController extends Controller
 
         return view('admin.orders.today', ['orders' => $orders]);
     }
-    public function todayDayEditOrders()
+    public function toDayEditOrders()
     {
         $orders = Order::select(
             '*',

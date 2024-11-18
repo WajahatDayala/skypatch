@@ -72,7 +72,7 @@ Route::group(['middleware' => 'auth:web'], function () {
 
     //orders
     Route::resource('/customer/orders', OrdersController::class);
-    Route::get('/customer/today-orders', [OrdersController::class, 'todayDayQuote']);
+    Route::get('/customer/today-orders', [OrdersController::class, 'toDayOrder']);
     //vector orders
     Route::resource('/customer/vector-orders', VectorsController::class);
 
@@ -117,7 +117,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
     //all quotes
     Route::resource('/admin/allquotes', AllQuotesController::class);
-    Route::get('/admin/today-quotes', [AllQuotesController::class, 'todayDayQuote']);
+    Route::get('/admin/today-quotes', [AllQuotesController::class, 'toDayQuote']);
     Route::post('/admin/allquotes/{id}/allquote', [AllQuotesController::class, 'assignDesigner'])->name('allquotes.allquote');
     Route::post('/admin/allquotes/addInstruction', [AllQuotesController::class, 'storeInstruction'])->name('allquotes.addInstruction');
     Route::post('/admin/allquotes/adminInstruction', [AllQuotesController::class, 'storeAdminInstruction'])->name('allquotes.adminInstruction');
@@ -133,8 +133,8 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
     //all orders
     Route::resource('/admin/allorders', AllOrdersController::class);
-    Route::get('/admin/today-orders', [AllOrdersController::class, 'todayDayOrders']);
-    Route::get('/admin/today-edit-orders', [AllOrdersController::class, 'todayDayEditOrders']);
+    Route::get('/admin/today-orders', [AllOrdersController::class, 'toDayOrders']);
+    Route::get('/admin/today-edit-orders', [AllOrdersController::class, 'toDayEditOrders']);
     Route::get('/admin/allorders/{id}/process', [AllOrdersController::class, 'processOrder'])->name('allorders.process');
     Route::get('/admin/allorders/{id}/print', [AllOrdersController::class, 'printOrder'])->name('allorders.print');
 

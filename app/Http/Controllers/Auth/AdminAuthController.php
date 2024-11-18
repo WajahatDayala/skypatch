@@ -45,17 +45,17 @@ class AdminAuthController extends Controller
                     return redirect()->route('sales.index'); // Sales Dashboard
                 case 'Accounts':
                     return redirect()->route('accounts.index'); // Accounts Dashboard
-                case 'Quote Digitizer Leader':
+                case 'Quote Leader':
                     return redirect()->route('quote-leader.dashboard'); // Quote Leader Dashboard
-                case 'Quote Digitizer Worker':
+                case 'Quote Worker':
                     return redirect()->route('quote-worker.dashboard'); // Quote Worker Dashboard
-                case 'Order Digitizer Leader':
+                case 'Order Leader':
                     return redirect()->route('order-leader.dashboard'); // Order Leader Dashboard
-                case 'Order Digitizer Worker':
+                case 'Order Worker':
                     return redirect()->route('order-worker.dashboard'); // Order Worker Dashboard
-                case 'Vector Digitizer Leader':
+                case 'Vector Leader':
                     return redirect()->route('vector-leader.dashboard'); // Vector Leader Dashboard
-                case 'Vector Digitizer Worker':
+                case 'Vector Worker':
                     return redirect()->route('vector-worker.dashboard'); // Vector Worker Dashboard
                 default:
                     return redirect('/admin/login'); // Fallback

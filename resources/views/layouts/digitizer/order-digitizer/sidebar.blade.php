@@ -13,13 +13,13 @@
         </div>
         <div class="navbar-nav w-100">
           <!--worker-->
-          @if(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Order Digitizer Worker')
+          @if(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Order Worker')
           <a href="{{url('/order-worker/dashboard')}}" class="nav-item nav-link  {{ request()->is('order-worker/dashboard') ? 'active' : '' }}" ><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
           <a href="{{url('/order-worker/today-worker-order')}}" class="nav-item nav-link {{ request()->is('order-worker/today-worker-order') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>Today's Order</a>
           <a href="{{url('/order-worker/all-worker-orders')}}" class="nav-item nav-link {{ request()->is('order-worker/all-worker-orders') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked me-2"></i>
           All Orders</a>
           <!--Leader-->
-          @elseif(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Order Digitizer Leader')
+          @elseif(Auth::check() && Auth::user()->role && Auth::user()->role->name === 'Order Leader')
           <a href="{{url('/order-leader/dashboard')}}" class="nav-item nav-link  {{ request()->is('order-leader/dashboard') ? 'active' : '' }}" ><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
           <a href="{{url('/order-leader/today-leader-order')}}" class="nav-item nav-link {{ request()->is('order-leader/today-leader-order') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>Today's Order</a>
           <a href="{{url('/order-leader/all-leader-orders')}}" class="nav-item nav-link {{ request()->is('order-leader/all-leader-orders') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked me-2"></i>

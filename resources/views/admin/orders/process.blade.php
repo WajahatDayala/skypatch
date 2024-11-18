@@ -359,10 +359,10 @@
                                                     Total
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="number" class="form-control" id="total_A" readonly>
+                                                    <input type="number" class="form-control" id="total" name="total_price" readonly>
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="number" class="form-control" id="total_B" readonly>
+                                                    {{-- <input type="number" class="form-control" id="total_B" readonly> --}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -511,19 +511,24 @@
 
             <script>
                 // Get elements
-                const priceA = document.getElementById('price_A');
-                const priceB = document.getElementById('price_B');
-                const totalA = document.getElementById('total_A');
-                const totalB = document.getElementById('total_B');
-            
-                // Add event listeners to update totals when prices change
-                priceA.addEventListener('input', function() {
-                    totalA.value = priceA.value; // Set total A to the value of price A
-                });
-            
-                priceB.addEventListener('input', function() {
-                    totalB.value = priceB.value; // Set total B to the value of price B
-                });
-            </script>
+             const priceA = document.getElementById('price_A');
+             const priceB = document.getElementById('price_B');
+             const totalA = document.getElementById('total');
+             // const totalB = document.getElementById('total_B');  // Uncomment if you want another total B
+             
+             // Function to update total
+             function updateTotal() {
+                 // Get values of priceA and priceB, and convert them to numbers
+                 const valueA = parseFloat(priceA.value) || 0;  // If input is empty or invalid, default to 0
+                 const valueB = parseFloat(priceB.value) || 0;  // If input is empty or invalid, default to 0
+             
+                 // Set totalA to the sum of priceA and priceB
+                 totalA.value = valueA + valueB;
+             }
+             
+             // Add event listeners to update totals when prices change
+             priceA.addEventListener('input', updateTotal);
+             priceB.addEventListener('input', updateTotal);
+             </script>
  
 @endsection

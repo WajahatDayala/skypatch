@@ -52,19 +52,19 @@
         @include('layouts.admin.sidebar')
 
     <!-- Quote digitizer -->
-    @elseif(Auth::user()->role->name === 'Quote Digitizer Worker' || Auth::user()->role->name === 'Quote Digitizer Leader')
+    @elseif(Auth::user()->role->name === 'Quote Worker' || Auth::user()->role->name === 'Quote Leader')
        
         @include('layouts.digitizer.quote-digitizers.worker.sidebar')
     <!-- End quote digitizer -->
 
     <!-- Order digitizer -->
-    @elseif(Auth::user()->role->name === 'Order Digitizer Worker' || Auth::user()->role->name === 'Order Digitizer Leader')
+    @elseif(Auth::user()->role->name === 'Order Worker' || Auth::user()->role->name === 'Order Leader')
       
         @include('layouts.digitizer.order-digitizer.sidebar')
     <!-- End order digitizer -->
 
     <!-- Vector order digitizer -->
-    @elseif(Auth::user()->role->name === 'Vector Digitizer Worker' || Auth::user()->role->name === 'Vector Digitizer Leader')
+    @elseif(Auth::user()->role->name === 'Vector Worker' || Auth::user()->role->name === 'Vector Leader')
        
         @include('layouts.digitizer.vector-digitizer.sidebar')
     <!-- End vector order digitizer -->

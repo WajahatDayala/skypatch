@@ -37,19 +37,23 @@ class OrdersController extends Controller
         'orders.id as order_id',
         'users.name as customer_name',
         'orders.name as design_name',
-        'statuses.name as status'
+        'statuses.name as status',
+        'orders.created_at as createdAt'
         )
         ->join('users','orders.customer_id','=','users.id')
         ->join('statuses','orders.status_id','statuses.id')
         ->where('customer_id',Auth::id())
-        ->orderBy('design_name','ASC')
+        ->orderBy('orders.id', 'DESC')  
+        ->orderBy('orders.created_at', 'DESC')  
+        ->orderBy('design_name', 'ASC')  
         ->get();
+
 
        
         return view('customer/orders/index',['orders'=>$orders]);
     }
 
-    public function todayDayQuote()
+    public function toDayOrder()
     {
         $orders = Order::select('*',
         'orders.id as order_id',
