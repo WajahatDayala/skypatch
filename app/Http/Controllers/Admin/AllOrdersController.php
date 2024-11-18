@@ -270,7 +270,7 @@ class AllOrdersController extends Controller
             ->join('roles', 'admins.role_id', '=', 'roles.id')
             ->whereIn(
                 'roles.name',
-                ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker']
+                ['Quote Worker', 'Order Worker', 'Vector Worker']
             )
             ->get();
 

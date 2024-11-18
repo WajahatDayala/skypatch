@@ -151,7 +151,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
     //all vectors
     Route::resource('/admin/allvectors', AllVectorController::class);
-    Route::get('/admin/today-vector', [AllVectorController::class, 'todayDayVector']);
+    Route::get('/admin/today-vector', [AllVectorController::class, 'toDayVector']);
     Route::post('/admin/allvectors/{id}/allvector', [AllVectorController::class, 'assignDesigner'])->name('allvectors.allvecto');
     Route::post('/admin/allvectors/addInstruction', [AllVectorController::class, 'storeInstruction'])->name('allvectors.addInstruction');
     Route::post('/admin/allvectors/adminInstruction', [AllVectorController::class, 'storeAdminInstruction'])->name('allvectors.adminInstruction');
@@ -186,23 +186,23 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
     Route::get('/quote-worker/dashboard', [WorkerDashboardController::class, 'index'])->name('quote-worker.dashboard');
     Route::resource('/quote-worker/all-worker-quotes', WorkerQuoteController::class);
-    Route::get('/quote-worker/today-worker-quotes', [WorkerQuoteController::class, 'todayDayQuote'])->name('quote-worker.today-quotes');
+    Route::get('/quote-worker/today-worker-quotes', [WorkerQuoteController::class, 'toDayQuote'])->name('quote-worker.today-quotes');
     Route::get('/quote-worker/all-worker-quotes/{id}/process', [WorkerQuoteController::class, 'showProcess'])->name('all-worker-quote.process');
     //quote leader
     Route::get('/quote-leader/dashboard', [QuoteLeaderDashboard::class, 'index'])->name('quote-leader.dashboard');
     Route::resource('/quote-leader/all-leader-quotes', LeaderQuoteController::class);
-    Route::get('/quote-leader/today-leader-quotes', [LeaderQuoteController::class, 'todayDayQuote'])->name('quote-leader.today-quotes');
+    Route::get('/quote-leader/today-leader-quotes', [LeaderQuoteController::class, 'toDayQuote'])->name('quote-leader.today-quotes');
     Route::get('/quote-leader/all-leader-quotes/{id}/process', [LeaderQuoteController::class, 'showProcess'])->name('all-leader-quote.process');
 
     //order worker
     Route::get('/order-worker/dashboard', [OrderWorkerDashboardController::class, 'index'])->name('order-worker.dashboard');
     Route::resource('/order-worker/all-worker-orders', WorkerOrderController::class);
-    Route::get('/order-worker/today-worker-order', [WorkerOrderController::class, 'todayDayOrders'])->name('order-worker.today-orders');
+    Route::get('/order-worker/today-worker-order', [WorkerOrderController::class, 'toDayOrders'])->name('order-worker.today-orders');
     Route::get('/order-worker/all-worker-order/{id}/process', [WorkerOrderController::class, 'showProcess'])->name('all-worker-orders.process');
     //order leader
     Route::get('/order-leader/dashboard', [OrderLeaderDashboardController::class, 'index'])->name('order-leader.dashboard');
     Route::resource('/order-leader/all-leader-orders', LeaderOrderController::class);
-    Route::get('/order-leader/today-leader-order', [LeaderOrderController::class, 'todayDayOrders'])->name('order-leader.today-leader-order');
+    Route::get('/order-leader/today-leader-order', [LeaderOrderController::class, 'toDayOrders'])->name('order-leader.today-leader-order');
     Route::get('/order-leader/all-leader-order/{id}/process', [LeaderOrderController::class, 'showProcess'])->name('all-leader-orders.process');
     
 

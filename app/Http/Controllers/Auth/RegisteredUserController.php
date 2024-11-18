@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\CardType;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use App\Models\Country;
-
+use App\Models\CustomerBillInfo;
 class RegisteredUserController extends Controller
 {
     /**
@@ -21,7 +22,8 @@ class RegisteredUserController extends Controller
     public function create(): View
     {
         $countries = Country::all();
-        return view('auth.register',['countries'=>$countries]);
+        $cardType = CardType::all();
+        return view('auth.register',['countries'=>$countries,'cardType'=>$cardType]);
     }
 
     /**
@@ -51,6 +53,7 @@ class RegisteredUserController extends Controller
             'email_2' => $request->email2,
             'email_3' => $request->email3,
             'email_4' => $request->email4,
+            'invoice_email' => $request->invoice_email,
             'address' => $request->address,
             'city' => $request->city,
             'state' => $request->state,
@@ -63,6 +66,23 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+
+          // Create the Billing Info
+    $billInfo = new CustomerBillInfo(); // Assume BillingInfo is the model
+    $billInfo->customer_id = $user->id;
+    $billInfo->card_holder_name = $request['card_holder_name'];
+    $billInfo->card_type_id = $request['card_type'];
+    $billInfo->card_number = $request['credit_number'];
+    $billInfo->card_expiry = $request['billing_exp_month'] . '/' . $request['billing_exp_year'];
+    $billInfo->vcc = $request['verification_num'];
+    $billInfo->address = $request['address'];
+    $billInfo->city = $request['city'];
+    $billInfo->state = $request['state'];
+    $billInfo->zipcode = $request['zipcode'];
+    $billInfo->country = $request['countrybill']; // Store the selected billing country
+
+    $billInfo->save();
+
 
         return redirect(route('dashboard', absolute: false));
     }

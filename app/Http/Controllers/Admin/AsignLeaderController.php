@@ -29,14 +29,14 @@ class AsignLeaderController extends Controller
         ->leftJoin('admins as leaders', 'admins.leader_id', '=', 'leaders.id') // Join to get leader name
         ->join('roles', 'admins.role_id', '=', 'roles.id')
         ->whereIn('roles.name', 
-        ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
+        ['Quote Worker', 'Order Worker', 'Vector Worker'])
         ->get();
 
         //all leaders 
         $leaders = Admin::select('*', 'admins.name as leaderName', 'roles.name as roles')
         ->join('roles', 'admins.role_id', '=', 'roles.id')
         ->whereIn('roles.name',
-         ['Quote Digitizer Leader', 'Order Digitizer Leader', 'Vector Digitizer Leader'])
+         ['Quote Leader', 'Order Leader', 'Vector Leader'])
         ->get();
       
         return view('admin.assignleaders.index',[

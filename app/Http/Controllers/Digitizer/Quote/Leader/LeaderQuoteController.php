@@ -54,7 +54,7 @@ class LeaderQuoteController extends Controller
         ]);
     }
 
-    public function todayDayQuote()
+    public function toDayQuote()
     {
         $quotes = Quote::select('*',
         'quotes.id as order_id',

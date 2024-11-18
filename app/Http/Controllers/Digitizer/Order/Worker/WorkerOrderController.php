@@ -32,7 +32,7 @@ class WorkerOrderController extends Controller
         $orders = Order::select('*',
         'orders.id as order_id',
         'users.name as customer_name',
-        'admins.name as designerName',
+        'admins.name as designer_name',
         'orders.name as design_name',
         'statuses.name as status',
         'orders.created_at as createdAt'
@@ -48,12 +48,12 @@ class WorkerOrderController extends Controller
     }
 
     
-    public function todayDayOrders()
+    public function toDayOrders()
     {
         $orders = Order::select('*',
         'orders.id as order_id',
         'users.name as customer_name',
-        'admins.name as designerName',
+        'admins.name as designer_name',
         'orders.name as design_name',
         'delivery_types.type as deliveryType',
         'statuses.name as status',

@@ -55,7 +55,7 @@ class AllVectorController extends Controller
         ]);
     }
 
-    public function todayDayVector()
+    public function toDayVector()
     {
         //
         $orders = VectorOrder::select('*',
@@ -155,7 +155,7 @@ class AllVectorController extends Controller
           $designer = Admin::select('*','admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
           ->join('roles', 'admins.role_id', '=', 'roles.id')
           ->whereIn('roles.name',
-           ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
+           ['Quote Worker', 'Order Worker', 'Vector Worker'])
           ->get();
 
             //options A
