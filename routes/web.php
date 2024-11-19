@@ -123,6 +123,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/admin/allquotes/adminInstruction', [AllQuotesController::class, 'storeAdminInstruction'])->name('allquotes.adminInstruction');
     Route::post('/admin/allquotes/uploadFile', [AllQuotesController::class, 'storeFile'])->name('allquotes.uploadFile');
     Route::post('/admin/allquotes/deleteFile', [AllQuotesController::class, 'deleteFile'])->name('allquotes.deleteFile');
+    Route::post('/admin/allquotes/deleteFileA', [AllQuotesController::class, 'deleteFileA'])->name('allquotes.deleteFileA');
     Route::post('/admin/allquotes/updateStatus', [AllQuotesController::class, 'orderStatus'])->name('allquotes.updateStatus');
     Route::get('/admin/allquotes/{id}/process', [AllQuotesController::class, 'showProcess'])->name('allquotes.process');
     //option A B

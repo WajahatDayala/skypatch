@@ -175,11 +175,13 @@ class AllQuotesController extends Controller
         ->get();
 
         //options A
-        $optionA = Option::select('*')
+        $optionA = Option::select('*','options.id as fileId')
         ->join('quotes','options.quote_id','quotes.id')
         ->where('option_type','A')
         ->where('options.quote_id',$id)
         ->get();
+
+        
 
           //options B
         $optionB = Option::select('*')
@@ -325,7 +327,7 @@ class AllQuotesController extends Controller
          return redirect()->back()->with('error', 'No files uploaded.');
      }
  
- 
+     
      //delete FIle 
      public function deleteFile(Request $request)
      {
@@ -335,6 +337,40 @@ class AllQuotesController extends Controller
  
          // Find the file entry in the database
          $fileLog = QuoteFileLog::find($request->file_id);
+ 
+         if ($fileLog) {
+             // Decode the file path from JSON
+             $fileData = json_decode($fileLog->files, true);
+             $filePath = $fileData['path'] ?? '';
+             $fileName = basename($filePath); // Get the file name
+             $fullPath = storage_path('app/public/' . $filePath); // Full path to the file
+ 
+             // Check if the file exists and delete it
+             if (file_exists($fullPath)) {
+                 unlink($fullPath);
+             } else {
+                 return redirect()->back()->with('error', 'File does not exist.');
+             }
+ 
+             // Delete the database record
+             $fileLog->delete();
+             return redirect()->back()->with('success', 'File deleted successfully!');
+         }
+ 
+         return redirect()->back()->with('error', 'File deletion failed.');
+     }
+
+
+     //deleteFileA
+
+     public function deleteFileA(Request $request)
+     {
+         $request->validate([
+             'fileA_id' => 'required|integer|exists:options,id',
+         ]);
+ 
+         // Find the file entry in the database
+         $fileLog = Option::find($request->fileA_id);
  
          if ($fileLog) {
              // Decode the file path from JSON
