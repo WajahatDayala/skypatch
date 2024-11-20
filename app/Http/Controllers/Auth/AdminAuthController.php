@@ -40,7 +40,7 @@ class AdminAuthController extends Controller
                 case 'Admin':
                     return redirect()->route('admin.dashboard'); // Admin Dashboard
                 case 'Customer Support':
-                    return redirect()->route('support.index'); // Support Dashboard
+                    return redirect()->route('support.dashboard'); // Support Dashboard
                 case 'Sales':
                     return redirect()->route('sales.index'); // Sales Dashboard
                 case 'Accounts':

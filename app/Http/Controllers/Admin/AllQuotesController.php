@@ -184,7 +184,7 @@ class AllQuotesController extends Controller
         
 
           //options B
-        $optionB = Option::select('*')
+        $optionB = Option::select('*','options.id as fileId')
           ->join('quotes','options.quote_id','quotes.id')
           ->where('option_type','B')
           ->where('options.quote_id',$id)
@@ -366,18 +366,20 @@ class AllQuotesController extends Controller
      public function deleteFileA(Request $request)
      {
          $request->validate([
-             'fileA_id' => 'required|integer|exists:options,id',
+             'file_id' => 'required|integer|exists:options,id',
          ]);
  
          // Find the file entry in the database
-         $fileLog = Option::find($request->fileA_id);
+         $fileLog = Option::find($request->file_id);
+        
  
          if ($fileLog) {
              // Decode the file path from JSON
-             $fileData = json_decode($fileLog->files, true);
+             $fileData = json_decode($fileLog->file_upload, true);
              $filePath = $fileData['path'] ?? '';
              $fileName = basename($filePath); // Get the file name
              $fullPath = storage_path('app/public/' . $filePath); // Full path to the file
+             
  
              // Check if the file exists and delete it
              if (file_exists($fullPath)) {
@@ -393,6 +395,42 @@ class AllQuotesController extends Controller
  
          return redirect()->back()->with('error', 'File deletion failed.');
      }
+
+
+      //deleteFileA
+
+      public function deleteFileB(Request $request)
+      {
+          $request->validate([
+              'file_id' => 'required|integer|exists:options,id',
+          ]);
+  
+          // Find the file entry in the database
+          $fileLog = Option::find($request->file_id);
+         
+  
+          if ($fileLog) {
+              // Decode the file path from JSON
+              $fileData = json_decode($fileLog->file_upload, true);
+              $filePath = $fileData['path'] ?? '';
+              $fileName = basename($filePath); // Get the file name
+              $fullPath = storage_path('app/public/' . $filePath); // Full path to the file
+              
+  
+              // Check if the file exists and delete it
+              if (file_exists($fullPath)) {
+                  unlink($fullPath);
+              } else {
+                  return redirect()->back()->with('error', 'File does not exist.');
+              }
+  
+              // Delete the database record
+              $fileLog->delete();
+              return redirect()->back()->with('success', 'File deleted successfully!');
+          }
+  
+          return redirect()->back()->with('error', 'File deletion failed.');
+      }
  
      //update status
      public function orderStatus(Request $request)
@@ -793,6 +831,93 @@ class AllQuotesController extends Controller
             'optionB'
         ));
     }
+
+
+    //print quote
+    public function printOrder(string $id)
+    {
+
+        $order = Quote::findOrFail($id);
+
+        $order = Quote::select(
+            '*',
+            'quotes.id as order_id',
+            'quotes.name as design_name',
+            'users.name as customer_name',
+            'users.id as customer_id',
+            'users.email as email1',
+            'users.email_2 as email2',
+            'users.email_3 as email3',
+            'users.email_4 as email4',
+            'users.invoice_email as invoceEmail',
+            'admins.id as designer_id',
+            'admins.name as designer_name',
+            'statuses.name as status',
+            'ordersStatus.name as order_status_name',
+            'fabrics.name as fabric_name',
+            'required_formats.name as format',
+            'placements.name as placement',
+            'users.name as customer_name',
+            'quotes.created_at as received_date',
+            'quotes.name as design_name'
+        )
+            ->join('users', 'quotes.customer_id', '=', 'users.id')
+            ->join('statuses', 'quotes.status_id', '=', 'statuses.id')
+            ->join('fabrics', 'quotes.fabric_id', '=', 'fabrics.id')
+            ->join('placements', 'quotes.placement_id', '=', 'placements.id')
+            ->join('required_formats', 'quotes.required_format_id', '=', 'required_formats.id')
+            ->leftjoin('admins', 'quotes.designer_id', '=', 'admins.id')
+            ->leftjoin('statuses as ordersStatus', 'quotes.quotes_status', 'ordersStatus.id')
+            ->where('quotes.id', $order->id)
+            ->first();
+
+        //instruction
+        $orderInstruction = Quote::select('*', 'instructions.description as instruction')
+            ->leftjoin('instructions', 'instructions.quote_id', '=', 'quotes.id')
+            ->where('instructions.quote_id', $id)
+            ->first();
+
+
+        //admin instruction
+        $adminInstruction = Quote::select('*', 'instructions.description as instruction')
+            ->join('instructions', 'instructions.quote_id', '=', 'quotes.id')
+            ->leftjoin('admins', 'instructions.emp_id', 'admins.id')
+            ->leftjoin('roles', 'admins.role_id', 'roles.id')
+            ->where('instructions.quote_id', $id)
+            ->where('roles.name', 'Admin')
+            ->first();
+
+        //files
+        $orderFiles = QuoteFileLog::select('*', 'quote_file_logs.id as fileId')
+            ->where('quote_id', $id)->get();
+
+        //order status
+        $orderStatus = Status::where('status_value', 1)->get();
+
+      
+
+        //designer
+        $designer = Admin::select('*', 'admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
+            ->join('roles', 'admins.role_id', '=', 'roles.id')
+            ->whereIn(
+                'roles.name',
+                ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker']
+            )
+            ->get();
+
+
+
+
+        return view('admin/quotes/printview', compact(
+            'order',
+            'designer',
+            'orderStatus',
+            'orderFiles',
+            'orderInstruction',
+            'adminInstruction'
+        ));
+    }
+
 
 
 

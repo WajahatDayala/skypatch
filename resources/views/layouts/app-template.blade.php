@@ -69,6 +69,10 @@
         @include('layouts.digitizer.vector-digitizer.sidebar')
     <!-- End vector order digitizer -->
 
+    <!-- support sidebar -->
+    @elseif(Auth::user()->role->name === 'Customer Support')
+    @include('layouts.support.sidebar')
+
     <!-- Default sidebar -->
 
 

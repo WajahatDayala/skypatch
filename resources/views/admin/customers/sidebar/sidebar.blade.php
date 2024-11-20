@@ -15,6 +15,7 @@
         <a href="{{ url('/admin/customers/' . $user->id . '/dashboard') }}" class="nav-item nav-link {{ request()->is('admin/customers/' . $user->id . '/dashboard') ? 'active' : '' }}">
         <i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
         
+            
             <a href="{{ url('/admin/customers/' . $user->id . '/quote') }}" class="nav-item nav-link {{ request()->is('admin/customers/' . $user->id . '/quote') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
             Send Quotes</a>
 
@@ -22,9 +23,10 @@
             <a href="" class="nav-item nav-link {{ request()->is('/admin/customer/vector-orders/create') ? 'active' : '' }}"><i class="fa-regular fa-pen-to-square me-2"></i></i>
             Place Vector Orders</a>
 
-          <a href="{{ url('/admin/customers/' . $user->id . '/all-quotes') }}" class="nav-item nav-link {{ request()->is('admin/customers/' . $user->id . '/all-quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>Quote Records</a>
          
+          <a href="{{ url('/admin/customers/' . $user->id . '/all-quotes') }}" class="nav-item nav-link {{ request()->is('admin/customers/' . $user->id . '/all-quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>Quote Records</a>
           
+       
           <a href="" class="nav-item nav-link {{ request()->is('/admin/customer/orders') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked me-2"></i>
             Order Records</a>
          

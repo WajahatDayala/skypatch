@@ -42,6 +42,10 @@ use App\Http\Controllers\Digitizer\Vector\Leader\VectorLeaderDashboardController
 use App\Http\Controllers\Digitizer\Vector\Leader\VectorLeaderController;
 
 
+//support
+use App\Http\Controllers\Support\SupportDashboardController;
+use App\Http\Controllers\Support\SupportCustomerController;
+
 
 Route::get('/', function () {
 
@@ -118,12 +122,14 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //all quotes
     Route::resource('/admin/allquotes', AllQuotesController::class);
     Route::get('/admin/today-quotes', [AllQuotesController::class, 'toDayQuote']);
+    Route::get('/admin/allquotes/{id}/print', [AllQuotesController::class, 'printOrder'])->name('allquotes.print');
     Route::post('/admin/allquotes/{id}/allquote', [AllQuotesController::class, 'assignDesigner'])->name('allquotes.allquote');
     Route::post('/admin/allquotes/addInstruction', [AllQuotesController::class, 'storeInstruction'])->name('allquotes.addInstruction');
     Route::post('/admin/allquotes/adminInstruction', [AllQuotesController::class, 'storeAdminInstruction'])->name('allquotes.adminInstruction');
     Route::post('/admin/allquotes/uploadFile', [AllQuotesController::class, 'storeFile'])->name('allquotes.uploadFile');
     Route::post('/admin/allquotes/deleteFile', [AllQuotesController::class, 'deleteFile'])->name('allquotes.deleteFile');
     Route::post('/admin/allquotes/deleteFileA', [AllQuotesController::class, 'deleteFileA'])->name('allquotes.deleteFileA');
+    Route::post('/admin/allquotes/deleteFileB', [AllQuotesController::class, 'deleteFileB'])->name('allquotes.deleteFileB');
     Route::post('/admin/allquotes/updateStatus', [AllQuotesController::class, 'orderStatus'])->name('allquotes.updateStatus');
     Route::get('/admin/allquotes/{id}/process', [AllQuotesController::class, 'showProcess'])->name('allquotes.process');
     //option A B
@@ -149,9 +155,13 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //options
     Route::post('/admin/allorders/optionA', [AllOrdersController::class, 'storeOptionA'])->name('allorders.optionA');
     Route::post('/admin/allorders/optionB', [AllOrdersController::class, 'storeOptionB'])->name('allorders.optionB');
+    Route::post('/admin/allorders/deleteFileA', [AllOrdersController::class, 'deleteFileA'])->name('allorders.deleteFileA');
+    Route::post('/admin/allorders/deleteFileB', [AllOrdersController::class, 'deleteFileB'])->name('allorders.deleteFileB');
+
 
     //all vectors
     Route::resource('/admin/allvectors', AllVectorController::class);
+    Route::get('/admin/allvectors/{id}/print', [AllVectorController::class, 'printOrder'])->name('allvectors.print');
     Route::get('/admin/today-vector', [AllVectorController::class, 'toDayVector']);
     Route::post('/admin/allvectors/{id}/allvector', [AllVectorController::class, 'assignDesigner'])->name('allvectors.allvecto');
     Route::post('/admin/allvectors/addInstruction', [AllVectorController::class, 'storeInstruction'])->name('allvectors.addInstruction');
@@ -160,10 +170,12 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/admin/allvectors/deleteFile', [AllVectorController::class, 'deleteFile'])->name('allvectors.deleteFile');
     Route::post('/admin/allvectors/updateStatus', [AllVectorController::class, 'orderStatus'])->name('allvectors.updateStatus');
 
+    
     //option A B
     Route::post('/admin/allvectors/optionA', [AllVectorController::class, 'storeOptionA'])->name('allvectors.optionA');
     Route::post('/admin/allvectors/optionB', [AllVectorController::class, 'storeOptionB'])->name('allvectors.optionB');
-    
+    Route::post('/admin/allvectors/deleteFileA', [AllVectorController::class, 'deleteFileA'])->name('allvectors.deleteFileA');
+    Route::post('/admin/allvectors/deleteFileB', [AllVectorController::class, 'deleteFileB'])->name('allvectors.deleteFileB');
     
 
 
@@ -223,6 +235,20 @@ Route::group(['middleware' => 'auth:admin'], function () {
     
     
     /* digitizer */
+
+
+
+    //support dashboard routing
+    Route::get('/support/dashboard', [SupportDashboardController::class, 'index'])->name('support.dashboard');
+    //support customers
+    Route::resource('/support/supportcustomers', SupportCustomerController::class);
+    Route::post('/support/supportcustomers/updateBill', [SupportCustomerController::class, 'updateBIlInfo'])->name('supportcustomer.updatedBill');
+    Route::get('/support/allcustomers', [SupportCustomerController::class, 'allCustomer']);
+    Route::get('/support/supportcustomers/{id}/dashboard', [SupportCustomerController::class, 'showPanel'])->name('supportcustomer.dashboard');
+   //support quotes
+    Route::get('/support/supportcustomers/{id}/all-quotes', [CustomerController::class, 'allQuotes'])->name('supportcustomer.all-quotes');
+   
+
 
 
 
