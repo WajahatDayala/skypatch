@@ -24,7 +24,7 @@
                                 <tbody>
                                     <tr class="table-info">
                                         <td colspan="2" class="text-center">Personal Information
-                                            <a href="{{ route('customers.edit', ['customer' => $user->id]) }}" class="btn btn-sm btn-primary">Update</a>
+                                            <a href="{{ route('supportcustomers.edit', ['supportcustomer' => $user->id]) }}" class="btn btn-sm btn-primary">Update</a>
                                         </td>
                                     </tr>
                                     <tr class="bg-white">
@@ -160,7 +160,7 @@
                                 <tbody>
                                     <tr class="table-info">
                                         <td colspan="2" class="text-center">Bill Information
-                                            <a href="{{route('customers.billInfo',[$user->id])}}" class="btn btn-sm btn-primary">Update</a>
+                                            <a href="{{route('supportcustomers.billInfo',[$user->id])}}" class="btn btn-sm btn-primary">Update</a>
                                         </td>
                                     </tr>
                                     <tr class="bg-white">

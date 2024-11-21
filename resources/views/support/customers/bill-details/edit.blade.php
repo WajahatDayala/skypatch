@@ -19,7 +19,7 @@
                 </div>
                 @endif
 
-                <form action="{{ route('customer.updatedBill') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('supportcustomer.updatedBill') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                    
                     <div class="row mb-3">

@@ -19,7 +19,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('customers.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('supportcustomers.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT') <!-- Use PUT method for updating -->
                     <div class="row mb-3">

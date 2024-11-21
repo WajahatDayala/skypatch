@@ -1,4 +1,4 @@
-@extends('customer.orders.base')
+@extends('customers.orders.base')
 @section('action-content')
 
 <!-- All Content Goes inside this div -->

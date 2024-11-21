@@ -348,7 +348,7 @@
        <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-            <x-text-input class="form-control" id="card_holder_name" type="text" placeholder="Cardholder's Name" name="card_holder_name"  required autofocus autocomplete="card_holder_name" />
+            <x-text-input class="form-control" id="card_holder_name" type="text" placeholder="Cardholder's Name" name="card_holder_name"   autofocus autocomplete="card_holder_name" />
           </div>
         </div>
        </div>
@@ -495,7 +495,7 @@ if (!empty($savedValue) && strpos($savedValue, '/') !== false) {
 <div class="row">
   <div class="col-md-12">
       <div class="form-group">
-          <select class="form-control bg-white" id="billcountry" name="countrybill" required>
+          <select class="form-control bg-white" id="billcountry" name="countrybill">
               <option value="" disabled selected>Select Country</option>
               @foreach ($countries as $country)
                   <option value="{{ $country->name }}">{{ $country->name }}</option>

@@ -45,6 +45,7 @@ use App\Http\Controllers\Digitizer\Vector\Leader\VectorLeaderController;
 //support
 use App\Http\Controllers\Support\SupportDashboardController;
 use App\Http\Controllers\Support\SupportCustomerController;
+use App\Http\Controllers\Support\SupportQuotesController;
 
 
 Route::get('/', function () {
@@ -245,12 +246,16 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/support/supportcustomers/updateBill', [SupportCustomerController::class, 'updateBIlInfo'])->name('supportcustomer.updatedBill');
     Route::get('/support/allcustomers', [SupportCustomerController::class, 'allCustomer']);
     Route::get('/support/supportcustomers/{id}/dashboard', [SupportCustomerController::class, 'showPanel'])->name('supportcustomer.dashboard');
-   //support quotes
-    Route::get('/support/supportcustomers/{id}/all-quotes', [CustomerController::class, 'allQuotes'])->name('supportcustomer.all-quotes');
+    Route::get('/support/supportcustomers/{id}/addinvoice', [SupportCustomerController::class, 'addInvoice'])->name('supportcustomer.addinvoice');
+    Route::post('/support/supportcustomers/storeinvoice', [SupportCustomerController::class, 'storeInvoice'])->name('supportcustomer.storeinvoice'); //customer panel profile from admin panel
    
-
-
-
+    Route::get('/support/supportcustomers/{id}/billInfo',[SupportCustomerController::class,'billInfo'])->name('supportcustomers.billInfo');
+    Route::resource('/support/supportquotes',SupportQuotesController::class);
+    Route::get('/support/support-todayquotes',[SupportQuotesController::class,'toDayQuote'])->name('supportquotes.support-todayquotes');
+    Route::post('/support/supportquotes/deleteQuote',[SupportQuotesController::class,'deleteQuotes'])->name('supportquotes.deleteQuote');
+    Route::get('/support/supportquotes/{id}/process', [SupportQuotesController::class, 'showProcess'])->name('supportquotes.process');
+    Route::get('/support/supportquotes/{id}/print', [SupportQuotesController::class, 'printOrder'])->name('supportquotes.print');
+   
 
 });
 /*end admin routing  */

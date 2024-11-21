@@ -68,8 +68,10 @@
                                         class="btn btn-sm {{ $q->status == 1 ? 'btn-success' : 'btn-secondary' }} rounded-pill m-2"
                                         href="">{{$q->status}}</span></td>
                                 <td>
+                                   
                                     <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="{{ route('allquotes.show', ['allquote' => $q->order_id]) }}">Details</a>
+                                    href="{{ route('supportquotes.show', ['supportquote' => $q->order_id]) }}">Details</a>
+                                    <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn" data-file-id="{{ $q->order_id }}" data-bs-toggle="modal" data-bs-target="#deleteFileModal">Delete</button>
                                 </td>
                             </tr>
                             @endforeach
@@ -77,6 +79,28 @@
 
 
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteFileModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFileModalLabel">Delete Quotes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this file?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteFileForm" method="POST" action="{{ route('supportquotes.deleteQuote') }}">
+                    @csrf
+                    <input type="text" hidden id="file_id" name="quote_id" value="">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
                         </tbody>
@@ -90,6 +114,19 @@
 <!-- Blank End -->
 
 
+
+<!-- JavaScript to handle the modal -->
+<script>
+    const deleteFileButtons = document.querySelectorAll('.delete-file-btn');
+    const fileIdInput = document.getElementById('file_id');
+
+    deleteFileButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const fileId = this.getAttribute('data-file-id');
+            fileIdInput.value = fileId; // Set the file ID in the hidden input
+        });
+    });
+</script>
 
 
 @endsection

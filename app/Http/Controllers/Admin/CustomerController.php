@@ -145,7 +145,7 @@ class CustomerController extends Controller
     }
 
 
-
+    //store invoice
     public function storeInvoice(Request $request)
     {
         // Retrieve the last invoice and generate the next invoice number

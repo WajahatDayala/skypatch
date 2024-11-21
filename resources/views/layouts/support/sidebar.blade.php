@@ -17,16 +17,13 @@
           
         
 
-            {{-- <a href="{{url('/admin/customers')}}" class="nav-item nav-link {{ request()->is('admin/customers') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
-            Customers</a> --}}
 
-            <a href="{{url('/support/allcustomers')}}" class="nav-item nav-link {{ request()->is('support/allcustomers') ? 'active' : '' }}"><i class="fa-solid fa-box me-2"></i>All Customers</a>
-         
-          
-          <a href="{{url('/support/today-quotes')}}" class="nav-item nav-link {{ request()->is('support/today-quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>Today's Quote</a>
+          <a href="{{url('/support/allcustomers')}}" class="nav-item nav-link {{ request()->is('support/allcustomers') ? 'active' : '' }}"><i class="fa-solid fa-box me-2"></i>All Customers</a>
+           
+          <a href="{{url('/support/support-todayquotes')}}" class="nav-item nav-link {{ request()->is('support/support-todayquotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>Today's Quote</a>
          
            
-          <a href="{{url('/support/allquotes')}}" class="nav-item nav-link {{ request()->is('support/allquotes') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked me-2"></i>
+          <a href="{{url('/support/supportquotes')}}" class="nav-item nav-link {{ request()->is('support/supportquotes') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked me-2"></i>
           All Quotes</a>
          
           <a href="{{url('/support/today-orders')}}" class="nav-item nav-link {{ request()->is('support/today-orders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>

@@ -1,4 +1,4 @@
-@extends('customer.vector-orders.base')
+@extends('customers.vector-orders.base')
 @section('action-content')
 
 

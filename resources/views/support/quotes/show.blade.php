@@ -1,4 +1,4 @@
-@extends('admin.quotes.base')
+@extends('support.quotes.base')
 @section('action-content')
 
 
@@ -14,16 +14,16 @@
                         <h6 class="h6 mb-0">Quote Details</h6>
                     </div>
                     <div class="col-6 d-flex align-items-center justify-content-end">
-                        <a href="{{route('allquotes.print',[$order->order_id])}}"
+                        <a href="{{route('supportquotes.print',[$order->order_id])}}"
                             target="_blank"  class="btn btn-sm btn-primary rounded-pill me-2">Print</a> 
                                         
                         @if($order->edit_status == 1 && $order->status_id == 1)
-                        <a href="{{route('allquotes.edit',[$order->order_id])}}"
+                        <a href="{{route('supportquotes.edit',[$order->order_id])}}"
                         class="btn btn-sm btn-primary rounded-pill me-2">Edit</a> 
                         @endif
 
                         @if($order->edit_status == 1 && $order->status_id == 2)
-                        <a href="{{route('allquotes.process',[$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
+                        <a href="{{route('supportquotes.process',[$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
                         @endif
                     </div>
                 </div>
@@ -167,9 +167,9 @@
                                     <p>{{ $adminInstruction ? $adminInstruction->instruction : 'No instruction available.' }} 
                                     <!-- Button trigger modal -->
                                     @if($order->edit_status == 1)
-<button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#adminInstructionModal">
+{{-- <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#adminInstructionModal">
 Update
-</button>
+</button> --}}
 @endif
 </p>
 <!-- Modal -->
