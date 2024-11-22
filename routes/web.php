@@ -46,6 +46,12 @@ use App\Http\Controllers\Digitizer\Vector\Leader\VectorLeaderController;
 use App\Http\Controllers\Support\SupportDashboardController;
 use App\Http\Controllers\Support\SupportCustomerController;
 use App\Http\Controllers\Support\SupportQuotesController;
+use App\Http\Controllers\Support\SupportOrdersController;
+use App\Http\Controllers\Support\SupportVectorOrdersController;
+use App\Http\Controllers\Support\SupportEmployeeController;
+use App\Http\Controllers\Support\SupportInvoiceController;
+
+
 
 
 Route::get('/', function () {
@@ -248,14 +254,42 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/support/supportcustomers/{id}/dashboard', [SupportCustomerController::class, 'showPanel'])->name('supportcustomer.dashboard');
     Route::get('/support/supportcustomers/{id}/addinvoice', [SupportCustomerController::class, 'addInvoice'])->name('supportcustomer.addinvoice');
     Route::post('/support/supportcustomers/storeinvoice', [SupportCustomerController::class, 'storeInvoice'])->name('supportcustomer.storeinvoice'); //customer panel profile from admin panel
-   
     Route::get('/support/supportcustomers/{id}/billInfo',[SupportCustomerController::class,'billInfo'])->name('supportcustomers.billInfo');
+    //price details by customer from customer support panel
+    //Route::get('/support/supportcustomers/{id}/support-price-details',[SupportCustomerController::class,'editPriceDetails'])->name('supportcustomers.support-price-details');
+   
+    
+    
+    //support quotes
     Route::resource('/support/supportquotes',SupportQuotesController::class);
     Route::get('/support/support-todayquotes',[SupportQuotesController::class,'toDayQuote'])->name('supportquotes.support-todayquotes');
     Route::post('/support/supportquotes/deleteQuote',[SupportQuotesController::class,'deleteQuotes'])->name('supportquotes.deleteQuote');
     Route::get('/support/supportquotes/{id}/process', [SupportQuotesController::class, 'showProcess'])->name('supportquotes.process');
     Route::get('/support/supportquotes/{id}/print', [SupportQuotesController::class, 'printOrder'])->name('supportquotes.print');
-   
+    //support orders
+    Route::resource('/support/support-allorders', SupportOrdersController::class);
+    Route::get('/support/support-today-orders', [SupportOrdersController::class, 'toDayOrders']);
+    Route::get('/support/support-today-edit-orders', [SupportOrdersController::class, 'toDayEditOrders']);
+    Route::get('/support/supportorders/{id}/process', [SupportOrdersController::class, 'processOrder'])->name('supportorders.process');
+    Route::get('/support/supportorders/{id}/print', [SupportOrdersController::class, 'printOrder'])->name('supportorders.print');
+    Route::post('/support/supportorders/deleteOrder',[SupportOrdersController::class,'deleteOrder'])->name('supportorders.deleteOrder');
+
+    //support vector orders.
+     Route::resource('/support/support-vector-orders', SupportVectorOrdersController::class);
+     Route::get('/support/support-vector-today-orders', [SupportVectorOrdersController::class, 'toDayVector']);
+     Route::post('/support/support-vector-orders/deleteOrder',[SupportVectorOrdersController::class,'deleteOrder'])->name('support-vector-orders.deleteOrder');
+     Route::get('/support/support-vector-orders/{id}/process', [SupportVectorOrdersController::class, 'processOrder'])->name('support-vector-orders.process');
+     Route::get('/support/support-vector-orders/{id}/print', [SupportVectorOrdersController::class, 'printOrder'])->name('support-vector-orders.print');
+    //support employee add
+     //all employees
+    Route::resource('/support/suppport-employees', SupportEmployeeController::class);
+    Route::resource('/support/suppport-invoices', SupportInvoiceController::class);
+
+    
+
+
+
+
 
 });
 /*end admin routing  */

@@ -11,10 +11,10 @@
                         <h6 class="h6 mb-0">Order Details</h6>
                     </div>
                     <div class="col-6 d-flex align-items-center justify-content-end">
-                        <a href="{{route('allorders.print',[$order->order_id])}}"
+                        <a href="{{route('supportorders.print',[$order->order_id])}}"
                                       target="_blank"  class="btn btn-sm btn-primary rounded-pill me-2">Print</a> 
                         @if($order->edit_status == 1 && $order->status_id == 2)
-                       <a href="{{route('allorders.process',[$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
+                       <a href="{{route('supportorders.process',[$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
                         @endif
 
                     
@@ -160,9 +160,9 @@
                                     <p>{{ $adminInstruction ? $adminInstruction->instruction : 'No instruction available.' }} 
                                     <!-- Button trigger modal -->
                                     @if($order->edit_status == 1)
-<button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#adminInstructionModal">
+{{-- <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#adminInstructionModal">
 Update
-</button>
+</button> --}}
 @endif
 </p>
 <!-- Modal -->

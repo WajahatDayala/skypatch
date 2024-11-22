@@ -26,19 +26,19 @@
           <a href="{{url('/support/supportquotes')}}" class="nav-item nav-link {{ request()->is('support/supportquotes') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked me-2"></i>
           All Quotes</a>
          
-          <a href="{{url('/support/today-orders')}}" class="nav-item nav-link {{ request()->is('support/today-orders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
+          <a href="{{url('/support/support-today-orders')}}" class="nav-item nav-link {{ request()->is('support/support-today-orders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
           Today's Order </a>
 
-          <a href="{{url('/support/today-edit-orders')}}" class="nav-item nav-link {{ request()->is('support/today-edit-orders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
+          <a href="{{url('/support/support-today-edit-orders')}}" class="nav-item nav-link {{ request()->is('support/support-today-edit-orders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
           Today's Edit Order </a>
 
-          <a href="{{url('/support/allorders')}}" class="nav-item nav-link {{ request()->is('support/allorders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
+          <a href="{{url('/support/support-allorders')}}" class="nav-item nav-link {{ request()->is('support/support-allorders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
           All Orders</a>
         
-          <a href="{{url('/support/today-vector')}}" class="nav-item nav-link {{ request()->is('support/today-vector') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
+          <a href="{{url('/support/support-vector-today-orders')}}" class="nav-item nav-link {{ request()->is('support/support-vector-today-orders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
           Today's Vector</a>
 
-          <a href="{{url('/support/allvectors')}}" class="nav-item nav-link {{ request()->is('support/allvectors') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
+          <a href="{{url('/support/support-vector-orders')}}" class="nav-item nav-link {{ request()->is('support/support-vector-orders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
           All Vector </a>
           
          

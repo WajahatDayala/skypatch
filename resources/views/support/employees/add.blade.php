@@ -1,4 +1,4 @@
-@extends('admin.customers.base')
+@extends('support.customers.base')
 @section('action-content')
 
 
@@ -19,7 +19,7 @@
                     </ul>
                 </div>
                 @endif
-                <form action="{{ route('employees.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('suppport-employees.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row mb-3">
                         <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Name</label>

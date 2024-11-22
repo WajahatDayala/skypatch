@@ -22,6 +22,7 @@ use App\Models\Placement;
 use App\Models\Admin;
 use App\Models\Invoice;
 use App\Models\InvoiceDetail;
+use App\Models\PricingCriteria;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use Carbon\Carbon;
@@ -1010,6 +1011,33 @@ class CustomerController extends Controller
 
 
     }
+
+    //customer pricing details update
+     public function updatePriceDetails(Request $request ,$id)
+     {
+        $validated = $request->validate([
+            'mini_price' => 'required|numeric',
+            'max_price' => 'required|numeric',
+            'stitches' => 'required|numeric',
+            'delivery_type' => 'required|in:1,2',
+            'editing_changes' => 'required|string',
+            'editing_stitches_file' => 'required|string',
+            'comment_1' => 'nullable|string',
+            'comment_2' => 'nullable|string',
+            'comment_3' => 'nullable|string',
+            'comment_4' => 'nullable|string',
+        ]);
+
+            // Find the existing pricing or create a new one
+             $pricing = PricingCriteria::firstOrNew(['user_id' => $id]);  // Use user_id or other unique identifier
+
+            // Update fields
+             $pricing->fill($validated);
+             $pricing->save(); // Save to DB
+
+             return redirect()->route('pricing.view', $id)->with('success', 'Pricing details saved successfully!');
+
+     }   
 
     /**
      * Remove the specified resource from storage.

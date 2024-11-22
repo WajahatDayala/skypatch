@@ -1,4 +1,4 @@
-@extends('admin.customers.invoice.base')
+@extends('support.customers.invoice.base')
 
 @section('action-content')
 <div class="container-fluid pt-4 px-4">

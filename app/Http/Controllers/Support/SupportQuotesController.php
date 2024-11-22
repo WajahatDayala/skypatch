@@ -315,7 +315,7 @@ class SupportQuotesController extends Controller
    
    
            
-           return view('admin/quotes/process',compact(
+           return view('support/quotes/process',compact(
                'quote',
                'designer',
                'quoteStatus',

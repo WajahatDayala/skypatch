@@ -1,4 +1,4 @@
-@extends('admin.vector-orders.base')
+@extends('support.vector-orders.base')
 @section('action-content')
 
 
@@ -55,13 +55,41 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="{{ route('allvectors.show',['allvector'=>$q->order_id]) }}">Details</a>
-                                </td>
+                                        href="{{ route('support-vector-orders.show',['support_vector_order'=>$q->order_id]) }}">Details</a>
+                                        <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn" data-file-id="{{ $q->order_id }}" data-bs-toggle="modal" data-bs-target="#deleteFileModal">Delete</button>
+                               
+                                    </td>
                             </tr>
                             @endforeach
 
 
 
+                            
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteFileModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFileModalLabel">Delete Vector Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this file?</p>
+                {{-- <p id="file_ids"></p> <!-- This will display the Quote ID dynamically --> --}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteFileForm" method="POST" action="{{ route('support-vector-orders.deleteOrder') }}">
+                    @csrf
+                    <span id="file_ids"></span>
+                    <input type="text" hidden id="file_id" name="order_id" value="">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+  
 
 
 
@@ -75,5 +103,25 @@
 </div>
 <!-- Blank End -->
 
+
+
+<!-- JavaScript to handle the modal -->
+<script>
+    const deleteFileButtons = document.querySelectorAll('.delete-file-btn');
+    const fileIdInput = document.getElementById('file_id');
+  //  const fileIdText = document.getElementById('file_ids'); // This will hold the file ID for viewing in the modal
+    const modalTitle = document.getElementById('deleteFileModalLabel'); // Modal title to dynamically update
+  
+  
+  
+    deleteFileButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const fileId = this.getAttribute('data-file-id');
+            fileIdInput.value = fileId; // Set the file ID in the hidden input
+            //fileIdText.textContent = `QT-: ${fileId}`; // Set the text for Quote ID display in modal
+            modalTitle.textContent = `Delete this VO-${fileId}`; // Update the modal title to include Quote ID
+        });
+    });
+  </script>
 
 @endsection

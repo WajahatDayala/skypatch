@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Support;
 
 use App\Http\Controllers\Controller;
+use App\Models\PricingCriteria;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
@@ -354,7 +355,7 @@ class SupportCustomerController extends Controller
     public function showPanel(string $id)
     {
         $user = User::find($id);
-        return view('support.customers.customer-dashboard.dashboard',compact('user'));
+        return view('admin.customers.customer-dashboard.dashboard',compact('user'));
     }
 
      //showAllQuotes from Admin
@@ -421,6 +422,11 @@ class SupportCustomerController extends Controller
         ->leftjoin('card_types','customer_bill_infos.card_type_id','=','card_types.id')
         ->where('customer_bill_infos.customer_id',$id)
         ->first();
+
+        $pricing = PricingCriteria::select('*')
+             ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
+            ->where('pricing_criterias.customer_id',$id)
+             ->first();
     
     
         return view('support.customers.profile-details.index',compact('user','billInfo'));
@@ -574,6 +580,22 @@ class SupportCustomerController extends Controller
 
 
     }
+
+     //customer pricing details update
+    //  public function editPriceDetails(string $id)
+    //  {
+    //      //
+    //      $user = User::find($id);
+         
+    //      $priceDetails = PricingCriteria::select('*')
+    //      ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
+    //      ->where('pricing_criterias.customer_id',$id)
+    //      ->first();
+     
+     
+    //      return view('price-details.edit',compact('user','priceDetails'));
+ 
+    //  }
 
      
 

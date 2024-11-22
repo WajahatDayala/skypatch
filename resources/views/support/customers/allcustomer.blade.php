@@ -56,9 +56,9 @@
 
                                         <a class="btn btn-sm btn-primary rounded-pill m-2"
                                         href="{{ route('supportcustomer.dashboard', ['id' => $c->id]) }}"  target="_blank">records</a>
-
+{{-- 
                                         <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="{{ route('supportcustomer.addinvoice', ['id' => $c->id]) }}"  target="_blank">Invoice</a>
+                                        href="{{ route('supportcustomer.addinvoice', ['id' => $c->id]) }}"  target="_blank">Invoice</a> --}}
                                 </td>
                             </tr>
                             @endforeach
