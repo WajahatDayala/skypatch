@@ -10,6 +10,7 @@ class PricingCriteria extends Model
     use HasFactory;
     
     protected $fillable = [
+        'delivery_type_id',
         'minimum_price',
         'maximum_price', 
         'stitches',

@@ -424,12 +424,13 @@ class SupportCustomerController extends Controller
         ->first();
 
         $pricing = PricingCriteria::select('*')
-             ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
-            ->where('pricing_criterias.customer_id',$id)
-             ->first();
+        ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
+       ->where('pricing_criterias.customer_id',$id)
+        ->first();
+        
     
     
-        return view('support.customers.profile-details.index',compact('user','billInfo'));
+        return view('support.customers.profile-details.index',compact('user','billInfo','pricing'));
     }
 
     /**

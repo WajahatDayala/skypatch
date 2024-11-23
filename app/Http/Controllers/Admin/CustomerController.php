@@ -399,9 +399,14 @@ class CustomerController extends Controller
         ->leftjoin('card_types','customer_bill_infos.card_type_id','=','card_types.id')
         ->where('customer_bill_infos.customer_id',$id)
         ->first();
+
+        $pricing = PricingCriteria::select('*')
+             ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
+            ->where('pricing_criterias.customer_id',$id)
+             ->first();
     
     
-        return view('admin.customers.profile-details.index',compact('user','billInfo'));
+        return view('admin.customers.profile-details.index',compact('user','billInfo','pricing'));
 
     }
 
@@ -1013,31 +1018,48 @@ class CustomerController extends Controller
     }
 
     //customer pricing details update
-     public function updatePriceDetails(Request $request ,$id)
+     public function updatePriceDetails(Request $request)
      {
-        $validated = $request->validate([
-            'mini_price' => 'required|numeric',
-            'max_price' => 'required|numeric',
-            'stitches' => 'required|numeric',
-            'delivery_type' => 'required|in:1,2',
-            'editing_changes' => 'required|string',
-            'editing_stitches_file' => 'required|string',
-            'comment_1' => 'nullable|string',
-            'comment_2' => 'nullable|string',
-            'comment_3' => 'nullable|string',
-            'comment_4' => 'nullable|string',
+        // Ensure this is in the correct controller method
+        // $validated = $request->validate([
+        //     'delivery_type_id' => 'required|in:1,2',
+        //     'mini_price' => 'required|numeric',
+        //     'max_price' => 'required|numeric',
+        //     'stitches' => 'required|numeric',
+        //     'editing_changes' => 'required|string',
+        //     'editing_stitches_file' => 'required|string',
+        //     'comment_1' => 'nullable|string',
+        //     'comment_2' => 'nullable|string',
+        //     'comment_3' => 'nullable|string',
+        //     'comment_4' => 'nullable|string',
+        // ]);
+
+        // Find the existing pricing or create a new one
+        $pricing = PricingCriteria::firstOrNew(['customer_id' => $request->customer_id]);
+
+        // Fill validated data into the model
+        $pricing->fill([
+            'delivery_type_id' => $request->delivery_type_id,
+            'minimum_price' => $request->mini_price,
+            'maximum_price' => $request->max_price,
+            'stitches' => $request->stitches,
+            'editing_changes' => $request->editing_changes,
+            'editing_in_stitch_file' => $request->editing_stitches_file,
+            'comment_box_1' => $request->comment_1,
+            'comment_box_2' => $request->comment_2,
+            'comment_box_3' => $request->comment_3,
+            'comment_box_4' => $request->comment_4,
+            'customer_id' =>$request->customer_id
         ]);
 
-            // Find the existing pricing or create a new one
-             $pricing = PricingCriteria::firstOrNew(['user_id' => $id]);  // Use user_id or other unique identifier
+        // Save the model to the database
+        $pricing->save();
 
-            // Update fields
-             $pricing->fill($validated);
-             $pricing->save(); // Save to DB
+        // Redirect back with success message
+      //  return redirect()->route('pricing.view', $request->customer_id)->with('success', 'Pricing details saved successfully!');
 
-             return redirect()->route('pricing.view', $id)->with('success', 'Pricing details saved successfully!');
-
-     }   
+       return redirect()->back()->with('success', 'Pricing details saved successfully!');
+    }   
 
     /**
      * Remove the specified resource from storage.
