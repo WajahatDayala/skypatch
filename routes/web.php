@@ -105,26 +105,29 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::resource('/admin/customers', CustomerController::class);
     Route::post('/admin/customers/updateBill', [CustomerController::class, 'updateBIlInfo'])->name('customer.updatedBill');
     Route::get('/admin/allcustomers', [CustomerController::class, 'allCustomer']);
-    Route::get('/admin/customers/{id}/dashboard', [CustomerController::class, 'showPanel'])->name('customer.dashboard');
+    Route::get('/customers/{id}/dashboard', [CustomerController::class, 'showPanel'])->name('customer.dashboard');
     //add invoice
     Route::get('/admin/customers/{id}/addinvoice', [CustomerController::class, 'addInvoice'])->name('customer.addinvoice');
     Route::post('/admin/customers/storeinvoice', [CustomerController::class, 'storeInvoice'])->name('customer.storeinvoice'); //customer panel profile from admin panel
-    Route::get('/admin/customers/{id}/my-profile', [CustomerController::class, 'customerProfile'])->name('customer.my-profile');
-    Route::get('/admin/customers/{id}/edit-profile', [CustomerController::class, 'customerProfileEdit'])->name('customer.edit-profile');
-    Route::post('/admin/customers/{id}/update-profile', [CustomerController::class, 'customerProfileUpdate'])->name('customer.update-profile');
-    Route::get('/admin/customers/{id}/editBillInfo', [CustomerController::class, 'customerBillInfo'])->name('customer.editBillInfo');
+    Route::get('customers/{id}/my-profile', [CustomerController::class, 'customerProfile'])->name('customer.my-profile');
+    Route::get('customers/{id}/edit-profile', [CustomerController::class, 'customerProfileEdit'])->name('customer.edit-profile');
+    Route::post('customers/{id}/update-profile', [CustomerController::class, 'customerProfileUpdate'])->name('customer.update-profile');
+    Route::get('customers/{id}/editBillInfo', [CustomerController::class, 'customerBillInfo'])->name('customer.editBillInfo');
 
     Route::get('/admin/customers/{id}/billInfo', [CustomerController::class, 'billInfo'])->name('customers.billInfo');
     Route::post('/admin/customers/updateBillInfo', [CustomerController::class, 'storeBillInfo'])->name('customers.updateBillInfo');
-    //customer orders from admin
-    Route::get('/admin/customers/{id}/quote', [CustomerController::class, 'createQuote'])->name('customer.quote');
-    Route::post('/admin/customers/savedQuote', [CustomerController::class, 'storeQuote'])->name('customer.savedQuote');
-    Route::get('/admin/customers/{id}/all-quotes', [CustomerController::class, 'allQuotes'])->name('customer.all-quotes');
-    Route::get('/admin/customers/{id}/show-quote', [CustomerController::class, 'showQuote'])->name('customer.show-quote');
-    Route::get('/admin/customers/{id}/edit-quote', [CustomerController::class, 'editQuote'])->name('customer.edit-quote');
-    Route::post('/admin/customers/{id}/all-quotes/convert-quotes/{quoteId}', [CustomerController::class, 'convertToOrder']);
 
-    Route::post('/customers/pricing/save/', [CustomerController::class, 'updatePriceDetails'])->name('pricing.save');
+  
+
+    //customer orders from admin
+    Route::get('customers/{id}/quote', [CustomerController::class, 'createQuote'])->name('customer.quote');
+    Route::post('customers/savedQuote', [CustomerController::class, 'storeQuote'])->name('customer.savedQuote');
+    Route::get('customers/{id}/all-quotes', [CustomerController::class, 'allQuotes'])->name('customer.all-quotes');
+    Route::get('customers/{id}/show-quote', [CustomerController::class, 'showQuote'])->name('customer.show-quote');
+    Route::get('customers/{id}/edit-quote', [CustomerController::class, 'editQuote'])->name('customer.edit-quote');
+    Route::post('customers/{id}/all-quotes/convert-quotes/{quoteId}', [CustomerController::class, 'convertToOrder']);
+
+ 
 
 
 
@@ -253,15 +256,15 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::resource('/support/supportcustomers', SupportCustomerController::class);
     Route::post('/support/supportcustomers/updateBill', [SupportCustomerController::class, 'updateBIlInfo'])->name('supportcustomer.updatedBill');
     Route::get('/support/allcustomers', [SupportCustomerController::class, 'allCustomer']);
-    Route::get('/support/supportcustomers/{id}/dashboard', [SupportCustomerController::class, 'showPanel'])->name('supportcustomer.dashboard');
-    Route::get('/support/supportcustomers/{id}/addinvoice', [SupportCustomerController::class, 'addInvoice'])->name('supportcustomer.addinvoice');
-    Route::post('/support/supportcustomers/storeinvoice', [SupportCustomerController::class, 'storeInvoice'])->name('supportcustomer.storeinvoice'); //customer panel profile from admin panel
     Route::get('/support/supportcustomers/{id}/billInfo',[SupportCustomerController::class,'billInfo'])->name('supportcustomers.billInfo');
-    //price details by customer from customer support panel
-    //Route::get('/support/supportcustomers/{id}/support-price-details',[SupportCustomerController::class,'editPriceDetails'])->name('supportcustomers.support-price-details');
-   
     
+      //pricing criteria
+    Route::get('/support/pricing/{id}/support-pricing-details',[SupportCustomerController::class,'editPricingDetails'])->name('pricing.support-pricing-details');
+    Route::post('/support/pricing/save/', [SupportCustomerController::class, 'updatePriceDetails'])->name('pricing.save');
     
+    //vector details
+    Route::get('/support/vectordetails/{id}/support-vector-details',[SupportCustomerController::class,'editVectorDetails'])->name('vectordetails.support-vector-details');
+    Route::post('/support/vectordetails/save/',[SupportCustomerController::class,'updateVectorDetails'])->name('vectordetails.save');
     //support quotes
     Route::resource('/support/supportquotes',SupportQuotesController::class);
     Route::get('/support/support-todayquotes',[SupportQuotesController::class,'toDayQuote'])->name('supportquotes.support-todayquotes');

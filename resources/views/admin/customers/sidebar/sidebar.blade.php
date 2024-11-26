@@ -12,11 +12,11 @@
           </div>
         </div>
         <div class="navbar-nav w-100">
-        <a href="{{ url('/admin/customers/' . $user->id . '/dashboard') }}" class="nav-item nav-link {{ request()->is('admin/customers/' . $user->id . '/dashboard') ? 'active' : '' }}">
+        <a href="{{ url('customers/' . $user->id . '/dashboard') }}" class="nav-item nav-link {{ request()->is('customers/' . $user->id . '/dashboard') ? 'active' : '' }}">
         <i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
         
             
-            <a href="{{ url('/admin/customers/' . $user->id . '/quote') }}" class="nav-item nav-link {{ request()->is('admin/customers/' . $user->id . '/quote') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
+            <a href="{{ url('customers/' . $user->id . '/quote') }}" class="nav-item nav-link {{ request()->is('customers/' . $user->id . '/quote') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
             Send Quotes</a>
 
             <a href="" class="nav-item nav-link {{ request()->is('/admin/customer/orders/create') ? 'active' : '' }}"><i class="fa-solid fa-box me-2"></i>Place Orders</a>
@@ -24,7 +24,7 @@
             Place Vector Orders</a>
 
          
-          <a href="{{ url('/admin/customers/' . $user->id . '/all-quotes') }}" class="nav-item nav-link {{ request()->is('admin/customers/' . $user->id . '/all-quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>Quote Records</a>
+          <a href="{{ url('customers/' . $user->id . '/all-quotes') }}" class="nav-item nav-link {{ request()->is('customers/' . $user->id . '/all-quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>Quote Records</a>
           
        
           <a href="" class="nav-item nav-link {{ request()->is('/admin/customer/orders') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked me-2"></i>
@@ -33,7 +33,7 @@
           <a href="" class="nav-item nav-link {{ request()->is('/admin/customer/vector-orders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
             Vector Records</a>
 
-            <a href="{{url('/admin/customers/'.$user->id.'/my-profile')}}" class="nav-item nav-link {{ request()->is('admin/customers/'.$user->id.'/my-profile') ? 'active' : '' }}"><i class="fa-solid fa-user me-2"></i>
+            <a href="{{url('customers/'.$user->id.'/my-profile')}}" class="nav-item nav-link {{ request()->is('customers/'.$user->id.'/my-profile') ? 'active' : '' }}"><i class="fa-solid fa-user me-2"></i>
             My Profile</a>
 
           <!-- <a onclick="event.preventDefault();document.getElementById('logout-form').submit();" href="{{ route('logout') }}" class="nav-item nav-link"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</a> -->

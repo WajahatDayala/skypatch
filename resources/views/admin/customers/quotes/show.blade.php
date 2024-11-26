@@ -510,7 +510,7 @@ Update
 
             </div>
 
-            <div class="bg-table rounded h-100 p-4 mt-4">
+            {{-- <div class="bg-table rounded h-100 p-4 mt-4">
                             <div class="row bg-info p-2">
                                 <h6 class="text-secondary text-center mb-0">For Digitzer's/Vector Teams</h1>
                             </div>
@@ -667,7 +667,7 @@ Update
 
                         </div>
 
-        </div>
+        </div> --}}
     </div>
 </div>
 <!-- Content Div Ends here End -->

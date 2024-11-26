@@ -258,25 +258,21 @@
                 <tr class="table-info">
                     <td colspan="3" class="text-center">
                         Pricing Details
-                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" id="updateBtn">Update</a>
+                        <a href="{{route('pricing.support-pricing-details',['id'=>$user->id])}}" class="btn btn-sm btn-primary" id="updateBtn">Update</a>
                     </td>
                 </tr>
                 <tr class="bg-white">
                     <td class="col-4">
                         <strong>Minimum Price</strong><br>
                         <span id="miniPriceDisplay">{{ old('mini_price', $pricing->minimum_price ?? '') }}</span>
-                        <input type="number" name="mini_price" id="miniPriceInput" class="form-control" value="{{ old('mini_price', $pricing->minimum_price ?? '') }}" style="display: none;">
-                        <input type="text" hidden name="customer_id" value="{{$user->id}}">
                     </td>
                     <td class="col-4">
                         <strong>Maximum Price</strong><br>
                         <span id="maxPriceDisplay">{{ old('max_price', $pricing->maximum_price ?? '') }}</span>
-                        <input type="number" name="max_price" id="maxPriceInput" class="form-control" value="{{ old('max_price', $pricing->maximum_price ?? '') }}" style="display: none;">
                     </td>
                     <td class="col-4">
                         <strong>1000 Stitches</strong><br>
                         <span id="stitchesDisplay">{{ old('stitches', $pricing->stitches ?? '') }}</span>
-                        <input type="number" name="stitches" id="stitchesInput" class="form-control" value="{{ old('stitches', $pricing->stitches ?? '') }}" style="display: none;">
                     </td>
                 </tr>
                 <tr class="bg-white">
@@ -285,55 +281,38 @@
                         <span id="deliveryTypeDisplay">
                             {{ old('delivery_type', optional($pricing)->delivery_type_id == 1 ? 'Normal Delivery' : (optional($pricing)->delivery_type_id == 2 ? 'Super Urgent' : '')) }}
                         </span>
-                        <select class="form-control" name="delivery_type_id" id="deliveryTypeInput" style="display: none;">
-                            <option value="1" {{ old('delivery_type', optional($pricing)->delivery_type_id) == 1 ? 'selected' : '' }}>Normal Delivery</option>
-                            <option value="2" {{ old('delivery_type', optional($pricing)->delivery_type_id) == 2 ? 'selected' : '' }}>Super Urgent</option>
-                        </select>
+                          
                     </td>
                     
                     <td class="col-4">
                         <strong>Editing/Changes</strong><br>
                         <span id="editingChangesDisplay">{{ old('editing_changes', $pricing->editing_changes ?? '') }}</span>
-                        <input type="text" name="editing_changes" id="editingChangesInput" class="form-control" value="{{ old('editing_changes', $pricing->editing_changes ?? '') }}" style="display: none;">
                     </td>
                     <td class="col-4">
                         <strong>Editing in stitches file</strong><br>
                         <span id="editingStitchesFileDisplay">{{ old('editing_stitches_file', $pricing->editing_in_stitch_file ?? '') }}</span>
-                        <input type="text" name="editing_stitches_file" id="editingStitchesFileInput" class="form-control" value="{{ old('editing_stitches_file', $pricing->editing_in_stitch_file ?? '') }}" style="display: none;">
                     </td>
                 </tr>
                 <tr class="bg-white">
                     <td class="col-4">
                         <strong>Comment Box 1</strong><br>
                         <span id="comment1Display">{{ old('comment_1', $pricing->comment_box_1 ?? '') }}</span>
-                        <textarea class="form-control" name="comment_1" id="comment1Input" style="display: none;">{{ old('comment_1', $pricing->comment_box_1 ?? '') }}</textarea>
                     </td>
                     <td class="col-4">
                         <strong>Comment Box 2</strong><br>
                         <span id="comment2Display">{{ old('comment_2', $pricing->comment_box_2 ?? '') }}</span>
-                        <textarea class="form-control" name="comment_2" id="comment2Input" style="display: none;">{{ old('comment_2', $pricing->comment_box_2 ?? '') }}</textarea>
                     </td>
                     <td class="col-4">
                         <strong>Comment Box 3</strong><br>
                         <span id="comment3Display">{{ old('comment_3', $pricing->comment_box_3 ?? '') }}</span>
-                        <textarea class="form-control" name="comment_3" id="comment3Input" style="display: none;">{{ old('comment_3', $pricing->comment_box_3 ?? '') }}</textarea>
                     </td>
                 </tr>
                 <tr class="bg-white">
                     <td class="col-4">
                         <strong>Comment Box 4</strong><br>
-                        <span id="comment4Display">{{ old('comment_4', $pricing->comment_box_4 ?? '') }}</span>
-                        <textarea class="form-control" name="comment_4" id="comment4Input" style="display: none;">{{ old('comment_4', $pricing->comment_box_4 ?? '') }}</textarea>
+                        <span id="comment4Display">{{ old('comment_4', $pricing->comment_box_4 ?? '') }}</span> 
                     </td>
                     <td colspan="2"></td>
-                </tr>
-                <tr>
-                    <td colspan="3" class="text-center">
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-success mx-2" id="saveBtn" style="display: none;">Save</button>
-                            <button type="button" class="btn btn-secondary mx-2" id="closeBtn" style="display: none;">Close</button>
-                        </div>
-                    </td>
                 </tr>
             </tbody>
         </table>
@@ -351,69 +330,69 @@
         <tbody>
             <tr class="table-info">
                 <td colspan="3" class="text-center">Vector Details
-                <a href="" class="btn btn-sm btn-primary">Update</a>
+                <a href="{{route('vectordetails.support-vector-details',['id'=>$user->id])}}" class="btn btn-sm btn-primary">Update</a>
                 </td>
             </tr>
             <tr class="bg-white">
                 <td class="col-4">
                     <strong># of Machine(s)</strong><br>
-                    <span></span>
+                    <span> {{ old('machine', $vectordetails->machine ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Condition</strong><br>
-                    <span></span>
+                    <span> {{ old('condition', $vectordetails->condition ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong># of Needles</strong><br>
-                    <span></span>
+                    <span> {{ old('needles', $vectordetails->needles ?? '') }}</span>
                 </td>
             </tr>
             <tr class="bg-white">
                 <td class="col-4">
                     <strong>Thread</strong><br>
-                    <span></span>
+                    <span> {{ old('thread', $vectordetails->thread ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Needle Brand</strong><br>
-                    <span></span>
+                    <span> {{ old('needle_brand', $vectordetails->needle_brand ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Backing (Pique / Jersey)</strong><br>
-                    <span></span>
+                    <span> {{ old('backing_pique_jersey', $vectordetails->backing_pique_jersey ?? '') }}</span>
                 </td>
             </tr>
             <tr class="bg-white">
                 <td class="col-4">
                     <strong>Brand</strong><br>
-                    <span>psd</span>
+                    <span> {{ old('brand', $vectordetails->brand ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Backing (Cotton / Twill)</strong><br>
-                    <span></span>
+                    <span> {{ old('backing_cotton_twill', $vectordetails->backing_cotton_twill ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Backing (Cap)</strong><br>
-                    <span></span>
+                    <span> {{ old('backing_cap', $vectordetails->backing_cap ?? '') }}</span>
                 </td>
             </tr>
             <tr class="bg-white">
                 <td class="col-4">
-                    <strong>Backing</strong><br>
-                    <span></span>
+                    <strong>Model</strong><br>
+                    <span> {{ old('model', $vectordetails->model ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Needle Number</strong><br>
-                    <span></span>
+                    <span> {{ old('needle_number', $vectordetails->needle_number ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong># of Heads</strong><br>
-                    <span></span>
+                    <span> {{ old('heads', $vectordetails->head ?? '') }}</span>
                 </td>
             </tr>
             <tr class="bg-white">
                 <td class="col-4" colspan="3">
                     <strong>Comments</strong><br>
-                    <span></span>
+                    <span> {{ old('comments', $vectordetails->comment_box ?? '') }}</span>
                 </td>
             </tr>
         </tbody>
@@ -426,46 +405,5 @@
 
 </div>
 <!-- Blank End -->
-
-<!--fileds for pricing -->
-<script>
-  // Toggle between view and edit mode
-function toggleEditMode(isEditMode) {
-    const elementsToToggle = [
-        { display: 'miniPrice', input: 'miniPriceInput' },
-        { display: 'maxPrice', input: 'maxPriceInput' },
-        { display: 'stitches', input: 'stitchesInput' },
-        { display: 'deliveryType', input: 'deliveryTypeInput' },
-        { display: 'editingChanges', input: 'editingChangesInput' },
-        { display: 'editingStitchesFile', input: 'editingStitchesFileInput' },
-        { display: 'comment1', input: 'comment1Input' },
-        { display: 'comment2', input: 'comment2Input' },
-        { display: 'comment3', input: 'comment3Input' },
-        { display: 'comment4', input: 'comment4Input' }
-    ];
-
-    elementsToToggle.forEach(({ display, input }) => {
-        document.getElementById(`${display}Display`).style.display = isEditMode ? "none" : "block";
-        document.getElementById(input).style.display = isEditMode ? "block" : "none";
-    });
-
-    document.getElementById("saveBtn").style.display = isEditMode ? "block" : "none";
-    document.getElementById("closeBtn").style.display = isEditMode ? "block" : "none";
-}
-
-document.getElementById("updateBtn").addEventListener("click", () => {
-    toggleEditMode(true);
-});
-
-document.getElementById("closeBtn").addEventListener("click", () => {
-    toggleEditMode(false);
-});
-
-document.getElementById("saveBtn").addEventListener("click", () => {
-    document.getElementById("pricingForm").submit();
-});
-
-    </script>
-
 
 @endsection

@@ -16,18 +16,18 @@ return new class extends Migration
             // Foreign key column
             $table->foreignId('customer_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade'); 
             // Other fields
-            $table->decimal('machine', 8, 2)->nullable(); 
-            $table->decimal('condition', 8, 2)->nullable(); 
-            $table->integer('needles')->nullable(); 
-            $table->integer('thread')->nullable(); 
+            $table->string('machine', 8, 2)->nullable(); 
+            $table->string('condition', 8, 2)->nullable(); 
+            $table->string('needles')->nullable(); 
+            $table->string('thread')->nullable(); 
             $table->string('needle_brand')->nullable(); 
-            $table->string('backing_pique_jersey)')->nullable(); 
+            $table->string('backing_pique_jersey')->nullable(); 
             $table->string('brand')->nullable();
-            $table->string('backing_cotton_twill)')->nullable(); 
-            $table->string('backing_cap)')->nullable(); 
-            $table->string('backing)')->nullable(); 
-            $table->string('needle_number)')->nullable(); 
-            $table->string('head)')->nullable(); 
+            $table->string('backing_cotton_twill')->nullable(); 
+            $table->string('backing_cap')->nullable(); 
+            $table->string('model')->nullable(); 
+            $table->string('needle_number')->nullable(); 
+            $table->string('head')->nullable(); 
             $table->text('comment_box')->nullable(); 
             $table->timestamps();
         });

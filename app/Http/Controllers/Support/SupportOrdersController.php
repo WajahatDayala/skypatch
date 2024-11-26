@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
 use Auth;
+use App\Models\VectorDetail;
 
 class SupportOrdersController extends Controller
 {
@@ -222,9 +223,13 @@ class SupportOrdersController extends Controller
               ->where('option_type','B')
               ->where('options.order_id',$id)
                ->get();
-   
-   
 
+
+        //vector details
+        $vectordetails = VectorDetail::select('*')
+            ->leftjoin('users', 'vector_details.customer_id', '=', 'users.id')
+            ->where('vector_details.customer_id', $order->customer_id)
+            ->first();
 
 
         return view('support/orders/show', compact(
@@ -236,7 +241,8 @@ class SupportOrdersController extends Controller
             'adminInstruction',
             'allReasons',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails'
         ));
     }
 

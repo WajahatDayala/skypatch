@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
+use App\Models\PricingCriteria;
+use App\Models\VectorDetail;
 
 class SupportQuotesController extends Controller
 {
@@ -141,6 +143,7 @@ class SupportQuotesController extends Controller
         $order = Quote::select('*', 
         'quotes.id as order_id',
         'quotes.name as design_name',
+        'users.id as customer_id',
         'users.name as customer_name',
         'admins.id as designer_id',
         'admins.name as designer_name',
@@ -209,6 +212,11 @@ class SupportQuotesController extends Controller
           ->where('options.quote_id',$id)
           ->get();
 
+        //vector details
+          $vectordetails = VectorDetail::select('*')
+         ->leftjoin('users','vector_details.customer_id','=','users.id')
+         ->where('vector_details.customer_id',$order->customer_id)
+         ->first();
 
 
         return view('support/quotes/show',compact(
@@ -219,7 +227,8 @@ class SupportQuotesController extends Controller
             'orderInstruction',
             'adminInstruction',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails'
         ));
     }
 
@@ -239,6 +248,7 @@ class SupportQuotesController extends Controller
            $quote = Quote::select('*', 
            'quotes.id as quote_id',
            'quotes.name as design_name',
+           'users.id as customer_id',
            'users.name as customer_name',
            'users.email as email1',
            'users.email_2 as email2',
@@ -312,6 +322,20 @@ class SupportQuotesController extends Controller
              ->where('option_type','B')
              ->where('options.quote_id',$id)
              ->get();
+
+             
+        //pricing
+        $pricing = PricingCriteria::select('*')
+        ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
+       ->where('pricing_criterias.customer_id',$quote->customer_id)
+        ->first();
+
+
+        //vector details
+        $vectordetails = VectorDetail::select('*')
+        ->leftjoin('users','vector_details.customer_id','=','users.id')
+        ->where('vector_details.customer_id',$quote->customer_id)
+        ->first();
    
    
            
@@ -324,7 +348,9 @@ class SupportQuotesController extends Controller
                'adminInstruction',
                'allReasons',
                'optionA',
-               'optionB'
+               'optionB',
+               'pricing',
+               'vectordetails'
            ));
        }
    

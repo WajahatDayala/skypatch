@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
 use Auth;
+use App\Models\VectorDetail;
 
 class AllOrdersController extends Controller
 {
@@ -291,7 +292,11 @@ class AllOrdersController extends Controller
                ->get();
    
    
-
+    //vector details
+         $vectordetails = VectorDetail::select('*')
+        ->leftjoin('users','vector_details.customer_id','=','users.id')
+        ->where('vector_details.customer_id',$order->customer_id)
+        ->first();
 
 
         return view('admin/orders/show', compact(
@@ -303,7 +308,8 @@ class AllOrdersController extends Controller
             'adminInstruction',
             'allReasons',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails'
         ));
     }
     //assign designer
