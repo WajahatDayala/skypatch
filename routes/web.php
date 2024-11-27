@@ -169,6 +169,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/admin/allorders/optionB', [AllOrdersController::class, 'storeOptionB'])->name('allorders.optionB');
     Route::post('/admin/allorders/deleteFileA', [AllOrdersController::class, 'deleteFileA'])->name('allorders.deleteFileA');
     Route::post('/admin/allorders/deleteFileB', [AllOrdersController::class, 'deleteFileB'])->name('allorders.deleteFileB');
+    //for process page options
 
 
     //all vectors
@@ -271,6 +272,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/support/supportquotes/deleteQuote',[SupportQuotesController::class,'deleteQuotes'])->name('supportquotes.deleteQuote');
     Route::get('/support/supportquotes/{id}/process', [SupportQuotesController::class, 'showProcess'])->name('supportquotes.process');
     Route::get('/support/supportquotes/{id}/print', [SupportQuotesController::class, 'printOrder'])->name('supportquotes.print');
+    Route::post('/support/supportquotes/send',[SupportQuotesController::class,'sendEmailAndQuotes'])->name('supportquotes.send');
     //support orders
     Route::resource('/support/support-allorders', SupportOrdersController::class);
     Route::get('/support/support-today-orders', [SupportOrdersController::class, 'toDayOrders']);
@@ -278,6 +280,8 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/support/supportorders/{id}/process', [SupportOrdersController::class, 'processOrder'])->name('supportorders.process');
     Route::get('/support/supportorders/{id}/print', [SupportOrdersController::class, 'printOrder'])->name('supportorders.print');
     Route::post('/support/supportorders/deleteOrder',[SupportOrdersController::class,'deleteOrder'])->name('supportorders.deleteOrder');
+    Route::post('/support/supportorders/send',[SupportOrdersController::class,'sendEmailAndOrder'])->name('supportorders.send');
+    
 
     //support vector orders.
      Route::resource('/support/support-vector-orders', SupportVectorOrdersController::class);

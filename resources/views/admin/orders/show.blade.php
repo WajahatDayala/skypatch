@@ -723,7 +723,7 @@ Update
 
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table>    
 
                             <!-- Modal for Reason -->
                             <div class="modal fade" id="Reason" tabindex="-1" aria-labelledby="ReasonLabel"

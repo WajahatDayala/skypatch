@@ -221,7 +221,8 @@
                             <!-- Modal for Edit Designer Ends Here -->
 
                         </div>
-
+                        <form action="{{route('supportquotes.send')}}" method="POST"  enctype="multipart/form-data">
+                            @csrf
                         <div class="bg-table rounded h-100 p-4 mt-4">
                             <div class="row bg-dark p-2">
                                 <h6 class="text-light fw-light text-center mb-0">Job Information</h1>
@@ -234,6 +235,7 @@
                                                 <td class="col-3">
                                                     <strong>Number</strong><br>
                                                     <span>QT-{{$quote->quote_id}}</span>
+                                                    <input type="text" hidden name="quote_id" value="{{$quote->quote_id}}">
                                                 </td>
                                                 <td class="col-3">
                                                     <strong>Date & Time</strong><br>
@@ -303,10 +305,10 @@
                                                     Height
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                    <input type="number" name="height_A" class="form-control" id="inputEmail3" value="{{ old('height_A', $jobInfo->height_A ?? '') }}"  step="any">
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                    <input type="number" name="height_B" class="form-control" id="inputEmail3" value="{{$jobInfo->height_B ?? ''}}"  step="any">
                                                 </td>
                                             </tr>
                                             <tr class="row d-flex align-items-center justify-content-center">
@@ -314,10 +316,10 @@
                                                     Width
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                    <input type="number" name="width_A" class="form-control" id="inputEmail3" value="{{ old('width_A', $jobInfo->width_A ?? '') }}"  step="any">
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                    <input type="number" name="width_B" class="form-control" id="inputEmail3" value="{{ old('width_B', $jobInfo->width_B ?? '') }}"  step="any">
                                                 </td>
                                             </tr>
                                             <tr class="row d-flex align-items-center justify-content-center">
@@ -325,10 +327,10 @@
                                                     Stitches
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                    <input type="number" name="stitches_A" class="form-control" id="inputEmail3" value="{{ old('stitches_A', $jobInfo->stitches_A ?? '')}}">
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" class="form-control" id="inputEmail3">
+                                                    <input type="number" name="stitches_B" class="form-control" id="inputEmail3" value="{{ old('stitches_A',$jobInfo->stitches_B ?? '')}}">
                                                 </td>
                                             </tr>
                                             <tr class="row d-flex align-items-center justify-content-center">
@@ -338,15 +340,15 @@
                                                 <td class="col-5">
                                                     <div class="input-group">
                                                         <span class="input-group-text" id="basic-addon1">$</span>
-                                                        <input type="number" id="price_A" class="form-control" placeholder="Price"
-                                                            aria-label="Username" aria-describedby="basic-addon1">
+                                                        <input type="number" id="price_A" name="price_A" class="form-control" placeholder="Price"
+                                                            aria-label="Username" aria-describedby="basic-addon1" value="{{ old('price_A', $jobInfo->price_A ?? '')}}">
                                                     </div>
                                                 </td>
                                                 <td class="col-5">
                                                     <div class="input-group">
                                                         <span class="input-group-text" id="basic-addon1">$</span>
-                                                        <input type="number" id="price_B" class="form-control" placeholder="Price"
-                                                            aria-label="Username" aria-describedby="basic-addon1">
+                                                        <input type="number" id="price_B" name="price_B" class="form-control" placeholder="Price"
+                                                            aria-label="Username" aria-describedby="basic-addon1" value="{{ old('price_B', $jobInfo->price_B ?? '')}}">
                                                     </div>
                                                 </td>
                                             </tr>
@@ -355,7 +357,7 @@
                                                     Total
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="number" class="form-control" id="total" name="total_price" readonly>
+                                                    <input type="number" class="form-control" id="total" name="total" readonly  value="{{ old('total',$jobInfo->total ?? '')}}">
                                                 </td>
                                                 <td class="col-5">
                                                     {{-- <input type="number" class="form-control" id="total_B" readonly> --}}
@@ -387,6 +389,8 @@
                                                     @endphp
                                                    
                                                     {{ $originalFilename }}
+                                                    <input class="form-check-input" checked type="checkbox" name="checkedOptionA"
+                                                    id="checkedOptionA" value="{{$originalFilename }}">
                                                     @endforeach
                                                 </td>
                                                 <td>
@@ -405,9 +409,9 @@
                                                         <br>
                                                         <div class="form-check">
                                                             @if($quote->email1)
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="gridCheck1">
-                                                            <label class="form-check-label" for="gridCheck1">
+                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail1"
+                                                            id="gridCheckemail1" value="{{$quote->email1}}">
+                                                            <label class="form-check-label" for="gridCheckemai11">
                                                              
                                                                {{$quote->email1}}
                                                             </label>
@@ -415,38 +419,35 @@
                                                         </div>
                                                         <div class="form-check">
                                                             @if($quote->email2)
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="gridCheck1">
-                                                            <label class="form-check-label" for="gridCheck1">
+                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail2"
+                                                            id="gridCheckemail2" value="{{$quote->email2}}">
+                                                            <label class="form-check-label" for="gridCheckemail2">
                                                             {{$quote->email2}}
                                                             </label>
                                                             @endif
                                                         </div>
                                                         <div class="form-check">
                                                             @if($quote->email4)
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="gridCheck1">
-                                                            <label class="form-check-label" for="gridCheck1">
+                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail3"
+                                                            id="gridCheckemail3" value="{{$quote->email3}}">
+                                                            <label class="form-check-label" for="gridCheckemail3">
                                                             {{$quote->email3}}
                                                             </label>
                                                             @endif
                                                         </div>
                                                         <div class="form-check">
                                                             @if($quote->email4)
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="gridCheck1">
-                                                            <label class="form-check-label" for="gridCheck1">
+                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail4"
+                                                                id="gridCheckemail4" value="{{$quote->email4}}">
+                                                            <label class="form-check-label" for="gridCheckemail4">
                                                             {{$quote->email4}}
                                                             </label>
                                                             @endif
                                                         </div>
                                                         <div class="form-check">
                                                             @if($quote->invoceEmail)
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="gridCheck1">
-                                                            <label class="form-check-label" for="gridCheck1">
-                                                            {{$quote->invoceEmail}}
-                                                            </label>
+                                                            <input checked class="form-check-input" type="checkbox" id="gridCheckinvoiceemail" name="gridCheckinvoiceemail" value="{{$quote->invoceEmail}}">
+                                                            <label for="gridCheckinvoiceemail">{{ $quote->invoceEmail }}</label>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -474,6 +475,8 @@
                                                     @endphp
                                                    
                                                     {{ $originalFilename }}
+                                                    <input class="form-check-input" checked type="checkbox" name="checkedOptionB"
+                                                    id="checkedOptionB" value="{{$originalFilename }}">
                                                     @endforeach
                                                 </td>
                                                 <td>
@@ -483,9 +486,9 @@
                                             </tr>
                                             <tr class="row">
                                                 <td>
-                                                    <strong>Comment</strong><br>
+                                                    {{-- <strong>Comment</strong><br>
                                                     <textarea class="form-control" placeholder="Leave a comment here"
-                                                        id="floatingTextarea" style="height: 150px;"></textarea>
+                                                        id="floatingTextarea" style="height: 150px;"></textarea> --}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -495,12 +498,12 @@
 
                             <div class="row d-flex justify-content-end align-items-center">
                                 <div class="col-2 d-flex">
-                                    <button type="button" class="btn btn-primary rounded-pill m-2">Send</button>
-                                    <button type="button" class="btn btn-dark rounded-pill m-2">Reset</button>
+                                    <button type="submit" class="btn btn-primary rounded-pill m-2">Send</button>
+                                    <button type="reset" class="btn btn-dark rounded-pill m-2">Reset</button>
                                 </div>
                             </div>
                         </div>
-
+                        </form>
 
                     </div>
                 </div>

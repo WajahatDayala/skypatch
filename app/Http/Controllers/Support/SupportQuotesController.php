@@ -23,6 +23,7 @@ use Auth;
 
 use App\Models\PricingCriteria;
 use App\Models\VectorDetail;
+use App\Models\JobInformation;
 
 class SupportQuotesController extends Controller
 {
@@ -218,6 +219,12 @@ class SupportQuotesController extends Controller
          ->where('vector_details.customer_id',$order->customer_id)
          ->first();
 
+           //jobinfo
+        $jobInfo = JobInformation::select('*')
+        ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+        ->where('job_information.quote_id',$id)
+        ->first();
+
 
         return view('support/quotes/show',compact(
             'order',
@@ -228,7 +235,8 @@ class SupportQuotesController extends Controller
             'adminInstruction',
             'optionA',
             'optionB',
-            'vectordetails'
+            'vectordetails',
+            'jobInfo'
         ));
     }
 
@@ -336,6 +344,15 @@ class SupportQuotesController extends Controller
         ->leftjoin('users','vector_details.customer_id','=','users.id')
         ->where('vector_details.customer_id',$quote->customer_id)
         ->first();
+
+        //jobinfo
+        $jobInfo = JobInformation::select('*')
+        ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+        ->where('job_information.quote_id',$id)
+        ->first();
+
+      
+        
    
    
            
@@ -350,7 +367,8 @@ class SupportQuotesController extends Controller
                'optionA',
                'optionB',
                'pricing',
-               'vectordetails'
+               'vectordetails',
+               'jobInfo'
            ));
        }
    
@@ -439,6 +457,39 @@ class SupportQuotesController extends Controller
                'adminInstruction'
            ));
        }
+
+
+       //send email process quotes
+       public function sendEmailAndQuotes(Request $request)
+       {
+
+            //quotes
+            $quote = Quote::where('id',$request->quote_id)->first();
+
+            //job process
+            $job = JobInformation::updateOrCreate(
+            ['quote_id' => $request->quote_id], // Condition to check if the record exists
+            [
+                'height_A' => $request->height_A,
+                'width_A' => $request->width_A,
+                'stitches_A' => $request->stitches_A,
+                'price_A' => $request->price_A,
+                'height_B' => $request->height_B,
+                'width_B' => $request->width_B,
+                'stitches_B' => $request->stitches_B,
+                'price_B' => $request->price_B,
+                'total' => $request->total
+            ]
+           );
+         
+           
+           $quote->update(['status_id' => 1]);
+
+           return redirect()->route('supportquotes.show',$request->quote_id)->with('success', 'Quote updated successfully!');
+
+
+       }
+
    
     /**
      * Show the form for editing the specified resource.
