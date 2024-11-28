@@ -1,8 +1,6 @@
 @extends('admin.orders.base')
 @section('action-content')
 
-
-
          <!-- All Content Goes inside this div -->
          <div class=" container-fluid py-4 px-4">
                 <div class="row g-4 d-flex align-items-center justify-content-center">
@@ -141,89 +139,11 @@
                                 </tbody>
                             </table>
 
-                            <!-- Modal for Reason -->
-                            <div class="modal fade" id="Reason" tabindex="-1" aria-labelledby="ReasonLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="ReasonLabel">Reasons</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="">
-                                                <div class="row mb-3">
-                                                    <label for="reasonSelect"
-                                                        class="col-sm-4 col-form-label text-end">Select Reason *</label>
-                                                    <div class="col-sm-8">
-                                                        <select class="form-select" id="reasonSelect"
-                                                            aria-label="Default select example">
-                                                            <option selected class='text-gray'>Select Format</option>
-                                                            <option value="1">Sales</option>
-                                                            <option value="2">Support</option>
-                                                            <option value="3">Accounts</option>
-                                                            <option value="4">Digitizer Leader</option>
-                                                            <option value="5">Digitizer</option>
-                                                            <option value="6">Vector Artist Leader</option>
-                                                            <option value="7">Vector Artist</option>
-                                                            <option value="8">Quote Digitizer Leader</option>
-                                                            <option value="9">Quote Digitizer</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Modal for Edit Reason Ends Here -->
+                           
 
-                            <!-- Modal for Edit Designer Start Here -->
-                            <div class="modal fade" id="Designer" tabindex="-1" aria-labelledby="DesignerLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="DesignerLabel">Designer Assignment</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="">
-                                                <div class="row mb-3">
-                                                    <label for="designerSelect"
-                                                        class="col-sm-4 col-form-label text-end">Select Designer
-                                                        *</label>
-                                                    <div class="col-sm-8">
-                                                        <select class="form-select" id="designerSelect"
-                                                            aria-label="Default select example">
-                                                            <option selected class='text-gray'>Select Designer</option>
-                                                            <option value="1">Designer 1</option>
-                                                            <option value="2">Designer 2</option>
-                                                            <option value="3">Designer 3</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Modal for Edit Designer Ends Here -->
 
                         </div>
-                        <form action="{{route('supportorders.send')}}" method="POST"  enctype="multipart/form-data">
+                        <form id="mainForm" action="{{route('supportorders.send')}}" method="POST">
                             @csrf
                         <div class="bg-table rounded h-100 p-4 mt-4">
                             <div class="row bg-dark p-2">
@@ -301,8 +221,26 @@
                                 </div>
                                 <div class="col-5">
                                     <table class="table table-bordered">
+                                        
                                         <tbody>
+                                            
                                             <tr class="row d-flex align-items-center justify-content-center">
+                                                
+                                            
+                                                <td class="col-2">
+                                                    
+                                                </td>
+                                                <td class="col-5 text-center">
+                                                   <b>Option A</b>
+                                                </td>
+                                                <td class="col-5 text-center">
+                                                    <b>Option B</b>
+                                                </td>
+                                            </tr>
+                                       
+                                            <tr class="row d-flex align-items-center justify-content-center">
+                                                
+                                            
                                                 <td class="col-2">
                                                     Height
                                                 </td>
@@ -389,16 +327,22 @@
                                                         $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                                                         $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
                                                     @endphp
-                                                   
-                                                    {{ $originalFilename }}
                                                     <input class="form-check-input" checked type="checkbox" name="checkedOptionA"
-                                                    id="checkedOptionA" value="{{$originalFilename }}">
-                                                    @endforeach
+                                                      id="checkedOptionA" value="{{$originalFilename }}">   
+                                                   {{ $originalFilename }}<br> <!-- Line break after filename -->
+                                                 
+                                                    @endforeach<br> <!-- Line break after filename -->
                                                 </td>
                                                 <td>
-                                                    <button type="button"
-                                                        class="btn btn-primary rounded-pill m-2">Upload Files</button>
+                                                  
+                                                    <button type="button" class="btn btn-sm rounded-pill btn-primary m-2" data-bs-toggle="modal" data-bs-target="#fileUploadModalA">
+                                                        Upload Files
+                                                    </button>
+                                             
+
                                                 </td>
+                                                
+                                             
                                             </tr>
                                             <tr class="row">
                                                 <td>
@@ -475,15 +419,15 @@
                                                         $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                                                         $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
                                                     @endphp
-                                                   
-                                                    {{ $originalFilename }}
                                                     <input class="form-check-input" checked type="checkbox" name="checkedOptionB"
                                                     id="checkedOptionB" value="{{$originalFilename }}">
+                                                    {{ $originalFilename }}<br> <!-- Line break after filename -->
+                                                   
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                    <button type="button"
-                                                        class="btn btn-primary rounded-pill m-2">Upload Files</button>
+                                                    <button type="button" class="btn btn-sm rounded-pill btn-primary m-2"
+                                                    data-bs-toggle="modal" data-bs-target="#fileUploadModal">Upload Files</button>
                                                 </td>
                                             </tr>
                                             <tr class="row">
@@ -510,6 +454,77 @@
                     </div>
                 </div>
             </div>
+
+
+            <!-- file optionA -->
+            
+ <!-- Modal for Option A -->
+ <div class="modal fade" id="fileUploadModalA" tabindex="-1" aria-labelledby="fileUploadModalLabelA" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileUploadModalLabelA">Upload Files</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="fileUploadFormA" action="{{ route('allorders.optionA') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label hidden for="order_id">Order ID</label>
+                        <input type="text" hidden class="form-control" id="order_id" name="order_id" required value="{{ $order->order_id }}">
+                    </div>
+                    <input type="file" class="form-control" id="filesA" name="filesA[]" multiple>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="btnUploadA" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--option B -->
+       <!-- Modal for Multiple File Upload -->
+       <div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog"
+       aria-labelledby="fileUploadModalLabel" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <h5 class="modal-title" id="fileUploadModalLabel">Upload Files</h5>
+                   <button type="button" class="btn-close" data-bs-dismiss="modal"
+                       aria-label="Close"></button>
+               </div>
+               <form id="fileUploadForm" method="POST"
+                   action="{{route('allorders.optionB')}}"
+                   enctype="multipart/form-data">
+                   @csrf
+                   <div class="modal-body">
+                     
+                       <div class="form-group">
+                           <label hidden for="order_id">Order ID</label>
+                           <input type="text" class="form-control" hidden
+                               id="order_id" name="order_id" required
+                               value="{{ $order->order_id }}">
+                       </div>
+                       <div class="form-group">
+                           <label for="files">Choose Files</label>
+                           <input type="file" class="form-control" id="files"
+                               name="filesB[]" multiple required>
+                       </div>
+                   </div>
+                   <div class="modal-footer">
+                       <button type="button" class="btn btn-secondary"
+                           data-bs-dismiss="modal">Close</button>
+                       <button type="submit" class="btn btn-primary">Upload</button>
+                   </div>
+               </form>
+           </div>
+       </div>
+   </div>
+
+   <!-- end file upload-->
+
             <!-- Content Div Ends here End -->
 
             <script>
@@ -532,6 +547,13 @@
              // Add event listeners to update totals when prices change
              priceA.addEventListener('input', updateTotal);
              priceB.addEventListener('input', updateTotal);
+             
              </script>
- 
+
+<!-- Include Bootstrap Bundle JS -->
+
+
+
+
+
 @endsection

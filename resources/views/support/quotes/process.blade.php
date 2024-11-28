@@ -301,6 +301,19 @@
                                     <table class="table table-bordered">
                                         <tbody>
                                             <tr class="row d-flex align-items-center justify-content-center">
+                                                
+                                            
+                                                <td class="col-2">
+                                                    
+                                                </td>
+                                                <td class="col-5 text-center">
+                                                   <b>Option A</b>
+                                                </td>
+                                                <td class="col-5 text-center">
+                                                    <b>Option B</b>
+                                                </td>
+                                            </tr>   
+                                            <tr class="row d-flex align-items-center justify-content-center">
                                                 <td class="col-2">
                                                     Height
                                                 </td>
@@ -387,15 +400,17 @@
                                                         $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                                                         $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
                                                     @endphp
-                                                   
-                                                    {{ $originalFilename }}
                                                     <input class="form-check-input" checked type="checkbox" name="checkedOptionA"
                                                     id="checkedOptionA" value="{{$originalFilename }}">
+                                                    {{ $originalFilename }}<br>
+                                                   
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                    <button type="button"
-                                                        class="btn btn-primary rounded-pill m-2">Upload Files</button>
+                                                    
+                                                    <button type="button" class="btn btn-sm rounded-pill btn-primary m-2"
+                                                        data-bs-toggle="modal" data-bs-target="#fileUploadModal1">Upload Files</button>
+                                                   
                                                 </td>
                                             </tr>
                                             <tr class="row">
@@ -473,15 +488,17 @@
                                                         $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                                                         $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
                                                     @endphp
-                                                   
-                                                    {{ $originalFilename }}
                                                     <input class="form-check-input" checked type="checkbox" name="checkedOptionB"
                                                     id="checkedOptionB" value="{{$originalFilename }}">
+                                                    {{ $originalFilename }}<br>
+                                                   
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                    <button type="button"
-                                                        class="btn btn-primary rounded-pill m-2">Upload Files</button>
+                                                    @if ($quote->edit_status == 1)
+                                                    <button type="button" class="btn btn-sm rounded-pill btn-primary m-2"
+                                                        data-bs-toggle="modal" data-bs-target="#fileUploadModal">Upload Files</button>
+                                                   @endif
                                                 </td>
                                             </tr>
                                             <tr class="row">
@@ -509,6 +526,89 @@
                 </div>
             </div>
             <!-- Content Div Ends here End -->
+
+            <!-- option A -->
+             <!-- Modal for Multiple File Upload -->
+             <div class="modal fade" id="fileUploadModal1" tabindex="-1" role="dialog"
+             aria-labelledby="fileUploadModalLabel1" aria-hidden="true">
+             <div class="modal-dialog" role="document">
+                 <div class="modal-content">
+                     <div class="modal-header">
+                         <h5 class="modal-title" id="fileUploadModalLabel1">Upload Files</h5>
+                         <button type="button" class="btn-close" data-bs-dismiss="modal"
+                             aria-label="Close"></button>
+                     </div>
+                     <form id="fileUploadForm1" method="POST"
+                         action="{{route('allquotes.optionA')}}"
+                         enctype="multipart/form-data">
+                         @csrf
+                         <div class="modal-body">
+                            
+                             <div class="form-group">
+                                 <label hidden for="order_id">Order ID</label>
+                                 <input type="text" hidden class="form-control" 
+                                     id="order_id" name="order_id" required
+                                     value="{{ $quote->quote_id }}">
+                             </div>
+                             <div class="form-group">
+                                 <label for="files">Choose Files</label>
+                                 <input type="file" class="form-control" id="files"
+                                     name="filesA[]" multiple required>
+                             </div>
+                         </div>
+                         <div class="modal-footer">
+                             <button type="button" class="btn btn-secondary"
+                                 data-bs-dismiss="modal">Close</button>
+                             <button type="submit" class="btn btn-primary">Upload</button>
+                         </div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+
+         <!-- end file upload-->
+
+         <!--option b -->
+          <!-- Modal for Multiple File Upload -->
+          <div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog"
+          aria-labelledby="fileUploadModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="fileUploadModalLabel">Upload Files</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                          aria-label="Close"></button>
+                  </div>
+                  <form id="fileUploadForm" method="POST"
+                      action="{{route('allquotes.optionB')}}"
+                      enctype="multipart/form-data">
+                      @csrf
+                      <div class="modal-body">
+                        
+                          <div class="form-group">
+                              <label hidden for="order_id">Order ID</label>
+                              <input type="text" class="form-control" hidden
+                                  id="order_id" name="order_id" required
+                                  value="{{ $quote->quote_id }}">
+                          </div>
+                          <div class="form-group">
+                              <label for="files">Choose Files</label>
+                              <input type="file" class="form-control" id="files"
+                                  name="filesB[]" multiple required>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary"
+                              data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Upload</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+
+      <!-- end file upload-->
+
 
             <!-- Add this script to enable dynamic price updates -->
 <script>

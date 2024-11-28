@@ -96,13 +96,12 @@
 
   <!-- new script for admintheme-->
    
-<script src="{{ asset('admintheme/assets/js/scripts.js')}}"></script>
 
 
  <!-- JavaScript Libraries -->
  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ asset('skypatch/lib/chart/chart.min.js')}}"></script>
+  <script src="{{ asset('skypatch/lib/chart/c   hart.min.js')}}"></script>
   <script src="{{ asset('skypatch/lib/easing/easing.min.js')}}"></script>
   <script src="{{ asset('skypatch/lib/waypoints/waypoints.min.js')}}"></script>
   <script src="{{ asset('skypatch/lib/owlcarousel/owl.carousel.min.js')}}"></script>
@@ -112,7 +111,8 @@
   <script  type="text/css" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <!-- Template Javascript -->
   <script src="{{ asset('skypatch/js/main.js')}}"></script>
- 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <script>
     
 $(document).ready( function () {

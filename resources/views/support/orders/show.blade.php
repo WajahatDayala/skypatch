@@ -90,19 +90,27 @@
 
                         
                         <tr class="row">
-                            <td class="col-6">
+                            <td class="col-4">
                                 <strong class="">Price</strong><br>
                                 <p>{{ $jobInfo->total ?? ''}}</p>
                                     <!-- <button type="button"
                                                     class="btn btn-sm rounded-pill btn-primary m-2">Update</button> -->
 
                             </td>
-                            <td class="col-6">
-                                <strong>Stitching </strong><br>
+                            <td class="col-4">
+                                <strong>Stitching A </strong> 
                                 <p>
                                     {{ $jobInfo->stitches_A ?? ''}}
-
-                                </p>
+                                  
+                                </p> 
+                              
+                            </td>
+                            <td class="col-4">
+                                <strong>Stitching B  </strong>   <p>
+                                    {{ $jobInfo->stitches_B ?? ''}}
+                                  
+                                </p> 
+                              
                             </td>
                         </tr>
 
@@ -311,13 +319,14 @@ Update
 </div>
 <!-- order status end-->
                                                 </p>
+                                                @if($order->status_id ==1)
                                             <p class="mb-0">{{$order->reason_name ? $order->reason_name : 'Reason' }} |
                                                 <button type="button" class="btn btn-sm rounded-pill btn-primary"
                                                     data-bs-toggle="modal" data-bs-target="#reasonModal">
                                                   
                                                     Reason Not Specified
                                                     
-                                                </button>
+                                                </button>  @endif
                                                 <!-- Modal Reason -->
 <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -359,6 +368,7 @@ Update
 </div>
 <!-- end reasons -->
                                             </p>
+                                          
                                         </td>
                                         @else
                                         <td class="col-3">
