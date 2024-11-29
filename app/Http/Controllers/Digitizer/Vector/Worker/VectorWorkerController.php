@@ -16,7 +16,7 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
-
+use App\Models\VectorDetail;
 use Auth;
 class VectorWorkerController extends Controller
 {
@@ -153,6 +153,13 @@ class VectorWorkerController extends Controller
                ->where('options.vector_order_id',$id)
                ->get();
 
+                       //vector details
+              $vectordetails = VectorDetail::select('*')
+              ->leftjoin('users','vector_details.customer_id','=','users.id')
+              ->where('vector_details.customer_id',$order->customer_id)
+              ->first();
+  
+
           return view('digitizer/vector-worker/order/process',compact(
             'order',
             'orderStatus',
@@ -161,7 +168,8 @@ class VectorWorkerController extends Controller
             'adminInstruction',
             'orderInstruction',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails'
         )); 
     }
 
@@ -258,6 +266,12 @@ class VectorWorkerController extends Controller
                ->where('options.vector_order_id',$id)
                ->get();
 
+                           //vector details
+              $vectordetails = VectorDetail::select('*')
+              ->leftjoin('users','vector_details.customer_id','=','users.id')
+              ->where('vector_details.customer_id',$order->customer_id)
+              ->first();
+
           return view('digitizer/vector-worker/order/show',compact(
             'order',
             'orderStatus',
@@ -266,7 +280,8 @@ class VectorWorkerController extends Controller
             'adminInstruction',
             'orderInstruction',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails'
         )); 
     }
 

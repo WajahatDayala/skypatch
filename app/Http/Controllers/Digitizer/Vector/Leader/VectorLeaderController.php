@@ -16,6 +16,8 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
+use App\Models\VectorDetail;
+
 
 use Auth;
 class VectorLeaderController extends Controller
@@ -153,6 +155,15 @@ class VectorLeaderController extends Controller
                ->where('options.vector_order_id',$id)
                ->get();
 
+                  //vector details
+              $vectordetails = VectorDetail::select('*')
+              ->leftjoin('users','vector_details.customer_id','=','users.id')
+              ->where('vector_details.customer_id',$order->customer_id)
+              ->first();
+  
+           
+   
+
           return view('digitizer/vector-leader/order/process',compact(
             'order',
             'orderStatus',
@@ -161,7 +172,8 @@ class VectorLeaderController extends Controller
             'adminInstruction',
             'orderInstruction',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails'
         )); 
     }
 
@@ -257,6 +269,12 @@ class VectorLeaderController extends Controller
                ->where('options.vector_order_id',$id)
                ->get();
 
+                        //vector details
+              $vectordetails = VectorDetail::select('*')
+              ->leftjoin('users','vector_details.customer_id','=','users.id')
+              ->where('vector_details.customer_id',$order->customer_id)
+              ->first();
+
           return view('digitizer/vector-leader/order/show',compact(
             'order',
             'orderStatus',
@@ -265,7 +283,8 @@ class VectorLeaderController extends Controller
             'adminInstruction',
             'orderInstruction',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails'
         )); 
     }
 
