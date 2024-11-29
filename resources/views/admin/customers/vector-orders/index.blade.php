@@ -1,4 +1,4 @@
-@extends('customer.vector-orders.base')
+@extends('admin.customers.vector-orders.base')
 @section('action-content')
 
 
@@ -47,7 +47,7 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="{{ route('vector-orders.show',['vector_order'=>$q->order_id]) }}">Details</a>
+                                        href="{{ route('customer.show-vector-order',['id'=>$q->order_id]) }}">Details</a>
                                 </td>
                             </tr>
                             @endforeach

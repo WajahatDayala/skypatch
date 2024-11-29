@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\VectorOrder;
+use App\Models\VectorRequiredFormat;
 use App\Models\Quote;
 use App\Models\QuoteFileLog;
 use App\Models\Instruction;
@@ -23,6 +24,7 @@ use App\Models\Admin;
 use App\Models\Invoice;
 use App\Models\InvoiceDetail;
 use App\Models\PricingCriteria;
+use App\Models\Option;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use Carbon\Carbon;
@@ -571,6 +573,7 @@ class CustomerController extends Controller
     {
         $user = Quote::select('*','quotes.customer_id')
         ->join('users','quotes.customer_id','=','users.id')
+        ->where('quotes.id',$id)
         ->first();
 
         $order = Quote::findOrFail($id);
@@ -650,6 +653,10 @@ class CustomerController extends Controller
     public function editQuote(string $id)
     {
         //
+        $user = Quote::select('*','quotes.customer_id')
+        ->join('users','quotes.customer_id','=','users.id')
+        ->where('quotes.id',$id)
+        ->first();
         $quote = Quote::findOrFail($id);
 
         $requiredFormat = RequiredFormat::all();
@@ -696,8 +703,910 @@ class CustomerController extends Controller
             'requiredFormat',
             'fabric',
             'quoteInstruction',
+            'placement',
+            'user'
+        ));
+    }
+
+    //update Quote from customer panel by admin role
+    public function updateQuote(Request $request)
+    {
+         // Validate the request
+         $validatedData = $request->validate([
+            'name' => 'required',
+            'required_format_id' => 'required',
+            'fabric_id' => 'required',
+            'placement_id' => 'required'
+        ], [
+            'name.required' => 'Name is required.',
+            'required_format_id.required' => 'Format is required.',
+            'fabric_id.required' => 'Fabric is required.',
+            'placement_id.required' => 'Placement is required.'
+        ]);
+    
+        DB::beginTransaction();
+        $quote = Quote::findOrFail($request->quote_id);
+    
+        try {
+      
+
+
+            $quote->update(['edit_status' => 0]);
+
+
+            // Create a new Quote
+            if ($quote->quote_id == null) {
+                $quote = Quote::create([
+                    'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                    'required_format_id' => $request->required_format_id,
+                    'fabric_id' => $request->fabric_id,
+                    'placement_id' => $request->placement_id,
+                    'status_id' => $request->status,
+                    'quote_id_edit' => $quote->id,
+                    'edit_status' => 1,
+                    'description' => $request->desc . '(' . 'QT-' . $quote->id.')',
+                    'name' => $request->name,
+              
+                    'height' => $request->height,
+                    'width' => $request->width,
+                    'number_of_colors' => $request->number_of_colors,
+                    'super_urgent' => $request->has('super_urgent'),
+                ]);
+            } else {
+
+                
+                $quote = Quote::create([
+                    'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                    'required_format_id' => $request->required_format_id,
+                    'fabric_id' => $request->fabric_id,
+                    'placement_id' => $request->placement_id,
+                    'status_id' => $request->status,
+                    'quote_id_edit' => $quote->id,
+                    'edit_status' => 1,
+                    'description' => $request->desc . '(QT-' . (string)$request->quote_id . '),(QT-' . (string)$quote->id . ')',
+                    //'name' => $request->name . '(QT-'.''.$id.'),('.'QT-'.$quote->id.')',
+                    'name' => $request->name,
+
+                    'height' => $request->height,
+                    'width' => $request->width,
+                    'number_of_colors' => $request->number_of_colors,
+                    'super_urgent' => $request->has('super_urgent'),
+                ]);
+
+            }
+    
+
+            //removed quote edit Id
+            // $quoteId =  new QuoteEditID();
+            // $quoteId->quote_id = $quote->id;
+            // $quoteId->save();
+
+            // Handle file uploads
+            if ($request->hasFile('files')) {
+                // Fetch and delete existing files
+                $existingFiles = QuoteFileLog::where('quote_id', $quote->id)->get();
+                foreach ($existingFiles as $fileLog) {
+                    Storage::disk('public')->delete($fileLog->files);
+                    $fileLog->delete();
+                }
+    
+                // Store new files
+                foreach ($request->file('files') as $file) {
+                    $filePath = $file->store('uploads/quotes', 'public');
+
+                                               // Get the original filename
+                 $originalFilename = $file->getClientOriginalName();
+     
+                 // Create a structured string to store both path and original filename
+                 $fileData = [
+                     'path' => $filePath,
+                     'original_name' => $originalFilename,
+                 ];
+
+                    QuoteFileLog::create([
+                        'quote_id' => $quote->id,
+                        'cust_id' => $request->customer_id,
+                        'files' => json_encode($fileData),
+                    ]);
+                }
+            }
+    
+            // Update additional instructions
+            if ($request->filled('additional_instruction')) {
+                Instruction::updateOrCreate(
+                    ['quote_id' => $quote->id],
+                    ['description' => $request->additional_instruction]
+                );
+            }
+    
+            DB::commit();
+            
+            //return redirect()->route('quotes.edit', $quote->id)->with('success', 'Quote updated successfully!');
+            return redirect()->route('customer.all-quotes',$request->customer_id)->with('success', 'Quote updated successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Error updating quote: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'An error occurred while updating the quote.']);
+        }
+    }
+
+    //orders for customer panel by admin
+    public function allOrders(string $id)
+    {
+        $user = User::find($id);
+        $orders = Order::select('*',
+        'orders.id as order_id',
+        'users.name as customer_name',
+        'orders.name as design_name',
+        'statuses.name as status',
+        'orders.created_at as createdAt'
+        )
+        ->join('users','orders.customer_id','=','users.id')
+        ->join('statuses','orders.status_id','statuses.id')
+        ->where('customer_id',$user->id)
+        ->orderBy('orders.id', 'DESC')  
+        ->orderBy('orders.created_at', 'DESC')  
+        ->orderBy('design_name', 'ASC')  
+        ->get();
+
+
+       
+        return view('admin/customers/orders/index',compact('user'),['orders'=>$orders]);
+
+    }
+
+    //create Order for customer panel by admin roles
+    public function createOrder(string $id)
+    {
+        $user = User::find($id);
+        $requiredFormat = RequiredFormat::all();
+        $fabric = Fabric::all();
+        $placement = Placement::all();
+       
+        return view('admin.customers.orders.add',
+        compact(
+            'user',
+            'requiredFormat',
+            'fabric',
             'placement'
         ));
+
+    }
+
+    //store Order for customer panel by admin
+     public function storeOrder(Request $request)
+     {
+         // Validate the request
+         $validatedData = $request->validate([
+            'name' => 'required',
+            'required_format_id' => 'required',
+            'fabric_id' => 'required',
+            'placement_id' => 'required'
+        ], [
+            'name.required' => 'Name is required.',
+            'required_format_id.required' => 'Format is required.',
+            'fabric_id.required' => 'Fabric is required.',
+            'placement_id.required' => 'Placement is required.'
+        ]);
+
+       
+
+        // Start a database transaction
+        DB::beginTransaction();
+
+        try {
+
+            $user = User::findOrFail($request->customer_id);
+
+           
+            // Create a new Quote
+            $quote = Order::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'fabric_id' => $request->fabric_id,
+                'placement_id' => $request->placement_id,
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'height' => $request->height,
+                'width' => $request->width,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+                'delivery_type_id' =>$request->delivery_type,
+                
+            ]);
+
+            // Handle file uploads
+                if ($request->hasFile('files')) {
+                    foreach ($request->file('files') as $file) {
+                        // Store the file and get its path
+                        $filePath = $file->store('uploads/quotes', 'public'); // Store in public/uploads/quotes
+                        
+
+
+                           
+                   // Get the original filename
+                  $originalFilename = $file->getClientOriginalName();
+
+                // Create a structured string or array to store in the files column
+                    $fileData = [
+                     'path' => $filePath,
+                     'original_name' => $originalFilename,
+                    ];
+
+
+                        // Insert into QuoteFileLog
+                        QuoteFileLog::create([
+                            'order_id' => $quote->id,
+                            'cust_id' => $request->customer_id,
+                            'files' => json_encode($fileData),
+                        ]);
+                    }
+                }
+
+                
+                //check additonal fields
+                if($request->filled('additional_instruction')){
+                    Instruction::create([
+                        'cust_id' => $request->customer_id,
+                        'description' => $request->additional_instruction,
+                        'order_id' => $quote->id,
+                    ]);
+                }
+
+
+            // Commit the transaction
+            DB::commit();
+            
+            $request->session()->flash('order',$request['name']);
+
+            return redirect()->route('customer.all-orders',$user->id)->with('success', 'Order created successfully!');
+            
+        } catch (\Exception $e) {
+            // Rollback the transaction if there's an error
+           // DB::rollBack();
+            
+            // Log the error
+           // \Log::error('Error creating Order: ' . $e->getMessage());
+
+            // Redirect back with error message
+            return back()->withErrors(['error' => 'An error occurred while creating the Order.']);
+        }
+     }
+   
+    //show order customer panel
+    public function showOrder(string $id)
+    {
+        //
+
+        $user = Order::select('*','orders.customer_id')
+        ->join('users','orders.customer_id','=','users.id')
+        ->where('orders.id',$id)
+        ->first();
+
+        $order = Order::findOrFail($id);
+
+        $order = Order::select(
+            '*',
+            'orders.id as order_id',
+            'orders.name as design_name',
+            'users.name as customer_name',
+            'admins.id as designer_id',
+            'admins.name as designer_name',
+            'statuses.name as status',
+            'ordersStatus.name as order_status_name',
+            'fabrics.name as fabric_name',
+            'required_formats.name as format',
+            'placements.name as placement',
+            'users.name as customer_name',
+            'orders.created_at as received_date',
+            'reason_edits.reason as reason_name',
+            'orders.name as design_name'
+        )
+            ->join('users', 'orders.customer_id', '=', 'users.id')
+            ->join('statuses', 'orders.status_id', '=', 'statuses.id')
+            ->join('fabrics', 'orders.fabric_id', '=', 'fabrics.id')
+            ->join('placements', 'orders.placement_id', '=', 'placements.id')
+            ->join('required_formats', 'orders.required_format_id', '=', 'required_formats.id')
+            ->leftjoin('admins', 'orders.designer_id', '=', 'admins.id')
+            ->leftjoin('statuses as ordersStatus', 'orders.order_status', 'ordersStatus.id')
+            ->leftjoin('reason_edits', 'orders.edit_reason_id', 'reason_edits.id')
+            ->where('orders.id', $order->id)
+            ->first();
+
+        //instruction
+        $orderInstruction = Order::select('*', 'instructions.description as instruction')
+            ->leftjoin('instructions', 'instructions.order_id', '=', 'orders.id')
+            ->where('instructions.order_id', $id)
+            ->first();
+
+
+        //admin instruction
+        $adminInstruction = Order::select('*', 'instructions.description as instruction')
+            ->join('instructions', 'instructions.order_id', '=', 'orders.id')
+            ->leftjoin('admins', 'instructions.emp_id', 'admins.id')
+            ->leftjoin('roles', 'admins.role_id', 'roles.id')
+            ->where('instructions.order_id', $id)
+            ->where('roles.name', 'Admin')
+            ->first();
+
+        //files
+        $orderFiles = QuoteFileLog::select('*', 'quote_file_logs.id as fileId')
+            ->where('order_id', $id)->get();
+
+        //order status
+        $orderStatus = Status::where('status_value', 1)->get();
+
+        //Allreasons
+       // $allReasons = ReasonEdit::all();
+
+
+        //designer
+        $designer = Admin::select('*', 'admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
+            ->join('roles', 'admins.role_id', '=', 'roles.id')
+            ->whereIn(
+                'roles.name',
+                ['Quote Worker', 'Order Worker', 'Vector Worker']
+            )
+            ->get();
+
+            
+             //options A
+             $optionA = Option::select('*','options.id as fileId')
+             ->join('orders','options.order_id','orders.id')
+             ->where('option_type','A')
+             ->where('options.order_id',$id)
+             ->get();
+            
+   
+               //options B
+             $optionB = Option::select('*','options.id as fileId')
+              ->join('orders','options.order_id','orders.id')
+              ->where('option_type','B')
+              ->where('options.order_id',$id)
+               ->get();
+   
+   
+
+
+        return view('admin/customers/orders/show', compact(
+            'order',
+            'designer',
+            'orderStatus',
+            'orderFiles',
+            'orderInstruction',
+            'adminInstruction',
+            'optionA',
+            'optionB',
+            'user'
+        ));
+    }
+
+    //edit orders for customer panel by admin roles
+    public function editOrder(string $id){
+       
+        $user = Order::select('*','orders.customer_id')
+        ->join('users','orders.customer_id','=','users.id')
+        ->where('orders.id',$id)
+        ->first();
+
+        $order = Order::findOrFail($id);
+      
+        $requiredFormat = RequiredFormat::all();
+        $fabric = Fabric::all();
+        $placement = Placement::all();
+       
+
+        $order = Order::select('*', 
+        'orders.id as order_id',
+        'orders.name as design_name',
+        'users.name as customer_name', 
+        'statuses.name as status',
+        'fabrics.name as fabric_name',
+        'required_formats.name as format',
+        'placements.name as placement',
+        'users.name as customer_name',
+        'orders.created_at as received_date',
+        'orders.name as design_name')
+        ->join('users', 'orders.customer_id', '=', 'users.id')
+        ->join('statuses','orders.status_id','=','statuses.id')
+        ->join('fabrics','orders.fabric_id','=','fabrics.id')
+        ->join('placements','orders.placement_id','=','placements.id')
+        ->join('required_formats','orders.required_format_id','=','required_formats.id')
+        ->where('orders.id', $order->id) 
+        ->first(); 
+
+        //order files
+        $quoteFiles =QuoteFileLog::select('*')
+        ->join('orders','quote_file_logs.order_id','=','orders.id')
+        ->where('quote_file_logs.order_id',$order->order_id)
+        ->get();
+
+        //instruction
+        $orderInstruction = Order::select('*','instructions.description as instruction') 
+        ->leftjoin('instructions','instructions.order_id','=','orders.id')
+        ->where('instructions.order_id',$order->order_id)
+        ->first();
+
+
+        return view('admin/customers/orders/edit',compact(
+            'order',
+            'quoteFiles',
+            'requiredFormat',
+            'fabric',
+            'orderInstruction',
+            'placement',
+            'user'
+        ));
+    }
+
+    //update order for customer panel by admin roles
+    public function updateOrder(Request $request)
+    {
+         // Validate the request
+         $validatedData = $request->validate([
+            'name' => 'required',
+            'required_format_id' => 'required',
+            'fabric_id' => 'required',
+            'placement_id' => 'required'
+        ], [
+            'name.required' => 'Name is required.',
+            'required_format_id.required' => 'Format is required.',
+            'fabric_id.required' => 'Fabric is required.',
+            'placement_id.required' => 'Placement is required.'
+        ]);
+    
+        DB::beginTransaction();
+        $order = Order::findOrFail($request->order_id);
+    
+        try {
+
+             
+            
+        //status update 
+        $order->update(['edit_status' => 0]);
+
+            
+        if ($order->order_id == null) {
+
+            $order = order::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'fabric_id' => $request->fabric_id,
+                'placement_id' => $request->placement_id,
+                'edit_order_id' => $order->id,
+                'edit_status' => 1,
+                'description' => $request->desc . '(' . 'OR-' . $order->id.')',
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'height' => $request->height,
+                'width' => $request->width,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+
+            ]);
+        }
+        else{
+            $order = order::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'fabric_id' => $request->fabric_id,
+                'placement_id' => $request->placement_id,
+                'edit_order_id' => $order->id,
+                'edit_status' => 1,
+                
+                'description' => $request->desc . '(OR-' . (string)$request->order_id . '),(OR-' . (string)$order->id . ')',
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'height' => $request->height,
+                'width' => $request->width,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+
+            ]);
+        }
+           
+
+            // Handle file uploads
+            if ($request->hasFile('files')) {
+                // Fetch and delete existing files
+                $existingFiles = QuoteFileLog::where('order_id', $order->id)->get();
+                foreach ($existingFiles as $fileLog) {
+                    Storage::disk('public')->delete($fileLog->files);
+                    $fileLog->delete();
+                 
+                }
+    
+                // Store new files
+            foreach ($request->file('files') as $file) {
+                    $filePath = $file->store('uploads/quotes', 'public');
+
+                    // Get the original filename
+                    $originalFilename = $file->getClientOriginalName();
+
+        // Create a structured string to store both path and original filename
+            $fileData = [
+                        'path' => $filePath,
+                        'original_name' => $originalFilename,
+                        ];
+                 
+                    QuoteFileLog::create([
+                        'order_id' => $order->id,
+                        'cust_id' => $request->customer_id,
+                        'files' => json_encode($fileData),
+                    ]);
+                }
+            }
+    
+            // Update additional instructions
+            if ($request->filled('additional_instruction')) {
+                Instruction::updateOrCreate(
+                    ['order_id' => $order->id],
+                    ['description' => $request->additional_instruction]
+                );
+            }
+    
+            DB::commit();
+            
+            //return redirect()->route('orders.edit', $order->id)->with('success', 'Order updated successfully!');
+            return redirect()->route('customer.all-orders',$request->customer_id)->with('success', 'Order updated successfully!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            //\Log::error('Error updating Order: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'An error occurred while updating the Order.']);
+        }
+    }
+
+
+    //vector order customer panel by admin roles
+
+    public function allVectorOrder(string $id)
+    {
+        $user = User::findorFail($id);
+        $orders = VectorOrder::select('*',
+        'vector_orders.id as order_id',
+        'users.name as customer_name',
+        'vector_orders.name as design_name',
+        'statuses.name as status'
+        )
+        ->join('users','vector_orders.customer_id','=','users.id')
+        ->join('statuses','vector_orders.status_id','statuses.id')
+        ->where('customer_id',$id)
+        ->orderBy('design_name','asc')
+        ->get();
+
+      
+
+        return view('admin/customers/vector-orders/index',
+        [
+            'orders'=>$orders
+        ],compact('user'));
+    }
+
+    //create Vector Order for customer panel by admin roles
+    public function createVectorOrder(string $id)
+    {
+        $user = User::find($id);
+        $requiredFormat = VectorRequiredFormat::all();
+       
+       
+        return view('/admin/customers/vector-orders/add',
+        compact(
+            'requiredFormat',
+            'user'
+        ));
+    }
+
+    
+    //store Vector Order for customer panel by admin
+    public function storeVectorOrder(Request $request)
+    {
+         // Validate the request
+         $validatedData = $request->validate([
+            'name' => 'required',
+            'required_format_id' => 'required'
+           
+        ], [
+            'name.required' => 'Name is required.',
+            'required_format_id.required' => 'Format is required.'
+           
+        ]);
+
+        // Start a database transaction
+        DB::beginTransaction();
+
+        try {
+
+            $user = User::findOrFail($request->customer_id);
+
+           
+            // Create a new Order
+            $order = VectorOrder::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+            ]);
+
+            // Handle file uploads
+                if ($request->hasFile('files')) {
+                    foreach ($request->file('files') as $file) {
+                        // Store the file and get its path
+                        $filePath = $file->store('uploads/vector-order', 'public'); // Store in public/uploads/quotes
+                        
+                              // Get the original filename
+                 $originalFilename = $file->getClientOriginalName();
+     
+                 // Create a structured string to store both path and original filename
+                 $fileData = [
+                     'path' => $filePath,
+                     'original_name' => $originalFilename,
+                 ];
+                        // Insert into QuoteFileLog
+                        QuoteFileLog::create([
+                            'vector_order_id' => $order->id,
+                            'cust_id' => $request->customer_id,
+                            'files' => json_encode($fileData),
+                        ]);
+                    }
+                }
+
+                //check additonal fields
+                if($request->filled('additional_instruction')){
+                    Instruction::create([
+                        'cust_id' => $request->customer_id,
+                        'description' => $request->additional_instruction,
+                        'vector_id' => $order->id,
+                    ]);
+                }
+
+
+            // Commit the transaction
+            DB::commit();
+            
+            $request->session()->flash('order',$request['name']);
+
+            return redirect()->route('customer.all-vector-orders',$user->id)->with('success', 'Order created successfully!');
+            
+        } catch (\Exception $e) {
+            // Rollback the transaction if there's an error
+            DB::rollBack();
+            
+            // Log the error
+           // \Log::error('Error creating Order: ' . $e->getMessage());
+
+            // Redirect back with error message
+            return back()->withErrors(['error' => 'An error occurred while creating the Order.']);
+        }
+    }
+
+
+    //show vector order for customer panel by admin roles
+    public function showVectorOrder(string $id)
+    {
+        $user = VectorOrder::select('*','vector_orders.customer_id')
+        ->join('users','vector_orders.customer_id','=','users.id')
+        ->where('vector_orders.id',$id)
+        ->first();
+
+        $order = VectorOrder::findOrFail($id);
+
+        $order = VectorOrder::select('*', 
+        'vector_orders.id as order_id',
+        'vector_orders.name as design_name',
+        'users.name as customer_name', 
+        'statuses.name as status',
+        'vector_required_formats.name as format',
+        'users.name as customer_name',
+        'vector_orders.created_at as received_date',
+        'vector_orders.name as design_name')
+        ->join('users', 'vector_orders.customer_id', '=', 'users.id')
+        ->join('statuses','vector_orders.status_id','=','statuses.id')
+        ->join('vector_required_formats','vector_orders.required_format_id','=','vector_required_formats.id')
+        ->where('vector_orders.id', $order->id) 
+        ->first(); 
+
+
+
+        //instruction
+        $orderInstruction = VectorOrder::select('*','instructions.description as instruction') 
+        ->leftjoin('instructions','instructions.vector_id','=','vector_orders.id')
+        ->where('instructions.vector_id',$order->order_id)
+        ->first();
+
+         //options A
+         $optionA = Option::select('*')
+         ->join('vector_orders','options.vector_order_id','vector_orders.id')
+         ->where('option_type','A')
+         ->where('options.vector_order_id',$id)
+         ->get();
+
+           //options B
+         $optionB = Option::select('*')
+         ->join('vector_orders','options.vector_order_id','vector_orders.id')
+           ->where('option_type','B')
+           ->where('options.vector_order_id',$id)
+           ->get();
+
+
+        return view('admin/customers/vector-orders/show',compact(
+            'order',
+            'orderInstruction',
+            'optionA',
+            'optionB',
+            'user'
+        )); 
+        
+    }
+
+
+    //edit vector orders for customer panel by admin roles
+    public function editVectorOrder(string $id)
+    {
+
+        $user = VectorOrder::select('*','vector_orders.customer_id')
+        ->join('users','vector_orders.customer_id','=','users.id')
+        ->where('vector_orders.id',$id)
+        ->first();
+
+        $order = VectorOrder::findOrFail($id);
+
+        $requiredFormat = VectorRequiredFormat::all();
+       
+       
+
+        $order = VectorOrder::select('*', 
+        'vector_orders.id as order_id',
+        'vector_orders.name as design_name',
+        'users.name as customer_name', 
+        'statuses.name as status',
+        'vector_required_formats.name as format',
+        'users.name as customer_name',
+        'vector_orders.created_at as received_date',
+        'vector_orders.name as design_name')
+        ->join('users', 'vector_orders.customer_id', '=', 'users.id')
+        ->join('statuses','vector_orders.status_id','=','statuses.id')
+        ->join('vector_required_formats','vector_orders.required_format_id','=','vector_required_formats.id')
+        ->where('vector_orders.id', $order->id) 
+        ->first(); 
+
+        //order files
+        $quoteFiles =QuoteFileLog::select('*')
+        ->join('vector_orders','quote_file_logs.vector_order_id','=','vector_orders.id')
+        ->where('quote_file_logs.vector_order_id',$order->order_id)
+        ->get();
+
+       
+         //instruction
+         $orderInstruction = VectorOrder::select('*','instructions.description as instruction') 
+         ->leftjoin('instructions','instructions.vector_id','=','vector_orders.id')
+         ->where('instructions.vector_id',$order->order_id)
+         ->first();
+
+
+        return view('admin/customers/vector-orders/edit',compact(
+            'order',
+            'quoteFiles',
+            'requiredFormat',
+            'orderInstruction',
+            'user'
+        ));
+    }
+
+    //update vector order for customer panel by admin roles
+    public function updateVectorOrder(Request $request)
+    {
+          // Validate the request
+          $validatedData = $request->validate([
+            'name' => 'required',
+            'required_format_id' => 'required'
+        ], [
+            'name.required' => 'Name is required.',
+            'required_format_id.required' => 'Format is required.'
+        ]);
+    
+        DB::beginTransaction();
+        $order = VectorOrder::findOrFail($request->id);
+
+        //status update 
+        $order->update(['edit_status' => 0]);
+    
+        try {
+            // $order->update([
+            //     'required_format_id' => $request->required_format_id,
+            //     'status_id' => $request->status,
+            //     'name' => $request->name,
+            //     'number_of_colors' => $request->number_of_colors,
+            //     'super_urgent' => $request->has('super_urgent'),
+            // ]);
+    
+                      
+        if ($order->order_id == null) {
+
+            $order = VectorOrder::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'edit_vector_id' => $order->id,
+                'edit_status' => 1,
+                'description' => $request->desc . '(' . 'VO-' . $order->id.')',
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+
+            ]);
+
+        }
+        else{
+
+            $order = VectorOrder::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'edit_vector_id' => $order->id,
+                'edit_status' => 1,
+                'description' => $request->desc . '(VO-' . (string)$request->order_id . '),(VO-' . (string)$order->id . ')',
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+
+            ]);
+
+
+        }
+        
+
+            // Handle file uploads
+            if ($request->hasFile('files')) {
+                // Fetch and delete existing files
+                $existingFiles = QuoteFileLog::where('vector_order_id', $order->id)->get();
+                foreach ($existingFiles as $fileLog) {
+                    Storage::disk('public')->delete($fileLog->files);
+                    $fileLog->delete();
+                }
+    
+                // Store new files
+                foreach ($request->file('files') as $file) {
+                    $filePath = $file->store('uploads/vector-order', 'public');
+
+                        // Get the original filename
+                 $originalFilename = $file->getClientOriginalName();
+     
+                 // Create a structured string to store both path and original filename
+                 $fileData = [
+                     'path' => $filePath,
+                     'original_name' => $originalFilename,
+                 ];
+
+                    QuoteFileLog::create([
+                        'vector_order_id' => $order->id,
+                        'cust_id' => $request->customer_id,
+                        'files' => json_encode($fileData),
+                    ]);
+                }
+            }
+    
+            // Update additional instructions
+            if ($request->filled('additional_instruction')) {
+                Instruction::updateOrCreate(
+                    ['vector_id' => $order->id],
+                    ['description' => $request->additional_instruction]
+                );
+            }
+    
+            DB::commit();
+            
+           // return redirect()->route('vector-orders.edit', $order->id)->with('success', 'Order updated successfully!');
+
+           return redirect()->route('customer.all-vector-orders',$request->customer_id)->with('success', 'Order updated successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            //\Log::error('Error updating Order: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'An error occurred while updating the Order.']);
+        }
+
     }
 
 

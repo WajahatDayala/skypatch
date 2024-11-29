@@ -1,4 +1,4 @@
-@extends('customer.vector-orders.base')
+@extends('admin.customers.vector-orders.base')
 @section('action-content')
 
 
@@ -17,9 +17,9 @@
                              </ul>
                             </div>
                              @endif
-                             <form action="{{ route('vector-orders.update', $order->order_id) }}" method="POST" enctype="multipart/form-data">
+                             <form action="{{ route('customer.update-vector-order', $order->order_id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT') <!-- Use PUT method for updating -->
+                             
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Name/PO *</label>
                                     <div class="col-sm-8">
@@ -28,6 +28,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                         </span>
                                      @enderror   
+                                     <input type="text" hidden name="order_id" value="{{$order->order_id}}">
                                     </div>
                                     <input hidden type="text" name="desc" class="form-control" value="{{$order->description}}">
                                    
@@ -100,7 +101,7 @@
 
                                
 
-                                <input type="hidden" name="customer_id" value="{{Auth()->user()->id}}">
+                                <input type="hidden" name="customer_id" value="{{$order->customer_id}}">
                                 <div class="row mb-3">
                                     <div class="col-sm-4">
                                     </div>

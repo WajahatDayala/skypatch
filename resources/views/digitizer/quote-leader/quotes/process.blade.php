@@ -74,63 +74,63 @@
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong># of Machine(s)</strong><br>
-                                            <span></span>
+                                            <span> {{ old('machine', $vectordetails->machine ?? '') }}</span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Condition</strong><br>
-                                            <span></span>
+                                            <span> {{ old('condition', $vectordetails->condition ?? '') }}</span>
                                         </td>
                                         <td class="col-4">
                                             <strong># of Needles</strong><br>
-                                            <span></span>
+                                            <span> {{ old('needles', $vectordetails->needles ?? '') }}</span>
                                         </td>
                                     </tr>
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong>Thread</strong><br>
-                                            <span></span>
+                                            <span> {{ old('thread', $vectordetails->thread ?? '') }}</span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Needle Brand</strong><br>
-                                            <span></span>
+                                            <span> {{ old('needle_brand', $vectordetails->needle_brand ?? '') }}</span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Backing(Pique / Jersey)</strong><br>
-                                            <span></span>
+                                            <span> {{ old('backing_pique_jersey', $vectordetails->backing_pique_jersey ?? '') }}</span>
                                         </td>
                                     </tr>
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong>Brand</strong><br>
-                                            <span>psd</span>
+                                            <span> {{ old('brand', $vectordetails->brand ?? '') }}</span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Backing (Cotton / Twill)</strong><br>
-                                            <span></span>
+                                            <span> {{ old('backing_cotton_twill', $vectordetails->backing_cotton_twill ?? '') }}</span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Backing (Cap)</strong><br>
-                                            <span></span>
+                                            <span> {{ old('backing_cap', $vectordetails->backing_cap ?? '') }}</span>
                                         </td>
                                     </tr>
                                     <tr class="row">
                                         <td class="col-4">
-                                            <strong>Backing</strong><br>
-                                            <span></span>
+                                            <strong>Model</strong><br>
+                                            <span> {{ old('model', $vectordetails->model ?? '') }}</span>
                                         </td>
                                         <td class="col-4">
                                             <strong>Needle Number</strong><br>
-                                            <span></span>
+                                            <span> {{ old('needle_number', $vectordetails->needle_number ?? '') }}</span>
                                         </td>
                                         <td class="col-4">
                                             <strong># of Heads</strong><br>
-                                            <span></span>
+                                            <span> {{ old('heads', $vectordetails->head ?? '') }}</span>
                                         </td>
                                     </tr>
                                     <tr class="row">
                                         <td class="col-4">
                                             <strong>Comments</strong><br>
-                                            <span></span>
+                                            <span> {{ old('comments', $vectordetails->comment_box ?? '') }}</span>
                                         </td>
 
                                     </tr>
@@ -219,7 +219,6 @@
                             <!-- Modal for Edit Designer Ends Here -->
 
                         </div>
-
                         <div class="bg-table rounded h-100 p-4 mt-4">
                             <div class="row bg-dark p-2">
                                 <h6 class="text-light fw-light text-center mb-0">Job Information</h1>
@@ -297,14 +296,27 @@
                                     <table class="table table-bordered">
                                         <tbody>
                                             <tr class="row d-flex align-items-center justify-content-center">
+                                                
+                                            
+                                                <td class="col-2">
+                                                    
+                                                </td>
+                                                <td class="col-5 text-center">
+                                                   <b>Option A</b>
+                                                </td>
+                                                <td class="col-5 text-center">
+                                                    <b>Option B</b>
+                                                </td>
+                                            </tr>   
+                                            <tr class="row d-flex align-items-center justify-content-center">
                                                 <td class="col-2">
                                                     Height
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" readonly class="form-control" id="inputEmail3">
+                                                    <input type="number" name="height_A" readonly class="form-control" id="inputEmail3" value="{{ old('height_A', $jobInfo->height_A ?? '') }}"  step="any">
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" readonly class="form-control" id="inputEmail3">
+                                                    <input type="number" name="height_B" readonly class="form-control" id="inputEmail3" value="{{$jobInfo->height_B ?? ''}}"  step="any">
                                                 </td>
                                             </tr>
                                             <tr class="row d-flex align-items-center justify-content-center">
@@ -312,10 +324,10 @@
                                                     Width
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" readonly class="form-control" id="inputEmail3">
+                                                    <input type="number" name="width_A" readonly class="form-control" id="inputEmail3" value="{{ old('width_A', $jobInfo->width_A ?? '') }}"  step="any">
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" readonly class="form-control" id="inputEmail3">
+                                                    <input type="number" name="width_B" readonly class="form-control" id="inputEmail3" value="{{ old('width_B', $jobInfo->width_B ?? '') }}"  step="any">
                                                 </td>
                                             </tr>
                                             <tr class="row d-flex align-items-center justify-content-center">
@@ -323,42 +335,13 @@
                                                     Stitches
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" readonly class="form-control" id="inputEmail3">
+                                                    <input type="number" name="stitches_A" readonly class="form-control" id="inputEmail3" value="{{ old('stitches_A', $jobInfo->stitches_A ?? '')}}">
                                                 </td>
                                                 <td class="col-5">
-                                                    <input type="email" readonly class="form-control" id="inputEmail3">
+                                                    <input type="number" name="stitches_B" readonly class="form-control" id="inputEmail3" value="{{ old('stitches_A',$jobInfo->stitches_B ?? '')}}">
                                                 </td>
                                             </tr>
-                                            <tr class="row d-flex align-items-center justify-content-center">
-                                                <td class="col-2">
-                                                    Price
-                                                </td>
-                                                <td class="col-5">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text" readonly id="basic-addon1">$</span>
-                                                        <input type="text" class="form-control" placeholder="Price"
-                                                            aria-label="Username" readonly aria-describedby="basic-addon1">
-                                                    </div>
-                                                </td>
-                                                <td class="col-5">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text"  id="basic-addon1">$</span>
-                                                        <input type="text" readonly class="form-control" placeholder="Price"
-                                                            aria-label="Username" aria-describedby="basic-addon1">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr class="row d-flex align-items-center justify-content-center">
-                                                <td class="col-2">
-                                                    Total
-                                                </td>
-                                                <td class="col-5">
-                                                    <input type="email" readonly class="form-control" id="inputEmail3">
-                                                </td>
-                                                <td class="col-5">
-                                                    <input type="email" readonly class="form-control" id="inputEmail3">
-                                                </td>
-                                            </tr>
+                                           
                                         </tbody>
                                     </table>
                                 </div>

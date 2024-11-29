@@ -103,9 +103,16 @@
 
                             </td> --}}
                                 <td class="col-6">
-                                    <strong>Stitching </strong><br>
+                                    <strong>Stitching A</strong><br>
                                     <p>
+                                        {{ $jobInfo->stitches_A ?? ''}}
 
+                                    </p>
+                                </td>
+                                <td class="col-6">
+                                    <strong>Stitching B</strong><br>
+                                    <p>
+                                        {{ $jobInfo->stitches_B?? ''}}
 
                                     </p>
                                 </td>
@@ -491,65 +498,63 @@ Update
                             <tr class="row">
                                 <td class="col-4">
                                     <strong># of Machine(s)</strong><br>
-                                    <span>Lorem</span>
+                                    <span> {{ old('machine', $vectordetails->machine ?? '') }}</span>
                                 </td>
                                 <td class="col-4">
                                     <strong>Condition</strong><br>
-                                    <span>Lorem</span>
+                                    <span> {{ old('condition', $vectordetails->condition ?? '') }}</span>
                                 </td>
                                 <td class="col-4">
                                     <strong># of Needles</strong><br>
-                                    <span>Lorem</span>
+                                    <span> {{ old('needles', $vectordetails->needles ?? '') }}</span>
                                 </td>
                             </tr>
                             <tr class="row">
                                 <td class="col-4">
                                     <strong>Thread</strong><br>
-                                    <span>Lorem</span>
+                                    <span> {{ old('thread', $vectordetails->thread ?? '') }}</span>
                                 </td>
                                 <td class="col-4">
                                     <strong>Needle Brand</strong><br>
-                                    <span>Lorem</span>
+                                    <span> {{ old('needle_brand', $vectordetails->needle_brand ?? '') }}</span>
                                 </td>
                                 <td class="col-4">
                                     <strong>Backing(Pique / Jersey)</strong><br>
-                                    <span>lorem</span>
+                                    <span> {{ old('backing_pique_jersey', $vectordetails->backing_pique_jersey ?? '') }}</span>
                                 </td>
                             </tr>
                             <tr class="row">
                                 <td class="col-4">
                                     <strong>Brand</strong><br>
-                                    <span>psd</span>
+                                    <span> {{ old('brand', $vectordetails->brand ?? '') }}</span>
                                 </td>
                                 <td class="col-4">
                                     <strong>Backing (Cotton / Twill)</strong><br>
-                                    <span>Lorem</span>
+                                    <span> {{ old('backing_cotton_twill', $vectordetails->backing_cotton_twill ?? '') }}</span>
                                 </td>
                                 <td class="col-4">
                                     <strong>Backing (Cap)</strong><br>
-                                    <span>Lorem</span>
+                                    <span> {{ old('backing_cap', $vectordetails->backing_cap ?? '') }}</span>
                                 </td>
                             </tr>
                             <tr class="row">
                                 <td class="col-4">
-                                    <strong>Backing</strong><br>
-                                    <span>Lorem</span>
+                                    <strong>Model</strong><br>
+                                    <span> {{ old('model', $vectordetails->model ?? '') }}</span>
                                 </td>
                                 <td class="col-4">
                                     <strong>Needle Number</strong><br>
-                                    <span>Lorem</span>
+                                    <span> {{ old('needle_number', $vectordetails->needle_number ?? '') }}</span>
                                 </td>
                                 <td class="col-4">
                                     <strong># of Heads</strong><br>
-                                    <span>Lorem</span>
+                                    <span> {{ old('heads', $vectordetails->head ?? '') }}</span>
                                 </td>
                             </tr>
                             <tr class="row">
                                 <td class="col-4">
                                     <strong>Comments</strong><br>
-                                    <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni
-                                        possimus perspiciatis ad dicta, incidunt accusamus. Voluptatibus, veniam
-                                        laboriosam! Vitae, iure.</span>
+                                    <span> {{ old('comments', $vectordetails->comment_box ?? '') }}</span>
                                 </td>
 
                             </tr>
@@ -569,8 +574,8 @@ Update
                                 <div class="modal-body">
                                     <form action="">
                                         <div class="row mb-3">
-                                            <label for="reasonSelect" class="col-sm-4 col-form-label text-end">Select
-                                                Reason *</label>
+                                            <label for="reasonSelect"
+                                                class="col-sm-4 col-form-label text-end">Select Reason *</label>
                                             <div class="col-sm-8">
                                                 <select class="form-select" id="reasonSelect"
                                                     aria-label="Default select example">
@@ -612,8 +617,8 @@ Update
                                 <div class="modal-body">
                                     <form action="">
                                         <div class="row mb-3">
-                                            <label for="designerSelect" class="col-sm-4 col-form-label text-end">Select
-                                                Designer
+                                            <label for="designerSelect"
+                                                class="col-sm-4 col-form-label text-end">Select Designer
                                                 *</label>
                                             <div class="col-sm-8">
                                                 <select class="form-select" id="designerSelect"
@@ -638,6 +643,8 @@ Update
                     <!-- Modal for Edit Designer Ends Here -->
 
                 </div>
+
+
 
             </div>
         </div>

@@ -1,4 +1,4 @@
-@extends('customer.orders.base')
+@extends('admin.customers.orders.base')
 @section('action-content')
 
 
@@ -17,12 +17,13 @@
                              </ul>
                             </div>
                              @endif
-                             <form action="{{ route('orders.update', $order->order_id) }}" method="POST" enctype="multipart/form-data">
+                             <form action="{{ route('customer.update-order', $order->order_id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT') <!-- Use PUT method for updating -->
+                             
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Name/PO *</label>
                                     <div class="col-sm-8">
+                                        <input type="text" hidden name="order_id" value="{{$order->order_id}}">
                                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{$order->design_name}}">
                                     @error('name')
                                         <span class="text-danger">{{ $message }}</span>
@@ -142,7 +143,7 @@
 
                                
 
-                                <input type="hidden" name="customer_id" value="{{Auth()->user()->id}}">
+                                <input type="hidden" name="customer_id" value="{{$order->customer_id}}">
                                 <div class="row mb-3">
                                     <div class="col-sm-4">
                                     </div>

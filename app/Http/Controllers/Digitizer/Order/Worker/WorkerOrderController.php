@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Option; 
+use App\Models\VectorDetail;
+use App\Models\JobInformation;
 use Auth;
 class WorkerOrderController extends Controller
 {
@@ -159,6 +161,21 @@ class WorkerOrderController extends Controller
            ->where('option_type','B')
            ->where('options.order_id',$id)
             ->get();
+
+              //vector details
+              $vectordetails = VectorDetail::select('*')
+              ->leftjoin('users','vector_details.customer_id','=','users.id')
+              ->where('vector_details.customer_id',$order->customer_id)
+              ->first();
+  
+                         //jobinfo
+             $jobInfo = JobInformation::select('*')
+            ->leftjoin('orders','job_information.order_id','=','orders.id')
+            ->where('job_information.order_id',$id)
+            ->first();
+   
+ 
+ 
   
         
           return view('digitizer/order-worker/order/process',compact(
@@ -170,7 +187,9 @@ class WorkerOrderController extends Controller
             'adminInstruction',
             'allReasons',
             'optionA',
-            'optionB'
+            'optionB',
+             'vectordetails',
+            'jobInfo'
         ));
 
       
@@ -274,6 +293,19 @@ class WorkerOrderController extends Controller
             ->where('option_type','B')
             ->where('options.order_id',$id) 
             ->get();
+
+
+                   //vector details
+                   $vectordetails = VectorDetail::select('*')
+                   ->leftjoin('users','vector_details.customer_id','=','users.id')
+                   ->where('vector_details.customer_id',$order->customer_id)
+                   ->first();
+       
+                              //jobinfo
+                  $jobInfo = JobInformation::select('*')
+                 ->leftjoin('orders','job_information.order_id','=','orders.id')
+                 ->where('job_information.order_id',$id)
+                 ->first();
   
 
 
@@ -287,7 +319,9 @@ class WorkerOrderController extends Controller
             'adminInstruction',
             'allReasons',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails',
+            'jobInfo'
         ));
     }
 

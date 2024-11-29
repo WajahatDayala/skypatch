@@ -503,8 +503,8 @@ class SupportOrdersController extends Controller
            ]
           );
         
-          
-         // $order->update(['status_id' => 1]);
+          //relased o9rders
+          $order->update(['status_id' => 1]);
 
           return redirect()->route('support-allorders.show',$request->order_id)->with('success', 'Order updated successfully!');
 

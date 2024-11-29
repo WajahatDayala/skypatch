@@ -18,19 +18,19 @@
             
             <a href="{{ url('customers/' . $user->id . '/quote') }}" class="nav-item nav-link {{ request()->is('customers/' . $user->id . '/quote') ? 'active' : '' }}"><i class="fa-solid fa-quote-right me-2"></i>
             Send Quotes</a>
-
-            <a href="" class="nav-item nav-link {{ request()->is('/admin/customer/orders/create') ? 'active' : '' }}"><i class="fa-solid fa-box me-2"></i>Place Orders</a>
-            <a href="" class="nav-item nav-link {{ request()->is('/admin/customer/vector-orders/create') ? 'active' : '' }}"><i class="fa-regular fa-pen-to-square me-2"></i></i>
+            
+            <a href="{{ url('customers/' . $user->id . '/order') }}" class="nav-item nav-link {{ request()->is('customers/' . $user->id . '/order') ? 'active' : '' }}"><i class="fa-solid fa-box me-2"></i>Place Orders</a>
+            <a href="{{ url('customers/' . $user->id . '/vector-order') }}" class="nav-item nav-link {{ request()->is('customers/' . $user->id . '/vector-order') ? 'active' : '' }}"><i class="fa-regular fa-pen-to-square me-2"></i></i>
             Place Vector Orders</a>
-
+           
          
           <a href="{{ url('customers/' . $user->id . '/all-quotes') }}" class="nav-item nav-link {{ request()->is('customers/' . $user->id . '/all-quotes') ? 'active' : '' }}"><i class="fa-solid fa-quote-left me-2"></i>Quote Records</a>
           
        
-          <a href="" class="nav-item nav-link {{ request()->is('/admin/customer/orders') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked me-2"></i>
+          <a href="{{url('customers/'.$user->id.'/all-orders')}}" class="nav-item nav-link {{ request()->is('customers/'.$user->id.'/all-orders') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked me-2"></i>
             Order Records</a>
          
-          <a href="" class="nav-item nav-link {{ request()->is('/admin/customer/vector-orders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
+          <a href="{{url('customers/'.$user->id.'/all-vector-orders')}}" class="nav-item nav-link {{ request()->is('customers/'.$user->id.'/all-vector-orders') ? 'active' : '' }}"><i class="fa-solid fa-pen-to-square me-2"></i>
             Vector Records</a>
 
             <a href="{{url('customers/'.$user->id.'/my-profile')}}" class="nav-item nav-link {{ request()->is('customers/'.$user->id.'/my-profile') ? 'active' : '' }}"><i class="fa-solid fa-user me-2"></i>

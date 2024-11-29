@@ -119,16 +119,32 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
   
 
-    //customer orders from admin
+    //quotes for customer panel by admin roles
     Route::get('customers/{id}/quote', [CustomerController::class, 'createQuote'])->name('customer.quote');
     Route::post('customers/savedQuote', [CustomerController::class, 'storeQuote'])->name('customer.savedQuote');
     Route::get('customers/{id}/all-quotes', [CustomerController::class, 'allQuotes'])->name('customer.all-quotes');
     Route::get('customers/{id}/show-quote', [CustomerController::class, 'showQuote'])->name('customer.show-quote');
     Route::get('customers/{id}/edit-quote', [CustomerController::class, 'editQuote'])->name('customer.edit-quote');
+    Route::post('customers/{id}/update-quote', [CustomerController::class, 'updateQuote'])->name('customer.update-quote');
     Route::post('customers/{id}/all-quotes/convert-quotes/{quoteId}', [CustomerController::class, 'convertToOrder']);
 
+    //orders for customer panel by admin roles
+    Route::get('customers/{id}/all-orders', [CustomerController::class, 'allOrders'])->name('customer.all-orders');
+    Route::get('customers/{id}/show-order', [CustomerController::class, 'showOrder'])->name('customer.show-order');
+    Route::get('customers/{id}/edit-order', [CustomerController::class, 'editOrder'])->name('customer.edit-order');
+    Route::post('customers/{id}/update-order',[CustomerController::class,'updateOrder'])->name('customer.update-order');
+    Route::get('customers/{id}/order', [CustomerController::class, 'createOrder'])->name('customer.order');
+    Route::post('customers/savedOrder', [CustomerController::class, 'storeOrder'])->name('customer.savedOrder');
+   
+    //vector orders for customer panel by admin roles
+    Route::get('customers/{id}/all-vector-orders', [CustomerController::class, 'allVectorOrder'])->name('customer.all-vector-orders');
+    Route::get('customers/{id}/show-vector-order', [CustomerController::class, 'showVectorOrder'])->name('customer.show-vector-order');
+    Route::get('customers/{id}/edit-vector-order', [CustomerController::class, 'editVectorOrder'])->name('customer.edit-vector-order');
+    Route::post('customers/{id}/update-vector-order',[CustomerController::class,'updateVectorOrder'])->name('customer.update-vector-order');
+    Route::get('customers/{id}/vector-order',[CustomerController::class,'createVectorOrder'])->name('customer.vector-order');
+    Route::post('customers/savedVector',[CustomerController::class,'storeVectorOrder'])->name('customer.savedVector');
  
-
+    
 
 
     //all quotes
@@ -289,7 +305,8 @@ Route::group(['middleware' => 'auth:admin'], function () {
      Route::post('/support/support-vector-orders/deleteOrder',[SupportVectorOrdersController::class,'deleteOrder'])->name('support-vector-orders.deleteOrder');
      Route::get('/support/support-vector-orders/{id}/process', [SupportVectorOrdersController::class, 'processOrder'])->name('support-vector-orders.process');
      Route::get('/support/support-vector-orders/{id}/print', [SupportVectorOrdersController::class, 'printOrder'])->name('support-vector-orders.print');
-    //support employee add
+     Route::post('/support/support-vector-orders/send',[SupportVectorOrdersController::class,'sendEmailAndOrder'])->name('support-vector-orders.send');
+     //support employee add
      //all employees
     Route::resource('/support/suppport-employees', SupportEmployeeController::class);
     Route::resource('/support/suppport-invoices', SupportInvoiceController::class);

@@ -1,4 +1,4 @@
-@extends('customer.orders.base')
+@extends('admin.customers.orders.base')
 @section('action-content')
 
 
@@ -82,7 +82,7 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="{{ route('orders.show', ['order' => $q->order_id]) }}">Details</a>
+                                        href="{{ route('customer.show-order', ['id' => $q->order_id]) }}">Details</a>
                                 </td>
                             </tr>
                             @endforeach

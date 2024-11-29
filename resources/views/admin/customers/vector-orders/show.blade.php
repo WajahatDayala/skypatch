@@ -1,4 +1,4 @@
-@extends('customer.vector-orders.base')
+@extends('admin.customers.vector-orders.base')
 @section('action-content')
 
 <!-- All Content Goes inside this div -->
@@ -14,7 +14,7 @@
                         <!-- <button type="button"
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button> -->
                         @if($order->edit_status ==1)
-                        <a type="button" href="{{ route('vector-orders.edit', ['vector_order' => $order->order_id]) }}"
+                        <a type="button" href="{{ route('customer.edit-vector-order', ['id' => $order->order_id]) }}"
                                         class="btn btn-sm btn-dark rounded-pill ">Edit</a>
                         @endif
                     </div>

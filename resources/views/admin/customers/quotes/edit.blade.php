@@ -17,12 +17,13 @@
                              </ul>
                             </div>
                              @endif
-                             <form action="{{ route('quotes.update', $quote->quote_id) }}" method="POST" enctype="multipart/form-data">
+                             <form action="{{ route('customer.update-quote', ['id',$quote->quote_id]) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT') <!-- Use PUT method for updating -->
+                             
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Name/PO *</label>
                                     <div class="col-sm-8">
+                                        <input type="text" hidden name="quote_id" value="{{$quote->quote_id}}">
                                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{$quote->design_name}}">
                                     @error('name')
                                         <span class="text-danger">{{ $message }}</span>
@@ -142,7 +143,7 @@
 
                                
 
-                                <input type="hidden" name="customer_id" value="{{Auth()->user()->id}}">
+                                <input type="text" hidden name="customer_id" value="{{$quote->customer_id}}">
                                 <div class="row mb-3">
                                     <div class="col-sm-4">
                                     </div>

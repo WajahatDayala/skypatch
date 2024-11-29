@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use App\Models\Option;
-
+use App\Models\VectorDetail;
+use App\Models\JobInformation;
 class LeaderQuoteController extends Controller
 {
     /**
@@ -174,6 +175,17 @@ class LeaderQuoteController extends Controller
             ->where('options.quote_id',$id)
             ->get();
   
+                 //vector details
+                 $vectordetails = VectorDetail::select('*')
+                 ->leftjoin('users','vector_details.customer_id','=','users.id')
+                 ->where('vector_details.customer_id',$quote->customer_id)
+                 ->first();
+
+                            //jobinfo
+        $jobInfo = JobInformation::select('*')
+        ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+        ->where('job_information.quote_id',$id)
+        ->first();
         
           return view('digitizer/quote-leader/quotes/process',compact(
             'quote',
@@ -184,7 +196,9 @@ class LeaderQuoteController extends Controller
             'adminInstruction',
             'allReasons',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails',
+            'jobInfo'
         ));
 
       
@@ -284,6 +298,17 @@ class LeaderQuoteController extends Controller
             ->get();
   
 
+            //vector details
+          $vectordetails = VectorDetail::select('*')
+            ->leftjoin('users','vector_details.customer_id','=','users.id')
+            ->where('vector_details.customer_id',$order->customer_id)
+            ->first();
+
+                //jobinfo
+        $jobInfo = JobInformation::select('*')
+        ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+        ->where('job_information.quote_id',$id)
+        ->first();
 
 
         return view('digitizer/quote-leader/quotes/show',compact(
@@ -294,7 +319,9 @@ class LeaderQuoteController extends Controller
             'orderInstruction',
             'adminInstruction',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails',
+            'jobInfo'
         ));
     }
 

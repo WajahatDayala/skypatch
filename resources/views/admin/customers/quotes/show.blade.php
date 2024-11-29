@@ -20,7 +20,7 @@
                         class="btn btn-sm btn-primary rounded-pill me-2">Edit</a> 
                         @endif
                         @if($order->edit_status == 1 && $order->status_id == 2)
-                        <a href="" class="btn btn-sm btn-dark rounded-pill ">Process</a>
+                        {{-- <a href="" class="btn btn-sm btn-dark rounded-pill ">Process</a> --}}
                         @endif
                     </div>
                 </div>

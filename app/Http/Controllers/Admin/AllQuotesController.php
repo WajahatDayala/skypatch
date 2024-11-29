@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use App\Models\VectorDetail;
-
+use App\Models\JobInformation;
 class AllQuotesController extends Controller
 {
     /**

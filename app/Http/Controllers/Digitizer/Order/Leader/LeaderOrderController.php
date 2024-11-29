@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Models\Option; 
 use Auth;
+use App\Models\VectorDetail;
+use App\Models\JobInformation;
 class LeaderOrderController extends Controller
 {
     /**
@@ -160,6 +162,19 @@ class LeaderOrderController extends Controller
            ->where('option_type','B')
            ->where('options.order_id',$id)
             ->get();
+
+              //vector details
+              $vectordetails = VectorDetail::select('*')
+              ->leftjoin('users','vector_details.customer_id','=','users.id')
+              ->where('vector_details.customer_id',$order->customer_id)
+              ->first();
+  
+                         //jobinfo
+             $jobInfo = JobInformation::select('*')
+            ->leftjoin('orders','job_information.order_id','=','orders.id')
+            ->where('job_information.order_id',$id)
+            ->first();
+    
   
         
           return view('digitizer/order-leader/order/process',compact(
@@ -171,7 +186,9 @@ class LeaderOrderController extends Controller
             'adminInstruction',
             'allReasons',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails',
+            'jobInfo'
         ));
 
       
@@ -276,6 +293,18 @@ class LeaderOrderController extends Controller
             ->where('option_type','B')
             ->where('options.order_id',$id) 
             ->get();
+
+             //vector details
+             $vectordetails = VectorDetail::select('*')
+             ->leftjoin('users','vector_details.customer_id','=','users.id')
+             ->where('vector_details.customer_id',$order->customer_id)
+             ->first();
+ 
+                        //jobinfo
+            $jobInfo = JobInformation::select('*')
+           ->leftjoin('orders','job_information.order_id','=','orders.id')
+           ->where('job_information.order_id',$id)
+           ->first();
   
 
 
@@ -289,7 +318,9 @@ class LeaderOrderController extends Controller
             'adminInstruction',
             'allReasons',
             'optionA',
-            'optionB'
+            'optionB',
+            'vectordetails',
+            'jobInfo'
         ));
     }
 

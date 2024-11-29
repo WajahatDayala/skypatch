@@ -1,4 +1,4 @@
-@extends('customer.vector-orders.base')
+@extends('admin.customers.vector-orders.base')
 @section('action-content')
 
 
@@ -17,7 +17,7 @@
                              </ul>
                             </div>
                              @endif
-                            <form action="{{ route('vector-orders.store') }}" method="POST"  enctype="multipart/form-data">
+                            <form action="{{ route('customer.savedVector') }}" method="POST"  enctype="multipart/form-data">
                                  @csrf
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-4 col-form-label text-end">Name/PO *</label>
@@ -27,6 +27,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                         </span>
                                      @enderror   
+                                    
                                     </div>
                                    
                                 </div>
@@ -85,7 +86,7 @@
                                     </div>
                                 </div>
                                 <input type="hidden" name="status" value="2">
-                                <input type="hidden" name="customer_id" value="{{ Auth::id() }}">
+                                <input type="hidden" name="customer_id" value="{{ $user->id }}">
 
                                 <div class="row mb-3">
                                     <div class="col-sm-4">

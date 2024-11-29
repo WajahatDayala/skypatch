@@ -1,4 +1,4 @@
-@extends('customer.orders.base')
+@extends('admin.customers.orders.base')
 @section('action-content')
 
 <!-- All Content Goes inside this div -->
@@ -13,8 +13,8 @@
                     <div class="col-6 d-flex align-items-center justify-content-end">
                         <!-- <button type="button"
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button> -->
-                        @if($order->edit_status == 1)
-                        <a type="button" href="{{ route('orders.edit', ['order' => $order->order_id]) }}"
+                        @if($order->edit_status == 1 && $order->status_id ==1)
+                        <a  href="{{ route('customer.edit-order', ['id' => $order->order_id]) }}"
                                         class="btn btn-sm btn-dark rounded-pill ">Edit</a>
                         @endif
                     </div>

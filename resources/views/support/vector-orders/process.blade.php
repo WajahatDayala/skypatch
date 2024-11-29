@@ -1,4 +1,4 @@
-@extends('support.orders.base')
+@extends('support.vector-orders.base')
 @section('action-content')
 
          <!-- All Content Goes inside this div -->
@@ -143,7 +143,7 @@
 
 
                         </div>
-                        <form id="mainForm" action="{{route('supportorders.send')}}" method="POST">
+                        <form id="mainForm" action="{{route('support-vector-orders.send')}}" method="POST">
                             @csrf
                         <div class="bg-table rounded h-100 p-4 mt-4">
                             <div class="row bg-dark p-2">
@@ -156,7 +156,7 @@
                                             <tr class="row">
                                                 <td class="col-3">
                                                     <strong>Number</strong><br>
-                                                    <span>OR-{{$order->order_id}}</span>
+                                                    <span>VO-{{$order->order_id}}</span>
                                                     <input type="text" hidden name="order_id" value="{{$order->order_id}}">
                                                 </td>
                                                 <td class="col-3">
@@ -238,7 +238,7 @@
                                                 </td>
                                             </tr>
                                        
-                                            <tr class="row d-flex align-items-center justify-content-center">
+                                            {{-- <tr class="row d-flex align-items-center justify-content-center">
                                                 
                                             
                                                 <td class="col-2">
@@ -250,8 +250,8 @@
                                                 <td class="col-5">
                                                     <input type="number" name="height_B" class="form-control" id="inputEmail3" value="{{$jobInfo->height_B ?? ''}}"  step="any">
                                                 </td>
-                                            </tr>
-                                            <tr class="row d-flex align-items-center justify-content-center">
+                                            </tr> --}}
+                                            {{-- <tr class="row d-flex align-items-center justify-content-center">
                                                 <td class="col-2">
                                                     Width
                                                 </td>
@@ -261,8 +261,8 @@
                                                 <td class="col-5">
                                                     <input type="number" name="width_B" class="form-control" id="inputEmail3" value="{{ old('width_B', $jobInfo->width_B ?? '') }}"  step="any">
                                                 </td>
-                                            </tr>
-                                            <tr class="row d-flex align-items-center justify-content-center">
+                                            </tr> --}}
+                                            {{-- <tr class="row d-flex align-items-center justify-content-center">
                                                 <td class="col-2">
                                                     Stitches
                                                 </td>
@@ -272,7 +272,7 @@
                                                 <td class="col-5">
                                                     <input type="number" name="stitches_B" class="form-control" id="inputEmail3" value="{{ old('stitches_A',$jobInfo->stitches_B ?? '')}}">
                                                 </td>
-                                            </tr>
+                                            </tr> --}}
                                             <tr class="row d-flex align-items-center justify-content-center">
                                                 <td class="col-2">
                                                     Price
@@ -466,7 +466,7 @@
                 <h5 class="modal-title" id="fileUploadModalLabelA">Upload Files</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="fileUploadFormA" action="{{ route('allorders.optionA') }}" method="POST" enctype="multipart/form-data">
+            <form id="fileUploadFormA" action="{{ route('allvectors.optionA') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
@@ -496,7 +496,7 @@
                        aria-label="Close"></button>
                </div>
                <form id="fileUploadForm" method="POST"
-                   action="{{route('allorders.optionB')}}"
+                   action="{{route('allvectors.optionB')}}"
                    enctype="multipart/form-data">
                    @csrf
                    <div class="modal-body">
