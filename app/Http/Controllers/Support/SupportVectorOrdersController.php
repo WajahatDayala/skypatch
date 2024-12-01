@@ -21,7 +21,7 @@ use Auth;
 use App\Models\VectorDetail;
 use App\Models\PricingCriteria;
 use App\Models\JobInformation;
-
+use App\Models\InvoiceDetail;
 class SupportVectorOrdersController extends Controller
 {
     /**
@@ -284,6 +284,11 @@ class SupportVectorOrdersController extends Controller
          ->leftjoin('orders','job_information.order_id','=','orders.id')
          ->where('job_information.vector_id',$id)
          ->first();
+
+         $invoice_status = InvoiceDetail::select('*','invoices.invoice_status as invoiceStatus')
+         ->join('invoices','invoice_details.invoice_id','=','invoices.id')
+         ->where('invoice_details.vector_id',$id)
+         ->first();
  
 
         return view('support/vector-orders/show',compact(
@@ -296,7 +301,8 @@ class SupportVectorOrdersController extends Controller
             'optionA',
             'optionB',
             'vectordetails',
-            'jobInfo'
+            'jobInfo',
+            'invoice_status'
         )); 
     }
 

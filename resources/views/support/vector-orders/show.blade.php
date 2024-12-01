@@ -66,7 +66,18 @@
                             </td>
                             <td class="col-3">
                                 <strong>Payment Status</strong><br>
-                                <span>Payable</span>
+                                <span>
+                                    @if($invoice_status && ($invoice_status->invoiceStatus === 0 || $invoice_status->invoiceStatus === null))
+                                    <!-- Assuming 0 means Unpaid -->
+                                    <span>Payable</span>
+                                @elseif ($invoice_status && $invoice_status->invoiceStatus === 1)
+                                    <!-- Assuming 1 means Paid -->
+                                    <span>Paid</span>
+                                @else
+                                    <span>Payable</span>
+                                    <!-- In case neither paymentStatus nor vectorPaymentStatus are available -->
+                                @endif
+                                </span>
                             </td>
                             <td class="col-3">
                             <strong>Format</strong><br>

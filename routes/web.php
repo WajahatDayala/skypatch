@@ -198,7 +198,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::resource('/admin/allvectors', AllVectorController::class);
     Route::get('/admin/allvectors/{id}/print', [AllVectorController::class, 'printOrder'])->name('allvectors.print');
     Route::get('/admin/today-vector', [AllVectorController::class, 'toDayVector']);
-    Route::post('/admin/allvectors/{id}/allvector', [AllVectorController::class, 'assignDesigner'])->name('allvectors.allvecto');
+    Route::post('/admin/allvectors/{id}/allvector', [AllVectorController::class, 'assignDesigner'])->name('allvectors.allvector');
     Route::post('/admin/allvectors/addInstruction', [AllVectorController::class, 'storeInstruction'])->name('allvectors.addInstruction');
     Route::post('/admin/allvectors/adminInstruction', [AllVectorController::class, 'storeAdminInstruction'])->name('allvectors.adminInstruction');
     Route::post('/admin/allvectors/uploadFile', [AllVectorController::class, 'storeFile'])->name('allvectors.uploadFile');
@@ -211,8 +211,8 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/admin/allvectors/optionB', [AllVectorController::class, 'storeOptionB'])->name('allvectors.optionB');
     Route::post('/admin/allvectors/deleteFileA', [AllVectorController::class, 'deleteFileA'])->name('allvectors.deleteFileA');
     Route::post('/admin/allvectors/deleteFileB', [AllVectorController::class, 'deleteFileB'])->name('allvectors.deleteFileB');
-    
-
+    Route::get('/admin/allvectors/{id}/process',[AllVectorController::class,'processOrder'])->name('allvectors.process');
+    Route::post('/admin/allvectors/send',[AllVectorController::class,'sendEmailAndOrder'])->name('allvectors.send');
 
     //invoices 
     Route::resource('/admin/invoices', InvoiceControlller::class);

@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\DB;
 
 use Auth;
 use App\Models\VectorDetail;
+use App\Models\PricingCriteria;
+use App\Models\JobInformation;
+use App\Models\InvoiceDetail;
 
 class AllVectorController extends Controller
 {
@@ -179,6 +182,20 @@ class AllVectorController extends Controller
          ->leftjoin('users','vector_details.customer_id','=','users.id')
          ->where('vector_details.customer_id',$order->customer_id)
          ->first();
+   
+         //jobinfo
+    $jobInfo = JobInformation::select('*')
+    ->leftjoin('orders','job_information.order_id','=','orders.id')
+    ->where('job_information.order_id',$id)
+    ->first();
+
+
+         
+         $invoice_status = InvoiceDetail::select('*','invoices.invoice_status as invoiceStatus')
+         ->join('invoices','invoice_details.invoice_id','=','invoices.id')
+         ->where('invoice_details.vector_id',$id)
+         ->first();
+
 
         return view('admin/vector-orders/show',compact(
             'order',
@@ -189,9 +206,158 @@ class AllVectorController extends Controller
             'orderInstruction',
             'optionA',
             'optionB',
-            'vectordetails'
+            'vectordetails',
+            'jobInfo',
+            'invoice_status'
         )); 
     }
+
+    //process vector order
+    public function processOrder(string $id)
+    {
+
+        $order = VectorOrder::findOrFail($id);
+
+        $order = VectorOrder::select(
+            '*',
+            'vector_orders.id as order_id',
+            'vector_orders.name as design_name',
+            'users.name as customer_name',
+            'users.email as email1',
+            'users.email_2 as email2',
+            'users.email_3 as email3',
+            'users.email_4 as email4',
+            'users.invoice_email as invoceEmail',
+            'admins.id as designer_id',
+            'admins.name as designer_name',
+            'statuses.name as status',
+            'ordersStatus.name as order_status_name',
+            'required_formats.name as format',
+            'users.name as customer_name',
+            'vector_orders.created_at as received_date',
+        )
+            ->join('users', 'vector_orders.customer_id', '=', 'users.id')
+            ->join('statuses', 'vector_orders.status_id', '=', 'statuses.id')
+            ->join('required_formats', 'vector_orders.required_format_id', '=', 'required_formats.id')
+            ->leftjoin('admins', 'vector_orders.designer_id', '=', 'admins.id')
+            ->leftjoin('statuses as ordersStatus', 'vector_orders.vector_status', 'ordersStatus.id')
+            ->where('vector_orders.id', $order->id)
+            ->first();
+
+        //instruction
+        $orderInstruction = VectorOrder::select('*', 'instructions.description as instruction')
+            ->leftjoin('instructions', 'instructions.vector_id', '=', 'vector_orders.id')
+            ->where('instructions.vector_id', $id)
+            ->first();
+
+
+        //admin instruction
+        $adminInstruction = VectorOrder::select('*', 'instructions.description as instruction')
+            ->join('instructions', 'instructions.vector_id', '=', 'vector_orders.id')
+            ->leftjoin('admins', 'instructions.emp_id', 'admins.id')
+            ->leftjoin('roles', 'admins.role_id', 'roles.id')
+            ->where('instructions.vector_id', $id)
+            ->where('roles.name', 'Admin')
+            ->first();
+
+        //files
+        $orderFiles = QuoteFileLog::select('*', 'quote_file_logs.id as fileId')
+            ->where('vector_order_id', $id)->get();
+
+        //order status
+        $orderStatus = Status::where('status_value', 1)->get();
+
+      
+
+        //designer
+        $designer = Admin::select('*', 'admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
+            ->join('roles', 'admins.role_id', '=', 'roles.id')
+            ->whereIn(
+                'roles.name',
+                ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker']
+            )
+            ->get();
+
+              //options A
+          $optionA = Option::select('*','options.id as fileId')
+          ->join('vector_orders','options.vector_order_id','vector_orders.id')
+          ->where('option_type','A')
+          ->where('options.vector_order_id',$id)
+          ->get();
+         
+
+            //options B
+          $optionB = Option::select('*','options.id as fileId')
+          ->join('vector_orders','options.vector_order_id','vector_orders.id')
+           ->where('option_type','B')
+           ->where('options.vector_order_id',$id)
+            ->get();
+
+     
+        //pricing
+        $pricing = PricingCriteria::select('*')
+        ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
+       ->where('pricing_criterias.customer_id',$order->customer_id)
+        ->first();
+
+
+        //vector details
+        $vectordetails = VectorDetail::select('*')
+        ->leftjoin('users','vector_details.customer_id','=','users.id')
+        ->where('vector_details.customer_id',$order->customer_id)
+        ->first();
+
+         //jobinfo
+         $jobInfo = JobInformation::select('*')
+         ->leftjoin('orders','job_information.order_id','=','orders.id')
+         ->where('job_information.order_id',$id)
+         ->first();
+ 
+
+
+
+
+        return view('admin/vector-orders/process', compact(
+            'order',
+            'designer',
+            'orderStatus',
+            'orderFiles',
+            'orderInstruction',
+            'adminInstruction',
+            'optionA',
+            'optionB',
+            'jobInfo',
+            'vectordetails',
+             'pricing'
+        ));
+    }
+
+    //send email process quotes
+    public function sendEmailAndOrder(Request $request)
+    {
+
+         //order
+         $order = VectorOrder::where('id',$request->order_id)->first();
+
+         //job process
+         $job = JobInformation::updateOrCreate(
+         ['vector_id' => $request->order_id], // Condition to check if the record exists
+         [
+            
+             'price_A' => $request->price_A,
+             'price_B' => $request->price_B,
+             'total' => $request->total
+         ]
+        );
+      
+        //relased o9rders
+        $order->update(['status_id' => 1]);
+
+        return redirect()->route('allvectors.show',$request->order_id)->with('success', 'Vector Order updated successfully!');
+
+
+    }
+
 
       //assign designer
       public function assignDesigner(Request $request, $id)
