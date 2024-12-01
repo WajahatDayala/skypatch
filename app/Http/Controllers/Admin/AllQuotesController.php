@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 use Auth;
 use App\Models\VectorDetail;
 use App\Models\JobInformation;
+use App\Models\PricingCriteria;
 class AllQuotesController extends Controller
 {
     /**
@@ -182,7 +183,12 @@ class AllQuotesController extends Controller
         ->where('options.quote_id',$id)
         ->get();
 
-        
+            //jobinfo
+            $jobInfo = JobInformation::select('*')
+            ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+            ->where('job_information.quote_id',$id)
+            ->first();
+    
 
           //options B
         $optionB = Option::select('*','options.id as fileId')
@@ -197,6 +203,8 @@ class AllQuotesController extends Controller
             ->where('vector_details.customer_id',$order->customer_id)
             ->first();
 
+            
+
 
 
         return view('admin/quotes/show',compact(
@@ -208,7 +216,8 @@ class AllQuotesController extends Controller
             'adminInstruction',
             'optionA',
             'optionB',
-            'vectordetails'
+            'vectordetails',
+            'jobInfo'
         ));
     }
 
@@ -825,6 +834,26 @@ class AllQuotesController extends Controller
           ->where('options.quote_id',$id)
           ->get();
 
+                
+        //pricing
+        $pricing = PricingCriteria::select('*')
+        ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
+       ->where('pricing_criterias.customer_id',$quote->customer_id)
+        ->first();
+
+
+        //vector details
+        $vectordetails = VectorDetail::select('*')
+        ->leftjoin('users','vector_details.customer_id','=','users.id')
+        ->where('vector_details.customer_id',$quote->customer_id)
+        ->first();
+
+        //jobinfo
+        $jobInfo = JobInformation::select('*')
+        ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+        ->where('job_information.quote_id',$id)
+        ->first();
+
 
         
         return view('admin/quotes/process',compact(
@@ -836,9 +865,43 @@ class AllQuotesController extends Controller
             'adminInstruction',
             'allReasons',
             'optionA',
-            'optionB'
+            'optionB',
+            'pricing',
+            'vectordetails',
+            'jobInfo'
         ));
     }
+
+         //send email process quotes
+         public function sendEmailAndQuotes(Request $request)
+         {
+  
+              //quotes
+              $quote = Quote::where('id',$request->quote_id)->first();
+  
+              //job process
+              $job = JobInformation::updateOrCreate(
+              ['quote_id' => $request->quote_id], // Condition to check if the record exists
+              [
+                  'height_A' => $request->height_A,
+                  'width_A' => $request->width_A,
+                  'stitches_A' => $request->stitches_A,
+                  'price_A' => $request->price_A,
+                  'height_B' => $request->height_B,
+                  'width_B' => $request->width_B,
+                  'stitches_B' => $request->stitches_B,
+                  'price_B' => $request->price_B,
+                  'total' => $request->total
+              ]
+             );
+           
+             
+             $quote->update(['status_id' => 1]);
+  
+             return redirect()->route('allquotes.show',$request->quote_id)->with('success', 'Quote updated successfully!');
+  
+  
+         }
 
 
     //print quote

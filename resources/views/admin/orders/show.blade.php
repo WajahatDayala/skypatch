@@ -89,20 +89,46 @@
                         </tr>
 
                         
+                        
                         <tr class="row">
-                            <td class="col-6">
+                            <td class="col-3">
                                 <strong class="">Price</strong><br>
-                                <p></p>
-                                    <!-- <button type="button"
-                                                    class="btn btn-sm rounded-pill btn-primary m-2">Update</button> -->
-
-                            </td>
-                            <td class="col-6">
-                                <strong>Stitching </strong><br>
-                                <p>
+                                <p>{{ $jobInfo->total ?? ''}}</p>
                                    
 
+                            </td>
+                            <td class="col-3">
+                                <strong class="">Payment Status</strong><br>
+                                <p>
+                                   
+                                @if($invoice_status && ($invoice_status->invoiceStatus === 0 || $invoice_status->invoiceStatus === null))
+                                    <!-- Assuming 0 means Unpaid -->
+                                    <span>Payable</span>
+                                @elseif ($invoice_status && $invoice_status->invoiceStatus === 1)
+                                    <!-- Assuming 1 means Paid -->
+                                    <span>Paid</span>
+                                @else
+                                    <span>Payable</span>
+                                    <!-- In case neither paymentStatus nor vectorPaymentStatus are available -->
+                                @endif
+                                
                                 </p>
+                              
+                            </td>
+                            <td class="col-3">
+                                <strong>Stitching A </strong> 
+                                <p>
+                                    {{ $jobInfo->stitches_A ?? ''}}
+                                  
+                                </p> 
+                              
+                            </td>
+                            <td class="col-3">
+                                <strong>Stitching B  </strong>   <p>
+                                    {{ $jobInfo->stitches_B ?? ''}}
+                                  
+                                </p> 
+                              
                             </td>
                         </tr>
 

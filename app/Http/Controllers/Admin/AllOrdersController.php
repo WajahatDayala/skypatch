@@ -20,8 +20,10 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
 use Auth;
+use App\Models\PricingCriteria;
 use App\Models\VectorDetail;
-
+use App\Models\JobInformation;
+use App\Models\InvoiceDetail;
 class AllOrdersController extends Controller
 {
     /**
@@ -298,6 +300,19 @@ class AllOrdersController extends Controller
         ->where('vector_details.customer_id',$order->customer_id)
         ->first();
 
+        
+         //jobinfo
+         $jobInfo = JobInformation::select('*')
+         ->leftjoin('orders','job_information.order_id','=','orders.id')
+         ->where('job_information.order_id',$id)
+         ->first();
+
+
+         $invoice_status = InvoiceDetail::select('*','invoices.invoice_status as invoiceStatus')
+         ->join('invoices','invoice_details.invoice_id','=','invoices.id')
+         ->where('invoice_details.order_id',$id)
+         ->first();
+
 
         return view('admin/orders/show', compact(
             'order',
@@ -309,7 +324,9 @@ class AllOrdersController extends Controller
             'allReasons',
             'optionA',
             'optionB',
-            'vectordetails'
+            'vectordetails',
+            'jobInfo',
+            'invoice_status'
         ));
     }
     //assign designer
@@ -703,6 +720,25 @@ class AllOrdersController extends Controller
             ->get();
 
 
+             //pricing
+        $pricing = PricingCriteria::select('*')
+        ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
+       ->where('pricing_criterias.customer_id',$order->customer_id)
+        ->first();
+
+
+        //vector details
+        $vectordetails = VectorDetail::select('*')
+        ->leftjoin('users','vector_details.customer_id','=','users.id')
+        ->where('vector_details.customer_id',$order->customer_id)
+        ->first();
+
+         //jobinfo
+         $jobInfo = JobInformation::select('*')
+         ->leftjoin('orders','job_information.order_id','=','orders.id')
+         ->where('job_information.order_id',$id)
+         ->first();
+
 
 
 
@@ -716,9 +752,45 @@ class AllOrdersController extends Controller
             'adminInstruction',
             'allReasons',
             'optionA',
-            'optionB'
+            'optionB',
+            'pricing',
+            'vectordetails',
+            'jobInfo'
         ));
     }
+
+        //send email process quotes
+        public function sendEmailAndOrder(Request $request)
+        {
+  
+             //order
+             $order = Order::where('id',$request->order_id)->first();
+  
+             //job process
+             $job = JobInformation::updateOrCreate(
+             ['order_id' => $request->order_id], // Condition to check if the record exists
+             [
+                 'height_A' => $request->height_A,
+                 'width_A' => $request->width_A,
+                 'stitches_A' => $request->stitches_A,
+                 'price_A' => $request->price_A,
+                 'height_B' => $request->height_B,
+                 'width_B' => $request->width_B,
+                 'stitches_B' => $request->stitches_B,
+                 'price_B' => $request->price_B,
+                 'total' => $request->total
+             ]
+            );
+          
+            //relased o9rders
+            $order->update(['status_id' => 1]);
+  
+            return redirect()->route('allorders.show',$request->order_id)->with('success', 'Order updated successfully!');
+  
+  
+        }
+  
+  
 
     //file upload for process page
     public function storeOptionFileA(Request $request)

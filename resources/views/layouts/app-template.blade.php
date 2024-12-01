@@ -51,6 +51,10 @@
        
         @include('layouts.admin.sidebar')
 
+
+    <!--accounts sidebar -->
+    @elseif(Auth::user()->role->name === 'Accounts')
+    @include('layouts.accounts.sidebar')
     <!-- Quote digitizer -->
     @elseif(Auth::user()->role->name === 'Quote Worker' || Auth::user()->role->name === 'Quote Leader')
        

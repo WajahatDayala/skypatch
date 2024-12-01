@@ -97,17 +97,23 @@
 
                         
                         <tr class="row">
-                            <td class="col-6">
+                            <td class="col-4">
                                 <strong class="">Price</strong><br>
-                                <p></p>
-                                    <!-- <button type="button"
-                                                    class="btn btn-sm rounded-pill btn-primary m-2">Update</button> -->
+                                <p>{{ $jobInfo->total ?? ''}}</p>
+                                   
 
                             </td>
-                            <td class="col-6">
-                                <strong>Stitching </strong><br>
+                            <td class="col-4">
+                                <strong>Stitching A</strong><br>
                                 <p>
-                                   
+                                    {{ $jobInfo->stitches_A ?? ''}}
+
+                                </p>
+                            </td>
+                            <td class="col-4">
+                                <strong>Stitching B</strong><br>
+                                <p>
+                                    {{ $jobInfo->stitches_B ?? ''}}
 
                                 </p>
                             </td>

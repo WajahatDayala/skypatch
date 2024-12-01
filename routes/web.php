@@ -51,7 +51,8 @@ use App\Http\Controllers\Support\SupportVectorOrdersController;
 use App\Http\Controllers\Support\SupportEmployeeController;
 use App\Http\Controllers\Support\SupportInvoiceController;
 
-
+//accounts
+use App\Http\Controllers\Accounts\AccounsDashboardController;
 
 
 Route::get('/', function () {
@@ -163,6 +164,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //option A B
     Route::post('/admin/allquotes/optionA', [AllQuotesController::class, 'storeOptionA'])->name('allquotes.optionA');
     Route::post('/admin/allquotes/optionB', [AllQuotesController::class, 'storeOptionB'])->name('allquotes.optionB');
+    Route::post('/admin/allquotes/send',[AllQuotesController::class,'sendEmailAndQuotes'])->name('allquotes.send');
 
 
 
@@ -185,6 +187,10 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/admin/allorders/optionB', [AllOrdersController::class, 'storeOptionB'])->name('allorders.optionB');
     Route::post('/admin/allorders/deleteFileA', [AllOrdersController::class, 'deleteFileA'])->name('allorders.deleteFileA');
     Route::post('/admin/allorders/deleteFileB', [AllOrdersController::class, 'deleteFileB'])->name('allorders.deleteFileB');
+    Route::post('/admin/allorders/send',[AllOrdersController::class,'sendEmailAndOrder'])->name('allorders.send');
+
+
+    
     //for process page options
 
 
@@ -311,6 +317,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::resource('/support/suppport-employees', SupportEmployeeController::class);
     Route::resource('/support/suppport-invoices', SupportInvoiceController::class);
 
+    //accounts dashboard routing
+    Route::get('/accounts/dashboard', [AccounsDashboardController::class, 'index'])->name('accounts.dashboard');
+   
     
 
 
