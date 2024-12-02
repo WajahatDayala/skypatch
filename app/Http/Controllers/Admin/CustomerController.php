@@ -28,6 +28,7 @@ use App\Models\Option;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use Carbon\Carbon;
+use App\Models\JobInformation;
 
 
 use Illuminate\Support\Facades\Storage;
@@ -96,36 +97,61 @@ class CustomerController extends Controller
         $customer = User::findOrFail($id);
        
 
-        $orders = DB::table('orders')
-            ->select(
-                'orders.id as order_id',
-                'users.name as customer_name',
-                DB::raw("CONCAT('OR-', orders.id) as design_number"),
-                'orders.name as design_name',
-                'statuses.name as status',
-                DB::raw("'orders' as source_table") // Identify that this row is from the orders table
-            )
-            ->join('users', 'orders.customer_id', '=', 'users.id')
-            ->leftJoin('statuses', 'orders.status_id', '=', 'statuses.id')
-            ->where('orders.payment_status', 0)
-            ->where('orders.invoice_status',0)
-            ->where('orders.customer_id', $id)
-            ->where('orders.status_id', 1)
-            ->orderBy('design_number', 'ASC') // Sort by design_number to keep proper order
-            ->get();
+        // $orders = DB::table('orders')
+        //     ->select(
+        //         'orders.id as order_id',
+        //         'users.name as customer_name',
+        //         DB::raw("CONCAT('OR-', orders.id) as design_number"),
+        //         'orders.name as design_name',
+        //         'statuses.name as status',
+        //         DB::raw("'orders' as source_table") // Identify that this row is from the orders table
+        //     )
+        //     ->join('users', 'orders.customer_id', '=', 'users.id')
+        //     ->leftJoin('statuses', 'orders.status_id', '=', 'statuses.id')
+        //     ->where('orders.payment_status', 0)
+        //     ->where('orders.invoice_status',0)
+        //     ->where('orders.customer_id', $id)
+        //     ->where('orders.status_id', 1)
+        //     ->orderBy('design_number', 'ASC') // Sort by design_number to keep proper order
+        //     ->get();
 
 
-            $vectorOrders =  DB::table('vector_orders')
+        $orders = DB::table('job_information')
+        ->select(
+            'job_information.order_id as order_id',
+            'job_information.total as total',
+            'job_information.created_at as releasedDate',
+            'users.name as customer_name',
+            DB::raw("CONCAT('OR-', orders.id) as design_number"),
+            'orders.name as design_name',
+            'statuses.name as status',
+            DB::raw("'orders' as source_table") // Identify that this row is from the orders table
+        )
+        ->join('orders','job_information.order_id','=','orders.id')
+        ->join('users', 'orders.customer_id', '=', 'users.id')
+        ->leftJoin('statuses', 'orders.status_id', '=', 'statuses.id')
+        ->where('orders.payment_status', 0)
+        ->where('orders.invoice_status',0)
+        ->where('orders.customer_id', $id)
+        ->where('orders.status_id', 1)
+        ->orderBy('design_number', 'ASC') // Sort by design_number to keep proper order
+        ->get();
+
+
+            $vectorOrders =  DB::table('job_information')
             ->select(
-                'vector_orders.id as vector_id',
+                'job_information.vector_id as vector_id',
+                'job_information.total as total',
+                'job_information.created_at as releasedDate',
                 'users.name as customer_name',
                 DB::raw("CONCAT('VO-', vector_orders.id) as design_number"),
                 'vector_orders.name as design_name',
                 'statuses.name as status',
                 DB::raw("'vector_orders' as source_table") // Identify that this row is from the orders table
             )
+            ->join('vector_orders','job_information.vector_id','=','vector_orders.id')
             ->join('users', 'vector_orders.customer_id', '=', 'users.id')
-            ->leftJoin('statuses', 'vector_orders.status_id', '=', 'statuses.id')
+           ->leftJoin('statuses', 'vector_orders.status_id', '=', 'statuses.id')
             ->where('vector_orders.payment_status', 0)
             ->where('vector_orders.invoice_status',0)
             ->where('vector_orders.customer_id', $id)
@@ -179,6 +205,7 @@ class CustomerController extends Controller
             //$prices = $request->input('price');
 
             $orderPrice = $request->input('price');
+            $orderReleasedDate = $request->input('relased_date');
             $selectedOrders = $request->input('selected_orders');
 
             $orderIds = $selectedOrders;
@@ -197,6 +224,7 @@ class CustomerController extends Controller
             }
 
             $orderPrs = $orderPrice;
+            $orderReleasedD = $orderReleasedDate;
 
             foreach ($orderPrs as $index => $priceval) {
                 // Log only if the price value is not null
@@ -204,7 +232,22 @@ class CustomerController extends Controller
                     //\Log::info("Order Price : {$priceval}");
                 }
             }
+            //released Date
 
+            foreach($orderReleasedD as $index => $relDate){
+                if($relDate !== null)
+                {
+
+                }
+            }
+
+            //fitler releasedDate
+            $orderReleasedD = array_filter($orderReleasedDate, function ($value) {
+                return $value !== null;  // Keep only non-null values
+            });
+
+            //reIndex of releasedDate 
+            $orderReleasedD = array_values($orderReleasedD);
 
             // Step 1: Filter out null values from the $orderPrs (order prices) array
             $orderPrs = array_filter($orderPrice, function ($value) {
@@ -217,7 +260,8 @@ class CustomerController extends Controller
             // Step 2: Merge Order IDs and Prices arrays into one array
             $mergedData = [
                 'OrderIDs' => $selectedOrders,        // Store order IDs under 'OrderIDs'
-                'OrderPrices' => $orderPrs           // Store filtered order prices under 'OrderPrices'
+                'OrderPrices' => $orderPrs,           // Store filtered order prices under 'OrderPrices'
+                'releasedDate' =>$orderReleasedD
             ];
 
             // Log the merged data if necessary (you can skip this if you don't need to log it)
@@ -229,6 +273,7 @@ class CustomerController extends Controller
                 // Ensure there is a corresponding price for the current order
                 if (isset($mergedData['OrderPrices'][$index])) {
                     $orderPrice = $mergedData['OrderPrices'][$index];
+                    $orderReleasedDate = $mergedData['releasedDate'][$index];
 
                     // Step 4: Check if the order exists in the 'orders' table
                     if ($orderId) {
@@ -251,6 +296,7 @@ class CustomerController extends Controller
                             'price' => $orderPrice,
                             'created_at' => now(),
                             'updated_at' => now(),
+                            'released_date'=>$orderReleasedDate
                         ]);
 
                        // Update the invoice_status for the order
@@ -274,6 +320,7 @@ class CustomerController extends Controller
         if ($request->has('selected_vector_orders') && $request->has('vector_price')) {
             // Ensure vectorPrices and selectedVectorOrders are being passed correctly
             $vectorPrices = $request->input('vector_price');
+            $vectorReleasedDate = $request->input('v_relased_date');
             $selectedVectorOrders = $request->input('selected_vector_orders');
 
 
@@ -295,6 +342,7 @@ class CustomerController extends Controller
 
 
             $orderPrs = $vectorPrices;
+            $vectorReleasedD = $vectorReleasedDate;
 
             foreach ($orderPrs as $index => $priceval) {
                 // Log only if the price value is not null
@@ -302,6 +350,23 @@ class CustomerController extends Controller
                     //\Log::info("Order Price : {$priceval}");
                 }
             }
+
+              //released Date
+
+              foreach($vectorReleasedD as $index => $vrelDate){
+                if($vrelDate !== null)
+                {
+
+                }
+            }
+
+            //fitler releasedDate
+            $vectorReleasedD = array_filter($vectorReleasedDate, function ($value) {
+                return $value !== null;  // Keep only non-null values
+            });
+
+            //reIndex of releasedDate 
+            $vectorReleasedD = array_values($vectorReleasedD);
 
 
 
@@ -319,7 +384,8 @@ class CustomerController extends Controller
             // Step 3: Merge Vector IDs and Prices arrays into one associative array
             $mergedData = [
                 'VectorIDs' => $selectedVectorOrders,  // Store vector IDs under 'VectorIDs'
-                'VectorPrices' => $vectorPrices        // Store filtered vector prices under 'VectorPrices'
+                'VectorPrices' => $vectorPrices,        // Store filtered vector prices under 'VectorPrices'
+                'vreleasedDate' => $vectorReleasedD
             ];
 
             // Log the merged data if necessary (you can skip this if you don't need to log it)
@@ -330,6 +396,7 @@ class CustomerController extends Controller
                 // Ensure there is a corresponding price for the current vectorId
                 if (isset($mergedData['VectorPrices'][$index])) {
                     $vectorPrice = $mergedData['VectorPrices'][$index];
+                    $vectorReleasedDate = $mergedData['vreleasedDate'][$index];
 
                     // Step 5: Check if the vector order exists in the 'vector_orders' table
                     if ($vectorId) {
@@ -352,6 +419,7 @@ class CustomerController extends Controller
                             'price' => $vectorPrice,         // Insert the corresponding price
                             'created_at' => now(),
                             'updated_at' => now(),
+                            'released_date' => $vectorReleasedDate
                         ]);
 
                         // Update the invoice_status for the order

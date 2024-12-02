@@ -19,7 +19,7 @@
                  <div class="row">
                                  <div class="col-lg-4"></div>
                                  <div class="col-lg-4 "></div>
-                                <div class="col-lg-4 col-xs-offset-right-12"><a style="margin-left: 70%; color:#fff;" class="btn btn-rounded btn-primary mb-3" href="{{url('admin/employees/create')}}"><i class="fa fa-plus">Add New</i></a></div>
+                                <div class="col-lg-4 col-xs-offset-right-12"><a style="margin-left: 70%; color:#fff;" class="btn btn-rounded btn-primary mb-3" href="{{url('support/suppport-employees/create')}}"><i class="fa fa-plus">Add New</i></a></div>
                                 </div>
                 
                 <div class="table-responsive">

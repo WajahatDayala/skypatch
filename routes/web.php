@@ -53,6 +53,15 @@ use App\Http\Controllers\Support\SupportInvoiceController;
 
 //accounts
 use App\Http\Controllers\Accounts\AccounsDashboardController;
+use App\Http\Controllers\Accounts\AccountCustomerController;
+use App\Http\Controllers\Accounts\AccountQuotesController;
+use App\Http\Controllers\Accounts\AccountOrdersController;
+use App\Http\Controllers\Accounts\AccountVectorOrdersController;
+use App\Http\Controllers\Accounts\AccountInvoiceController;
+use App\Http\Controllers\Accounts\AccountEmployeeController;
+
+
+
 
 
 Route::get('/', function () {
@@ -281,6 +290,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/support/allcustomers', [SupportCustomerController::class, 'allCustomer']);
     Route::get('/support/supportcustomers/{id}/billInfo',[SupportCustomerController::class,'billInfo'])->name('supportcustomers.billInfo');
     
+    Route::get('/support/supportcustomers/{id}/addinvoice', [SupportCustomerController::class, 'addInvoice'])->name('supportcustomers.addinvoice');
+    Route::post('/support/supportcustomers/storeinvoice', [SupportCustomerController::class, 'storeInvoice'])->name('supportcustomers.storeinvoice'); //customer panel profile from admin panel
+    
       //pricing criteria
     Route::get('/support/pricing/{id}/support-pricing-details',[SupportCustomerController::class,'editPricingDetails'])->name('pricing.support-pricing-details');
     Route::post('/support/pricing/save/', [SupportCustomerController::class, 'updatePriceDetails'])->name('pricing.save');
@@ -319,10 +331,34 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
     //accounts dashboard routing
     Route::get('/accounts/dashboard', [AccounsDashboardController::class, 'index'])->name('accounts.dashboard');
+    Route::resource('/accounts/accounts-customers',AccountCustomerController::class);
+    Route::get('/accounts/allcustomers',[AccountCustomerController::class,'allCustomer']);
+    Route::get('/accounts/accounts-customers/{id}/billInfo',[AccountCustomerController::class,'billInfo'])->name('accounts-customers.billInfo');
+    Route::get('/accounts/accounts-customers/{id}/pricing-details',[AccountCustomerController::class,'editPricingDetails'])->name('accounts-customers.pricing-details');
+    Route::get('/accounts/accounts-customers/{id}/vector-details',[AccountCustomerController::class,'editVectorDetails'])->name('accounts-customers.vector-details');
    
+    Route::get('/accounts/accounts-customers/{id}/addinvoice', [AccountCustomerController::class, 'addInvoice'])->name('accounts-customers.addinvoice');
+    Route::resource('/accounts/accounts-invoices', AccountInvoiceController::class);
+
+
+    //accounts quotes routing
+    Route::resource('/accounts/account-allquotes',AccountQuotesController::class);
+    // Route::get('/accounts/accountquotes/{id}/process', [AccountQuotesController::class, 'showProcess'])->name('supportquotes.process');
+    // Route::get('/accounts/accountquotes/{id}/print', [AccountQuotesController::class, 'printOrder'])->name('supportquotes.print');
+    // Route::post('/accounts/accountquotes/send',[AccountQuotesController::class,'sendEmailAndQuotes'])->name('supportquotes.send');
+  
+    //accounts orders routing
+    Route::resource('/accounts/account-allorders',AccountOrdersController::class);
     
+    //accounts vector order routing
+    
+    Route::resource('/accounts/account-allvectors',AccountVectorOrdersController::class);
+
+    //employee add
+    Route::resource('/accounts/account-employees',AccountEmployeeController::class);
 
 
+    
 
 
 

@@ -19,6 +19,7 @@ use Dompdf\Options;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\DB;
+use App\Models\JobInformation;
 
 class InvoiceControlller extends Controller
 {
@@ -86,6 +87,7 @@ class InvoiceControlller extends Controller
     ->get();
    
 
+   
  
 
     // Initialize Dompdf

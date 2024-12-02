@@ -19,7 +19,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('customer.storeinvoice') }}" method="POST">
+                <form action="{{ route('supportcustomers.storeinvoice') }}" method="POST">
     @csrf
     <div class="col-md-4">
         <div class="form-group">
@@ -52,7 +52,8 @@
                             <td><input type="text" name="designNumber[]" class="form-control" value="{{ $o->design_number }}" readonly /></td>
                             <td><input type="text" name="designName[]" class="form-control" value="{{ $o->design_name }}" readonly /></td>
                             <td class="col-sm-4 text-center">
-                                <input type="number" name="price[]" class="form-control price-input" style="display: none;" data-row="{{ $loop->iteration }}" />
+                                <input type="number" name="price[]" readonly class="form-control price-input" data-row="{{ $loop->iteration }}" value="{{$o->total}}" />
+                                <input type="text" hidden name="relased_date[]" value="{{$o->releasedDate}}">
                             </td>
                         </tr>
                     @endforeach
@@ -65,7 +66,8 @@
                             <td><input type="text" name="designNumber[]" class="form-control" value="{{ $v->design_number }}" readonly /></td>
                             <td><input type="text" name="designName[]" class="form-control" value="{{ $v->design_name }}" readonly /></td>
                             <td class="col-sm-4 text-center">
-                                <input type="number" name="vector_price[]" class="form-control price-input" style="display: none;" data-row="{{ $loop->iteration }}_vector" />
+                                <input type="number" name="vector_price[]" class="form-control price-input" readonly  data-row="{{ $loop->iteration }}_vector" value="{{$v->total}}" />
+                                <input type="text" hidden name="v_relased_date[]" value="{{$v->releasedDate}}">
                             </td>
                         </tr>
                     @endforeach
@@ -106,10 +108,10 @@ document.querySelectorAll('.check-box').forEach(function(checkbox) {
 
         if (priceInput) {  // Check if priceInput exists
             if (checkbox.checked) {
-                priceInput.style.display = 'block'; // Show the price input field when checked
+                priceInput.disabled = false; // Enable the price input when checked
             } else {
-                priceInput.style.display = 'none'; // Hide the price input field when unchecked
-                priceInput.value = '';             // Reset the price value when unchecked
+                priceInput.disabled = true; // Disable the price input when unchecked
+               // priceInput.value = ''; // Optionally clear the value when unchecked
             }
         } else {
             console.error(`Price input for row ${rowIndex} not found`);
@@ -128,13 +130,20 @@ document.querySelectorAll('.price-input').forEach(function(input) {
 
 function updateTotal() {
     let totalPrice = 0;
-    document.querySelectorAll('.price-input').forEach(function(input) {
-        if (input.style.display !== 'none' && input.value) {
-            totalPrice += parseFloat(input.value);  // Add the price value
+
+    // Iterate through all checkboxes to calculate the total price of selected items
+    document.querySelectorAll('.check-box').forEach(function(checkbox) {
+        if (checkbox.checked) {  // Only consider checked checkboxes
+            let rowIndex = checkbox.getAttribute('data-row');
+            let priceInput = document.querySelector(`.price-input[data-row="${rowIndex}"]`);
+
+            if (priceInput && priceInput.value) {  // Make sure there's a price input and it's not empty
+                totalPrice += parseFloat(priceInput.value);  // Add the price value
+            }
         }
     });
 
-    // Update total in the table cell with id="total-price"
+    // Update the total in the footer cell with id="total-price"
     document.getElementById('total-price').innerText = totalPrice.toFixed(2);
 }
 
@@ -147,18 +156,17 @@ document.querySelector('form').addEventListener('submit', function(e) {
         const rowIndex = checkbox.getAttribute('data-row');
         const priceInput = document.querySelector(`.price-input[data-row="${rowIndex}"]`);
         
-        if (priceInput && priceInput.value) {
-            // Create a hidden input for each price (only if the price is not empty)
+        if (priceInput && priceInput.value && !priceInput.disabled) {
+            // Create a hidden input for each price (only if the price is not empty and the input is enabled)
             const hiddenPriceInput = document.createElement('input');
-            hiddenPriceInput.type = 'hidden';
+           // hiddenPriceInput.type = 'hidden';
             hiddenPriceInput.name = 'price[]'; // Ensure these are sent with the form
             hiddenPriceInput.value = priceInput.value;
             e.target.appendChild(hiddenPriceInput); // Append the hidden input to the form
         }
     });
 });
+
 </script>
-
-
 
 @endsection

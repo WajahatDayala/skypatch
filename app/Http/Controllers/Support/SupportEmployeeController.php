@@ -9,7 +9,7 @@ use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-
+use Auth;
 class SupportEmployeeController extends Controller
 {
     /**
@@ -60,7 +60,14 @@ class SupportEmployeeController extends Controller
 
         ]);
 
-        return redirect()->route('employees.index')->with('success', 'Employee added successfully!');
+        if (Auth::user()->role->name === 'Customer Support') {
+            return redirect()->route('suppport-employees.index')->with('success', 'Employee added successfully!');
+        
+        } else if (Auth::user()->role->name == 'Accounts') {
+
+            return redirect()->route('account-employees.index')->with('success', 'Invoice created successfully!');
+        }
+      
     }
 
     /**
