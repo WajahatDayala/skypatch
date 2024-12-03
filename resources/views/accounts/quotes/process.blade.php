@@ -1,4 +1,4 @@
-@extends('admin.quotes.base')
+@extends('accounts.quotes.base')
 @section('action-content')
 
          <!-- All Content Goes inside this div -->

@@ -628,6 +628,55 @@ class AllOrdersController extends Controller
     {
         //
 
+        $order = Order::findOrFail($id);
+      
+        $requiredFormat = RequiredFormat::all();
+        $fabric = Fabric::all();
+        $placement = Placement::all();
+       
+       
+
+        $order = Order::select('*', 
+        'orders.id as order_id',
+        'orders.name as design_name',
+        'users.name as customer_name', 
+        'statuses.name as status',
+        'fabrics.name as fabric_name',
+        'required_formats.name as format',
+        'placements.name as placement',
+        'users.name as customer_name',
+        'orders.created_at as received_date',
+        'orders.name as design_name')
+        ->join('users', 'orders.customer_id', '=', 'users.id')
+        ->join('statuses','orders.status_id','=','statuses.id')
+        ->join('fabrics','orders.fabric_id','=','fabrics.id')
+        ->join('placements','orders.placement_id','=','placements.id')
+        ->join('required_formats','orders.required_format_id','=','required_formats.id')
+        ->where('orders.id', $order->id) 
+        ->first(); 
+     
+        //order files
+        $quoteFiles =QuoteFileLog::select('*')
+        ->join('orders','quote_file_logs.order_id','=','orders.id')
+        ->where('quote_file_logs.order_id',$order->order_id)
+        ->get();
+
+        //instruction
+        $orderInstruction = Order::select('*','instructions.description as instruction') 
+        ->leftjoin('instructions','instructions.order_id','=','orders.id')
+        ->where('instructions.order_id',$order->order_id)
+        ->first();
+
+
+        return view('admin/orders/edit',compact(
+            'order',
+            'quoteFiles',
+            'requiredFormat',
+            'fabric',
+            'orderInstruction',
+            'placement'
+        ));
+
     }
 
     //process for order
@@ -929,6 +978,119 @@ class AllOrdersController extends Controller
     public function update(Request $request, string $id)
     {
         //
+         // Validate the request
+         $validatedData = $request->validate([
+            'name' => 'required',
+            'required_format_id' => 'required',
+            'fabric_id' => 'required',
+            'placement_id' => 'required'
+        ], [
+            'name.required' => 'Name is required.',
+            'required_format_id.required' => 'Format is required.',
+            'fabric_id.required' => 'Fabric is required.',
+            'placement_id.required' => 'Placement is required.'
+        ]);
+    
+        DB::beginTransaction();
+        $order = Order::findOrFail($id);
+    
+        try {
+
+             
+            
+        //status update 
+        $order->update(['edit_status' => 0]);
+
+            
+        if ($order->order_id == null) {
+
+            $order = order::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'fabric_id' => $request->fabric_id,
+                'placement_id' => $request->placement_id,
+                'edit_order_id' => $order->id,
+                'edit_status' => 1,
+                'description' => $request->desc . '(' . 'OR-' . $order->id.')',
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'height' => $request->height,
+                'width' => $request->width,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+
+            ]);
+        }
+        else{
+            $order = order::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'fabric_id' => $request->fabric_id,
+                'placement_id' => $request->placement_id,
+                'edit_order_id' => $order->id,
+                'edit_status' => 1,
+                
+                'description' => $request->desc . '(OR-' . (string)$id . '),(OR-' . (string)$order->id . ')',
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'height' => $request->height,
+                'width' => $request->width,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+
+            ]);
+        }
+           
+
+            // Handle file uploads
+            if ($request->hasFile('files')) {
+                // Fetch and delete existing files
+                $existingFiles = QuoteFileLog::where('order_id', $order->id)->get();
+                foreach ($existingFiles as $fileLog) {
+                    Storage::disk('public')->delete($fileLog->files);
+                    $fileLog->delete();
+                 
+                }
+    
+                // Store new files
+            foreach ($request->file('files') as $file) {
+                    $filePath = $file->store('uploads/quotes', 'public');
+
+                    // Get the original filename
+                    $originalFilename = $file->getClientOriginalName();
+
+        // Create a structured string to store both path and original filename
+            $fileData = [
+                        'path' => $filePath,
+                        'original_name' => $originalFilename,
+                        ];
+                 
+                    QuoteFileLog::create([
+                        'order_id' => $order->id,
+                        'cust_id' => Auth::id(),
+                        'files' => json_encode($fileData),
+                    ]);
+                }
+            }
+    
+            // Update additional instructions
+            if ($request->filled('additional_instruction')) {
+                Instruction::updateOrCreate(
+                    ['order_id' => $order->id],
+                    ['description' => $request->additional_instruction]
+                );
+            }
+    
+            DB::commit();
+            
+            //return redirect()->route('orders.edit', $order->id)->with('success', 'Order updated successfully!');
+            return redirect()->route('allorders.index')->with('success', 'Order updated successfully!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            //\Log::error('Error updating Order: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'An error occurred while updating the Order.']);
+        }
     }
 
     /**

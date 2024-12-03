@@ -13,6 +13,10 @@
                     <div class="col-6 d-flex align-items-center justify-content-end">
                         <a href="{{route('supportorders.print',[$order->order_id])}}"
                                       target="_blank"  class="btn btn-sm btn-primary rounded-pill me-2">Print</a> 
+                        @if($order->edit_status == 1 && $order->status_id == 1)
+                                      <a href="{{route('support-allorders.edit',[$order->order_id])}}"
+                                              class="btn btn-sm btn-primary rounded-pill me-2">Edit</a> 
+                                  @endif
                         @if($order->edit_status == 1 && $order->status_id == 2)
                        <a href="{{route('supportorders.process',[$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
                         @endif

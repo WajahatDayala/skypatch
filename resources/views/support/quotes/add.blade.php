@@ -1,4 +1,4 @@
-@extends('admin.quotes.base')
+@extends('support.quotes.base')
 @section('action-content')
 
 

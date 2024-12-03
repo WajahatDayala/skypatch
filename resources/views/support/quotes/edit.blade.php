@@ -1,4 +1,4 @@
-@extends('admin.quotes.base')
+@extends('support.quotes.base')
 @section('action-content')
 
 
@@ -17,7 +17,7 @@
                              </ul>
                             </div>
                              @endif
-                             <form action="{{ route('allquotes.update', $quote->quote_id) }}" method="POST" enctype="multipart/form-data">
+                             <form action="{{ route('supportquotes.update', $quote->quote_id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT') <!-- Use PUT method for updating -->
                                 <div class="row mb-3">

@@ -343,17 +343,21 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
     //accounts quotes routing
     Route::resource('/accounts/account-allquotes',AccountQuotesController::class);
-    // Route::get('/accounts/accountquotes/{id}/process', [AccountQuotesController::class, 'showProcess'])->name('supportquotes.process');
-    // Route::get('/accounts/accountquotes/{id}/print', [AccountQuotesController::class, 'printOrder'])->name('supportquotes.print');
-    // Route::post('/accounts/accountquotes/send',[AccountQuotesController::class,'sendEmailAndQuotes'])->name('supportquotes.send');
+    Route::get('/accounts/accountquotes/{id}/process', [AccountQuotesController::class, 'showProcess'])->name('accountquotes.process');
+    Route::get('/accounts/accountquotes/{id}/print', [AccountQuotesController::class, 'printOrder'])->name('accountquotes.print');
   
     //accounts orders routing
     Route::resource('/accounts/account-allorders',AccountOrdersController::class);
-    
+    Route::get('/accounts/accountorders/{id}/process', [AccountOrdersController::class, 'processOrder'])->name('accountorders.process');
+    Route::get('/accounts/accountorders/{id}/print', [AccountOrdersController::class, 'printOrder'])->name('accountorders.print');
+  //  Route::post('/accounts/accountorders/deleteOrder',[SupportOrdersController::class,'deleteOrder'])->name('supportorders.deleteOrder');
+   
     //accounts vector order routing
     
     Route::resource('/accounts/account-allvectors',AccountVectorOrdersController::class);
-
+    Route::get('/accounts/account-vector-orders/{id}/process', [SupportVectorOrdersController::class, 'processOrder'])->name('account-vector-orders.process');
+    Route::get('/accounts/account-vector-orders/{id}/print', [SupportVectorOrdersController::class, 'printOrder'])->name('account-vector-orders.print');
+ 
     //employee add
     Route::resource('/accounts/account-employees',AccountEmployeeController::class);
 

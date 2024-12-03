@@ -14,16 +14,16 @@
                         <h6 class="h6 mb-0">Quote Details</h6>
                     </div>
                     <div class="col-6 d-flex align-items-center justify-content-end">
-                        <a href="{{route('supportquotes.print',[$order->order_id])}}"
+                        <a href="{{route('accountquotes.print',[$order->order_id])}}"
                             target="_blank"  class="btn btn-sm btn-primary rounded-pill me-2">Print</a> 
                                         
                         @if($order->edit_status == 1 && $order->status_id == 1)
-                        <a href="{{route('supportquotes.edit',[$order->order_id])}}"
+                        <a href="{{route('account-allquotes.edit',[$order->order_id])}}"
                         class="btn btn-sm btn-primary rounded-pill me-2">Edit</a> 
                         @endif
 
                         @if($order->edit_status == 1 && $order->status_id == 2)
-                        <a href="{{route('supportquotes.process',[$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
+                        <a href="{{route('accountquotes.process',[$order->order_id])}}" class="btn btn-sm btn-dark rounded-pill ">Process</a>
                         @endif
                     </div>
                 </div>

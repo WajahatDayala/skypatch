@@ -25,6 +25,7 @@ use App\Models\PricingCriteria;
 use App\Models\VectorDetail;
 use App\Models\JobInformation;
 
+
 class SupportQuotesController extends Controller
 {
     /**
@@ -485,10 +486,17 @@ class SupportQuotesController extends Controller
            
            $quote->update(['status_id' => 1]);
 
-           return redirect()->route('supportquotes.show',$request->quote_id)->with('success', 'Quote updated successfully!');
+
+        if (Auth::user()->role->name === 'Customer Support') {
+            return redirect()->route('supportquotes.show', $request->quote_id)->with('success', 'Quote updated successfully!');
+
+        } else if (Auth::user()->role->name == 'Accounts') {
+
+            return redirect()->route('account-allquotes.show', $request->quote_id)->with('success', 'Invoice created successfully!');
+        }
 
 
-       }
+    }
 
    
     /**
@@ -497,6 +505,55 @@ class SupportQuotesController extends Controller
     public function edit(string $id)
     {
         //
+        $quote = Quote::findOrFail($id);
+
+        $requiredFormat = RequiredFormat::all();
+        $fabric = Fabric::all();
+        $placement = Placement::all();
+       
+       
+
+        $quote = Quote::select('*', 
+        'quotes.id as quote_id',
+        'quotes.name as design_name',
+        'users.name as customer_name', 
+        'statuses.name as status',
+        'fabrics.name as fabric_name',
+        'required_formats.name as format',
+        'placements.name as placement',
+        'users.name as customer_name',
+        'quotes.created_at as received_date',
+        'quotes.name as design_name')
+        ->join('users', 'quotes.customer_id', '=', 'users.id')
+        ->join('statuses','quotes.status_id','=','statuses.id')
+        ->join('fabrics','quotes.fabric_id','=','fabrics.id')
+        ->join('placements','quotes.placement_id','=','placements.id')
+        ->join('required_formats','quotes.required_format_id','=','required_formats.id')
+      
+        ->where('quotes.id', $quote->id) 
+        ->first(); 
+
+        //quote files
+        $quoteFiles =QuoteFileLog::select('*')
+        ->join('quotes','quote_file_logs.quote_id','=','quotes.id')
+        ->where('quote_file_logs.quote_id',$quote->quote_id)
+        ->get();
+
+      //instruction
+      $quoteInstruction = Quote::select('*','instructions.description as instruction') 
+      ->leftjoin('instructions','instructions.quote_id','=','quotes.id')
+      ->where('instructions.quote_id',$quote->quote_id)
+      ->first();
+
+
+        return view('support/quotes/edit',compact(
+            'quote',
+            'quoteFiles',
+            'requiredFormat',
+            'fabric',
+            'quoteInstruction',
+            'placement'
+        ));
     }
 
     /**
@@ -505,6 +562,136 @@ class SupportQuotesController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'required_format_id' => 'required',
+            'fabric_id' => 'required',
+            'placement_id' => 'required'
+        ], [
+            'name.required' => 'Name is required.',
+            'required_format_id.required' => 'Format is required.',
+            'fabric_id.required' => 'Fabric is required.',
+            'placement_id.required' => 'Placement is required.'
+        ]);
+    
+        DB::beginTransaction();
+        $quote = Quote::findOrFail($id);
+    
+        try {
+      
+
+
+
+            // Create a new Quote
+            if ($quote->quote_id == null) {
+                
+                $quote->update(['edit_status' => 0]);
+
+                $quote = Quote::create([
+                    'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                    'required_format_id' => $request->required_format_id,
+                    'fabric_id' => $request->fabric_id,
+                    'placement_id' => $request->placement_id,
+                    'status_id' => $request->status,
+                    'quote_id_edit' => $quote->id,
+                    'edit_status' => 1,
+                    'description' => $request->desc . '(' . 'QT-' . $quote->id.')',
+                    'name' => $request->name,
+              
+                    'height' => $request->height,
+                    'width' => $request->width,
+                    'number_of_colors' => $request->number_of_colors,
+                    'super_urgent' => $request->has('super_urgent'),
+                ]);
+            } else {
+
+                $quote->update(['edit_status' => 0]);
+                $quote = Quote::create([
+                    'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                    'required_format_id' => $request->required_format_id,
+                    'fabric_id' => $request->fabric_id,
+                    'placement_id' => $request->placement_id,
+                    'status_id' => $request->status,
+                    'quote_id_edit' => $quote->id,
+                    'edit_status' => 1,
+                    'description' => $request->desc . '(QT-' . (string)$id . '),(QT-' . (string)$quote->id . ')',
+                    //'name' => $request->name . '(QT-'.''.$id.'),('.'QT-'.$quote->id.')',
+                    'name' => $request->name,
+
+                    'height' => $request->height,
+                    'width' => $request->width,
+                    'number_of_colors' => $request->number_of_colors,
+                    'super_urgent' => $request->has('super_urgent'),
+                ]);
+
+            }
+    
+
+            //removed quote edit Id
+            // $quoteId =  new QuoteEditID();
+            // $quoteId->quote_id = $quote->id;
+            // $quoteId->save();
+
+            // Handle file uploads
+            if ($request->hasFile('files')) {
+                // Fetch and delete existing files
+                $existingFiles = QuoteFileLog::where('quote_id', $quote->id)->get();
+                foreach ($existingFiles as $fileLog) {
+                    Storage::disk('public')->delete($fileLog->files);
+                    $fileLog->delete();
+                }
+    
+                // Store new files
+                foreach ($request->file('files') as $file) {
+                    $filePath = $file->store('uploads/quotes', 'public');
+
+                        // Get the original filename
+                $originalFilename = $file->getClientOriginalName();
+    
+                // Create a structured string to store both path and original filename
+                $fileData = [
+                    'path' => $filePath,
+                    'original_name' => $originalFilename,
+                ];
+    
+
+                    QuoteFileLog::create([
+                        'quote_id' => $quote->id,
+                        'cust_id'=>$request->customer_id,
+                        'emp_id' => Auth::id(),
+                        'files' => json_encode($fileData),
+                    ]);
+                }
+            }
+    
+            // Update additional instructions
+            if ($request->filled('additional_instruction')) {
+                Instruction::updateOrCreate(
+                    ['quote_id' => $quote->id],
+                    ['description' => $request->additional_instruction]
+                );
+            }
+    
+            DB::commit();
+            
+           // return redirect()->route('allquotes.edit', $quote->id)->with('success', 'Quote updated successfully!');
+          //  return redirect()->route('allquotes.index')->with('success', 'Quote updated successfully!');
+          if (Auth::user()->role->name === 'Customer Support') {
+            return redirect()->route('supportquotes.index')->with('success', 'Quote updated successfully!');
+
+        } else if (Auth::user()->role->name == 'Accounts') {
+
+            return redirect()->route('account-allquotes.index')->with('success', 'Invoice created successfully!');
+        }
+
+
+       
+       
+        } catch (\Exception $e) {
+            DB::rollBack();
+           // \Log::error('Error updating quote: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'An error occurred while updating the quote.']);
+        }
     }
 
     /**

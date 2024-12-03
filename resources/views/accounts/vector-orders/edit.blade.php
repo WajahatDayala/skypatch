@@ -17,7 +17,7 @@
                              </ul>
                             </div>
                              @endif
-                             <form action="{{ route('allvectors.update', $order->order_id) }}" method="POST" enctype="multipart/form-data">
+                             <form action="{{ route('support-vector-orders.update', $order->order_id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT') <!-- Use PUT method for updating -->
                                 <div class="row mb-3">

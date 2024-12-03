@@ -308,10 +308,11 @@ class AllVectorController extends Controller
         ->first();
 
          //jobinfo
-         $jobInfo = JobInformation::select('*')
-         ->leftjoin('orders','job_information.order_id','=','orders.id')
-         ->where('job_information.order_id',$id)
-         ->first();
+      
+     $jobInfo = JobInformation::select('*')
+     ->leftjoin('vector_orders','job_information.vector_id','=','vector_orders.id')
+     ->where('job_information.vector_id',$id)
+     ->first();
  
 
 

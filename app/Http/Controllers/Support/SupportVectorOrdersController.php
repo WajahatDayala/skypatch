@@ -402,11 +402,14 @@ class SupportVectorOrdersController extends Controller
         ->first();
 
          //jobinfo
-         $jobInfo = JobInformation::select('*')
-         ->leftjoin('orders','job_information.order_id','=','orders.id')
-         ->where('job_information.order_id',$id)
-         ->first();
- 
+     
+     $jobInfo = JobInformation::select('*')
+     ->leftjoin('vector_orders','job_information.vector_id','=','vector_orders.id')
+     ->where('job_information.vector_id',$id)
+     ->first();
+
+
+
 
 
 
@@ -447,10 +450,17 @@ class SupportVectorOrdersController extends Controller
            //relased o9rders
            $order->update(['status_id' => 1]);
  
-           return redirect()->route('support-vector-orders.show',$request->order_id)->with('success', 'Vector Order updated successfully!');
- 
- 
-       }
+           //return redirect()->route('support-vector-orders.show',$request->order_id)->with('success', 'Vector Order updated successfully!');
+
+        if (Auth::user()->role->name === 'Customer Support') {
+            return redirect()->route('support-vector-orders.show', $request->order_id)->with('success', 'Order updated successfully!');
+
+        } else if (Auth::user()->role->name == 'Accounts') {
+
+            return redirect()->route('account-allvectors.show', $request->order_id)->with('success', 'Invoice created successfully!');
+        }
+
+    }
  
 
     /**
@@ -459,6 +469,47 @@ class SupportVectorOrdersController extends Controller
     public function edit(string $id)
     {
         //
+        $order = VectorOrder::findOrFail($id);
+
+        $requiredFormat = VectorRequiredFormat::all();
+       
+       
+
+        $order = VectorOrder::select('*', 
+        'vector_orders.id as order_id',
+        'vector_orders.name as design_name',
+        'users.name as customer_name', 
+        'statuses.name as status',
+        'vector_required_formats.name as format',
+        'users.name as customer_name',
+        'vector_orders.created_at as received_date',
+        'vector_orders.name as design_name')
+        ->join('users', 'vector_orders.customer_id', '=', 'users.id')
+        ->join('statuses','vector_orders.status_id','=','statuses.id')
+        ->join('vector_required_formats','vector_orders.required_format_id','=','vector_required_formats.id')
+        ->where('vector_orders.id', $id) 
+        ->first(); 
+
+        //order files
+        $quoteFiles =QuoteFileLog::select('*')
+        ->join('vector_orders','quote_file_logs.vector_order_id','=','vector_orders.id')
+        ->where('quote_file_logs.vector_order_id',$id)
+        ->get();
+
+       
+         //instruction
+         $orderInstruction = VectorOrder::select('*','instructions.description as instruction') 
+         ->leftjoin('instructions','instructions.vector_id','=','vector_orders.id')
+         ->where('instructions.vector_id',$id)
+         ->first();
+
+
+        return view('support/vector-orders/edit',compact(
+            'order',
+            'quoteFiles',
+            'requiredFormat',
+            'orderInstruction'
+        ));
     }
 
     /**
@@ -467,6 +518,130 @@ class SupportVectorOrdersController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'required_format_id' => 'required'
+        ], [
+            'name.required' => 'Name is required.',
+            'required_format_id.required' => 'Format is required.'
+        ]);
+    
+        DB::beginTransaction();
+        $order = VectorOrder::findOrFail($id);
+
+        //status update 
+        $order->update(['edit_status' => 0]);
+    
+        try {
+            // $order->update([
+            //     'required_format_id' => $request->required_format_id,
+            //     'status_id' => $request->status,
+            //     'name' => $request->name,
+            //     'number_of_colors' => $request->number_of_colors,
+            //     'super_urgent' => $request->has('super_urgent'),
+            // ]);
+    
+                      
+        if ($order->order_id == null) {
+
+            $order = VectorOrder::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'edit_vector_id' => $order->id,
+                'edit_status' => 1,
+                'description' => $request->desc . '(' . 'VO-' . $order->id.')',
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+
+            ]);
+
+        }
+        else{
+
+            $order = VectorOrder::create([
+                'customer_id' => $request->customer_id, // Get the authenticated user's ID
+                'required_format_id' => $request->required_format_id,
+                'edit_vector_id' => $order->id,
+                'edit_status' => 1,
+                'description' => $request->desc . '(VO-' . (string)$id . '),(VO-' . (string)$order->id . ')',
+                'status_id' => $request->status,
+                'name' => $request->name,
+                'number_of_colors' => $request->number_of_colors,
+                'super_urgent' => $request->has('super_urgent'),
+
+            ]);
+
+
+        }
+        
+
+            // Handle file uploads
+            if ($request->hasFile('files')) {
+                // Fetch and delete existing files
+                $existingFiles = QuoteFileLog::where('vector_order_id', $order->id)->get();
+                foreach ($existingFiles as $fileLog) {
+                    Storage::disk('public')->delete($fileLog->files);
+                    $fileLog->delete();
+                }
+    
+                // Store new files
+                foreach ($request->file('files') as $file) {
+                    $filePath = $file->store('uploads/vector-order', 'public');
+
+                                // Get the original filename
+                $originalFilename = $file->getClientOriginalName();
+    
+                // Create a structured string to store both path and original filename
+                $fileData = [
+                    'path' => $filePath,
+                    'original_name' => $originalFilename,
+                ];
+    
+
+                    QuoteFileLog::create([
+                        'vector_order_id' => $order->id,
+                        'cust_id'=>$request->customer_id,
+                        'emp_id' => Auth::id(),
+                        'files' => json_encode($fileData),
+                    ]);
+
+
+
+
+                }
+            }
+    
+            // Update additional instructions
+            if ($request->filled('additional_instruction')) {
+                Instruction::updateOrCreate(
+                    ['vector_id' => $order->id],
+                    ['description' => $request->additional_instruction]
+                );
+            }
+    
+            DB::commit();
+            
+           // return redirect()->route('allvectors.edit', $order->id)->with('success', 'Vector updated successfully!');
+
+          // return redirect()->route('support-vector-orders.index')->with('success', 'Order updated successfully!');
+
+            if (Auth::user()->role->name === 'Customer Support') {
+                return redirect()->route('support-vector-orders.index')->with('success', 'Order updated successfully!');
+
+            } else if (Auth::user()->role->name == 'Accounts') {
+
+                return redirect()->route('account-allvectors.index')->with('success', 'Invoice created successfully!');
+            }
+
+
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            //\Log::error('Error updating Vector: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'An error occurred while updating the Vector.']);
+        }
     }
 
     /**
