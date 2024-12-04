@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Support;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Models\Admin;
+use App\Models\Role;
 class SupportAssignLeaderController extends Controller
 {
     /**
@@ -13,6 +14,28 @@ class SupportAssignLeaderController extends Controller
     public function index()
     {
         //
+        $employee = Admin::select('*',
+        'admins.id as employeeId',
+         'admins.name as employeeName', 
+         'roles.name as roles','admins.leader_id', 
+         'leaders.name as leaderName')
+        ->leftJoin('admins as leaders', 'admins.leader_id', '=', 'leaders.id') // Join to get leader name
+        ->join('roles', 'admins.role_id', '=', 'roles.id')
+        ->whereIn('roles.name', 
+        ['Quote Worker', 'Order Worker', 'Vector Worker'])
+        ->get();
+
+        //all leaders 
+        $leaders = Admin::select('*', 'admins.name as leaderName', 'roles.name as roles')
+        ->join('roles', 'admins.role_id', '=', 'roles.id')
+        ->whereIn('roles.name',
+         ['Quote Leader', 'Order Leader', 'Vector Leader'])
+        ->get();
+      
+        return view('admin.assignleaders.index',[
+            'employee'=>$employee,
+            'leaders'=>$leaders
+        ]);
     }
 
     /**

@@ -67,6 +67,11 @@ class SupportEmployeeController extends Controller
 
             return redirect()->route('account-employees.index')->with('success', 'Invoice created successfully!');
         }
+        else if(Auth::user()->role->name == 'Sales')
+        {
+            return redirect()->route('sales-employees.index')->with('success', 'Invoice created successfully!');
+            
+        }
       
     }
 

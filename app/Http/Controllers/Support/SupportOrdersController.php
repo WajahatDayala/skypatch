@@ -515,6 +515,11 @@ class SupportOrdersController extends Controller
 
             return redirect()->route('account-allorders.show', $request->order_id)->with('success', 'Order created successfully!');
         }
+         else if (Auth::user()->role->name == 'Sales') {
+
+            return redirect()->route('sales-allorders.show', $request->order_id)->with('success', 'Order created successfully!');
+        }
+
 
       }
 
@@ -698,6 +703,10 @@ class SupportOrdersController extends Controller
             } else if (Auth::user()->role->name == 'Accounts') {
     
                 return redirect()->route('account-allorders.index')->with('success', 'Order updated successfully!');
+            }
+            else if (Auth::user()->role->name == 'Sales') {
+    
+                return redirect()->route('sales-allorders.index')->with('success', 'Order updated successfully!');
             }
     
 

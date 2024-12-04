@@ -51,6 +51,7 @@ use App\Http\Controllers\Support\SupportVectorOrdersController;
 use App\Http\Controllers\Support\SupportEmployeeController;
 use App\Http\Controllers\Support\SupportInvoiceController;
 
+
 //accounts
 use App\Http\Controllers\Accounts\AccounsDashboardController;
 use App\Http\Controllers\Accounts\AccountCustomerController;
@@ -59,6 +60,22 @@ use App\Http\Controllers\Accounts\AccountOrdersController;
 use App\Http\Controllers\Accounts\AccountVectorOrdersController;
 use App\Http\Controllers\Accounts\AccountInvoiceController;
 use App\Http\Controllers\Accounts\AccountEmployeeController;
+
+
+//sales
+use App\Http\Controllers\Sales\SalesDashboardController;
+use App\Http\Controllers\Sales\SalesCustomerController;
+use App\Http\Controllers\Sales\SalesAllQuotesController;
+use App\Http\Controllers\Sales\SalesOrdersController;
+use App\Http\Controllers\Sales\SalesAllVectorsController;
+use App\Http\Controllers\Sales\SalesEmployeeController;
+use App\Http\Controllers\Sales\SalesInvoiceController;
+use App\Http\Controllers\Sales\SalesAssignLeaderController;
+
+
+
+
+
 
 
 
@@ -329,6 +346,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::resource('/support/suppport-employees', SupportEmployeeController::class);
     Route::resource('/support/suppport-invoices', SupportInvoiceController::class);
 
+    //design & leaders
+    
+
     //accounts dashboard routing
     Route::get('/accounts/dashboard', [AccounsDashboardController::class, 'index'])->name('accounts.dashboard');
     Route::resource('/accounts/accounts-customers',AccountCustomerController::class);
@@ -355,16 +375,53 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //accounts vector order routing
     
     Route::resource('/accounts/account-allvectors',AccountVectorOrdersController::class);
-    Route::get('/accounts/account-vector-orders/{id}/process', [SupportVectorOrdersController::class, 'processOrder'])->name('account-vector-orders.process');
-    Route::get('/accounts/account-vector-orders/{id}/print', [SupportVectorOrdersController::class, 'printOrder'])->name('account-vector-orders.print');
+    Route::get('/accounts/account-vector-orders/{id}/process', [AccountVectorOrdersController::class, 'processOrder'])->name('account-vector-orders.process');
+    Route::get('/accounts/account-vector-orders/{id}/print', [AccountVectorOrdersController::class, 'printOrder'])->name('account-vector-orders.print');
  
     //employee add
     Route::resource('/accounts/account-employees',AccountEmployeeController::class);
 
-
+   
+    //sales panel routing
+    
+    Route::get('/sales/dashboard', [SalesDashboardController::class, 'index'])->name('sales.dashboard');
+    //customer sales panel
+    Route::resource('/sales/sales-customers',SalesCustomerController::class);
+    Route::get('/sales/allcustomers', [SalesCustomerController::class, 'allCustomer']);
+    //quotes sales panel
+    Route::resource('/sales/sales-allquotes',SalesAllQuotesController::class);
+    Route::get('/sales/sales-todayquotes',[SalesAllQuotesController::class,'toDayQuote'])->name('sales.sales-todayquotes');
+    // Route::post('/support/supportquotes/deleteQuote',[SupportQuotesController::class,'deleteQuotes'])->name('supportquotes.deleteQuote');
+    Route::get('/sales/salesquotes/{id}/process', [SalesAllQuotesController::class, 'showProcess'])->name('salesquotes.process');
+    Route::get('/sales/salesquotes/{id}/print', [SalesAllQuotesController::class, 'printOrder'])->name('salesquotes.print');
+    // Route::post('/support/supportquotes/send',[SupportQuotesController::class,'sendEmailAndQuotes'])->name('supportquotes.send');
     
 
+    //orders sales panel
+    Route::resource('/sales/sales-allorders', SalesOrdersController::class);
+    Route::get('/sales/sales-today-orders', [SalesOrdersController::class, 'toDayOrders']);
+    Route::get('/sales/sales-today-edit-orders', [SalesOrdersController::class, 'toDayEditOrders']);
+    Route::get('/sales/salesorders/{id}/process', [SalesOrdersController::class, 'processOrder'])->name('salesorders.process');
+    Route::get('/sales/salesorders/{id}/print', [SalesOrdersController::class, 'printOrder'])->name('salesorders.print');
+    // Route::post('/support/supportorders/deleteOrder',[SupportOrdersController::class,'deleteOrder'])->name('supportorders.deleteOrder');
+    // Route::post('/support/supportorders/send',[SupportOrdersController::class,'sendEmailAndOrder'])->name('supportorders.send');
 
+
+    // vector order sales panel.
+     Route::resource('/sales/sales-allvectors', SalesAllVectorsController::class);
+     Route::get('/sales/sales-today-vectors', [SalesAllVectorsController::class, 'toDayVector']);
+    //  Route::post('/support/support-vector-orders/deleteOrder',[SalesAllVectorsController::class,'deleteOrder'])->name('support-vector-orders.deleteOrder');
+     Route::get('/sales/sales-vector-orders/{id}/process', [SalesAllVectorsController::class, 'processOrder'])->name('sales-vector-orders.process');
+     Route::get('/sales/sales-vector-orders/{id}/print', [SalesAllVectorsController::class, 'printOrder'])->name('sales-vector-orders.print');
+    //  Route::post('/support/support-vector-orders/send',[SalesAllVectorsController::class,'sendEmailAndOrder'])->name('support-vector-orders.send');
+    
+    //  //sales employee add
+     //all employees
+    Route::resource('/sales/sales-employees', SalesEmployeeController::class);
+    Route::resource('/sales/sales-invoices', SalesInvoiceController::class);
+    //assign leader
+    Route::resource('/sales/sales-assign-leader', SalesAssignLeaderController::class);
+    
 
 });
 /*end admin routing  */

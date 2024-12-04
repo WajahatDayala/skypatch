@@ -457,7 +457,12 @@ class SupportVectorOrdersController extends Controller
 
         } else if (Auth::user()->role->name == 'Accounts') {
 
-            return redirect()->route('account-allvectors.show', $request->order_id)->with('success', 'Invoice created successfully!');
+            return redirect()->route('account-allvectors.show', $request->order_id)->with('success', 'Order created successfully!');
+        }
+
+        else if (Auth::user()->role->name == 'Sales') {
+
+            return redirect()->route('sales-allvectors.show', $request->order_id)->with('success', 'Order created successfully!');
         }
 
     }
@@ -632,7 +637,11 @@ class SupportVectorOrdersController extends Controller
 
             } else if (Auth::user()->role->name == 'Accounts') {
 
-                return redirect()->route('account-allvectors.index')->with('success', 'Invoice created successfully!');
+                return redirect()->route('account-allvectors.index')->with('success', 'Order created successfully!');
+            }
+            else if (Auth::user()->role->name == 'Sales') {
+
+                return redirect()->route('sales-allvectors.index')->with('success', 'Order created successfully!');
             }
 
 

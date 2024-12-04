@@ -492,7 +492,11 @@ class SupportQuotesController extends Controller
 
         } else if (Auth::user()->role->name == 'Accounts') {
 
-            return redirect()->route('account-allquotes.show', $request->quote_id)->with('success', 'Invoice created successfully!');
+            return redirect()->route('account-allquotes.show', $request->quote_id)->with('success', 'Quote created successfully!');
+      
+        } else if (Auth::user()->role->name == 'Sales') {
+
+            return redirect()->route('sales-allquotes.show', $request->quote_id)->with('success', 'Quote created successfully!');
         }
 
 
@@ -681,7 +685,11 @@ class SupportQuotesController extends Controller
 
         } else if (Auth::user()->role->name == 'Accounts') {
 
-            return redirect()->route('account-allquotes.index')->with('success', 'Invoice created successfully!');
+            return redirect()->route('account-allquotes.index')->with('success', 'Quote created successfully!');
+        }
+        else if (Auth::user()->role->name == 'Sales') {
+
+        return redirect()->route('sales-allquotes.index')->with('success', 'Quote created successfully!');
         }
 
 
