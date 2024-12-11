@@ -46,7 +46,7 @@ class SalesInvoiceController extends Controller
 
 
         
-        return view('/sales/customers/invoice/index',compact('invoices'));
+        return view('/support/customers/invoice/index',compact('invoices'));
 
     }
 

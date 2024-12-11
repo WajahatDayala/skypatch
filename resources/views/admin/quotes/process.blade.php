@@ -401,8 +401,16 @@
                                                         $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                                                         $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
                                                     @endphp
-                                                   
+                                                      @if ($filePath)
+                                                   <a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}">
                                                     {{ $originalFilename }}
+                                                    </a><input type="checkbox" name="optionSendFilesA[]" value="{{ $filePath }}" checked>
+                                                    | 
+                                                    <!-- Add a unique class for order files -->
+                                                    <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn-order" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileAModal">Remove</button><br>
+                                                    @else
+                                                    <p>No file available</p>
+                                                    @endif
                                                     @endforeach
                                                 </td>
                                                 <td>
@@ -413,7 +421,7 @@
                                             <tr class="row">
                                                 <td>
                                                     <strong>Comment</strong><br>
-                                                    <textarea class="form-control" placeholder="Leave a comment here"
+                                                    <textarea class="form-control" name="comment" placeholder="Leave a comment here"
                                                         id="floatingTextarea" style="height: 150px;"></textarea>
 
                                                     <div class="mt-3">
@@ -485,8 +493,18 @@
                                                         $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                                                         $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
                                                     @endphp
-                                                   
+                                                    @if ($filePath)
+                                                     <a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}">
                                                     {{ $originalFilename }}
+                                                    </a> <input type="checkbox" name="optionSendFilesB[]" value="{{ $filePath }}" checked>
+                                                        |
+                                                     <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn-order-b" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileBModal">Remove</button><br>
+                                                     @else
+                                                     <p>No file available</p>
+                                                     @endif
+                                                   
+                                               
+                                                   
                                                     @endforeach
                                                 </td>
                                                 <td>
@@ -606,6 +624,58 @@
       <!-- end file upload-->
 
 
+      <!-- option A delete file -->
+
+              <!-- Delete Confirmation Modal for Option A -->
+<div class="modal fade" id="deleteFileAModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileAModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFileAModalLabel">Delete File for Option A</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this file?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteFileAForm" method="POST" action="{{ route('allquotes.deleteFileA') }}">
+                    @csrf
+                    <!-- Hidden input for file ID -->
+                    <input type="text" hidden id="file_id_a" name="file_id" value="">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+   <!-- Delete Confirmation Modal for Option A -->
+   <div class="modal fade" id="deleteFileBModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileBModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFileBModalLabel">Delete File for Option B</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this file?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteFileBForm" method="POST" action="{{ route('allquotes.deleteFileB') }}">
+                    @csrf
+                    <!-- Hidden input for file ID -->
+                    <input type="text" hidden id="file_id_b" name="file_id" value="">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
             <!-- Add this script to enable dynamic price updates -->
 <script>
    // Get elements
@@ -628,4 +698,41 @@ function updateTotal() {
 priceA.addEventListener('input', updateTotal);
 priceB.addEventListener('input', updateTotal);
 </script>
+
+
+
+<!--option A -->
+<script>
+    // JavaScript to handle the modal for Option A
+   const deleteFileButtonsOptionA = document.querySelectorAll('.delete-file-btn-order');  // Correct class name for Option A
+   const fileIdInputOptionA = document.getElementById('file_id_a');  // Hidden input for Option A
+   
+   deleteFileButtonsOptionA.forEach(button => {
+       button.addEventListener('click', function() {
+           const fileId = this.getAttribute('data-file-id');
+           console.log('File ID:', fileId);  // Debugging log to see if fileId is passed correctly
+           fileIdInputOptionA.value = fileId; // Set the file ID in the hidden input for Option A modal
+       });
+   });
+   
+   </script>
+   <!-- option A -->
+   
+   <!-- option B -->
+   <script>
+       // JavaScript to handle the modal for Option A
+      const deleteFileButtonsOptionB = document.querySelectorAll('.delete-file-btn-order-b');  // Correct class name for Option A
+      const fileIdInputOptionB = document.getElementById('file_id_b');  // Hidden input for Option A
+      
+      deleteFileButtonsOptionB.forEach(button => {
+          button.addEventListener('click', function() {
+              const fileId = this.getAttribute('data-file-id');
+              console.log('File ID:', fileId);  // Debugging log to see if fileId is passed correctly
+              fileIdInputOptionB.value = fileId; // Set the file ID in the hidden input for Option A modal
+          });
+      });
+      
+      </script>
+   <!-- option B -->
+   
 @endsection

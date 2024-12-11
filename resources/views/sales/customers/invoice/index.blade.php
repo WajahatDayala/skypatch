@@ -1,4 +1,4 @@
-@extends('support.customers.invoice.base')
+@extends('sales.customers.invoice.base')
 @section('action-content')
     <!-- Blank Start -->
 <meta name="csrf-token" content="{{ csrf_token() }}">

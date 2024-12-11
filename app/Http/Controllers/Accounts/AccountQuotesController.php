@@ -63,6 +63,38 @@ class AccountQuotesController extends Controller
 
     }
 
+    public function toDayQuote()
+    {
+        $quotes = Quote::select('*',
+        'quotes.id as order_id',
+        'users.name as customer_name',
+        'quotes.name as design_name',
+        'admins.name as designer_name',
+        'statuses.name as status',
+        'quotes.created_at as createdAt'
+        )
+        ->join('users','quotes.customer_id','=','users.id')
+        ->join('statuses','quotes.status_id','statuses.id')
+        ->leftjoin('admins','quotes.designer_id','admins.id')
+        ->whereDate('quotes.created_at',today())
+        ->where('quotes.delete_status',0)
+        ->orderBy('design_name','ASC')
+        ->get();
+
+       
+
+        //convertQuotes
+        $quoteConvertedOrder = Order::select('*','orders.quote_id as orderQuoteId')
+        ->join('quotes','orders.quote_id','=','quotes.id')
+        ->get();
+
+
+        return view('accounts/quotes/today',
+        [
+        'quotes'=>$quotes
+        ]);
+    }
+
     public function printOrder(string $id)
     {
 

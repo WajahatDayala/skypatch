@@ -54,6 +54,32 @@ class AccountVectorOrdersController extends Controller
         ]);
     }
 
+    public function toDayVector()
+    {
+        //
+        $orders = VectorOrder::select('*',
+        'vector_orders.id as order_id',
+        'users.name as customer_name',
+        'vector_orders.name as design_name',
+        'statuses.name as status'
+        )
+        ->join('users','vector_orders.customer_id','=','users.id')
+        ->join('statuses','vector_orders.status_id','statuses.id')
+        ->orderBy('design_name','asc')
+        ->where('vector_orders.delete_status',0)
+        ->whereDate('vector_orders.created_at', today())
+        ->get();
+
+      
+
+        return view('accounts/vector-orders/today',
+        [
+            'orders'=>$orders
+           
+        ]);
+
+    }
+
     /**
      * Show the form for creating a new resource.
      */

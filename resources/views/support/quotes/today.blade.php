@@ -21,7 +21,7 @@
                         <thead>
                             <tr class="text-dark">
                                 <th scope="col"> Sr# </th>
-                                <th scope="col"> OT# </th>
+                                <th scope="col"> QT# </th>
                                 <th scope="col"> Rcv'd Date </th>
                                 <th scope="col"> Sent Date </th>
                                 <th scope="col"> Design Name </th>
@@ -37,7 +37,7 @@
                             <tr class="bg-danger bg-gradient text-white">
                                 @endif
                                 <td>{{ $loop->iteration }}</td>
-                                <td>OT-{{$q->order_id}}</td>
+                                <td>QT-{{$q->order_id}}</td>
                                 <td>{{$q->createdAt}}</td>
                                 <td>
                                     @if(!$q->date_finalized)
@@ -72,6 +72,7 @@
                                     <a class="btn btn-sm btn-primary rounded-pill m-2"
                                     href="{{ route('supportquotes.show', ['supportquote' => $q->order_id]) }}">Details</a>
                                     <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn" data-file-id="{{ $q->order_id }}" data-bs-toggle="modal" data-bs-target="#deleteFileModal">Delete</button>
+                                  
                                 </td>
                             </tr>
                             @endforeach

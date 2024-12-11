@@ -21,7 +21,7 @@
                         <thead>
                             <tr class="text-dark">
                                 <th scope="col"> Sr# </th>
-                                <th scope="col"> OT# </th>
+                                <th scope="col"> QT# </th>
                                 <th scope="col"> Rcv'd Date </th>
                                 <th scope="col"> Date Finalized </th>
                                 <th scope="col"> Design Name </th>
@@ -38,7 +38,7 @@
                             <tr class="bg-danger bg-gradient text-white">
                                 @endif
                                 <td>{{ $loop->iteration }}</td>
-                                <td>OT-{{$q->order_id}}</td>
+                                <td>QT-{{$q->order_id}}</td>
                                 <td>{{$q->created_at}}</td>
                                 <td>
                                     @if(!$q->date_finalized)

@@ -495,10 +495,9 @@
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                    @if ($quote->edit_status == 1)
-                                                    <button type="button" class="btn btn-sm rounded-pill btn-primary m-2"
+                                                   <button type="button" class="btn btn-sm rounded-pill btn-primary m-2"
                                                         data-bs-toggle="modal" data-bs-target="#fileUploadModal">Upload Files</button>
-                                                   @endif
+                                                
                                                 </td>
                                             </tr>
                                             <tr class="row">

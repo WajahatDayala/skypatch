@@ -24,18 +24,20 @@ use App\Models\Admin;
 use App\Models\Invoice;
 use App\Models\InvoiceDetail;
 use App\Models\PricingCriteria;
+use App\Models\VectorDetail;
 use App\Models\Option;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use Carbon\Carbon;
 use App\Models\JobInformation;
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use Auth;
 
 class CustomerController extends Controller
 {
@@ -296,7 +298,8 @@ class CustomerController extends Controller
                             'price' => $orderPrice,
                             'created_at' => now(),
                             'updated_at' => now(),
-                            'released_date'=>$orderReleasedDate
+                            'released_date'=>$orderReleasedDate,
+                            'seller_id' => Auth::id()
                         ]);
 
                        // Update the invoice_status for the order
@@ -419,7 +422,8 @@ class CustomerController extends Controller
                             'price' => $vectorPrice,         // Insert the corresponding price
                             'created_at' => now(),
                             'updated_at' => now(),
-                            'released_date' => $vectorReleasedDate
+                            'released_date' => $vectorReleasedDate,
+                            'seller_id' => Auth::id()
                         ]);
 
                         // Update the invoice_status for the order
@@ -440,6 +444,8 @@ class CustomerController extends Controller
        
         return redirect()->route('invoices.index')->with('success', 'Invoice created successfully!');
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -474,9 +480,16 @@ class CustomerController extends Controller
              ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
             ->where('pricing_criterias.customer_id',$id)
              ->first();
+
+             
+           //vector details
+           $vectordetails = VectorDetail::select('*')
+           ->leftjoin('users','vector_details.customer_id','=','users.id')
+           ->where('vector_details.customer_id',$id)
+           ->first();
     
     
-        return view('admin.customers.profile-details.index',compact('user','billInfo','pricing'));
+        return view('admin.customers.profile-details.index',compact('user','billInfo','pricing','vectordetails'));
 
     }
 
@@ -504,6 +517,168 @@ class CustomerController extends Controller
         ));
 
     }
+
+    //all invoices for customer panel from admin.
+    public function showAllInvoices(string $id)
+    {
+        //
+
+        $user = User::find($id);
+
+        $invoices = InvoiceDetail::select(
+            'invoice_details.invoice_id as invoiceId',
+            'invoices.invoice_status',
+            'invoices.invoice_number as invoiceNumber', // Select invoice_number
+            'users.invoice_email as invoiceEmail', // Select invoice_email
+            DB::raw('MIN(invoice_details.created_at) as createdAt'), // Aggregate for created_at
+            DB::raw('MIN(invoice_details.updated_at) as updatedAt'), // Aggregate for created_at
+            DB::raw('SUM(invoice_details.price) as total_amount') // Sum the price/amount
+        )
+        ->join('invoices', 'invoice_details.invoice_id', '=', 'invoices.id')
+        ->join('users', 'invoices.customer_id', '=', 'users.id') // Ensure this join is correct
+        ->where('invoices.customer_id',$user->id)
+        ->groupBy('invoice_details.invoice_id','invoices.invoice_status', 'invoices.invoice_number', 'users.invoice_email') // Group by both invoice_id, invoice_number, and invoice_email
+        ->get();
+
+
+
+        
+        return view('/admin/customers/customer-dashboard-invoice/invoice/index',compact('invoices','user'));
+
+
+
+    }
+
+    //all invoices orders
+
+    public function showAllInvoicesOrder(string $id)
+    {
+        $user = User::find($id);
+
+        
+
+        // $invoices = InvoiceDetail::select(
+        //     'invoice_details.invoice_id as invoiceId',
+        //     'invoices.invoice_status',
+        //     'invoices.invoice_number as invoiceNumber', // Select invoice_number
+        //     'users.invoice_email as invoiceEmail', // Select invoice_email
+        //     DB::raw('MIN(invoice_details.created_at) as createdAt'), // Aggregate for created_at
+        //     DB::raw('MIN(invoice_details.updated_at) as updatedAt'), // Aggregate for created_at
+        //     DB::raw('SUM(invoice_details.price) as total_amount') // Sum the price/amount
+        // )
+        // ->join('invoices', 'invoice_details.invoice_id', '=', 'invoices.id')
+        // ->join('users', 'invoices.customer_id', '=', 'users.id') // Ensure this join is correct
+        // ->where('invoices.customer_id',$user->id)
+        // ->groupBy('invoice_details.invoice_id','invoices.invoice_status', 'invoices.invoice_number', 'users.invoice_email') // Group by both invoice_id, invoice_number, and invoice_email
+        // ->get();
+
+         // Fetch the invoice by ID
+    // $invoice = Invoice::select('*')
+    // ->join('users','invoices.customer_id','=','users.id')
+    // ->where('invoices.customer_id',$id)
+    // ->first();
+
+
+        // Fetch invoice details
+        $orderInvoice = InvoiceDetail::select(
+            '*',
+            'invoice_details.invoice_id',
+            'invoices.customer_id',
+            'invoices.id as invoiceId',
+            'invoices.invoice_number',
+            'orders.payment_status as paymentStatus',
+            'invoice_details.order_id as orderId',
+            'invoice_details.vector_id as vectorId',
+            'orders.name as orderDesign',
+            'orders.created_at as ordersCreatedAt',
+            'orders.sent_date as orderSentDate',
+            'vector_orders.name as vectorDesign',
+            'vector_orders.created_at as vectorCreatedAt',
+            'vector_orders.date_finalized as vectorSentDate'
+        )
+            ->join('invoices','invoice_details.invoice_id','=','invoices.id')
+            ->leftjoin('orders', 'invoice_details.order_id', '=', 'orders.id')
+            ->leftjoin('vector_orders', 'invoice_details.vector_id', '=', 'vector_orders.id')
+            ->where('invoices.customer_id', $id)
+            ->get();
+
+
+
+
+
+
+        return view('/admin/customers/customer-dashboard-invoice/allorders/index',compact('orderInvoice','user'));
+
+
+
+    }
+
+
+    //download invoices from customer panel
+    //download pdf
+    public function downloadPDF(string $id)
+    {
+        // Fetch the invoice by ID
+    $invoice = Invoice::select('*')
+    ->join('users','invoices.customer_id','=','users.id')
+    ->where('invoices.id',$id)
+    ->first();
+
+    
+    // Fetch invoice details
+    $orderInvoice = InvoiceDetail::select('*',
+        'invoice_details.invoice_id',
+        'orders.payment_status as paymentStatus',
+        'invoice_details.order_id as orderId',
+        'invoice_details.vector_id as vectorId',
+        'orders.name as orderDesign',
+        'orders.created_at as ordersCreatedAt',
+        'orders.sent_date as orderSentDate', 
+        'vector_orders.name as vectorDesign',
+        'vector_orders.created_at as vectorCreatedAt',
+        'vector_orders.date_finalized as vectorSentDate'
+    )
+    ->leftjoin('orders', 'invoice_details.order_id', '=', 'orders.id')
+    ->leftjoin('vector_orders', 'invoice_details.vector_id', '=', 'vector_orders.id')
+    ->where('invoice_details.invoice_id', $id)
+    ->get();
+   
+
+   
+ 
+
+    // Initialize Dompdf
+    $dompdf = new Dompdf();
+
+    // Set options
+    $options = new Options();
+    $options->set('isHtml5ParserEnabled', true);  // Enable HTML5 support
+    $options->set('isPhpEnabled', true);          // Enable PHP functions (optional)
+    $options->set('isExternalLinksEnabled', true); // Allow external links like image URLs
+    $dompdf->setOptions($options);
+
+    // Set base path for assets (important for resolving image paths)
+    $dompdf->setBasePath(public_path()); // Use public path to resolve image URLs
+
+    // Load HTML content for the PDF (passing $invoice and $invoiceDetails)
+    $htmlContent = view('admin.customers.invoice.invoice_pdf', compact(
+        'invoice', 
+        'orderInvoice'
+        ))->render();
+    $dompdf->loadHtml($htmlContent);
+
+    // // Render the PDF
+     $dompdf->render();
+
+    // // Stream the PDF to the browser (for download)
+     return $dompdf->stream("invoice_{$id}.pdf", array("Attachment" => true));  // Download the file
+
+   
+        
+    }
+
+
+
 
     //showAllQuotes from Admin
     public function allQuotes(string $id)
@@ -1798,8 +1973,14 @@ class CustomerController extends Controller
         ->where('customer_bill_infos.customer_id',$id)
         ->first();
 
+           //vector details
+           $vectordetails = VectorDetail::select('*')
+           ->leftjoin('users','vector_details.customer_id','=','users.id')
+           ->where('vector_details.customer_id',$id)
+           ->first();
+       
     
-        return view('admin.customers.panel-profile.index',compact('user','billInfo'));
+        return view('admin.customers.panel-profile.index',compact('user','billInfo','vectordetails'));
     }
      //customer profile edit by admin
     public function customerProfileEdit(string $id)
@@ -1994,24 +2175,30 @@ class CustomerController extends Controller
 
     }
 
-    //customer pricing details update
+   
+
+     // customer pricing details update
+     public function editPricingDetails(string $id)
+     {
+         //
+         $user = User::find($id);
+         
+         $pricing = PricingCriteria::select('*')
+         ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
+         ->where('pricing_criterias.customer_id',$id)
+         ->first();
+     
+     
+          return view('admin.price-details.edit',compact('user','pricing'));
+       
+ 
+     }
+
+     //update pricing
      public function updatePriceDetails(Request $request)
      {
-        // Ensure this is in the correct controller method
-        // $validated = $request->validate([
-        //     'delivery_type_id' => 'required|in:1,2',
-        //     'mini_price' => 'required|numeric',
-        //     'max_price' => 'required|numeric',
-        //     'stitches' => 'required|numeric',
-        //     'editing_changes' => 'required|string',
-        //     'editing_stitches_file' => 'required|string',
-        //     'comment_1' => 'nullable|string',
-        //     'comment_2' => 'nullable|string',
-        //     'comment_3' => 'nullable|string',
-        //     'comment_4' => 'nullable|string',
-        // ]);
 
-        // Find the existing pricing or create a new one
+       // Find the existing pricing or create a new one
         $pricing = PricingCriteria::firstOrNew(['customer_id' => $request->customer_id]);
 
         // Fill validated data into the model
@@ -2033,10 +2220,57 @@ class CustomerController extends Controller
         $pricing->save();
 
         // Redirect back with success message
-      //  return redirect()->route('pricing.view', $request->customer_id)->with('success', 'Pricing details saved successfully!');
+        return redirect()->route('customers.show', $request->customer_id)->with('success', 'Pricing details saved successfully!');
 
-       return redirect()->back()->with('success', 'Pricing details saved successfully!');
     }   
+
+    public function editVectorDetails(String $id)
+    {
+        $user = User::find($id);
+         
+        $vectordetails = VectorDetail::select('*')
+        ->leftjoin('users','vector_details.customer_id','=','users.id')
+        ->where('vector_details.customer_id',$id)
+        ->first();
+    
+    
+         return view('admin.vector-details.edit',compact('user','vectordetails'));
+    }
+    //update vector details
+
+    public function updateVectorDetails(Request $request)
+    {
+
+         // Find the existing pricing or create a new one
+        $vectorDetail = VectorDetail::firstOrNew(['customer_id' => $request->customer_id]);
+
+        // Fill validated data into the model
+        $vectorDetail->fill([
+           // 'customer_id' => $request->customer_id,
+            'machine' => $request->machines,
+            'condition' => $request->condition,
+            'needles' => $request->needles,
+            'thread' => $request->thread,
+            'needle_brand' => $request->needle_brand,
+            'backing_pique_jersey' => $request->backing_pique_jersey,
+            'brand' => $request->brand,
+            'backing_cotton_twill' => $request->backing_cotton_twill,
+            'backing_cap' => $request->backing_cap,
+            'model' => $request->model,
+            'needle_number' =>$request->needle_number,
+            'head' =>$request->heads,
+            'comment_box' =>$request->comments
+        ]);
+
+        // Save the model to the database
+        $vectorDetail->save();
+        
+        
+        return redirect()->route('customers.show', $request->customer_id)->with('success', 'Vector Details Updated successfully!');
+    
+
+    
+    }
 
     /**
      * Remove the specified resource from storage.

@@ -23,6 +23,7 @@ use Auth;
 use App\Models\PricingCriteria;
 use App\Models\VectorDetail;
 use App\Models\JobInformation;
+use App\Models\InvoiceDetail;
 class SalesOrdersController extends Controller
 {
     /**
@@ -313,6 +314,10 @@ class SalesOrdersController extends Controller
          ->where('job_information.order_id',$id)
          ->first();
  
+         $invoice_status = InvoiceDetail::select('*','invoices.invoice_status as invoiceStatus')
+         ->join('invoices','invoice_details.invoice_id','=','invoices.id')
+         ->where('invoice_details.order_id',$id)
+         ->first();
 
 
         
@@ -329,7 +334,8 @@ class SalesOrdersController extends Controller
             'optionA',
             'optionB',
             'vectordetails',
-            'jobInfo'
+            'jobInfo',
+            'invoice_status'
            
         ));
     }

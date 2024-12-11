@@ -1,4 +1,4 @@
-@extends('accounts.customers.profile-details.base')
+@extends('sales.customers.profile-details.base')
 @section('action-content')
 
 
@@ -24,7 +24,7 @@
                                 <tbody>
                                     <tr class="table-info">
                                         <td colspan="2" class="text-center">Personal Information
-                                            <a href="{{ route('accounts-customers.edit', ['accounts_customer' => $user->id]) }}" class="btn btn-sm btn-primary">Update</a>
+                                            <a href="{{ route('sales-customers.edit', ['sales_customer' => $user->id]) }}" class="btn btn-sm btn-primary">Update</a>
                                         </td>
                                     </tr>
                                     <tr class="bg-white">
@@ -161,7 +161,7 @@
                                 <tbody>
                                     <tr class="table-info">
                                         <td colspan="2" class="text-center">Bill Information
-                                            <a href="{{route('accounts-customers.billInfo',[$user->id])}}" class="btn btn-sm btn-primary">Update</a>
+                                            <a href="{{route('sales-customers.billInfo',[$user->id])}}" class="btn btn-sm btn-primary">Update</a>
                                         </td>
                                     </tr>
                                     <tr class="bg-white">
@@ -258,7 +258,7 @@
                 <tr class="table-info">
                     <td colspan="3" class="text-center">
                         Pricing Details
-                        <a href="{{route('accounts-customers.pricing-details',['id'=>$user->id])}}" class="btn btn-sm btn-primary" id="updateBtn">Update</a>
+                        <a href="{{route('sales-customers.pricing-details',['id'=>$user->id])}}" class="btn btn-sm btn-primary" id="updateBtn">Update</a>
                     </td>
                 </tr>
                 <tr class="bg-white">
@@ -329,8 +329,8 @@
     <table class="table table-fixed text-start align-middle table-bordered mb-0">
         <tbody>
             <tr class="table-info">
-                <td colspan="3" class="text-center">Vector Details
-                <a href="{{route('accounts-customers.vector-details',['id'=>$user->id])}}" class="btn btn-sm btn-primary">Update</a>
+                <td colspan="3" class="text-center">Digitizer/Vector Details
+                <a href="{{route('sales-customers.vector-details',['id'=>$user->id])}}" class="btn btn-sm btn-primary">Update</a>
                 </td>
             </tr>
             <tr class="bg-white">

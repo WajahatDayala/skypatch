@@ -18,12 +18,20 @@ use App\Models\ReasonEdit;
 use App\Models\Option;
 use Validator;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use App\Models\VectorDetail;
 use App\Models\JobInformation;
 use App\Models\PricingCriteria;
+
+use App\Mail\QuoteMail;
+use Illuminate\Support\Facades\Mail;
+use ZipArchive;
+use App\Jobs\ProcessEmail;
+use App\Jobs\TestEmailJob;
+use App\Mail\TestMail;
+
 class AllQuotesController extends Controller
 {
     /**
@@ -43,12 +51,16 @@ class AllQuotesController extends Controller
         'users.name as customer_name',
         'quotes.name as design_name',
         'admins.name as designer_name',
+        'employee.name as employeeName',
+        'roles.name as employeeRole',
         'statuses.name as status',
         'quotes.created_at as createdAt'
         )
         ->join('users','quotes.customer_id','=','users.id')
         ->join('statuses','quotes.status_id','statuses.id')
         ->leftjoin('admins','quotes.designer_id','admins.id')
+        ->leftjoin('admins as employee','quotes.support_user_id','=','employee.id')
+        ->leftjoin('roles','employee.role_id','=','roles.id')
         ->orderBy('design_name','ASC')
         ->get();
 
@@ -73,12 +85,14 @@ class AllQuotesController extends Controller
         'users.name as customer_name',
         'quotes.name as design_name',
         'admins.name as designer_name',
+        'employee.name as employeeName',
         'statuses.name as status',
         'quotes.created_at as createdAt'
         )
         ->join('users','quotes.customer_id','=','users.id')
         ->join('statuses','quotes.status_id','statuses.id')
         ->leftjoin('admins','quotes.designer_id','admins.id')
+        ->leftjoin('admins as employee','quotes.support_user_id','=','employee.id')
         ->whereDate('quotes.created_at',today())
         ->orderBy('design_name','ASC')
         ->get();
@@ -183,6 +197,13 @@ class AllQuotesController extends Controller
         ->where('options.quote_id',$id)
         ->get();
 
+           //options B
+           $optionB = Option::select('*','options.id as fileId')
+           ->join('quotes','options.quote_id','quotes.id')
+           ->where('option_type','B')
+           ->where('options.quote_id',$id)
+           ->get();
+
             //jobinfo
             $jobInfo = JobInformation::select('*')
             ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
@@ -190,12 +211,7 @@ class AllQuotesController extends Controller
             ->first();
     
 
-          //options B
-        $optionB = Option::select('*','options.id as fileId')
-          ->join('quotes','options.quote_id','quotes.id')
-          ->where('option_type','B')
-          ->where('options.quote_id',$id)
-          ->get();
+       
 
             //vector details
             $vectordetails = VectorDetail::select('*')
@@ -821,18 +837,20 @@ class AllQuotesController extends Controller
           ->get();
 
               //options A
-        $optionA = Option::select('*')
+        $optionA = Option::select('*','options.id as fileId')
         ->join('quotes','options.quote_id','quotes.id')
         ->where('option_type','A')
         ->where('options.quote_id',$id)
         ->get();
 
           //options B
-        $optionB = Option::select('*')
+        $optionB = Option::select('*','options.id as fileId')
           ->join('quotes','options.quote_id','quotes.id')
           ->where('option_type','B')
           ->where('options.quote_id',$id)
           ->get();
+          
+         
 
                 
         //pricing
@@ -872,36 +890,141 @@ class AllQuotesController extends Controller
         ));
     }
 
-         //send email process quotes
-         public function sendEmailAndQuotes(Request $request)
-         {
-  
-              //quotes
-              $quote = Quote::where('id',$request->quote_id)->first();
-  
-              //job process
-              $job = JobInformation::updateOrCreate(
-              ['quote_id' => $request->quote_id], // Condition to check if the record exists
-              [
-                  'height_A' => $request->height_A,
-                  'width_A' => $request->width_A,
-                  'stitches_A' => $request->stitches_A,
-                  'price_A' => $request->price_A,
-                  'height_B' => $request->height_B,
-                  'width_B' => $request->width_B,
-                  'stitches_B' => $request->stitches_B,
-                  'price_B' => $request->price_B,
-                  'total' => $request->total
-              ]
-             );
-           
-             
-             $quote->update(['status_id' => 1]);
-  
-             return redirect()->route('allquotes.show',$request->quote_id)->with('success', 'Quote updated successfully!');
-  
-  
+    //send email process quotes
+    public function sendEmailAndQuotes(Request $request)
+    {
+
+        //quotes
+        $quote = Quote::where('id', $request->quote_id)->first();
+
+        //   //job process
+        $job = JobInformation::updateOrCreate(
+            ['quote_id' => $request->quote_id], // Condition to check if the record exists
+            [
+                'height_A' => $request->height_A,
+                'width_A' => $request->width_A,
+                'stitches_A' => $request->stitches_A,
+                'price_A' => $request->price_A,
+                'height_B' => $request->height_B,
+                'width_B' => $request->width_B,
+                'stitches_B' => $request->stitches_B,
+                'price_B' => $request->price_B,
+                'total' => $request->total
+            ]
+        );
+
+
+        $quote->update(['status_id' => 1]);
+
+     // Collect form data
+     $height_A = $request->input('height_A');
+     $width_A = $request->input('width_A');
+     $stitches_A = $request->input('stitches_A');
+     $price_A = $request->input('price_A');
+     $height_B = $request->input('height_B');
+     $width_B = $request->input('width_B');
+     $stitches_B = $request->input('stitches_B');
+     $price_B = $request->input('price_B');
+     $total = $request->input('total');
+     $comment = $request->input('comment');
+ 
+     // Collect selected files for Option A and Option B
+     $filesA = $request->input('optionSendFilesA', []);  // Default to empty array if no files selected
+     $filesB = $request->input('optionSendFilesB', []);  // Default to empty array if no files selected
+ 
+     // Collect selected email addresses
+     $emails = [];
+     if ($request->has('gridCheckemail1')) {
+         $emails[] = $request->input('gridCheckemail1');
+     }
+     if ($request->has('gridCheckemail2')) {
+         $emails[] = $request->input('gridCheckemail2');
+     }
+     if ($request->has('gridCheckemail3')) {
+         $emails[] = $request->input('gridCheckemail3');
+     }
+     if ($request->has('gridCheckemail4')) {
+         $emails[] = $request->input('gridCheckemail4');
+     }
+     if ($request->has('gridCheckinvoiceemail')) {
+         $emails[] = $request->input('gridCheckinvoiceemail');
+     }
+ 
+     // Correctly define the path for the ZIP file
+     $zipFile = storage_path('app/public/quote_files.zip');  // Path to storage/app/public/quote_files.zip
+     $zip = new ZipArchive();
+ 
+     // Try to open the zip file
+     if ($zip->open($zipFile, ZipArchive::CREATE) !== TRUE) {
+         return back()->with('error', 'Unable to create ZIP file');
+     }
+ 
+     // Add files for Option A and Option B
+     foreach ($filesA as $fileName) {
+         $filePath = storage_path('app/public/' . $fileName);  // Correct path to files in storage/app/public
+         if (file_exists($filePath)) {
+             $zip->addFile($filePath, 'OptionA/' . basename($filePath));  // Use basename for file inside the ZIP
          }
+     }
+ 
+     foreach ($filesB as $fileName) {
+         $filePath = storage_path('app/public/' . $fileName);  // Correct path to files in storage/app/public
+         if (file_exists($filePath)) {
+             $zip->addFile($filePath, 'OptionB/' . basename($filePath));  // Use basename for file inside the ZIP
+         }
+     }
+ 
+     // Close the ZIP file
+     $zip->close();
+ 
+     // Check if the zip file size exceeds 256MB
+     $maxFileSize = 256 * 1024 * 1024; // 256MB in bytes
+     if (filesize($zipFile) > $maxFileSize) {
+         // Remove the zip file after validation
+         unlink($zipFile);
+         return back()->with('error', 'The generated ZIP file exceeds the 256MB size limit and cannot be sent via email.');
+     }
+ 
+     // Prepare the email data
+     $emailData = [
+         'height_A' => $height_A,
+         'width_A' => $width_A,
+         'stitches_A' => $stitches_A,
+         'price_A' => $price_A,
+         'height_B' => $height_B,
+         'width_B' => $width_B,
+         'stitches_B' => $stitches_B,
+         'price_B' => $price_B,
+         'total' => $total,
+         'comment' => $comment,
+         'emails' => $emails,  // Add the emails array here
+     ];
+ 
+     // Check if emails are available
+     if (!empty($emails)) {
+         foreach ($emails as $email) {
+             try {
+                 // Send the email with the ZIP attachment
+                 Mail::to($email)->send(new QuoteMail($emailData, $zipFile));  // Send the email with the ZIP attachment
+ 
+                 // Optionally, you can dispatch a job for background processing if needed
+                 ProcessEmail::dispatch($emailData, $zipFile);
+             } catch (\Exception $e) {
+                 // Log the error or handle it
+                 // Log::error("Error sending email to $email: " . $e->getMessage());
+             }
+         }
+     }
+ 
+     // Clean up the zip file after sending the email
+     if (file_exists($zipFile)) {
+         unlink($zipFile); // Delete the zip file after sending email
+     }
+
+           return redirect()->route('allquotes.show',$request->quote_id)->with('success', 'Quote updated successfully!');
+
+
+    }
 
 
     //print quote
@@ -999,8 +1122,80 @@ class AllQuotesController extends Controller
     public function destroy(string $id)
     {
         //
+       
     }
+
+    //delete Quotes
+
+    public function deleteQuotes(Request $request)
+     {
+         $request->validate([
+             'quote_id' => 'required|exists:quotes,id', // Adjust according to your leaders table
+         ]);
+ 
+         $order = Quote::findOrFail($request->quote_id);
+        //  $order->delete_status = 1;
+        //  $order->support_user_id = Auth::id();
+         $order->delete();
+
+        //  $orderLast = Quote::orderBy('*', 'desc')->first(); // To get the latest quote by ID
+        //  $orderLast->edit_status = 1;
+         
+
+ 
+         return redirect()->back()->with('success', 'Delete Successfully!');
+     }
    
+
+    //delete all quotes where id related history.. 
+    // public function deleteQuotes(Request $request)
+    // {
+    //     // Log the entire request to examine the incoming data
+    //     Log::info('Incoming Request:', $request->all());
+
+    //     // Extract 'quote_id' from the request instead of 'id'
+    //     $quoteId = $request->input('quote_id');  // Or use $request->quote_id
+
+    //     // Find the quote by 'quote_id'
+    //     $quote = DB::table('quotes')->where('id', $quoteId)->first();
+
+    //     if ($quote) {
+    //         // Extract IDs from description using regex
+    //         preg_match_all('/QT-(\d+)/', $quote->description, $matches);
+    //         $relatedIds = array_map('intval', $matches[1]);
+
+    //         // Include the main ID in the deletion list
+    //         $idsToDelete = array_merge([$quoteId], $relatedIds);
+
+    //         // Log the IDs to be deleted
+    //         Log::info('Deleting Quotes with IDs:', $idsToDelete);
+
+    //         // Delete all rows matching the IDs
+    //         DB::table('quotes')->whereIn('id', $idsToDelete)->delete();
+
+    //         return response()->json([
+    //             'message' => 'Related quotes deleted successfully.',
+    //             'deleted_ids' => $idsToDelete
+    //         ]);
+    //     }
+
+    //     Log::warning('Quote not found for ID:', ['quote_id' => $quoteId]);
+
+    //     return response()->json(['message' => 'Quote not found.'], 404);
+    // }
+
+    // public function testMail() {
+    //     // $to = "abc@gmail.com";
+    //     // $msg ="test mail";
+    //     // $subject="ads";
+    //     // Mail::to($to)->send(new TestMail($msg,$subject));
+    //     // Dispatch the job
+    //     TestEmailJob::dispatch();
+
+    //     return response()->json(['message' => 'Test email job has been dispatched.']);
+
+    // }
+    
     
 }
 

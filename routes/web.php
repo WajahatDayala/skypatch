@@ -9,6 +9,7 @@ use App\Http\Controllers\Customer\DashboardController;
 use App\Http\Controllers\Customer\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 //admin 
 use App\Http\Controllers\Auth\AdminAuthController;
@@ -50,6 +51,7 @@ use App\Http\Controllers\Support\SupportOrdersController;
 use App\Http\Controllers\Support\SupportVectorOrdersController;
 use App\Http\Controllers\Support\SupportEmployeeController;
 use App\Http\Controllers\Support\SupportInvoiceController;
+use App\Http\Controllers\Support\SupportAssignLeaderController;
 
 
 //accounts
@@ -60,6 +62,7 @@ use App\Http\Controllers\Accounts\AccountOrdersController;
 use App\Http\Controllers\Accounts\AccountVectorOrdersController;
 use App\Http\Controllers\Accounts\AccountInvoiceController;
 use App\Http\Controllers\Accounts\AccountEmployeeController;
+use App\Http\Controllers\Accounts\AccountAssignLeaderController;
 
 
 //sales
@@ -73,8 +76,12 @@ use App\Http\Controllers\Sales\SalesInvoiceController;
 use App\Http\Controllers\Sales\SalesAssignLeaderController;
 
 
-
-
+//reports
+use App\Http\Controllers\Reports\SalesTeamReportController;
+use App\Http\Controllers\Reports\RecordAnnumController;
+use App\Http\Controllers\Reports\SalesAnnumController;
+use App\Http\Controllers\Reports\DesignReportController;
+use App\Http\Controllers\Reports\AccountsReportController;
 
 
 
@@ -85,6 +92,7 @@ Route::get('/', function () {
 
     return view('auth/login');
 });
+
 
 
 Route::get('/customer/dashboard', function () {
@@ -140,10 +148,19 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('customers/{id}/edit-profile', [CustomerController::class, 'customerProfileEdit'])->name('customer.edit-profile');
     Route::post('customers/{id}/update-profile', [CustomerController::class, 'customerProfileUpdate'])->name('customer.update-profile');
     Route::get('customers/{id}/editBillInfo', [CustomerController::class, 'customerBillInfo'])->name('customer.editBillInfo');
-
+    
     Route::get('/admin/customers/{id}/billInfo', [CustomerController::class, 'billInfo'])->name('customers.billInfo');
     Route::post('/admin/customers/updateBillInfo', [CustomerController::class, 'storeBillInfo'])->name('customers.updateBillInfo');
 
+
+       //pricing criteria
+       Route::get('/admin/pricing/{id}/pricing-details',[CustomerController::class,'editPricingDetails'])->name('pricing.pricing-details');
+       Route::post('/admin/adminpricing/save/', [CustomerController::class, 'updatePriceDetails'])->name('adminpricing.save');
+       
+       //vector details
+        Route::get('/admin/vectordetails/{id}/vector-details',[CustomerController::class,'editVectorDetails'])->name('vectordetails.vector-details');
+        Route::post('/admin/adminvectordetails/save/',[CustomerController::class,'updateVectorDetails'])->name('adminvectordetails.save');
+      
   
 
     //quotes for customer panel by admin roles
@@ -170,9 +187,21 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('customers/{id}/update-vector-order',[CustomerController::class,'updateVectorOrder'])->name('customer.update-vector-order');
     Route::get('customers/{id}/vector-order',[CustomerController::class,'createVectorOrder'])->name('customer.vector-order');
     Route::post('customers/savedVector',[CustomerController::class,'storeVectorOrder'])->name('customer.savedVector');
- 
     
-
+    Route::get('customers/{id}/invoices',[CustomerController::class,'showAllInvoices'])->name('customer.invoices');
+    Route::get('customers/{id}/allorders',[CustomerController::class,'showAllInvoicesOrder'])->name('customer.allorders');
+    Route::get('/customers/invoice/{id}/download', [CustomerController::class, 'downloadPDF'])->name('customer.download');
+    
+    
+    Route::get('check-upload-limit', function () {
+      $uploadMaxFilesize = ini_get('upload_max_filesize');
+      $postMaxSize = ini_get('post_max_size');
+  
+      return response()->json([
+          'upload_max_filesize' => $uploadMaxFilesize,
+          'post_max_size' => $postMaxSize
+      ]);
+  });
 
     //all quotes
     Route::resource('/admin/allquotes', AllQuotesController::class);
@@ -192,7 +221,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('/admin/allquotes/optionB', [AllQuotesController::class, 'storeOptionB'])->name('allquotes.optionB');
     Route::post('/admin/allquotes/send',[AllQuotesController::class,'sendEmailAndQuotes'])->name('allquotes.send');
 
-
+    Route::post('/admin/allquotes/deleteQuote',[AllQuotesController::class,'deleteQuotes'])->name('allquotes.deleteQuote');
+   //email test work
+    Route::get('send-email',[AllQuotesController::class,'testMail']);
 
     //all orders
     Route::resource('/admin/allorders', AllOrdersController::class);
@@ -347,7 +378,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::resource('/support/suppport-invoices', SupportInvoiceController::class);
 
     //design & leaders
+    Route::resource('/support/support-assign-leader', SupportAssignLeaderController::class);
     
+
 
     //accounts dashboard routing
     Route::get('/accounts/dashboard', [AccounsDashboardController::class, 'index'])->name('accounts.dashboard');
@@ -363,11 +396,14 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
     //accounts quotes routing
     Route::resource('/accounts/account-allquotes',AccountQuotesController::class);
+    Route::get('/accounts/account-todayquotes',[AccountQuotesController::class,'toDayQuote'])->name('accounts.account-todayquotes');
     Route::get('/accounts/accountquotes/{id}/process', [AccountQuotesController::class, 'showProcess'])->name('accountquotes.process');
     Route::get('/accounts/accountquotes/{id}/print', [AccountQuotesController::class, 'printOrder'])->name('accountquotes.print');
   
     //accounts orders routing
     Route::resource('/accounts/account-allorders',AccountOrdersController::class);
+    Route::get('/accounts/account-today-orders',[AccountOrdersController::class,'toDayOrders'])->name('accounts.account-today-orders');
+    Route::get('/accounts/account-today-edit-orders',[AccountOrdersController::class,'toDayEditOrders'])->name('accounts.account-today-edit-orders');
     Route::get('/accounts/accountorders/{id}/process', [AccountOrdersController::class, 'processOrder'])->name('accountorders.process');
     Route::get('/accounts/accountorders/{id}/print', [AccountOrdersController::class, 'printOrder'])->name('accountorders.print');
   //  Route::post('/accounts/accountorders/deleteOrder',[SupportOrdersController::class,'deleteOrder'])->name('supportorders.deleteOrder');
@@ -375,11 +411,17 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //accounts vector order routing
     
     Route::resource('/accounts/account-allvectors',AccountVectorOrdersController::class);
+    Route::get('/accounts/account-today-vector', [AccountVectorOrdersController::class, 'toDayVector']);
+    
     Route::get('/accounts/account-vector-orders/{id}/process', [AccountVectorOrdersController::class, 'processOrder'])->name('account-vector-orders.process');
     Route::get('/accounts/account-vector-orders/{id}/print', [AccountVectorOrdersController::class, 'printOrder'])->name('account-vector-orders.print');
- 
+    
     //employee add
     Route::resource('/accounts/account-employees',AccountEmployeeController::class);
+
+
+    //assign leader accounts
+    Route::resource('/accounts/accounts-assign-leader',AccountAssignLeaderController::class);
 
    
     //sales panel routing
@@ -388,6 +430,14 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //customer sales panel
     Route::resource('/sales/sales-customers',SalesCustomerController::class);
     Route::get('/sales/allcustomers', [SalesCustomerController::class, 'allCustomer']);
+    Route::get('/sales/sales-customers/{id}/billInfo',[SalesCustomerController::class,'billInfo'])->name('sales-customers.billInfo');
+    Route::get('/sales/sales-customers/{id}/pricing-details',[SalesCustomerController::class,'editPricingDetails'])->name('sales-customers.pricing-details');
+    Route::get('/sales/sales-customers/{id}/vector-details',[SalesCustomerController::class,'editVectorDetails'])->name('sales-customers.vector-details');
+   
+    Route::get('/sales/sales-customers/{id}/addinvoice', [SalesCustomerController::class, 'addInvoice'])->name('sales-customers.addinvoice');
+    Route::resource('/sales/sales-invoices', SalesCustomerController::class);
+
+
     //quotes sales panel
     Route::resource('/sales/sales-allquotes',SalesAllQuotesController::class);
     Route::get('/sales/sales-todayquotes',[SalesAllQuotesController::class,'toDayQuote'])->name('sales.sales-todayquotes');
@@ -421,6 +471,21 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::resource('/sales/sales-invoices', SalesInvoiceController::class);
     //assign leader
     Route::resource('/sales/sales-assign-leader', SalesAssignLeaderController::class);
+
+
+    //reports 
+    Route::get('/reports/sales-team', [SalesTeamReportController::class, 'index'])->name('reports.sales-team');
+    Route::get('/reports/sales-team/result',[SalesTeamReportController::class,'searchSalesTeam'])->name('sales-team.result');
+    Route::get('/reports/record-annum', [RecordAnnumController::class, 'index'])->name('reports.record-annum');
+    Route::get('/reports/record-annum/result',[RecordAnnumController::class,'searchRecordAnnum'])->name('record-annum.result');
+    Route::get('/reports/sales-annum', [SalesAnnumController::class, 'index'])->name('reports.sales-annum');
+    Route::get('/reports/sales-annum/result',[SalesAnnumController::class,'searchSalesAnnum'])->name('sales-annum.result');
+    Route::get('/reports/designer-report', [DesignReportController::class, 'index'])->name('reports.designer-report');
+    Route::get('/reports/designer-report/result',[DesignReportController::class,'searchDesignerReport'])->name('designer-report.result');
+    Route::get('/reports/account-report', [AccountsReportController::class, 'index'])->name('reports.account-report');
+    Route::get('/reports/account-report/result',[AccountsReportController::class,'searchDesignerReport'])->name('account-report.result');
+   
+    
     
 
 });

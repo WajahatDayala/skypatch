@@ -8,7 +8,7 @@
             <table class="table table-fixed text-start align-middle table-bordered mb-0">
                 <tbody>
                     <tr class="table-info">
-                        <td colspan="3" class="text-center">Update Vector Details
+                        <td colspan="3" class="text-center">Update Digitizer/Vector Details
                           
                         </td>
                     </tr>

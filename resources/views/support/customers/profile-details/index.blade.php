@@ -329,7 +329,7 @@
     <table class="table table-fixed text-start align-middle table-bordered mb-0">
         <tbody>
             <tr class="table-info">
-                <td colspan="3" class="text-center">Vector Details
+                <td colspan="3" class="text-center">Digitizer/Vector Details
                 <a href="{{route('vectordetails.support-vector-details',['id'=>$user->id])}}" class="btn btn-sm btn-primary">Update</a>
                 </td>
             </tr>

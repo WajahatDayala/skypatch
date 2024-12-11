@@ -28,7 +28,7 @@
                         <tr class="row">
                             <td class="col-3">
                                 <strong>Quote Number</strong><br>
-                                <span>OT-{{$order->order_id}}</span>
+                                <span>QT-{{$order->order_id}}</span>
                             </td>
                             <td class="col-3">
                                 <strong>Status</strong><br>

@@ -55,8 +55,8 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                    href="{{ route('support-vector-orders.show',['support_vector_order'=>$q->order_id]) }}">Details</a>
-                                   <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn" data-file-id="{{ $q->order_id }}" data-bs-toggle="modal" data-bs-target="#deleteFileModal">Delete</button>
+                                    href="{{ route('account-allvectors.show',['account_allvector'=>$q->order_id]) }}">Details</a>
+                                   {{-- <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn" data-file-id="{{ $q->order_id }}" data-bs-toggle="modal" data-bs-target="#deleteFileModal">Delete</button> --}}
                                
                                     </td>
                             </tr>

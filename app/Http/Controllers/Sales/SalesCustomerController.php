@@ -55,6 +55,72 @@ class SalesCustomerController extends Controller
 
     }
 
+    
+    public function addInvoice(string $id)
+    {
+
+        $customer = User::findOrFail($id);
+       
+
+       
+
+        $orders = DB::table('job_information')
+        ->select(
+            'job_information.order_id as order_id',
+            'job_information.total as total',
+            'job_information.created_at as releasedDate',
+            'users.name as customer_name',
+            DB::raw("CONCAT('OR-', orders.id) as design_number"),
+            'orders.name as design_name',
+            'statuses.name as status',
+            DB::raw("'orders' as source_table") // Identify that this row is from the orders table
+        )
+        ->join('orders','job_information.order_id','=','orders.id')
+        ->join('users', 'orders.customer_id', '=', 'users.id')
+        ->leftJoin('statuses', 'orders.status_id', '=', 'statuses.id')
+        ->where('orders.payment_status', 0)
+        ->where('orders.invoice_status',0)
+        ->where('orders.customer_id', $id)
+        ->where('orders.status_id', 1)
+        ->orderBy('design_number', 'ASC') // Sort by design_number to keep proper order
+        ->get();
+
+
+            $vectorOrders =  DB::table('job_information')
+            ->select(
+                'job_information.vector_id as vector_id',
+                'job_information.total as total',
+                'job_information.created_at as releasedDate',
+                'users.name as customer_name',
+                DB::raw("CONCAT('VO-', vector_orders.id) as design_number"),
+                'vector_orders.name as design_name',
+                'statuses.name as status',
+                DB::raw("'vector_orders' as source_table") // Identify that this row is from the orders table
+            )
+            ->join('vector_orders','job_information.vector_id','=','vector_orders.id')
+            ->join('users', 'vector_orders.customer_id', '=', 'users.id')
+           ->leftJoin('statuses', 'vector_orders.status_id', '=', 'statuses.id')
+            ->where('vector_orders.payment_status', 0)
+            ->where('vector_orders.invoice_status',0)
+            ->where('vector_orders.customer_id', $id)
+            ->where('vector_orders.status_id', 1)
+            ->orderBy('design_number', 'ASC') // Sort by design_number to keep proper order
+            ->get();
+
+        // Get the last invoice number to calculate the next one
+        $lastInvoice = Invoice::latest()->first();
+        $nextInvoiceNumber = $lastInvoice ? 'INV-' . ($lastInvoice->id + 100000) : 'INV-100000';
+
+
+
+        return view('support.customers.Invoice.add',compact(
+            'orders',
+            'vectorOrders',
+            'nextInvoiceNumber',
+            'customer'
+        ));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -114,7 +180,60 @@ class SalesCustomerController extends Controller
     public function edit(string $id)
     {
         //
+        $country  = Country::all();
+        $user = User::find(id: $id);
+        return view('sales.customers.profile-details.edit',
+        compact('user','country'));
+
     }
+
+    public function billInfo(string $id)
+    {
+        $country  = Country::all();
+        $cardType = CardType::all();
+        $user = User::select('*','users.id')
+        ->leftjoin('customer_bill_infos','customer_bill_infos.customer_id','=','users.id')
+        ->leftjoin('card_types','customer_bill_infos.card_type_id','=','card_types.id')
+        ->where('users.id',$id)
+        ->first();
+
+       
+        return view('sales.customers.bill-details.edit',
+        compact('user','country','cardType'));
+
+    }
+
+     // customer pricing details update
+     public function editPricingDetails(string $id)
+     {
+         //
+         $user = User::find($id);
+        
+         $pricing = PricingCriteria::select('*')
+         ->leftjoin('users','pricing_criterias.customer_id','=','users.id')
+         ->where('pricing_criterias.customer_id',$id)
+         ->first();
+     
+     
+          return view('price-details.edit',compact('user','pricing'));
+       
+ 
+     }
+
+      //edit Vector Details
+    public function editVectorDetails(String $id)
+    {
+        $user = User::find($id);
+         
+        $vectordetails = VectorDetail::select('*')
+        ->leftjoin('users','vector_details.customer_id','=','users.id')
+        ->where('vector_details.customer_id',$id)
+        ->first();
+    
+    
+         return view('vector-details.edit',compact('user','vectordetails'));
+    }
+ 
 
     /**
      * Update the specified resource in storage.
@@ -122,6 +241,7 @@ class SalesCustomerController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        
     }
 
     /**

@@ -60,8 +60,8 @@
                                         <a class="btn btn-sm btn-primary rounded-pill m-2"
                                         href="{{ route('customer.dashboard', ['id' => $c->id]) }}"  target="_blank">records</a>
 
-                                        <a class="btn btn-sm btn-primary rounded-pill m-2"
-                                        href="{{ route('accounts-customers.addinvoice', ['id' => $c->id]) }}"  target="_blank">Invoice</a>
+                                        {{-- <a class="btn btn-sm btn-primary rounded-pill m-2"
+                                        href="{{ route('accounts-customers.addinvoice', ['id' => $c->id]) }}"  target="_blank">Invoice</a> --}}
                                         {{-- <a class="btn btn-sm btn-primary rounded-pill m-2"
                                         href="{{ route('customer.addinvoice', ['id' => $c->id]) }}"  target="_blank">Invoice</a> --}}
                                 </td>

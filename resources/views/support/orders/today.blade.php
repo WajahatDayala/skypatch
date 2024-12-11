@@ -1,4 +1,4 @@
-@extends('admin.orders.base')
+@extends('support.orders.base')
 @section('action-content')
 
 
@@ -95,8 +95,8 @@
                                 <td>
                                   <a class="btn btn-sm btn-primary rounded-pill m-2"
                                   href="{{ route('support-allorders.show', ['support_allorder' => $q->order_id]) }}">Details</a>
-                                    <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn" data-file-id="{{ $q->order_id }}" data-bs-toggle="modal" data-bs-target="#deleteFileModal">Delete</button>
-                                
+                                  
+                                  <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn" data-file-id="{{ $q->order_id }}" data-bs-toggle="modal" data-bs-target="#deleteFileModal">Delete</button>
                                       </td>
                             </tr>
                             @endforeach

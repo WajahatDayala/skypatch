@@ -248,67 +248,78 @@
     </div>
 
 <!-- Pricing Criteria -->
-
 <div class="row bg-light rounded align-items-center justify-content-center mx-0 p-4 mt-4">
-       
+    <form  method="POST" id="pricingForm">
+        @csrf
+
         <table class="table table-fixed text-start align-middle table-bordered mb-0">
             <tbody>
                 <tr class="table-info">
-                    <td colspan="3" class="text-center">Pricing Details
-                    <a href="" class="btn btn-sm btn-primary">Update</a>
+                    <td colspan="3" class="text-center">
+                        Pricing Details
+                        <a href="{{route('pricing.pricing-details',['id'=>$user->id])}}" class="btn btn-sm btn-primary" id="updateBtn">Update</a>
                     </td>
                 </tr>
                 <tr class="bg-white">
                     <td class="col-4">
                         <strong>Minimum Price</strong><br>
-                        <span></span>
+                        <span id="miniPriceDisplay">{{ old('mini_price', $pricing->minimum_price ?? '') }}</span>
                     </td>
                     <td class="col-4">
                         <strong>Maximum Price</strong><br>
-                        <span></span>
+                        <span id="maxPriceDisplay">{{ old('max_price', $pricing->maximum_price ?? '') }}</span>
                     </td>
                     <td class="col-4">
                         <strong>1000 Stitches</strong><br>
-                        <span></span>
+                        <span id="stitchesDisplay">{{ old('stitches', $pricing->stitches ?? '') }}</span>
                     </td>
                 </tr>
                 <tr class="bg-white">
                     <td class="col-4">
                         <strong>Normal Delivery</strong><br>
-                        <span></span>
+                        <span id="deliveryTypeDisplay">
+                            {{ old('delivery_type', optional($pricing)->delivery_type_id == 1 ? 'Normal Delivery' : (optional($pricing)->delivery_type_id == 2 ? 'Super Urgent' : '')) }}
+                        </span>
+                          
                     </td>
+                    
                     <td class="col-4">
                         <strong>Editing/Changes</strong><br>
-                        <span></span>
+                        <span id="editingChangesDisplay">{{ old('editing_changes', $pricing->editing_changes ?? '') }}</span>
                     </td>
                     <td class="col-4">
                         <strong>Editing in stitches file</strong><br>
-                        <span></span>
+                        <span id="editingStitchesFileDisplay">{{ old('editing_stitches_file', $pricing->editing_in_stitch_file ?? '') }}</span>
                     </td>
                 </tr>
                 <tr class="bg-white">
                     <td class="col-4">
                         <strong>Comment Box 1</strong><br>
-                        <span></span>
+                        <span id="comment1Display">{{ old('comment_1', $pricing->comment_box_1 ?? '') }}</span>
                     </td>
                     <td class="col-4">
                         <strong>Comment Box 2</strong><br>
-                        <span></span>
+                        <span id="comment2Display">{{ old('comment_2', $pricing->comment_box_2 ?? '') }}</span>
                     </td>
                     <td class="col-4">
                         <strong>Comment Box 3</strong><br>
-                        <span></span>
+                        <span id="comment3Display">{{ old('comment_3', $pricing->comment_box_3 ?? '') }}</span>
                     </td>
                 </tr>
                 <tr class="bg-white">
-                    <td class="col-4" colspan="3">
+                    <td class="col-4">
                         <strong>Comment Box 4</strong><br>
-                        <span></span>
+                        <span id="comment4Display">{{ old('comment_4', $pricing->comment_box_4 ?? '') }}</span> 
                     </td>
+                    <td colspan="2"></td>
                 </tr>
             </tbody>
         </table>
-    </div>
+    </form>
+</div>
+
+
+
 
 
 <!-- For Digitizer's/Vector Teams -->
@@ -317,75 +328,76 @@
     <table class="table table-fixed text-start align-middle table-bordered mb-0">
         <tbody>
             <tr class="table-info">
-                <td colspan="3" class="text-center">Vector Details
-                <a href="" class="btn btn-sm btn-primary">Update</a>
+                <td colspan="3" class="text-center">Digitizer/Vector Terms
+                <a href="{{route('vectordetails.vector-details',['id'=>$user->id])}}" class="btn btn-sm btn-primary">Update</a>
                 </td>
             </tr>
             <tr class="bg-white">
                 <td class="col-4">
                     <strong># of Machine(s)</strong><br>
-                    <span></span>
+                    <span> {{ old('machine', $vectordetails->machine ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Condition</strong><br>
-                    <span></span>
+                    <span> {{ old('condition', $vectordetails->condition ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong># of Needles</strong><br>
-                    <span></span>
+                    <span> {{ old('needles', $vectordetails->needles ?? '') }}</span>
                 </td>
             </tr>
             <tr class="bg-white">
                 <td class="col-4">
                     <strong>Thread</strong><br>
-                    <span></span>
+                    <span> {{ old('thread', $vectordetails->thread ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Needle Brand</strong><br>
-                    <span></span>
+                    <span> {{ old('needle_brand', $vectordetails->needle_brand ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Backing (Pique / Jersey)</strong><br>
-                    <span></span>
+                    <span> {{ old('backing_pique_jersey', $vectordetails->backing_pique_jersey ?? '') }}</span>
                 </td>
             </tr>
             <tr class="bg-white">
                 <td class="col-4">
                     <strong>Brand</strong><br>
-                    <span>psd</span>
+                    <span> {{ old('brand', $vectordetails->brand ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Backing (Cotton / Twill)</strong><br>
-                    <span></span>
+                    <span> {{ old('backing_cotton_twill', $vectordetails->backing_cotton_twill ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Backing (Cap)</strong><br>
-                    <span></span>
+                    <span> {{ old('backing_cap', $vectordetails->backing_cap ?? '') }}</span>
                 </td>
             </tr>
             <tr class="bg-white">
                 <td class="col-4">
-                    <strong>Backing</strong><br>
-                    <span></span>
+                    <strong>Model</strong><br>
+                    <span> {{ old('model', $vectordetails->model ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong>Needle Number</strong><br>
-                    <span></span>
+                    <span> {{ old('needle_number', $vectordetails->needle_number ?? '') }}</span>
                 </td>
                 <td class="col-4">
                     <strong># of Heads</strong><br>
-                    <span></span>
+                    <span> {{ old('heads', $vectordetails->head ?? '') }}</span>
                 </td>
             </tr>
             <tr class="bg-white">
                 <td class="col-4" colspan="3">
                     <strong>Comments</strong><br>
-                    <span></span>
+                    <span> {{ old('comments', $vectordetails->comment_box ?? '') }}</span>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
+
 
 
 

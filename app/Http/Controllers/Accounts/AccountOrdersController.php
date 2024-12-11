@@ -23,6 +23,7 @@ use Auth;
 use App\Models\PricingCriteria;
 use App\Models\VectorDetail;
 use App\Models\JobInformation;
+use App\Models\InvoiceDetail;
 class AccountOrdersController extends Controller
 {
     /**
@@ -49,6 +50,58 @@ class AccountOrdersController extends Controller
 
 
         return view('accounts/orders/index', ['orders' => $orders]);
+    }
+
+    public function toDayOrders()
+    {
+        $orders = Order::select(
+            '*',
+            'orders.id as order_id',
+            'users.name as customer_name',
+            'admins.name as designerName',
+            'orders.name as design_name',
+            'delivery_types.type as deliveryType',
+            'statuses.name as status',
+            'orders.created_at as createdAt'
+        )
+            ->join('users', 'orders.customer_id', '=', 'users.id')
+            ->join('delivery_types', 'orders.delivery_type_id', 'delivery_types.id')
+            ->join('statuses', 'orders.status_id', '=', 'statuses.id')
+            ->leftjoin('admins', 'orders.designer_id', '=', 'admins.id')
+            ->whereDate('orders.created_at', today())
+            ->where('orders.delete_status',0)
+            ->orderBy('orders.id', 'Asc')
+            ->get();
+
+
+
+        return view('accounts.orders.today', ['orders' => $orders]);
+    }
+    public function toDayEditOrders()
+    {
+        $orders = Order::select(
+            '*',
+            'orders.id as order_id',
+            'users.name as customer_name',
+            'admins.name as designerName',
+            'orders.name as design_name',
+            'statuses.name as status',
+            'delivery_types.type as deliveryType',
+            'orders.created_at as createdAt'
+        )
+            ->join('users', 'orders.customer_id', '=', 'users.id')
+            ->join('delivery_types', 'orders.delivery_type_id', 'delivery_types.id')
+            ->join('statuses', 'orders.status_id', '=', 'statuses.id')
+            ->leftjoin('admins', 'orders.designer_id', 'admins.id')
+            ->whereNotNull('edit_order_id')
+            ->whereDate('orders.created_at', today())
+            ->where('orders.status_id', 1)
+            ->where('orders.delete_status',0)
+            ->get();
+
+
+
+        return view('sales.orders.today-edit', ['orders' => $orders]);
     }
 
     /**
@@ -172,6 +225,12 @@ class AccountOrdersController extends Controller
 
 
         
+         $invoice_status = InvoiceDetail::select('*','invoices.invoice_status as invoiceStatus')
+         ->join('invoices','invoice_details.invoice_id','=','invoices.id')
+         ->where('invoice_details.order_id',$id)
+         ->first();
+
+        
 
 
         return view('accounts/orders/show', compact(
@@ -185,7 +244,8 @@ class AccountOrdersController extends Controller
             'optionA',
             'optionB',
             'vectordetails',
-            'jobInfo'
+            'jobInfo',
+            'invoice_status'
            
         ));
     }

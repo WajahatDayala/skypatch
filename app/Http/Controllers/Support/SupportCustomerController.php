@@ -269,7 +269,8 @@ class SupportCustomerController extends Controller
                             'price' => $orderPrice,
                             'created_at' => now(),
                             'updated_at' => now(),
-                            'released_date'=>$orderReleasedDate
+                            'released_date'=>$orderReleasedDate,
+                            'seller_id' => Auth::id()
                         ]);
 
                        // Update the invoice_status for the order
@@ -392,7 +393,8 @@ class SupportCustomerController extends Controller
                             'price' => $vectorPrice,         // Insert the corresponding price
                             'created_at' => now(),
                             'updated_at' => now(),
-                            'released_date' => $vectorReleasedDate
+                            'released_date' => $vectorReleasedDate,
+                            'seller_id' => Auth::id()
                         ]);
 
                         // Update the invoice_status for the order
@@ -417,6 +419,12 @@ class SupportCustomerController extends Controller
 
             return redirect()->route('accounts-invoices.index')->with('success', 'Invoice created successfully!');
         }
+
+        else if (Auth::user()->role->name == 'Sales') {
+
+            return redirect()->route('sales-invoices.index')->with('success', 'Invoice created successfully!');
+        }
+       
        
         
     }
@@ -549,7 +557,12 @@ class SupportCustomerController extends Controller
 
         } else if (Auth::user()->role->name == 'Accounts') {
             return redirect()->route('accounts-customers.show', $user->id)->with('success', 'Profile updated successfully!');
+        }    
+         else if (Auth::user()->role->name == 'Sales') {
+            return redirect()->route('sales-customers.show', $user->id)->with('success', 'Profile updated successfully!');
         }
+
+        
    
     }
 
@@ -613,6 +626,9 @@ class SupportCustomerController extends Controller
         {
             return redirect()->route('accounts-customers.show', $user->id)->with('success', 'BillInfo updated successfully!');
 
+        }
+        else if (Auth::user()->role->name == 'Sales') {
+            return redirect()->route('sales-customers.show', $user->id)->with('success', 'BillInfo updated successfully!');
         }
       
 
@@ -685,6 +701,9 @@ class SupportCustomerController extends Controller
             return redirect()->route('accounts-customers.show', $request->customer_id)->with('success', 'BillInfo updated successfully!');
 
         }
+        else if (Auth::user()->role->name == 'Sales') {
+            return redirect()->route('sales-customers.show', $request->customer_id)->with('success', 'BillInfo updated successfully!');
+        }
    
     }   
 
@@ -740,6 +759,11 @@ class SupportCustomerController extends Controller
             return redirect()->route('accounts-customers.show', $request->customer_id)->with('success', 'BillInfo updated successfully!');
 
         }
+        else if (Auth::user()->role->name == 'Sales') {
+            return redirect()->route('sales-customers.show', $request->customer_id)->with('success', 'BillInfo updated successfully!');
+        }
+
+        
 
     
     }
