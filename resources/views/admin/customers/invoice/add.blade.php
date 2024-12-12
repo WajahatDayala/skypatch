@@ -21,6 +21,7 @@
 
                 <form action="{{ route('customer.storeinvoice') }}" method="POST">
     @csrf
+    <div class="row">
     <div class="col-md-4">
         <div class="form-group">
             <span class="d-flex flex-column align-items-start">Invoice No#</span>
@@ -28,9 +29,20 @@
         </div>
         <input name="customerId" hidden type="text" value="{{$customer->id}}">
     </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <span class="d-flex flex-column align-items-start">Billing Type</span>
+            <select class="form-control" name="billing_type" required>
+                <option value="">Billing Type</option>
+                @foreach($billingTypes as $t)
+                <option value="{{$t->id}}">{{$t->name}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div></div>
 
     <div class="row">
-        <h1>Order Information</h1>
+        <h1 class="m-4">Order Information</h1>
         <div class="table-responsive">
             <table id="orders-table" class="table mt-4 text-start align-middle table-bordered table-hover mb-0">
                 <thead>

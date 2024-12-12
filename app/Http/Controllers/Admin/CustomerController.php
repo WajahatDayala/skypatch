@@ -26,6 +26,7 @@ use App\Models\InvoiceDetail;
 use App\Models\PricingCriteria;
 use App\Models\VectorDetail;
 use App\Models\Option;
+use App\Models\BillingType;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use Carbon\Carbon;
@@ -97,6 +98,8 @@ class CustomerController extends Controller
     {
 
         $customer = User::findOrFail($id);
+
+        $billingTypes = BillingType::all();
        
 
         // $orders = DB::table('orders')
@@ -171,7 +174,8 @@ class CustomerController extends Controller
             'orders',
             'vectorOrders',
             'nextInvoiceNumber',
-            'customer'
+            'customer',
+            'billingTypes'
         ));
     }
 
@@ -189,7 +193,8 @@ class CustomerController extends Controller
             'invoice_status' => 0, // Assuming status is 0 initially
             'created_at' => now(),
             'updated_at' => now(),
-            'customer_id' =>$request->customerId
+            'customer_id' =>$request->customerId,
+            'billingtype_id' =>$request->billing_type
         ]);
 
         // Log the invoice details

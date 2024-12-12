@@ -82,6 +82,8 @@ use App\Http\Controllers\Reports\RecordAnnumController;
 use App\Http\Controllers\Reports\SalesAnnumController;
 use App\Http\Controllers\Reports\DesignReportController;
 use App\Http\Controllers\Reports\AccountsReportController;
+use App\Http\Controllers\Reports\SalesCommissionController;
+use App\Http\Controllers\Reports\EditReportController;
 
 
 
@@ -483,9 +485,13 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/reports/designer-report', [DesignReportController::class, 'index'])->name('reports.designer-report');
     Route::get('/reports/designer-report/result',[DesignReportController::class,'searchDesignerReport'])->name('designer-report.result');
     Route::get('/reports/account-report', [AccountsReportController::class, 'index'])->name('reports.account-report');
-    Route::get('/reports/account-report/result',[AccountsReportController::class,'searchDesignerReport'])->name('account-report.result');
+    Route::get('/reports/account-report/result',[AccountsReportController::class,'searchAccount'])->name('account-report.result');
+    Route::get('/reports/sales-commission', [SalesCommissionController::class, 'index'])->name('reports.sales-commission');
+    Route::get('/reports/sales-commission/result',[SalesCommissionController::class,'searchCommission'])->name('sales-commission.result');
+    Route::get('/reports/edit-report', [EditReportController::class, 'index'])->name('reports.edit-report');
+    Route::get('/reports/edit-report/result',[EditReportController::class,'searchAccount'])->name('edit-report.result');
    
-    
+
     
 
 });

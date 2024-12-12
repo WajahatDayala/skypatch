@@ -17,19 +17,20 @@ class RecordAnnumController extends Controller
     public function index()
     {
         if (Auth::user()->role->name === 'Admin') {
-          //  return redirect()->route('support-allorders.show',$request->order_id)->with('success', 'Order updated successfully!');
-
+        
+            return view('reports/accounts-user-report/record-annum/index');
+            
         } else if (Auth::user()->role->name == 'Accounts') {
 
             return view('reports/accounts-user-report/record-annum/index');
         }
         else if (Auth::user()->role->name == 'Customer Support') {
 
-            return view('reports/accounts-user-report/sale-team/index');
+            return view('reports/accounts-user-report/record-annum/index');
         }
          else if (Auth::user()->role->name == 'Sales') {
 
-         //   return redirect()->route('sales-allorders.show', $request->order_id)->with('success', 'Order created successfully!');
+            return view('reports/accounts-user-report/record-annum/index');
         }
 
       

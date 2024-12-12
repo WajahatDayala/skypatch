@@ -22,11 +22,11 @@ class SalesTeamReportController extends Controller
         }
         else if (Auth::user()->role->name == 'Customer Support') {
 
-            return view('reports/accounts-user-report/sale-team/index');
+            return view('reports/accounts-user-report/sales-team/index');
         }
          else if (Auth::user()->role->name == 'Sales') {
 
-         //   return redirect()->route('sales-allorders.show', $request->order_id)->with('success', 'Order created successfully!');
+            return view('reports/accounts-user-report/sales-team/index');
         }
 
       

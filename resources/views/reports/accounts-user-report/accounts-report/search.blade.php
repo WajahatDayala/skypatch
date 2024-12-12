@@ -11,7 +11,7 @@
             <div class="bg-light rounded h-100 p-4">
                 <div class="row mb-4">
                     <div class="col-6 d-flex justify-content-start align-items-center">
-                        <h6 class="h6 mb-0">Sales Team Report</h6>
+                        <h6 class="h6 mb-0">Accounts Report</h6>
                     </div>
                 </div>
                      
@@ -33,18 +33,19 @@
                             </div>
                         </div>
     
-                            {{-- <div class="col-md-3">
-                        <div class="form-group">
-                        <label>Billing Type</label>
-                        
-                        <select class="form-control" name="designer_id">
-                            <option value="">Credit Card</option> <!-- Default option with empty value -->
-                            <option value="">All</option>
-                               
-                        </select>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Billing Type</label>
 
+                                <select class="form-control" name="billing_type">
+                                    <option value="">All Billing Type</option>
+                                    @foreach ($billingTypes as $t)
+                                        <option value="{{ $t->id }}">{{ $t->name }}</option>
+                                    @endforeach
+                                </select>
+
+                            </div>
                         </div>
-                    </div> --}}
               
 
                     <div class="col-md-2 ml-6">
@@ -55,53 +56,72 @@
                     </form>
 
                     <div class="table-responsive">
-                        <table id="dataTable" class="table  text-start align-middle table-bordered table-hover mb-0">
+                        <table id="dataTable" class="table text-start align-middle table-bordered table-hover mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-center"> ID </th>
-                                    <th class="text-center"> Name </th>
-                                    <th class="text-center"> Free </th>
-                                    <th class="text-center"> Edit </th>
-                                    <th class="text-center"> New </th>
-                                    <th class="text-center"> Revision </th>
-                                    <th class="text-center"> All Quotes (including edit/revision) </th>
-                                    <th class="text-center"> Edit/Revision </th>
-                                    <th class="text-center"> Converted Quotes </th>
-                                    
+                                    <th class="text-center">S #</th>
+                                    <th class="text-center">Order #</th>
+                                    <th class="text-center">Design Name</th>
+                                    <th class="text-center">Customer Nick</th>
+                                    <th class="text-center">Billing Type</th>
+                                    <th class="text-center">Date</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
-                                $totalSales =0;    
+                                $iterationCount = 1; // Initialize iteration counter
                                 @endphp
-                                @foreach($ordersData as $s)
-                               
-                                <tr>
-                                    {{-- <td class="text-center">{{ $loop->iteration }}</td> --}}
-                                    <td class="text-center">{{ $s->designerId }}</td> 
-                                    <td class="text-center">{{$s->designerName}}</td>
-                                   <td class="text-center">{{$s->Free}}</td>
-                                    <td class="text-center">{{$s->Edit}}</td>
-                                    <td class="text-center">{{$s->New}}</td>
-                                    <td class="text-center">{{$s->Revision}}</td>
-                                    <td class="text-center">{{$s->All_Quotes}}</td>
-                                    <td class="text-center">{{$s->Edit_Revision_Quotes}}</td>
-                                    <td class="text-center">{{$s->ConvertedQuote}}</td>
-                                   
-                                   
-                        
-                                </tr>
+                    
+                                <!-- Loop through orders -->
+                                @foreach($orders as $s)
+                                    @if($s->order_id)
+                                    <tr>
+                                        <td class="text-center">{{ $iterationCount }}</td>
+                                        <td class="text-center">{{$s->design_number}}</td>
+                                        <td class="text-center">{{$s->design_name}}</td>
+                                        <td class="text-center">
+                                            {{-- @if(Auth::user()->role->name === 'Admin')       
+                                                {{$s->customer_name}}
+                                            @endif --}}
+                                            {{$s->customer_name}}
+                                        </td>
+                                        <td class="text-center">{{$s->billingType}}</td>
+                                        <td class="text-center">{{$s->createdAt}}</td>
+                                        <td class="text-center">{{$s->action_date}}</td>
+                                    </tr>
+                                    @php
+                                    $iterationCount++;
+                                    @endphp
+                                    @endif
                                 @endforeach
-    
-    
-    
-    
-    
+                    
+                                <!-- Loop through vectorOrders -->
+                                @foreach($vectorOrders as $s)
+                                    @if($s->vector_id)
+                                    <tr>
+                                        <td class="text-center">{{ $iterationCount }}</td>
+                                        <td class="text-center">{{$s->design_number}}</td>
+                                        <td class="text-center">{{$s->design_name}}</td>
+                                        <td class="text-center">
+                                            {{-- @if(Auth::user()->role->name === 'Admin')       
+                                                {{$s->customer_name}}
+                                            @endif --}}
+                                            {{$s->customer_name}}
+                                        </td>
+                                        <td class="text-center">{{$s->billingType}}</td>
+                                        <td class="text-center">{{$s->createdAt}}</td>
+                                        <td class="text-center">{{$s->action_date}}</td>
+                                    </tr>
+                                    @php
+                                    $iterationCount++;  // Increment iteration counter
+                                    @endphp
+                                    @endif
+                                @endforeach
                             </tbody>
-                          
                         </table>
                     </div>
-
+                    
                 </div>
 
                 

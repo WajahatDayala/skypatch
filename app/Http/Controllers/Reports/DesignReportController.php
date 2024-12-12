@@ -32,17 +32,18 @@ class DesignReportController extends Controller
 
 
         if (Auth::user()->role->name === 'Admin') {
-            //  return redirect()->route('support-allorders.show',$request->order_id)->with('success', 'Order updated successfully!');
-
+           
+            return view('reports/accounts-user-report/designer-report/index', compact('designer'));
+            
         } else if (Auth::user()->role->name == 'Accounts') {
 
             return view('reports/accounts-user-report/designer-report/index', compact('designer'));
         } else if (Auth::user()->role->name == 'Customer Support') {
 
-            return view('reports/accounts-user-report/sale-team/index', compact('designer'));
+            return view('reports/accounts-user-report/designer-report/index', compact('designer'));
         } else if (Auth::user()->role->name == 'Sales') {
 
-            //   return redirect()->route('sales-allorders.show', $request->order_id)->with('success', 'Order created successfully!');
+            return view('reports/accounts-user-report/designer-report/index', compact('designer'));
         }
 
 

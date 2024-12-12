@@ -77,21 +77,21 @@
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="rounded card shadow-lg border d-flex flex-column align-items-center justify-content-center p-4">
-                <a href=""><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/sale_Team_Report.png')}}" alt="" >
+                <a href="/reports/sales-team"><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/sale_Team_Report.png')}}" alt="" >
                 <p class="my-2 h6">Sales Team Report</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="rounded card shadow-lg border d-flex flex-column align-items-center justify-content-center p-4">
-                <a href=""><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/record_annum.png')}}" alt="" >
+                <a href="/reports/record-annum"><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/record_annum.png')}}" alt="" >
                 <p class="my-2 h6">Record Annum</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="rounded card shadow-lg border d-flex flex-column align-items-center justify-content-center p-4">
-                <a href=""><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/Sales_Annum.png')}}" alt="" >
+                <a href="/reports/sales-annum"><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/Sales_Annum.png')}}" alt="" >
                 <p class="my-2 h6">Sales Annum</p></a>
             </div>
         </div>
@@ -101,14 +101,14 @@
         <!-- Designer and Accounts Section -->
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="rounded card shadow-lg border d-flex flex-column align-items-center justify-content-center p-4">
-                <a href=""><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/designer_reports.png')}}" alt="" >
+                <a href="/reports/designer-report"><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/designer_reports.png')}}" alt="" >
                 <p class="my-2 h6">Designer Reports</p></a>
             </div>
         </div>
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="rounded card shadow-lg border d-flex flex-column align-items-center justify-content-center p-4">
-                <a href=""><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/account.png')}}" alt="" >
+                <a href="/reports/account-report"><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/account.png')}}" alt="" >
                 <p class="my-2 h6">Accounts</p></a>
             </div>
         </div>
