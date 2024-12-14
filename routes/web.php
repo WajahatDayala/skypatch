@@ -3,6 +3,7 @@
 use App\Http\Controllers\Customer\QuotesController;
 use App\Http\Controllers\Customer\OrdersController;
 use App\Http\Controllers\Customer\VectorsController;
+use App\Http\Controllers\Customer\CustomerInvoiceController;
 //use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Customer\DashboardController;
 
@@ -127,7 +128,12 @@ Route::group(['middleware' => 'auth:web'], function () {
     //convert quotes to order
     Route::post('/customer/convert-quote/{quoteId}', [QuotesController::class, 'convertToOrder']);
 
+    //invoices
+    Route::resource('/customer/Allinvoices', CustomerInvoiceController::class);
+    Route::get('/customer/customerinvoice/{id}/download', [CustomerInvoiceController::class, 'downloadPDF'])->name('customerinvoice.download');
+    Route::get('customer/Allorders',[CustomerInvoiceController::class,'showAllInvoicesOrder'])->name('customer.Allorders');
 
+    
 });
 
 
@@ -489,7 +495,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/reports/sales-commission', [SalesCommissionController::class, 'index'])->name('reports.sales-commission');
     Route::get('/reports/sales-commission/result',[SalesCommissionController::class,'searchCommission'])->name('sales-commission.result');
     Route::get('/reports/edit-report', [EditReportController::class, 'index'])->name('reports.edit-report');
-    Route::get('/reports/edit-report/result',[EditReportController::class,'searchAccount'])->name('edit-report.result');
+    Route::get('/reports/edit-report/result',[EditReportController::class,'searchEditReport'])->name('edit-report.result');
    
 
     

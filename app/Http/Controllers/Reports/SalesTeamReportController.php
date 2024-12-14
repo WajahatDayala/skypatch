@@ -14,8 +14,8 @@ class SalesTeamReportController extends Controller
     public function index()
     {
         if (Auth::user()->role->name === 'Admin') {
-          //  return redirect()->route('support-allorders.show',$request->order_id)->with('success', 'Order updated successfully!');
-
+            return view('reports/accounts-user-report/admin-sales-team/index');
+         
         } else if (Auth::user()->role->name == 'Accounts') {
 
             return view('reports/accounts-user-report/sales-team/index');
@@ -35,6 +35,20 @@ class SalesTeamReportController extends Controller
     public function searchSalesTeam(Request $request)
     {
 
+        if (Auth::user()->role->name === 'Admin') {
+
+            $sales = InvoiceDetail::select('admins.name as sellerName',
+            DB::raw('SUM(invoice_details.price) as total_price'))
+           ->join('admins', 'invoice_details.seller_id', '=', 'admins.id')
+          // ->where('admins.role_id', '!=', 1)  
+           ->where('invoice_details.paid_on', 1)  
+           ->whereBetween('invoice_details.released_date', [$request->from_date, $request->to_date])
+           ->groupBy('admins.name') 
+           ->get();
+   
+           return view('reports/accounts-user-report/admin-sales-team/search',compact('sales'));
+        }
+        else {
         $sales = InvoiceDetail::select('admins.name as sellerName',
          DB::raw('SUM(invoice_details.price) as total_price'))
         ->join('admins', 'invoice_details.seller_id', '=', 'admins.id')
@@ -45,6 +59,7 @@ class SalesTeamReportController extends Controller
         ->get();
 
         return view('reports/accounts-user-report/sales-team/search',compact('sales'));
+        }
        
         
     }

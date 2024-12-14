@@ -15,6 +15,8 @@ use Validator;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\DB;
+use App\Models\JobInformation;
+use App\Models\InvoiceDetail;
 
 use Auth;
 
@@ -199,13 +201,27 @@ class VectorsController extends Controller
            ->where('options.vector_order_id',$id)
            ->get();
 
+               //jobinfo
+               $jobInfo = JobInformation::select('*')
+               ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+               ->where('job_information.quote_id',$id)
+               ->first();
+  
+               
+           $invoice_status = InvoiceDetail::select('*','invoices.invoice_status as invoiceStatus')
+           ->join('invoices','invoice_details.invoice_id','=','invoices.id')
+           ->where('invoice_details.order_id',$id)
+           ->first();
+
 
         return view('customer/vector-orders/show',compact(
             'order',
             'orderVectorEdit',
             'orderInstruction',
             'optionA',
-            'optionB'
+            'optionB',
+            'jobInfo',
+            'invoice_status'
         )); 
     }
 

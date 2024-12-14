@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\ReasonEdit;
 use App\Models\VectorOrder;
 use App\Models\VectorRequiredFormat;
 use App\Models\Quote;
@@ -882,8 +883,46 @@ class CustomerController extends Controller
           ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
          ->get();
  
+         
+           //options B
+           $optionB = Option::select('*','options.id as fileId')
+           ->join('quotes','options.quote_id','quotes.id')
+           ->where('option_type','B')
+           ->where('options.quote_id',$id)
+           ->get();
 
-        
+            //jobinfo
+            $jobInfo = JobInformation::select('*')
+            ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+            ->where('job_information.quote_id',$id)
+            ->first();
+
+         //options A
+         $optionA = Option::select('*','options.id as fileId')
+         ->join('quotes','options.quote_id','quotes.id')
+         ->where('option_type','A')
+         ->where('options.quote_id',$id)
+         ->get();
+ 
+            //options B
+            $optionB = Option::select('*','options.id as fileId')
+            ->join('quotes','options.quote_id','quotes.id')
+            ->where('option_type','B')
+            ->where('options.quote_id',$id)
+            ->get();
+ 
+             //jobinfo
+             $jobInfo = JobInformation::select('*')
+             ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+             ->where('job_information.quote_id',$id)
+             ->first();
+
+                 //designer
+        $designer = Admin::select('*','admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
+        ->join('roles', 'admins.role_id', '=', 'roles.id')
+        ->whereIn('roles.name',
+         ['Quote Worker', 'Order Worker', 'Vector Worker'])
+        ->get();
 
         return view('admin/customers/quotes/show',compact(
             'user',
@@ -892,7 +931,11 @@ class CustomerController extends Controller
             'orderStatus',
             'orderFiles',
             'orderInstruction',
-            'adminInstruction'
+            'adminInstruction',
+            'optionA',
+            'optionB',
+            'jobInfo',
+            'designer'
         ));
 
     }
@@ -1285,7 +1328,7 @@ class CustomerController extends Controller
         $orderStatus = Status::where('status_value', 1)->get();
 
         //Allreasons
-       // $allReasons = ReasonEdit::all();
+       $allReasons = ReasonEdit::all();
 
 
         //designer
@@ -1314,6 +1357,11 @@ class CustomerController extends Controller
                ->get();
    
    
+               $invoice_status = InvoiceDetail::select('*','invoices.invoice_status as invoiceStatus')
+               ->join('invoices','invoice_details.invoice_id','=','invoices.id')
+               ->where('invoice_details.order_id',$id)
+               ->first();
+      
 
 
         return view('admin/customers/orders/show', compact(
@@ -1325,7 +1373,9 @@ class CustomerController extends Controller
             'adminInstruction',
             'optionA',
             'optionB',
-            'user'
+            'user',
+            'allReasons',
+            'invoice_status'
         ));
     }
 
@@ -1646,6 +1696,7 @@ class CustomerController extends Controller
         'vector_orders.name as design_name',
         'users.name as customer_name', 
         'statuses.name as status',
+        'ordersStatus.name as order_status_name',
         'vector_required_formats.name as format',
         'users.name as customer_name',
         'vector_orders.created_at as received_date',
@@ -1653,6 +1704,7 @@ class CustomerController extends Controller
         ->join('users', 'vector_orders.customer_id', '=', 'users.id')
         ->join('statuses','vector_orders.status_id','=','statuses.id')
         ->join('vector_required_formats','vector_orders.required_format_id','=','vector_required_formats.id')
+        ->leftjoin('statuses as ordersStatus','vector_orders.vector_status','ordersStatus.id')
         ->where('vector_orders.id', $order->id) 
         ->first(); 
 
@@ -1678,13 +1730,59 @@ class CustomerController extends Controller
            ->where('options.vector_order_id',$id)
            ->get();
 
+           
+           $invoice_status = InvoiceDetail::select('*','invoices.invoice_status as invoiceStatus')
+           ->join('invoices','invoice_details.invoice_id','=','invoices.id')
+           ->where('invoice_details.order_id',$id)
+           ->first();
+  
+           
+            //order status
+        $orderStatus = Status::where('status_value',1)->get();
+
+
+           //files
+           $orderFiles =QuoteFileLog::select('*','quote_file_logs.id as fileId')
+           ->where('vector_order_id',$id)->get();
+   
+  //instruction
+  $orderInstruction = VectorOrder::select('*','instructions.description as instruction') 
+  ->leftjoin('instructions','instructions.vector_id','=','vector_orders.id')
+  ->where('instructions.vector_id',$order->order_id)
+  ->first();
+
+  
+  
+  //admin instruction
+  $adminInstruction = VectorOrder::select('*','instructions.description as instruction') 
+  ->join('instructions','instructions.vector_id','=','vector_orders.id')
+  ->leftjoin('admins','instructions.emp_id','admins.id')
+  ->leftjoin('roles','admins.role_id','roles.id')
+  ->where('instructions.vector_id',$id)
+  ->where('roles.name','Admin')
+  ->first();
+
+   //designer
+   $designer = Admin::select('*','admins.id as designer_id', 'admins.name as designerName', 'roles.name as roles')
+   ->join('roles', 'admins.role_id', '=', 'roles.id')
+   ->whereIn('roles.name',
+    ['Quote Worker', 'Order Worker', 'Vector Worker'])
+   ->get();
+
 
         return view('admin/customers/vector-orders/show',compact(
             'order',
             'orderInstruction',
+            'designer',
+            'adminInstruction',
+            'orderInstruction',
             'optionA',
             'optionB',
-            'user'
+            'user',
+            'invoice_status',
+            'orderFiles',
+            'orderStatus'
+            
         )); 
         
     }

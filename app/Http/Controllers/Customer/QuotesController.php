@@ -14,6 +14,7 @@ use App\Models\Instruction;
 use App\Models\Status;
 use App\Models\QuoteEditID;
 use App\Models\Order;
+use App\Models\JobInformation;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -236,13 +237,21 @@ class QuotesController extends Controller
           ->where('option_type','B')
           ->where('options.quote_id',$id)
           ->get();
+
+             //jobinfo
+             $jobInfo = JobInformation::select('*')
+             ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+             ->where('job_information.quote_id',$id)
+             ->first();
+     
         
 
         return view('customer/quotes/show',compact(
             'quote',
             'quoteInstruction',
             'optionA',
-            'optionB'
+            'optionB',
+            'jobInfo'
         ));
     }
 

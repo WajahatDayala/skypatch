@@ -115,7 +115,7 @@
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="rounded card shadow-lg border d-flex flex-column align-items-center justify-content-center p-4">
-                <a href=""><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/Commission.png')}}" alt="" >
+                <a href="/reports/sales-commission"><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/Commission.png')}}" alt="" >
                 <p class="my-2 h6">Sales Commission</p></a>
             </div>
         </div>
@@ -134,7 +134,7 @@
 
         <div class="col-sm-6 col-md-3 col-xl-3">
             <div class="rounded card shadow-lg border d-flex flex-column align-items-center justify-content-center p-4">
-                <a href=""><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/edit.png')}}" alt="" >
+                <a href="/reports/edit-report"><img class="icon-img-dashboard" src="{{asset('skypatch/img/admin/edit.png')}}" alt="" >
                 <p class="my-2 h6">Edit Report</p></a>
             </div>
         </div>

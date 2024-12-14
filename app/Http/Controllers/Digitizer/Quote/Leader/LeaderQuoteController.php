@@ -43,6 +43,7 @@ class LeaderQuoteController extends Controller
         ->join('users','quotes.customer_id','=','users.id')
         ->join('statuses','quotes.status_id','statuses.id')
         ->join('admins','quotes.designer_id','admins.id')
+        ->where('quotes.status_id',2)
         ->orderBy('design_name','ASC')
         ->get();
 

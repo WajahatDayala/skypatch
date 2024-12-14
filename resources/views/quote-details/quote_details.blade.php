@@ -279,7 +279,7 @@ Update
 <div class="modal-dialog" role="document">
 <div class="modal-content">
 <div class="modal-header">
-<h5 class="modal-title" id="orderStatusModalLabel">Update Order Status</h5>
+<h5 class="modal-title" id="orderStatusModalLabel">Update Quote Status</h5>
 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <form id="orderStatusForm" method="POST" action="{{ route('allquotes.updateStatus')}}">
@@ -294,7 +294,7 @@ Update
 <input type="text" class="form-control" hidden id="order_id" name="order_id" required value="{{ $order->order_id }}">
 </div>
 <div class="form-group">
-<label for="order_status">Order Status</label>
+<label for="order_status">Quote Status</label>
 <select class="form-control" id="order_status" name="order_status" required>
 @foreach($orderStatus as $s)
 <option value="{{$s->id}}" {{ $s->id == $order->quotes_status ? 'selected' : '' }}>{{$s->name}}</option>

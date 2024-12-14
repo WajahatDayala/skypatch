@@ -44,6 +44,7 @@ class WorkerQuoteController extends Controller
         ->join('users','quotes.customer_id','=','users.id')
         ->join('statuses','quotes.status_id','statuses.id')
         ->join('admins','quotes.designer_id','admins.id')
+        ->where('quotes.status_id',2)
         ->orderBy('design_name','ASC')
         ->get();
 
@@ -341,6 +342,23 @@ class WorkerQuoteController extends Controller
     public function update(Request $request, string $id)
     {
         //
+ //   //job process
+        $job = JobInformation::updateOrCreate(
+            ['quote_id' => $request->quote_id], // Condition to check if the record exists
+            [
+                'height_A' => $request->height_A,
+                'width_A' => $request->width_A,
+                'stitches_A' => $request->stitches_A,
+                'price_A' => $request->price_A,
+                'height_B' => $request->height_B,
+                'width_B' => $request->width_B,
+                'stitches_B' => $request->stitches_B,
+                'price_B' => $request->price_B,
+                'total' => $request->total
+            ]
+        );
+        return back()->with('success', 'Job Updated');
+
     }
 
     /**

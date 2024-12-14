@@ -5,65 +5,7 @@
          <div class=" container-fluid py-4 px-4">
                 <div class="row g-4 d-flex align-items-center justify-content-center">
                     <div class="col-12">
-                        {{-- <div class="bg-table rounded h-100 p-4 mt-4">
-                            <div class="row bg-dark p-2">
-                                <h6 class="text-light fw-light text-center mb-0">Pricing Criteria</h1>
-                            </div>
-                            <table class="table table-bordered">
-                                <tbody>
-                                    <tr class="row">
-                                        <td class="col-4">
-                                            <strong>Minimum Price</strong><br>
-                                            <span></span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>Maximum Price</strong><br>
-                                            <span></span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>1000 Stitches</strong><br>
-                                            <span></span>
-                                        </td>
-                                    </tr>
-                                    <tr class="row">
-                                        <td class="col-4">
-                                            <strong>Normal Delivery</strong><br>
-                                            <span></span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>Editing/Changes</strong><br>
-                                            <span></span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>Editing in stiches file</strong><br>
-                                            <span></span>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="row">
-                                        <td class="col-4">
-                                            <strong>Commment Box 1</strong><br>
-                                            <span></span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>Comment Box 2</strong><br>
-                                            <span></span>
-                                        </td>
-                                        <td class="col-4">
-                                            <strong>Comment Box 3</strong><br>
-                                            <span></span>
-                                        </td>
-                                    </tr>
-                                    <tr class="row">
-                                        <td class="col-4">
-                                            <strong>Comment Box 4</strong><br>
-                                            <span></span>
-                                        </td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> --}}
+                        
 
                         <div class="bg-table rounded h-100 p-4 mt-4">
                             <div class="row bg-dark p-2">
@@ -219,134 +161,10 @@
                             <!-- Modal for Edit Designer Ends Here -->
 
                         </div>
-                        <div class="bg-table rounded h-100 p-4 mt-4">
-                            <div class="row bg-dark p-2">
-                                <h6 class="text-light fw-light text-center mb-0">Job Information</h1>
-                            </div>
-                            <div class="row">
-                                <div class="col-7">
-                                    <table class="table table-bordered">
-                                        <tbody>
-                                            <tr class="row">
-                                                <td class="col-3">
-                                                    <strong>Number</strong><br>
-                                                    <span>QT-{{$quote->quote_id}}</span>
-                                                </td>
-                                                <td class="col-3">
-                                                    <strong>Date & Time</strong><br>
-                                                    <span>{{$quote->received_date}}</span>
-                                                </td>
-                                                <td class="col-3">
-                                                    <strong>Customer Nick</strong><br>
-                                                    <span>{{$quote->customer_name}}</span>
-                                                </td>
-                                                <td class="col-3">
-                                                    <strong>Desing Namw/PO</strong><br>
-                                                    <span>{{$quote->design_name}}</span>
-                                                </td>
-                                            </tr>
-                                            <tr class="row">
-                                                <td class="col-3">
-                                                    <strong>Height</strong><br>
-                                                    <span>{{$quote->height}}</span>
-                                                </td>
-                                                <td class="col-3">
-                                                    <strong>Width</strong><br>
-                                                    <span>{{$quote->width}}</span>
-                                                </td>
-                                                <td class="col-3">
-                                                    <strong>Required Format</strong><br>
-                                                    <span>{{$quote->format}}</span>
-                                                </td>
-                                                <td class="col-3">
-                                                    <strong>Placement</strong><br>
-                                                    <span>{{$quote->placement}}</span>
-                                                </td>
-                                            </tr>
-                                            <tr class="row">
-                                                <td class="col-3">
-                                                    <strong>Number of Colors</strong><br>
-                                                    <span>{{$quote->number_of_colors}}</span>
-                                                </td>
-                                                <td class="col-3">
-                                                    <strong>Fabric Type</strong><br>
-                                                    <span>{{$quote->fabric_name}}</span>
-                                                </td>
-                                                <td class="col-6">
-                                                    <strong>Design Type</strong><br>
-                                                    <span></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="row">
-                                                <td class="col-12">
-                                                    <strong>Customer Instructions</strong><br>
-                                                    <span>{{ $quoteInstruction ? $quoteInstruction->instruction : 'No instruction available.' }}</span>
-                                                </td>
-                                            </tr>
-                                            <tr class="row">
-                                                <td class="col-12">
-                                                    <strong>Admin Instructions</strong><br>
-                                                    <span>{{ $adminInstruction ? $adminInstruction->instruction : 'No instruction available.' }} </span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-5">
-                                    <table class="table table-bordered">
-                                        <tbody>
-                                            <tr class="row d-flex align-items-center justify-content-center">
-                                                
-                                            
-                                                <td class="col-2">
-                                                    
-                                                </td>
-                                                <td class="col-5 text-center">
-                                                   <b>Option A</b>
-                                                </td>
-                                                <td class="col-5 text-center">
-                                                    <b>Option B</b>
-                                                </td>
-                                            </tr>   
-                                            <tr class="row d-flex align-items-center justify-content-center">
-                                                <td class="col-2">
-                                                    Height
-                                                </td>
-                                                <td class="col-5">
-                                                    <input type="number" name="height_A" readonly class="form-control" id="inputEmail3" value="{{ old('height_A', $jobInfo->height_A ?? '') }}"  step="any">
-                                                </td>
-                                                <td class="col-5">
-                                                    <input type="number" name="height_B" readonly class="form-control" id="inputEmail3" value="{{$jobInfo->height_B ?? ''}}"  step="any">
-                                                </td>
-                                            </tr>
-                                            <tr class="row d-flex align-items-center justify-content-center">
-                                                <td class="col-2">
-                                                    Width
-                                                </td>
-                                                <td class="col-5">
-                                                    <input type="number" name="width_A" readonly class="form-control" id="inputEmail3" value="{{ old('width_A', $jobInfo->width_A ?? '') }}"  step="any">
-                                                </td>
-                                                <td class="col-5">
-                                                    <input type="number" name="width_B" readonly class="form-control" id="inputEmail3" value="{{ old('width_B', $jobInfo->width_B ?? '') }}"  step="any">
-                                                </td>
-                                            </tr>
-                                            <tr class="row d-flex align-items-center justify-content-center">
-                                                <td class="col-2">
-                                                    Stitches
-                                                </td>
-                                                <td class="col-5">
-                                                    <input type="number" name="stitches_A" readonly class="form-control" id="inputEmail3" value="{{ old('stitches_A', $jobInfo->stitches_A ?? '')}}">
-                                                </td>
-                                                <td class="col-5">
-                                                    <input type="number" name="stitches_B" readonly class="form-control" id="inputEmail3" value="{{ old('stitches_A',$jobInfo->stitches_B ?? '')}}">
-                                                </td>
-                                            </tr>
-                                           
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                      
+                       <!-- job information -->
+                       @include('digitizer.quote-details.jobinfo')
+
 
                         <div class="bg-table rounded h-100 p-4 mt-4">
                             <div class="row">
@@ -419,49 +237,7 @@
                                             </tr>
                                             <tr class="row">
                                                 <td>
-                                                    {{-- <strong>Comment</strong><br>
-                                                    <textarea class="form-control" placeholder="Leave a comment here"
-                                                        id="floatingTextarea" style="height: 150px;"></textarea> 
-
-                                                    <div class="mt-3">
-                                                        <legend class="fs-6"><strong>Mail To:</strong></legend>
-                                                        <br>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="gridCheck1">
-                                                            <label class="form-check-label" for="gridCheck1">
-                                                               {{$quote->email1}}
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="gridCheck1">
-                                                            <label class="form-check-label" for="gridCheck1">
-                                                            {{$quote->email2}}
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="gridCheck1">
-                                                            <label class="form-check-label" for="gridCheck1">
-                                                            {{$quote->email3}}
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="gridCheck1">
-                                                            <label class="form-check-label" for="gridCheck1">
-                                                            {{$quote->email4}}
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="gridCheck1">
-                                                            <label class="form-check-label" for="gridCheck1">
-                                                            {{$quote->invoceEmail}}
-                                                            </label>
-                                                        </div>
-                                                    </div>--}}
+                                                 
                                                 </td>
                                             </tr>
                                         </tbody>

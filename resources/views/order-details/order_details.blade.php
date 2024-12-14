@@ -93,7 +93,7 @@
 
             </td>
             <td class="col-3">
-                <strong>Stitches B</strong><br>
+                <strong>Stitches A</strong><br>
                 <p>
                     {{ $jobInfo->stitches_A ?? ''}}
                   
