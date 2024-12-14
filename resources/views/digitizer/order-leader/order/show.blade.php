@@ -17,10 +17,10 @@
                             {{-- <button type="button"  
                                         class="btn btn-sm btn-primary rounded-pill me-2">Print</button>  --}}
 
-                            @if ($order->edit_status == 1)
+                         
                                 <a href="{{ route('all-leader-orders.process', [$order->order_id]) }}"
                                     class="btn btn-sm btn-dark rounded-pill ">Process</a>
-                            @endif
+                          
                         </div>
                     </div>
                    

@@ -40,6 +40,7 @@ class VectorLeaderController extends Controller
         ->join('users','vector_orders.customer_id','=','users.id')
         ->join('statuses','vector_orders.status_id','statuses.id')
         ->join('admins','vector_orders.designer_id','=','admins.id')
+        ->where('vector_orders.status_id',2)
         ->orderBy('design_name','asc')
         ->get();
 
