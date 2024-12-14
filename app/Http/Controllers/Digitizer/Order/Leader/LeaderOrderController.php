@@ -44,6 +44,7 @@ class LeaderOrderController extends Controller
         ->join('users','orders.customer_id','=','users.id')
         ->join('statuses','orders.status_id','statuses.id')
         ->join('admins','orders.designer_id','=','admins.id')
+        ->where('orders.status_id',2)
         ->orderBy('design_name','ASC')
         ->get();
 

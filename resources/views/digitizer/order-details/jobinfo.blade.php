@@ -9,48 +9,47 @@
                     <tr class="row">
                         <td class="col-3">
                             <strong>Number</strong><br>
-                            <span>QT-{{$quote->quote_id}}</span>
-                           
+                            <span>OR-{{$order->order_id}}</span>
                         </td>
                         <td class="col-3">
                             <strong>Date & Time</strong><br>
-                            <span>{{$quote->received_date}}</span>
+                            <span>{{$order->received_date}}</span>
                         </td>
                         <td class="col-3">
                             <strong>Customer Nick</strong><br>
-                            <span>{{$quote->customer_name}}</span>
+                            <span>{{$order->customer_name}}</span>
                         </td>
                         <td class="col-3">
                             <strong>Desing Namw/PO</strong><br>
-                            <span>{{$quote->design_name}}</span>
+                            <span>{{$order->design_name}}</span>
                         </td>
                     </tr>
                     <tr class="row">
                         <td class="col-3">
                             <strong>Height</strong><br>
-                            <span>{{$quote->height}}</span>
+                            <span>{{$order->height}}</span>
                         </td>
                         <td class="col-3">
                             <strong>Width</strong><br>
-                            <span>{{$quote->width}}</span>
+                            <span>{{$order->width}}</span>
                         </td>
                         <td class="col-3">
                             <strong>Required Format</strong><br>
-                            <span>{{$quote->format}}</span>
+                            <span>{{$order->format}}</span>
                         </td>
                         <td class="col-3">
                             <strong>Placement</strong><br>
-                            <span>{{$quote->placement}}</span>
+                            <span>{{$order->placement}}</span>
                         </td>
                     </tr>
                     <tr class="row">
                         <td class="col-3">
                             <strong>Number of Colors</strong><br>
-                            <span>{{$quote->number_of_colors}}</span>
+                            <span>{{$order->number_of_colors}}</span>
                         </td>
                         <td class="col-3">
                             <strong>Fabric Type</strong><br>
-                            <span>{{$quote->fabric_name}}</span>
+                            <span>{{$order->fabric_name}}</span>
                         </td>
                         <td class="col-6">
                             <strong>Design Type</strong><br>
@@ -60,7 +59,7 @@
                     <tr class="row">
                         <td class="col-12">
                             <strong>Customer Instructions</strong><br>
-                            <span>{{ $quoteInstruction ? $quoteInstruction->instruction : 'No instruction available.' }}</span>
+                            <span>{{ $orderInstruction ? $orderInstruction->instruction : 'No instruction available.' }}</span>
                         </td>
                     </tr>
                     <tr class="row">
@@ -73,11 +72,13 @@
             </table>
         </div>
         <div class="col-5">
-            <form method="post" action="{{route('all-worker-quotes.update',['all_worker_quote'=>$quote->quote_id])}}">
-            @csrf
-            @method('PUT') <!-- Use PUT method for updating -->
+            <form method="post" action="{{route('all-worker-orders.update',['all_worker_order'=>$order->order_id])}}">
+                @csrf
+                @method('PUT') <!-- Use PUT method for updating -->
             <table class="table table-bordered">
+                                        
                 <tbody>
+                    
                     <tr class="row d-flex align-items-center justify-content-center">
                         
                     
@@ -90,10 +91,13 @@
                         <td class="col-5 text-center">
                             <b>Option B</b>
                         </td>
-                    </tr>   
+                    </tr>
+               
                     <tr class="row d-flex align-items-center justify-content-center">
-                        <input type="text" hidden name="quote_id" value="{{$quote->quote_id}}">
+                        
+                    
                         <td class="col-2">
+                            <input type="text" hidden name="order_id" value="{{$order->order_id}}">
                             Height
                         </td>
                         <td class="col-5">
@@ -125,7 +129,7 @@
                             <input type="number" name="stitches_B" class="form-control" id="inputEmail3" value="{{ old('stitches_A',$jobInfo->stitches_B ?? '')}}">
                         </td>
                     </tr>
-                    <tr  class="row d-flex align-items-center justify-content-center">
+                    <tr class="row d-flex align-items-center justify-content-center">
                         <td style="display:none;" class="col-2">
                             Price
                         </td>
@@ -139,12 +143,12 @@
                         <td class="col-5">
                             <div class="input-group">
                                 <span hidden class="input-group-text" id="basic-addon1">$</span>
-                                <input type="number" hidden id="price_B" name="price_B" class="form-control" placeholder="Price"
+                                <input type="number" id="price_B" hidden name="price_B" class="form-control" placeholder="Price"
                                     aria-label="Username" aria-describedby="basic-addon1" value="{{ old('price_B', $jobInfo->price_B ?? '')}}">
                             </div>
                         </td>
                     </tr>
-                    <tr  class="row d-flex align-items-center justify-content-center">
+                    <tr class="row d-flex align-items-center justify-content-center">
                         <td style="display:none;" class="col-2">
                             Total
                         </td>
@@ -157,11 +161,11 @@
                         </td>
                     </tr>
                 </tbody>
-           
             </table>
         </form>
         </div>
     </div>
+    
 </div>
 
 <script>
@@ -185,4 +189,3 @@
  priceA.addEventListener('input', updateTotal);
  priceB.addEventListener('input', updateTotal);
  </script>
- 

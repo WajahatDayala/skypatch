@@ -42,6 +42,7 @@ class WorkerOrderController extends Controller
         ->join('users','orders.customer_id','=','users.id')
         ->join('statuses','orders.status_id','statuses.id')
         ->join('admins','orders.designer_id','=','admins.id')
+        ->where('orders.status_id',2)
         ->orderBy('design_name','ASC')
         ->get();
 
@@ -339,6 +340,26 @@ class WorkerOrderController extends Controller
     public function update(Request $request, string $id)
     {
         //
+           //order
+           $order = Order::where('id',$request->order_id)->first();
+  
+           //job process
+           $job = JobInformation::updateOrCreate(
+           ['order_id' => $request->order_id], // Condition to check if the record exists
+           [
+               'height_A' => $request->height_A,
+               'width_A' => $request->width_A,
+               'stitches_A' => $request->stitches_A,
+               'price_A' => $request->price_A,
+               'height_B' => $request->height_B,
+               'width_B' => $request->width_B,
+               'stitches_B' => $request->stitches_B,
+               'price_B' => $request->price_B,
+               'total' => $request->total
+           ]
+          );
+          return back()->with('success', 'Job Updated');
+
     }
 
     /**
