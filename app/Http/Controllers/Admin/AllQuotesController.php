@@ -27,10 +27,9 @@ use App\Models\PricingCriteria;
 
 use App\Mail\QuoteMail;
 use Illuminate\Support\Facades\Mail;
-use ZipArchive;
+//use ZipArchive;
 use App\Jobs\ProcessEmail;
-use App\Jobs\TestEmailJob;
-use App\Mail\TestMail;
+
 
 class AllQuotesController extends Controller
 {
@@ -339,11 +338,18 @@ class AllQuotesController extends Controller
      
                  // Get the original filename
                  $originalFilename = $file->getClientOriginalName();
+
+
+                 //order id for upload 
+                 $orderID = $request->input('order_id');
+
+                 $orderNo = 'QT-'.$orderID.'-'.$originalFilename;
+
      
                  // Create a structured string to store both path and original filename
                  $fileData = [
                      'path' => $filePath,
-                     'original_name' => $originalFilename,
+                     'original_name' => $orderNo,
                  ];
      
                  QuoteFileLog::create([
@@ -938,7 +944,8 @@ class AllQuotesController extends Controller
      $price_B = $request->input('price_B');
      $total = $request->input('total');
      $comment = $request->input('comment');
- // Collect selected files for Option A and Option B
+ 
+     // Collect selected files for Option A and Option B
 $filesA = $request->input('optionSendFilesA', []);  // Default to empty array if no files selected
 $filesB = $request->input('optionSendFilesB', []);  // Default to empty array if no files selected
 

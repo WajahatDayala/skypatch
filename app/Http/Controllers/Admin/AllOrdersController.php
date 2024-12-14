@@ -24,6 +24,12 @@ use App\Models\PricingCriteria;
 use App\Models\VectorDetail;
 use App\Models\JobInformation;
 use App\Models\InvoiceDetail;
+
+use App\Mail\OrderMail;
+use App\Jobs\ProcessOrderEmail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+
 class AllOrdersController extends Controller
 {
     /**
@@ -125,10 +131,17 @@ class AllOrdersController extends Controller
                 // Get the original filename
                 $originalFilename = $file->getClientOriginalName();
 
+                
+                      //order id for upload 
+                      $orderID = $request->input('order_id');
+
+                      $orderNo = 'OR-'.$orderID.'-'.$originalFilename;
+  
+
                 // Create a structured string to store both path and original filename
                 $fileData = [
                     'path' => $filePath,
-                    'original_name' => $originalFilename,
+                    'original_name' => $orderNo,
                 ];
 
                 Option::create([
@@ -165,10 +178,16 @@ class AllOrdersController extends Controller
                 // Get the original filename
                 $originalFilename = $file->getClientOriginalName();
 
+                      //order id for upload 
+                      $orderID = $request->input('order_id');
+
+                      $orderNo = 'OR-'.$orderID.'-'.$originalFilename;
+  
+
                 // Create a structured string to store both path and original filename
                 $fileData = [
                     'path' => $filePath,
-                    'original_name' => $originalFilename,
+                    'original_name' => $orderNo,
                 ];
 
                 Option::create([
@@ -432,10 +451,17 @@ class AllOrdersController extends Controller
                 // Get the original filename
                 $originalFilename = $file->getClientOriginalName();
 
+                
+                      //order id for upload 
+                      $orderID = $request->input('order_id');
+
+                      $orderNo = 'OR-'.$orderID.'-'.$originalFilename;
+  
+
                 // Create a structured string to store both path and original filename
                 $fileData = [
                     'path' => $filePath,
-                    'original_name' => $originalFilename,
+                    'original_name' => $orderNo,
                 ];
 
                 QuoteFileLog::create([
@@ -833,6 +859,79 @@ class AllOrdersController extends Controller
           
             //relased o9rders
             $order->update(['status_id' => 1]);
+
+        // Collect form data
+        $height_A = $request->input('height_A');
+        $width_A = $request->input('width_A');
+        $stitches_A = $request->input('stitches_A');
+        $price_A = $request->input('price_A');
+        $height_B = $request->input('height_B');
+        $width_B = $request->input('width_B');
+        $stitches_B = $request->input('stitches_B');
+        $price_B = $request->input('price_B');
+        $total = $request->input('total');
+        $comment = $request->input('comment');
+    
+        // Collect selected files for Option A and Option B
+        $filesA = $request->input('optionSendFilesA', []);  // Default to empty array if no files selected
+        $filesB = $request->input('optionSendFilesB', []);  // Default to empty array if no files selected
+    
+        // Log the file names for debugging
+        Log::info('Files A: ', $filesA);
+        Log::info('Files B: ', $filesB);
+    
+        // Collect selected email addresses
+        $emails = [];
+        if ($request->has('gridCheckemail1')) {
+            $emails[] = $request->input('gridCheckemail1');
+        }
+        if ($request->has('gridCheckemail2')) {
+            $emails[] = $request->input('gridCheckemail2');
+        }
+        if ($request->has('gridCheckemail3')) {
+            $emails[] = $request->input('gridCheckemail3');
+        }
+        if ($request->has('gridCheckemail4')) {
+            $emails[] = $request->input('gridCheckemail4');
+        }
+        if ($request->has('gridCheckinvoiceemail')) {
+            $emails[] = $request->input('gridCheckinvoiceemail');
+        }
+    
+        // Prepare the email data
+        $emailData = [
+            'height_A' => $height_A,
+            'width_A' => $width_A,
+            'stitches_A' => $stitches_A,
+            'price_A' => $price_A,
+            'height_B' => $height_B,
+            'width_B' => $width_B,
+            'stitches_B' => $stitches_B,
+            'price_B' => $price_B,
+            'total' => $total,
+            'comment' => $comment,
+            'emails' => $emails,  // Add the emails array here
+        ];
+    
+        // Check if emails are available
+        if (!empty($emails)) {
+            foreach ($emails as $email) {
+                try {
+                    // Start creating the mail instance, passing emailData, filesA, and filesB
+                    $mail = new OrderMail($emailData, $filesA, $filesB);
+    
+                    // Send the email with attachments
+                    Mail::to($email)->send($mail);
+    
+                    // Dispatch a job for background processing, passing all 3 arguments
+                    ProcessOrderEmail::dispatch($emailData, $filesA, $filesB);
+                } catch (\Exception $e) {
+                    // Log the error
+                    Log::error("Error sending email to $email: " . $e->getMessage());
+                }
+            }
+        }
+    
   
             return redirect()->route('allorders.show',$request->order_id)->with('success', 'Order updated successfully!');
   
@@ -858,10 +957,16 @@ class AllOrdersController extends Controller
             // Get the original filename
             $originalFilename = $file->getClientOriginalName();
 
+              
+                    //order id for upload 
+                    $orderID = $request->input('order_id');
+
+                    $orderNo = 'OR-'.$orderID.'-'.$originalFilename;
+
             // Create a structured string to store both path and original filename
             $fileData = [
                 'path' => $filePath,
-                'original_name' => $originalFilename,
+                'original_name' => $orderNo,
             ];
 
             Option::create([

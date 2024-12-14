@@ -159,7 +159,7 @@
                                             <tr class="row">
                                                 <td class="col-3">
                                                     <strong>Number</strong><br>
-                                                    <span>QT-{{$order->order_id}}</span>
+                                                    <span>OR-{{$order->order_id}}</span>
                                                     <input type="text" hidden name="order_id" value="{{$order->order_id}}">
                                                 </td>
                                                 <td class="col-3">
@@ -332,7 +332,7 @@
                                                     @if ($filePath)
                                                     <a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}">
                                                         {{ $originalFilename }}
-                                                        </a><input type="checkbox" name="optionSendFilesA[]" checked value="{{$originalFilename}}">
+                                                        </a><input type="checkbox" name="optionSendFilesA[]" checked value="{{$filePath}}">
                                                     <!-- Add a unique class for order files -->
                                                    <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn-order" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileAModal">Remove</button><br>
                                                    @else
@@ -426,7 +426,7 @@
                                               <!-- Create a clickable link to download the file dynamically -->
                                             <a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}">
                                             {{ $originalFilename }}
-                                             </a><input type="checkbox" name="optionSendFilesB[]" checked value="{{$originalFilename}}">
+                                             </a><input type="checkbox" name="optionSendFilesB[]" checked value="{{$filePath}}">
                                              <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn-order-b" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileBModal">Remove</button><br>
                                              @else
                                              <p>No file available</p>

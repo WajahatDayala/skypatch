@@ -1,15 +1,17 @@
 <?php
 
 namespace App\Jobs;
-
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\QuoteMail;
-class ProcessEmail implements ShouldQueue
+use App\Mail\OrderMail;
+use Illuminate\Support\Facades\Log;
+
+class ProcessOrderEmail implements ShouldQueue
 {
     use Queueable, SerializesModels;
+
     protected $emailData;
     protected $filesA;
     protected $filesB;
@@ -39,13 +41,19 @@ class ProcessEmail implements ShouldQueue
         if (isset($this->emailData['emails']) && is_array($this->emailData['emails'])) {
             $emails = $this->emailData['emails'];  // Access the 'emails' array
 
+            // Log the email addresses to ensure they're correct
+            Log::info("Sending emails to: ", $emails);
+
             // Send the email to each recipient
             foreach ($emails as $email) {
-                Mail::to($email)->send(new QuoteMail($this->emailData, $this->filesA, $this->filesB));
+                try {
+                    Mail::to($email)->send(new OrderMail($this->emailData, $this->filesA, $this->filesB));
+                } catch (\Exception $e) {
+                    Log::error("Error sending email to $email: " . $e->getMessage());
+                }
             }
         } else {
-            // Log an error or take appropriate action if 'emails' key is missing
-            //Log::error("Emails key is missing in the provided data.");
+            Log::error("Emails key is missing in the provided data.");
         }
     }
 }
