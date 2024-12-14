@@ -956,52 +956,7 @@ class AllOrdersController extends Controller
   
   
 
-    //file upload for process page
-    public function storeOptionFileA(Request $request)
-    {
-    // Validate the incoming request
-    $request->validate([
-        'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
-    ]);
-
-    // Handle file uploads
-    if ($request->hasFile('filesA')) {
-        // Store new files
-        foreach ($request->file('filesA') as $file) {
-            $filePath = $file->store('/uploads/orders-option/A', 'public');
-
-            // Get the original filename
-            $originalFilename = $file->getClientOriginalName();
-
-              
-                    //order id for upload 
-                    $orderID = $request->input('order_id');
-
-                    $orderNo = 'OR-'.$orderID.'-'.$originalFilename;
-
-            // Create a structured string to store both path and original filename
-            $fileData = [
-                'path' => $filePath,
-                'original_name' => $orderNo,
-            ];
-
-            Option::create([
-                'role_id' => Auth::User()->role_id,
-                'employee_id' => Auth::id(),
-                'order_id' => $request->order_id,
-                'option_type' => 'A',
-                'comment' => $request->commentA,
-                'file_upload' => json_encode($fileData),
-            ]);
-        }
-
-        // Return a success response in JSON format
-        return response()->json(['success' => true, 'message' => 'Files uploaded successfully!']);
-    }
-
-    // Return an error response if no files were uploaded
-    return response()->json(['success' => false, 'message' => 'No files uploaded.']);
-    }
+    
 
 
     public function printOrder(string $id)

@@ -450,9 +450,16 @@ class AllVectorController extends Controller
       public function storeFile(Request $request)
       {
           // Validate the incoming request
-          $request->validate([
-              'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
-          ]);
+        //   $request->validate([
+        //       'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+        //   ]);
+
+
+        // Validate the uploaded files for filesB
+      $request->validate([
+        'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif,cdr,cnd,dsb,dst,dsz,emb,exp,jef,ksm,ofm,pes,pof,tap,xxx,others|max:262144', // 256MB = 262144 KB
+    ]);
+
       
           // Handle file uploads
           if ($request->hasFile('files')) {
@@ -462,11 +469,18 @@ class AllVectorController extends Controller
       
                   // Get the original filename
                   $originalFilename = $file->getClientOriginalName();
+
+                    //order id for upload 
+                 $orderID = $request->input('order_id');
+
+                 $orderNo = 'VO-'.$orderID.'-'.$originalFilename;
+
+
       
                   // Create a structured string to store both path and original filename
                   $fileData = [
                       'path' => $filePath,
-                      'original_name' => $originalFilename,
+                      'original_name' => $orderNo,
                   ];
       
                   QuoteFileLog::create([
@@ -796,9 +810,15 @@ class AllVectorController extends Controller
     public function storeOptionA(Request $request)
     {
         // Validate the incoming request
-        $request->validate([
-            'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
-        ]);
+        // $request->validate([
+        //     'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+        // ]);
+
+         // Validate the uploaded files for filesB
+      $request->validate([
+        'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif,cdr,cnd,dsb,dst,dsz,emb,exp,jef,ksm,ofm,pes,pof,tap,xxx,others|max:262144', // 256MB = 262144 KB
+    ]);
+
 
         // Handle file uploads
         if ($request->hasFile('filesA')) {
@@ -809,10 +829,16 @@ class AllVectorController extends Controller
                 // Get the original filename
                 $originalFilename = $file->getClientOriginalName();
 
+                    //order id for upload 
+                    $orderID = $request->input('order_id');
+
+                    $orderNo = 'VO-'.$orderID.'-'.$originalFilename;
+
+
                 // Create a structured string to store both path and original filename
                 $fileData = [
                     'path' => $filePath,
-                    'original_name' => $originalFilename,
+                    'original_name' => $orderNo,
                 ];
 
                 Option::create([
@@ -836,9 +862,15 @@ class AllVectorController extends Controller
     {
         // Validate the incoming request
 // Validate the incoming request
-        $request->validate([
-            'filesB.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
-        ]);
+        // $request->validate([
+        //     'filesB.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+        // ]);
+
+        // Validate the uploaded files for filesB
+      $request->validate([
+        'filesB.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif,cdr,cnd,dsb,dst,dsz,emb,exp,jef,ksm,ofm,pes,pof,tap,xxx,others|max:262144', // 256MB = 262144 KB
+    ]);
+
 
         // Handle file uploads
         if ($request->hasFile('filesB')) {
@@ -849,10 +881,17 @@ class AllVectorController extends Controller
                 // Get the original filename
                 $originalFilename = $file->getClientOriginalName();
 
+                 //order id for upload 
+                 $orderID = $request->input('order_id');
+
+                 $orderNo = 'VO-'.$orderID.'-'.$originalFilename;
+
+
+
                 // Create a structured string to store both path and original filename
                 $fileData = [
                     'path' => $filePath,
-                    'original_name' => $originalFilename,
+                    'original_name' => $orderNo,
                 ];
 
                 Option::create([
