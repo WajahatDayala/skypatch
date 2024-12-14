@@ -8,36 +8,59 @@ use Illuminate\Support\Facades\Log;
 
 class QuoteMail extends Mailable
 {
-    use Queueable, SerializesModels;
-
     public $emailData;
-    public $zipFilePath;
+    public $filesA;
+    public $filesB;
 
-    // Constructor to accept email data and zip file path
-    public function __construct($emailData, $zipFilePath)
+    /**
+     * Create a new message instance.
+     *
+     * @param  array  $emailData
+     * @param  array  $filesA
+     * @param  array  $filesB
+     * @return void
+     */
+    public function __construct($emailData, $filesA, $filesB)
     {
         $this->emailData = $emailData;
-        $this->zipFilePath = $zipFilePath;
+        $this->filesA = $filesA;
+        $this->filesB = $filesB;
     }
 
-    // Build the email
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
     public function build()
     {
-        // Use the public path to access the file inside public/storage folder
-        $filePath = public_path("storage/quote_files.zip");  // Correct path inside the public directory
+        $email = $this->view('emails.quote')
+                      ->with(['emailData' => $this->emailData])
+                      ->subject('Quote Mail');
 
-        // Check if the file exists
-        if (!file_exists($filePath)) {
-            Log::error("File does not exist at path: $filePath");
-            throw new \Exception("The specified ZIP file was not found.");
+        // Add files for Option A
+        foreach ($this->filesA as $fileName) {
+            $filePath = storage_path('app/public/' . $fileName);
+            if (file_exists($filePath)) {
+                $email->attach($filePath, [
+                    'as' => basename($filePath),
+                    'mime' => mime_content_type($filePath),
+                ]);
+            }
         }
 
-        return $this->view('emails.quote')
-                    ->with(['emailData' => $this->emailData])
-                    ->subject('Quote Mail')
-                    ->attach($filePath, [
-                        'as' => 'quote_files.zip',  // Name of the attachment
-                        'mime' => 'application/zip',  // MIME type
-                    ]);
+        // Add files for Option B
+        foreach ($this->filesB as $fileName) {
+            $filePath = storage_path('app/public/' . $fileName);
+            if (file_exists($filePath)) {
+                $email->attach($filePath, [
+                    'as' => basename($filePath),
+                    'mime' => mime_content_type($filePath),
+                ]);
+            }
+        }
+
+        return $email;
     }
+
 }

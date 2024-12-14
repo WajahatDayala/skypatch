@@ -512,11 +512,16 @@ class AllQuotesController extends Controller
         
                     // Get the original filename
                     $originalFilename = $file->getClientOriginalName();
+                    
+                    //order id for upload 
+                    $orderID = $request->input('order_id');
+
+                    $quoteNo = 'QT-'.$orderID.'-'.$originalFilename;
         
                     // Create a structured string to store both path and original filename
                     $fileData = [
                         'path' => $filePath,
-                        'original_name' => $originalFilename,
+                        'original_name' => $quoteNo,
                     ];
         
                     Option::create([
@@ -552,10 +557,16 @@ class AllQuotesController extends Controller
             // Get the original filename
             $originalFilename = $file->getClientOriginalName();
 
+              //order id for upload 
+              $orderID = $request->input('order_id');
+
+              $quoteNo = 'QT-'.$orderID.'-'.$originalFilename;
+  
+
             // Create a structured string to store both path and original filename
             $fileData = [
                 'path' => $filePath,
-                'original_name' => $originalFilename,
+                'original_name' => $quoteNo,
             ];
 
             Option::create([
@@ -927,99 +938,63 @@ class AllQuotesController extends Controller
      $price_B = $request->input('price_B');
      $total = $request->input('total');
      $comment = $request->input('comment');
- 
-     // Collect selected files for Option A and Option B
-     $filesA = $request->input('optionSendFilesA', []);  // Default to empty array if no files selected
-     $filesB = $request->input('optionSendFilesB', []);  // Default to empty array if no files selected
- 
-     // Collect selected email addresses
-     $emails = [];
-     if ($request->has('gridCheckemail1')) {
-         $emails[] = $request->input('gridCheckemail1');
-     }
-     if ($request->has('gridCheckemail2')) {
-         $emails[] = $request->input('gridCheckemail2');
-     }
-     if ($request->has('gridCheckemail3')) {
-         $emails[] = $request->input('gridCheckemail3');
-     }
-     if ($request->has('gridCheckemail4')) {
-         $emails[] = $request->input('gridCheckemail4');
-     }
-     if ($request->has('gridCheckinvoiceemail')) {
-         $emails[] = $request->input('gridCheckinvoiceemail');
-     }
- 
-     // Correctly define the path for the ZIP file
-     $zipFile = storage_path('app/public/quote_files.zip');  // Path to storage/app/public/quote_files.zip
-     $zip = new ZipArchive();
- 
-     // Try to open the zip file
-     if ($zip->open($zipFile, ZipArchive::CREATE) !== TRUE) {
-         return back()->with('error', 'Unable to create ZIP file');
-     }
- 
-     // Add files for Option A and Option B
-     foreach ($filesA as $fileName) {
-         $filePath = storage_path('app/public/' . $fileName);  // Correct path to files in storage/app/public
-         if (file_exists($filePath)) {
-             $zip->addFile($filePath, 'OptionA/' . basename($filePath));  // Use basename for file inside the ZIP
-         }
-     }
- 
-     foreach ($filesB as $fileName) {
-         $filePath = storage_path('app/public/' . $fileName);  // Correct path to files in storage/app/public
-         if (file_exists($filePath)) {
-             $zip->addFile($filePath, 'OptionB/' . basename($filePath));  // Use basename for file inside the ZIP
-         }
-     }
- 
-     // Close the ZIP file
-     $zip->close();
- 
-     // Check if the zip file size exceeds 256MB
-     $maxFileSize = 256 * 1024 * 1024; // 256MB in bytes
-     if (filesize($zipFile) > $maxFileSize) {
-         // Remove the zip file after validation
-         unlink($zipFile);
-         return back()->with('error', 'The generated ZIP file exceeds the 256MB size limit and cannot be sent via email.');
-     }
- 
-     // Prepare the email data
-     $emailData = [
-         'height_A' => $height_A,
-         'width_A' => $width_A,
-         'stitches_A' => $stitches_A,
-         'price_A' => $price_A,
-         'height_B' => $height_B,
-         'width_B' => $width_B,
-         'stitches_B' => $stitches_B,
-         'price_B' => $price_B,
-         'total' => $total,
-         'comment' => $comment,
-         'emails' => $emails,  // Add the emails array here
-     ];
- 
-     // Check if emails are available
-     if (!empty($emails)) {
-         foreach ($emails as $email) {
-             try {
-                 // Send the email with the ZIP attachment
-                 Mail::to($email)->send(new QuoteMail($emailData, $zipFile));  // Send the email with the ZIP attachment
- 
-                 // Optionally, you can dispatch a job for background processing if needed
-                 ProcessEmail::dispatch($emailData, $zipFile);
-             } catch (\Exception $e) {
-                 // Log the error or handle it
-                 // Log::error("Error sending email to $email: " . $e->getMessage());
-             }
-         }
-     }
- 
-     // Clean up the zip file after sending the email
-     if (file_exists($zipFile)) {
-         unlink($zipFile); // Delete the zip file after sending email
-     }
+ // Collect selected files for Option A and Option B
+$filesA = $request->input('optionSendFilesA', []);  // Default to empty array if no files selected
+$filesB = $request->input('optionSendFilesB', []);  // Default to empty array if no files selected
+
+// Collect selected email addresses
+$emails = [];
+if ($request->has('gridCheckemail1')) {
+    $emails[] = $request->input('gridCheckemail1');
+}
+if ($request->has('gridCheckemail2')) {
+    $emails[] = $request->input('gridCheckemail2');
+}
+if ($request->has('gridCheckemail3')) {
+    $emails[] = $request->input('gridCheckemail3');
+}
+if ($request->has('gridCheckemail4')) {
+    $emails[] = $request->input('gridCheckemail4');
+}
+if ($request->has('gridCheckinvoiceemail')) {
+    $emails[] = $request->input('gridCheckinvoiceemail');
+}
+
+// Prepare the email data
+$emailData = [
+    'height_A' => $height_A,
+    'width_A' => $width_A,
+    'stitches_A' => $stitches_A,
+    'price_A' => $price_A,
+    'height_B' => $height_B,
+    'width_B' => $width_B,
+    'stitches_B' => $stitches_B,
+    'price_B' => $price_B,
+    'total' => $total,
+    'comment' => $comment,
+    'emails' => $emails,  // Add the emails array here
+];
+
+// Check if emails are available
+if (!empty($emails)) {
+    foreach ($emails as $email) {
+        try {
+            // Start creating the mail instance, passing emailData, filesA, and filesB
+            $mail = new QuoteMail($emailData, $filesA, $filesB);
+
+            // Send the email with attachments
+            Mail::to($email)->send($mail);  // Send the email with attachments
+
+            // Dispatch a job for background processing, passing all 3 arguments
+            ProcessEmail::dispatch($emailData, $filesA, $filesB);
+
+        } catch (\Exception $e) {
+            // Log the error or handle it
+            // Log::error("Error sending email to $email: " . $e->getMessage());
+        }
+    }
+}
+
 
            return redirect()->route('allquotes.show',$request->quote_id)->with('success', 'Quote updated successfully!');
 
