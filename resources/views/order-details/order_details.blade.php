@@ -124,15 +124,35 @@ $fileId = $f->fileId;
 $fileData = json_decode($f->files, true); // Decode the JSON
 $filePath = $fileData['path'] ?? 'No file'; // Get the file path
 $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
+$fileExtension = pathinfo($originalFilename, PATHINFO_EXTENSION); // Get the file extension
+
 @endphp
 @if ($filePath)
-<!-- Create a clickable link to download the file dynamically -->
-<a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}">
-{{ $originalFilename }}
-</a>
+
+      <!-- Check if the file is an image or PDF -->
+      @if (in_array(strtolower($fileExtension), ['png', 'jpeg', 'jpg', 'pdf']))
+      <a href="{{ asset('storage/' . $filePath) }}" target="_blank" class="file-link">
+        @if (in_array(strtolower($fileExtension), ['png', 'jpeg', 'jpg']))
+            <!-- Preview image -->
+            {{ $originalFilename }}
+            {{-- <img src="{{ asset('storage/' . $filePath) }}" alt="{{ $originalFilename }}" style="max-width: 200px; max-height: 200px;"> --}}
+        @else
+            <!-- Display PDF link -->
+            {{ $originalFilename }}
+        @endif
+    </a>
+    @else
+    <!-- For other files, provide download option -->
+    <a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}" class="file-link">
+         {{ $originalFilename }}
+    </a>
+@endif
+
+
 @else
 <p>No file available</p>
 @endif
+
  | 
 <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileModal">Delete</button><br>
 
@@ -448,21 +468,45 @@ Update
                                 $fileData = json_decode($a->file_upload, true); // Decode the JSON
                                 $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                                 $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
-                            @endphp
-                           
-                           @if ($filePath)
-                           <!-- Create a clickable link to download the file dynamically -->
-                         <a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}">
-                          {{ $originalFilename }}
-                          </a>
-                          | 
-                          <!-- Add a unique class for order files -->
-                          <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn-order" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileAModal">Remove</button><br>
+                                $fileExtension = pathinfo($originalFilename, PATHINFO_EXTENSION); // Get the file extension
                           
-                         @else
-                         <p>No file available</p>
-                         @endif
-                         @endforeach
+                          @endphp
+                          
+                          @if ($filePath)
+                          <!-- Check if the file is an image or PDF -->
+                          @if (in_array(strtolower($fileExtension), ['png', 'jpeg', 'jpg', 'pdf']))
+                              <!-- If the file is an image or PDF, open in a new tab (preview) -->
+                              <a href="{{ asset('storage/' . $filePath) }}" target="_blank" class="file-link">
+                                  @if (in_array(strtolower($fileExtension), ['png', 'jpeg', 'jpg']))
+                                      <!-- Preview image -->
+                                      {{ $originalFilename }}
+                                      {{-- <img src="{{ asset('storage/' . $filePath) }}" alt="{{ $originalFilename }}" style="max-width: 200px; max-height: 200px;"> --}}
+                                  @else
+                                      <!-- Display PDF link -->
+                                      {{ $originalFilename }}
+                                  @endif
+                              </a>
+                          @else
+                              <!-- For other files, provide download option -->
+                              <a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}" class="file-link">
+                                   {{ $originalFilename }}
+                              </a>
+                          @endif
+                  
+                          <!-- Checkbox for selection -->
+                          {{-- <input type="checkbox" name="optionSendFilesA[]" value="{{ $filePath }}" checked> --}}
+                  
+                          <!-- Separator and remove button -->
+                          |
+                          <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn-order" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileAModal">
+                              Remove
+                          </button>
+                  
+                          <br>
+                      @else
+                          <p>No file available</p>
+                      @endif
+                  @endforeach
 
                            <!-- Delete Confirmation Modal for Option A -->
 <div class="modal fade" id="deleteFileAModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileAModalLabel" aria-hidden="true">
@@ -497,9 +541,11 @@ Update
                                 $fileData = json_decode($b->file_upload, true); // Decode the JSON
                                 $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                                 $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
-                            @endphp
+                                $fileExtension = pathinfo($originalFilename, PATHINFO_EXTENSION); // Get the file extension
+                          
+                          @endphp
                            
-                           @if ($filePath)
+                           {{-- @if ($filePath)
                            <!-- Create a clickable link to download the file dynamically -->
                          <a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}">
                          {{ $originalFilename }}
@@ -511,7 +557,37 @@ Update
                          @else
                          <p>No file available</p>
                          @endif
-                        @endforeach
+                        @endforeach --}}
+                        @if ($filePath)
+                        <!-- Check if the file is an image or PDF -->
+                        @if (in_array(strtolower($fileExtension), ['png', 'jpeg', 'jpg', 'pdf']))
+                            <!-- If the file is an image or PDF, open in a new tab (preview) -->
+                            <a href="{{ asset('storage/' . $filePath) }}" target="_blank" class="file-link">
+                                {{ $originalFilename }}
+                                {{-- <img src="{{ asset('storage/' . $filePath) }}" alt="{{ $originalFilename }}" style="max-width: 200px; max-height: 200px;"> --}}
+                            </a>
+                        @else
+                            <!-- For other files, provide download option -->
+                            <a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}" class="file-link">
+                                 {{ $originalFilename }}
+                            </a>
+                        @endif
+                
+                        <!-- Checkbox for selection -->
+                        {{-- <input type="checkbox" name="optionSendFilesB[]" value="{{ $filePath }}" checked> --}}
+                
+                        <!-- Separator and remove button -->
+                        |
+                        <button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn-order-b" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileBModal">
+                            Remove
+                        </button>
+                
+                        <br>
+                    @else
+                        <p>No file available</p>
+                    @endif
+                @endforeach
+                
                        <!-- Delete Confirmation Modal for Option A -->
                        <div class="modal fade" id="deleteFileBModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileBModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
