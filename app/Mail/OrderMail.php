@@ -53,7 +53,7 @@ foreach ($this->filesA as $fileName) {
             'mime' => mime_content_type($filePath),
         ]);
     } else {
-        Log::error("File not found: " . $filePath);  // Log if the file doesn't exist
+        //Log::error("File not found: " . $filePath);  // Log if the file doesn't exist
     }
 }
 
@@ -66,7 +66,7 @@ foreach ($this->filesB as $fileName) {
             'mime' => mime_content_type($filePath),
         ]);
     } else {
-        Log::error("File not found: " . $filePath);  // Log if the file doesn't exist
+       // Log::error("File not found: " . $filePath);  // Log if the file doesn't exist
     }
 }
 

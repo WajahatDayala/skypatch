@@ -326,9 +326,14 @@ class AllQuotesController extends Controller
      public function storeFile(Request $request)
      {
          // Validate the incoming request
-         $request->validate([
-             'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
-         ]);
+        //  $request->validate([
+        //      'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+        //  ]);
+
+        // Validate the uploaded files for filesB
+      $request->validate([
+        'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif,cdr,cnd,dsb,dst,dsz,emb,exp,jef,ksm,ofm,pes,pof,tap,xxx,others|max:262144', // 256MB = 262144 KB
+    ]);
      
          // Handle file uploads
          if ($request->hasFile('files')) {
@@ -506,9 +511,14 @@ class AllQuotesController extends Controller
     //optionA
     public function storeOptionA(Request $request){
              // Validate the incoming request
-             $request->validate([
-                'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
-            ]);
+            //  $request->validate([
+            //     'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+            // ]);
+
+              // Validate the uploaded files directly with predefined formats
+    $request->validate([
+        'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif,cdr,cnd,dsb,dst,dsz,emb,exp,jef,ksm,ofm,pes,pof,tap,xxx,others|max:262144', // 256MB = 262144 KB
+    ]);
         
             // Handle file uploads
             if ($request->hasFile('filesA')) {
@@ -550,8 +560,13 @@ class AllQuotesController extends Controller
     public function storeOptionB(Request $request){
         // Validate the incoming request
     // Validate the incoming request
-    $request->validate([
-        'filesB.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+    // $request->validate([
+    //     'filesB.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+    // ]);
+
+      // Validate the uploaded files for filesB
+      $request->validate([
+        'filesB.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif,cdr,cnd,dsb,dst,dsz,emb,exp,jef,ksm,ofm,pes,pof,tap,xxx,others|max:262144', // 256MB = 262144 KB
     ]);
 
     // Handle file uploads
@@ -930,10 +945,10 @@ class AllQuotesController extends Controller
             ]
         );
 
-
+ 
         $quote->update(['status_id' => 1]);
 
-     // Collect form data
+    // Collect form data
      $height_A = $request->input('height_A');
      $width_A = $request->input('width_A');
      $stitches_A = $request->input('stitches_A');

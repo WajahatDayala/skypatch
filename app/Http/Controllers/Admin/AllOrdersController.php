@@ -118,9 +118,9 @@ class AllOrdersController extends Controller
     public function storeOptionA(Request $request)
     {
         // Validate the incoming request
-        $request->validate([
-            'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
-        ]);
+        // $request->validate([
+        //     'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif|max:2048',
+        // ]);
 
         // Handle file uploads
         if ($request->hasFile('filesA')) {
@@ -927,7 +927,7 @@ class AllOrdersController extends Controller
                     ProcessOrderEmail::dispatch($emailData, $filesA, $filesB);
                 } catch (\Exception $e) {
                     // Log the error
-                    Log::error("Error sending email to $email: " . $e->getMessage());
+                    //Log::error("Error sending email to $email: " . $e->getMessage());
                 }
             }
         }

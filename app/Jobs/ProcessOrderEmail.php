@@ -49,11 +49,11 @@ class ProcessOrderEmail implements ShouldQueue
                 try {
                     Mail::to($email)->send(new OrderMail($this->emailData, $this->filesA, $this->filesB));
                 } catch (\Exception $e) {
-                    Log::error("Error sending email to $email: " . $e->getMessage());
+                   // Log::error("Error sending email to $email: " . $e->getMessage());
                 }
             }
         } else {
-            Log::error("Emails key is missing in the provided data.");
+          //  Log::error("Emails key is missing in the provided data.");
         }
     }
 }
