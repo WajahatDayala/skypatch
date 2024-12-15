@@ -77,13 +77,30 @@
                         $fileData = json_decode($f->files, true); // Decode the JSON
                         $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                         $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
-                    @endphp
-                    <span class="text-info">{{ $originalFilename }}
+                        $fileExtension = pathinfo($originalFilename, PATHINFO_EXTENSION); // Get the file extension
 
-                    </span>
-                @endforeach
+@endphp
+@if ($filePath)
+<!-- Check if the file is an image or PDF -->
+@if (in_array(strtolower($fileExtension), ['png', 'jpeg', 'jpg', 'pdf']))
+    <!-- If the file is an image or PDF, open in a new tab (preview) -->
+    <a href="{{ asset('storage/' . $filePath) }}" target="_blank" class="file-link">
+        {{ $originalFilename }}
+        {{-- <img src="{{ asset('storage/' . $filePath) }}" alt="{{ $originalFilename }}" style="max-width: 200px; max-height: 200px;"> --}}
+    </a><br>
+@else
+    <!-- For other files, provide download option -->
+    <a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}" class="file-link">
+         {{ $originalFilename }}
+    </a><br>
+@endif
 
-
+<!-- Checkbox for selection -->
+{{-- <input type="checkbox" name="optionSendFilesB[]" value="{{ $filePath }}" checked> --}}
+@else
+<p>No file available</p>
+@endif
+@endforeach
             </td>
             <td class="col-6">
 
@@ -151,10 +168,55 @@
                     $fileData = json_decode($a->file_upload, true); // Decode the JSON
                     $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                     $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
-                @endphp
-               
-                {{ $originalFilename }}
-                @endforeach
+                    $fileExtension = pathinfo($originalFilename, PATHINFO_EXTENSION); // Get the file extension
+
+@endphp
+@if ($filePath)
+<!-- Check if the file is an image or PDF -->
+@if (in_array(strtolower($fileExtension), ['png', 'jpeg', 'jpg', 'pdf']))
+<!-- If the file is an image or PDF, open in a new tab (preview) -->
+<a href="{{ asset('storage/' . $filePath) }}" target="_blank" class="file-link">
+{{ $originalFilename }}
+{{-- <img src="{{ asset('storage/' . $filePath) }}" alt="{{ $originalFilename }}" style="max-width: 200px; max-height: 200px;"> --}}
+</a>
+@else
+<!-- For other files, provide download option -->
+<a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}" class="file-link">
+{{ $originalFilename }}
+</a>
+@endif
+| 
+<!-- Add a unique class for order files -->
+<button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn-order" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileAModal">Remove</button><br>
+
+@else
+<p>No file available</p>
+@endif
+@endforeach
+
+ <!-- Delete Confirmation Modal for Option A -->
+<div class="modal fade" id="deleteFileAModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileAModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="deleteFileAModalLabel">Delete File for Option A</h5>
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+<p>Are you sure you want to delete this file?</p>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+<form id="deleteFileAForm" method="POST" action="{{ route('allvectors.deleteFileA') }}">
+@csrf
+<!-- Hidden input for file ID -->
+<input type="text" hidden id="file_id_a" name="file_id" value="">
+<button type="submit" class="btn btn-danger">Delete</button>
+</form>
+</div>
+</div>
+</div>
+</div>
             </td>
             <td class="col-6">
                 <strong>Option B</strong><br>
@@ -164,10 +226,54 @@
                     $fileData = json_decode($b->file_upload, true); // Decode the JSON
                     $filePath = $fileData['path'] ?? 'No file'; // Get the file path
                     $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
-                @endphp
-               
-                {{ $originalFilename }}
-                @endforeach
+                    $fileExtension = pathinfo($originalFilename, PATHINFO_EXTENSION); // Get the file extension
+
+@endphp
+
+@if ($filePath)
+<!-- Check if the file is an image or PDF -->
+@if (in_array(strtolower($fileExtension), ['png', 'jpeg', 'jpg', 'pdf']))
+   <!-- If the file is an image or PDF, open in a new tab (preview) -->
+   <a href="{{ asset('storage/' . $filePath) }}" target="_blank" class="file-link">
+       {{ $originalFilename }}
+       {{-- <img src="{{ asset('storage/' . $filePath) }}" alt="{{ $originalFilename }}" style="max-width: 200px; max-height: 200px;"> --}}
+   </a>
+@else
+   <!-- For other files, provide download option -->
+   <a href="{{ asset('storage/' . $filePath) }}" download="{{ $originalFilename }}" class="file-link">
+        {{ $originalFilename }}
+   </a>
+@endif
+<!-- Add a unique class for order files -->
+<button type="button" class="btn btn-sm rounded-pill btn-danger m-2 delete-file-btn-order-b" data-file-id="{{ $fileId }}" data-bs-toggle="modal" data-bs-target="#deleteFileBModal">Remove</button><br>
+
+@else
+<p>No file available</p>
+@endif
+@endforeach
+<!-- Delete Confirmation Modal for Option A -->
+<div class="modal fade" id="deleteFileBModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileBModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="deleteFileBModalLabel">Delete File for Option B</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <p>Are you sure you want to delete this file?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form id="deleteFileBForm" method="POST" action="{{ route('allvectors.deleteFileB') }}">
+            @csrf
+            <!-- Hidden input for file ID -->
+            <input type="text" hidden id="file_id_b" name="file_id" value="">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+</div>
+</div>
+</div>
             </td>
         </tr>
     </tbody>

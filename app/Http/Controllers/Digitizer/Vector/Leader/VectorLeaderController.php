@@ -143,7 +143,7 @@ class VectorLeaderController extends Controller
           ->get();
 
              //options A
-             $optionA = Option::select('*')
+             $optionA = Option::select('*','options.id as fileId')
              ->join('vector_orders','options.vector_order_id','vector_orders.id')
              ->where('option_type','A')
              ->where('options.vector_order_id',$id)
@@ -157,7 +157,7 @@ class VectorLeaderController extends Controller
                ->get();
 
                   //vector details
-              $vectordetails = VectorDetail::select('*','options.id as fileId')
+              $vectordetails = VectorDetail::select('*')
               ->leftjoin('users','vector_details.customer_id','=','users.id')
               ->where('vector_details.customer_id',$order->customer_id)
               ->first();
@@ -256,19 +256,19 @@ class VectorLeaderController extends Controller
            ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
           ->get();
 
-             //options A
-             $optionA = Option::select('*')
-             ->join('vector_orders','options.vector_order_id','vector_orders.id')
-             ->where('option_type','A')
-             ->where('options.vector_order_id',$id)
-             ->get();
-   
-               //options B
-             $optionB = Option::select('*')
-             ->join('vector_orders','options.vector_order_id','vector_orders.id')
-               ->where('option_type','B')
-               ->where('options.vector_order_id',$id)
-               ->get();
+                //options A
+                $optionA = Option::select('*','options.id as fileId')
+                ->join('vector_orders','options.vector_order_id','vector_orders.id')
+                ->where('option_type','A')
+                ->where('options.vector_order_id',$id)
+                ->get();
+      
+                  //options B
+                $optionB = Option::select('*','options.id as fileId')
+                ->join('vector_orders','options.vector_order_id','vector_orders.id')
+                  ->where('option_type','B')
+                  ->where('options.vector_order_id',$id)
+                  ->get();
 
                         //vector details
               $vectordetails = VectorDetail::select('*')

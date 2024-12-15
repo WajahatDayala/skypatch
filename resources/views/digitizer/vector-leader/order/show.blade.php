@@ -88,5 +88,40 @@
     <!-- Content Div Ends here End -->
 
 
+<!--option A -->
+<script>
+    // JavaScript to handle the modal for Option A
+   const deleteFileButtonsOptionA = document.querySelectorAll('.delete-file-btn-order');  // Correct class name for Option A
+   const fileIdInputOptionA = document.getElementById('file_id_a');  // Hidden input for Option A
+   
+   deleteFileButtonsOptionA.forEach(button => {
+       button.addEventListener('click', function() {
+           const fileId = this.getAttribute('data-file-id');
+           console.log('File ID:', fileId);  // Debugging log to see if fileId is passed correctly
+           fileIdInputOptionA.value = fileId; // Set the file ID in the hidden input for Option A modal
+       });
+   });
+   
+   </script>
+   <!-- option A -->
+
+
+   
+<!-- option B -->
+<script>
+    // JavaScript to handle the modal for Option A
+   const deleteFileButtonsOptionB = document.querySelectorAll('.delete-file-btn-order-b');  // Correct class name for Option A
+   const fileIdInputOptionB = document.getElementById('file_id_b');  // Hidden input for Option A
+   
+   deleteFileButtonsOptionB.forEach(button => {
+       button.addEventListener('click', function() {
+           const fileId = this.getAttribute('data-file-id');
+           console.log('File ID:', fileId);  // Debugging log to see if fileId is passed correctly
+           fileIdInputOptionB.value = fileId; // Set the file ID in the hidden input for Option A modal
+       });
+   });
+   
+   </script>
+<!-- option B -->
 
 @endsection
