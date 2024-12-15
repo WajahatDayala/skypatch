@@ -42,7 +42,7 @@ class ProcessOrderEmail implements ShouldQueue
             $emails = $this->emailData['emails'];  // Access the 'emails' array
 
             // Log the email addresses to ensure they're correct
-            Log::info("Sending emails to: ", $emails);
+            //Log::info("Sending emails to: ", $emails);
 
             // Send the email to each recipient
             foreach ($emails as $email) {

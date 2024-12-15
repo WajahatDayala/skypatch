@@ -13,41 +13,63 @@ class VectorMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $emailData;
+    public $filesA;
+    public $filesB;
+
     /**
      * Create a new message instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Vector Mail',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'view.name',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @param  array  $emailData
+     * @param  array  $filesA
+     * @param  array  $filesB
+     * @return void
      */
-    public function attachments(): array
+    public function __construct($emailData, $filesA, $filesB)
     {
-        return [];
+        $this->emailData = $emailData;
+        $this->filesA = $filesA;
+        $this->filesB = $filesB;
+    }
+
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        $email = $this->view('emails.vector')
+                      ->with(['emailData' => $this->emailData])
+                      ->subject('Vector Mail');
+
+// Attach files for Option A
+foreach ($this->filesA as $fileName) {
+    $filePath = storage_path('app/public/' . $fileName);  // Full server path
+    if (file_exists($filePath)) {
+        $email->attach($filePath, [
+            'as' => basename($filePath),
+            'mime' => mime_content_type($filePath),
+        ]);
+    } else {
+        //Log::error("File not found: " . $filePath);  // Log if the file doesn't exist
+    }
+}
+
+// Attach files for Option B
+foreach ($this->filesB as $fileName) {
+    $filePath = storage_path('app/public/' . $fileName);  // Full server path
+    if (file_exists($filePath)) {
+        $email->attach($filePath, [
+            'as' => basename($filePath),
+            'mime' => mime_content_type($filePath),
+        ]);
+    } else {
+       // Log::error("File not found: " . $filePath);  // Log if the file doesn't exist
+    }
+}
+
+
+        return $email;
     }
 }

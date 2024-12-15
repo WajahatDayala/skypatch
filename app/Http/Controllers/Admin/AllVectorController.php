@@ -23,6 +23,11 @@ use App\Models\PricingCriteria;
 use App\Models\JobInformation;
 use App\Models\InvoiceDetail;
 
+use App\Mail\VectorMail;
+use App\Jobs\ProcessVectorOrderEmail;
+use Illuminate\Support\Facades\Mail;
+
+
 class AllVectorController extends Controller
 {
     /**
@@ -354,6 +359,79 @@ class AllVectorController extends Controller
         //relased o9rders
         $order->update(['status_id' => 1]);
 
+
+           // Collect form data
+        //    $height_A = $request->input('height_A');
+        //    $width_A = $request->input('width_A');
+        //    $stitches_A = $request->input('stitches_A');
+           $price_A = $request->input('price_A');
+        //    $height_B = $request->input('height_B');
+        //    $width_B = $request->input('width_B');
+        //    $stitches_B = $request->input('stitches_B');
+           $price_B = $request->input('price_B');
+           $total = $request->input('total');
+           $comment = $request->input('comment');
+       
+           // Collect selected files for Option A and Option B
+           $filesA = $request->input('optionSendFilesA', []);  // Default to empty array if no files selected
+           $filesB = $request->input('optionSendFilesB', []);  // Default to empty array if no files selected
+       
+           // Log the file names for debugging
+           //Log::info('Files A: ', $filesA);
+           //Log::info('Files B: ', $filesB);
+       
+           // Collect selected email addresses
+           $emails = [];
+           if ($request->has('gridCheckemail1')) {
+               $emails[] = $request->input('gridCheckemail1');
+           }
+           if ($request->has('gridCheckemail2')) {
+               $emails[] = $request->input('gridCheckemail2');
+           }
+           if ($request->has('gridCheckemail3')) {
+               $emails[] = $request->input('gridCheckemail3');
+           }
+           if ($request->has('gridCheckemail4')) {
+               $emails[] = $request->input('gridCheckemail4');
+           }
+           if ($request->has('gridCheckinvoiceemail')) {
+               $emails[] = $request->input('gridCheckinvoiceemail');
+           }
+       
+           // Prepare the email data
+           $emailData = [
+            //    'height_A' => $height_A,
+            //    'width_A' => $width_A,
+            //    'stitches_A' => $stitches_A,
+               'price_A' => $price_A,
+            //    'height_B' => $height_B,
+            //    'width_B' => $width_B,
+            //    'stitches_B' => $stitches_B,
+               'price_B' => $price_B,
+               'total' => $total,
+               'comment' => $comment,
+               'emails' => $emails,  // Add the emails array here
+           ];
+       
+           // Check if emails are available
+           if (!empty($emails)) {
+               foreach ($emails as $email) {
+                   try {
+                       // Start creating the mail instance, passing emailData, filesA, and filesB
+                       $mail = new VectorMail($emailData, $filesA, $filesB);
+                       // Send the email with attachments
+                       Mail::to($email)->send($mail);
+       
+                       // Dispatch a job for background processing, passing all 3 arguments
+                       ProcessVectorOrderEmail::dispatch($emailData, $filesA, $filesB);
+                   } catch (\Exception $e) {
+                       // Log the error
+                       //Log::error("Error sending email to $email: " . $e->getMessage());
+                   }
+               }
+           }
+       
+
         return redirect()->route('allvectors.show',$request->order_id)->with('success', 'Vector Order updated successfully!');
 
 
@@ -456,9 +534,15 @@ class AllVectorController extends Controller
 
 
         // Validate the uploaded files for filesB
-      $request->validate([
-        'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif,cdr,cnd,dsb,dst,dsz,emb,exp,jef,ksm,ofm,pes,pof,tap,xxx,others|max:262144', // 256MB = 262144 KB
+    //   $request->validate([
+    //     'files.*' => 'required|file|mimes:ai,cdr,aps,others|max:262144', // 256MB = 262144 KB
+    // ]);
+
+    $request->validate([
+        'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif,cdr,cnd,dsb,dst,dsz,emb,exp,jef,ksm,ofm,pes,pof,tap,xxx,others|max:262144', // 256MB = 262144 KB
     ]);
+
+    
 
       
           // Handle file uploads
@@ -818,6 +902,10 @@ class AllVectorController extends Controller
       $request->validate([
         'filesA.*' => 'required|file|mimes:jpg,jpeg,png,pdf,avif,cdr,cnd,dsb,dst,dsz,emb,exp,jef,ksm,ofm,pes,pof,tap,xxx,others|max:262144', // 256MB = 262144 KB
     ]);
+
+    // $request->validate([
+    //     'filesA.*' => 'required|file|mimes:ai,cdr,aps,others|max:262144', // 256MB = 262144 KB
+    // ]);
 
 
         // Handle file uploads

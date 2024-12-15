@@ -893,8 +893,8 @@ class AllOrdersController extends Controller
         $filesB = $request->input('optionSendFilesB', []);  // Default to empty array if no files selected
     
         // Log the file names for debugging
-        Log::info('Files A: ', $filesA);
-        Log::info('Files B: ', $filesB);
+        //Log::info('Files A: ', $filesA);
+        //Log::info('Files B: ', $filesB);
     
         // Collect selected email addresses
         $emails = [];
