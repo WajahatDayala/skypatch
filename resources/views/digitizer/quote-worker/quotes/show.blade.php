@@ -51,19 +51,6 @@
     <!-- Content Div Ends here End -->
 
 
-    <!-- JavaScript to handle the modal -->
-    <script>
-        const deleteFileButtons = document.querySelectorAll('.delete-file-btn');
-        const fileIdInput = document.getElementById('file_id');
-
-        deleteFileButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const fileId = this.getAttribute('data-file-id');
-                fileIdInput.value = fileId; // Set the file ID in the hidden input
-            });
-        });
-    </script>
-
     
 
 

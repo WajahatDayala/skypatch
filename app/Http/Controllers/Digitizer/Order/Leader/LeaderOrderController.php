@@ -281,19 +281,19 @@ class LeaderOrderController extends Controller
          ['Quote Digitizer Worker', 'Order Digitizer Worker', 'Vector Digitizer Worker'])
         ->get();
 
-          //options A
-          $optionA = Option::select('*')
-          ->join('orders','options.order_id','orders.id')
-          ->where('option_type','A')
-          ->where('options.order_id',$id)
-          ->get();
-
-            //options B
-          $optionB = Option::select('*')
-            ->join('orders','options.order_id','orders.id')
-            ->where('option_type','B')
-            ->where('options.order_id',$id) 
-            ->get();
+                  //options A
+                  $optionA = Option::select('*','options.id as fileId')
+                  ->join('orders','options.order_id','orders.id')
+                  ->where('option_type','A')
+                  ->where('options.order_id',$id)
+                  ->get();
+        
+                    //options B
+                  $optionB = Option::select('*','options.id as fileId')
+                   ->join('orders','options.order_id','orders.id')
+                   ->where('option_type','B')
+                   ->where('options.order_id',$id)
+                    ->get();
 
              //vector details
              $vectordetails = VectorDetail::select('*')

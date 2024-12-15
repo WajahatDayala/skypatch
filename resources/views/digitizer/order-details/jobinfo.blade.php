@@ -17,7 +17,7 @@
                         </td>
                         <td class="col-3">
                             <strong>Customer Nick</strong><br>
-                            <span>{{$order->customer_name}}</span>
+                            {{-- <span>{{$order->customer_name}}</span> --}}
                         </td>
                         <td class="col-3">
                             <strong>Desing Namw/PO</strong><br>

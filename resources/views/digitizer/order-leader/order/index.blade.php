@@ -25,7 +25,7 @@
                                 <th scope="col"> Rcv'd Date </th>
                                 <th scope="col"> Sent Date </th>
                                 <th scope="col"> Design Name </th>
-                                <th scope="col"> Customer Nick </th>
+                                {{-- <th scope="col"> Customer Nick </th> --}}
                                 <th scope="col"> Designer </th>
                                 <th scope="col"> Status </th>
                                 <th scope="col"> Action </th>
@@ -54,7 +54,7 @@
                                 </td>
 
 
-                                <td>{{$o->customer_name}}</td>
+                                {{-- <td>{{$o->customer_name}}</td> --}}
 
                                 <td>
                                     @if($o->designer_name)
