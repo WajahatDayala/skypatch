@@ -139,87 +139,7 @@
                                 </tbody>
                             </table>
 
-                            <!-- Modal for Reason -->
-                            <div class="modal fade" id="Reason" tabindex="-1" aria-labelledby="ReasonLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="ReasonLabel">Reasons</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="">
-                                                <div class="row mb-3">
-                                                    <label for="reasonSelect"
-                                                        class="col-sm-4 col-form-label text-end">Select Reason *</label>
-                                                    <div class="col-sm-8">
-                                                        <select class="form-select" id="reasonSelect"
-                                                            aria-label="Default select example">
-                                                            <option selected class='text-gray'>Select Format</option>
-                                                            <option value="1">Sales</option>
-                                                            <option value="2">Support</option>
-                                                            <option value="3">Accounts</option>
-                                                            <option value="4">Digitizer Leader</option>
-                                                            <option value="5">Digitizer</option>
-                                                            <option value="6">Vector Artist Leader</option>
-                                                            <option value="7">Vector Artist</option>
-                                                            <option value="8">Quote Digitizer Leader</option>
-                                                            <option value="9">Quote Digitizer</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Modal for Edit Reason Ends Here -->
-
-                            <!-- Modal for Edit Designer Start Here -->
-                            <div class="modal fade" id="Designer" tabindex="-1" aria-labelledby="DesignerLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="DesignerLabel">Designer Assignment</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="">
-                                                <div class="row mb-3">
-                                                    <label for="designerSelect"
-                                                        class="col-sm-4 col-form-label text-end">Select Designer
-                                                        *</label>
-                                                    <div class="col-sm-8">
-                                                        <select class="form-select" id="designerSelect"
-                                                            aria-label="Default select example">
-                                                            <option selected class='text-gray'>Select Designer</option>
-                                                            <option value="1">Designer 1</option>
-                                                            <option value="2">Designer 2</option>
-                                                            <option value="3">Designer 3</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Modal for Edit Designer Ends Here -->
-
+                            
                         </div>
                         <form action="{{route('supportquotes.send')}}" method="POST"  enctype="multipart/form-data">
                             @csrf
@@ -384,132 +304,7 @@
 
                         <div class="bg-table rounded h-100 p-4 mt-4">
                             <div class="row">
-                                <div class="col-6 border-end">
-                                    <div class="row bg-dark p-2">
-                                        <h6 class="text-light fw-light text-center mb-0">Option A</h1>
-                                    </div>
-                                    <table class="table table-bordered">
-                                        <tbody>
-                                            
-                                            <tr class="row">
-                                                <td>
-                                                    @foreach ($optionA as $a)
-                                                    @php
-                                                        $fileId = $a->fileId;
-                                                        $fileData = json_decode($a->file_upload, true); // Decode the JSON
-                                                        $filePath = $fileData['path'] ?? 'No file'; // Get the file path
-                                                        $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
-                                                    @endphp
-                                                    <input class="form-check-input" checked type="checkbox" name="checkedOptionA"
-                                                    id="checkedOptionA" value="{{$originalFilename }}">
-                                                    {{ $originalFilename }}<br>
-                                                   
-                                                    @endforeach
-                                                </td>
-                                                <td>
-                                                    
-                                                    <button type="button" class="btn btn-sm rounded-pill btn-primary m-2"
-                                                        data-bs-toggle="modal" data-bs-target="#fileUploadModal1">Upload Files</button>
-                                                   
-                                                </td>
-                                            </tr>
-                                            <tr class="row">
-                                                <td>
-                                                    <strong>Comment</strong><br>
-                                                    <textarea class="form-control" placeholder="Leave a comment here"
-                                                        id="floatingTextarea" style="height: 150px;"></textarea>
-
-                                                    <div class="mt-3">
-                                                        <legend class="fs-6"><strong>Mail To:</strong></legend>
-                                                        <br>
-                                                        <div class="form-check">
-                                                            @if($quote->email1)
-                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail1"
-                                                            id="gridCheckemail1" value="{{$quote->email1}}">
-                                                            <label class="form-check-label" for="gridCheckemai11">
-                                                             
-                                                               {{$quote->email1}}
-                                                            </label>
-                                                            @endif
-                                                        </div>
-                                                        <div class="form-check">
-                                                            @if($quote->email2)
-                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail2"
-                                                            id="gridCheckemail2" value="{{$quote->email2}}">
-                                                            <label class="form-check-label" for="gridCheckemail2">
-                                                            {{$quote->email2}}
-                                                            </label>
-                                                            @endif
-                                                        </div>
-                                                        <div class="form-check">
-                                                            @if($quote->email4)
-                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail3"
-                                                            id="gridCheckemail3" value="{{$quote->email3}}">
-                                                            <label class="form-check-label" for="gridCheckemail3">
-                                                            {{$quote->email3}}
-                                                            </label>
-                                                            @endif
-                                                        </div>
-                                                        <div class="form-check">
-                                                            @if($quote->email4)
-                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail4"
-                                                                id="gridCheckemail4" value="{{$quote->email4}}">
-                                                            <label class="form-check-label" for="gridCheckemail4">
-                                                            {{$quote->email4}}
-                                                            </label>
-                                                            @endif
-                                                        </div>
-                                                        <div class="form-check">
-                                                            @if($quote->invoceEmail)
-                                                            <input checked class="form-check-input" type="checkbox" id="gridCheckinvoiceemail" name="gridCheckinvoiceemail" value="{{$quote->invoceEmail}}">
-                                                            <label for="gridCheckinvoiceemail">{{ $quote->invoceEmail }}</label>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-6 border-start">
-                                    <div class="row bg-dark p-2">
-                                        <h6 class="text-light fw-light text-center mb-0">Option B</h1>
-                                    </div>
-                                    <table class="table table-bordered">
-                                        <tbody>
-                                            
-                                                
-                                            <tr class="row">
-                                                <td>
-                                                    @foreach ($optionB as $b)
-                                                    @php
-                                                        $fileId = $b->fileId;
-                                                        $fileData = json_decode($b->file_upload, true); // Decode the JSON
-                                                        $filePath = $fileData['path'] ?? 'No file'; // Get the file path
-                                                        $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
-                                                    @endphp
-                                                    <input class="form-check-input" checked type="checkbox" name="checkedOptionB"
-                                                    id="checkedOptionB" value="{{$originalFilename }}">
-                                                    {{ $originalFilename }}<br>
-                                                   
-                                                    @endforeach
-                                                </td>
-                                                <td>
-                                                   <button type="button" class="btn btn-sm rounded-pill btn-primary m-2"
-                                                        data-bs-toggle="modal" data-bs-target="#fileUploadModal">Upload Files</button>
-                                                
-                                                </td>
-                                            </tr>
-                                            <tr class="row">
-                                                <td>
-                                                    {{-- <strong>Comment</strong><br>
-                                                    <textarea class="form-control" placeholder="Leave a comment here"
-                                                        id="floatingTextarea" style="height: 150px;"></textarea> --}}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            @include('quote-details.process')
                             </div>
 
                             <div class="row d-flex justify-content-end align-items-center">
@@ -526,7 +321,7 @@
             </div>
             <!-- Content Div Ends here End -->
 
-            <!-- option A -->
+  <!-- option A -->
              <!-- Modal for Multiple File Upload -->
              <div class="modal fade" id="fileUploadModal1" tabindex="-1" role="dialog"
              aria-labelledby="fileUploadModalLabel1" aria-hidden="true">
@@ -609,6 +404,58 @@
       <!-- end file upload-->
 
 
+      <!-- option A delete file -->
+
+              <!-- Delete Confirmation Modal for Option A -->
+<div class="modal fade" id="deleteFileAModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileAModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFileAModalLabel">Delete File for Option A</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this file?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteFileAForm" method="POST" action="{{ route('allquotes.deleteFileA') }}">
+                    @csrf
+                    <!-- Hidden input for file ID -->
+                    <input type="text" hidden id="file_id_a" name="file_id" value="">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+   <!-- Delete Confirmation Modal for Option A -->
+   <div class="modal fade" id="deleteFileBModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileBModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFileBModalLabel">Delete File for Option B</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this file?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteFileBForm" method="POST" action="{{ route('allquotes.deleteFileB') }}">
+                    @csrf
+                    <!-- Hidden input for file ID -->
+                    <input type="text" hidden id="file_id_b" name="file_id" value="">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
             <!-- Add this script to enable dynamic price updates -->
 <script>
    // Get elements
@@ -631,4 +478,41 @@ function updateTotal() {
 priceA.addEventListener('input', updateTotal);
 priceB.addEventListener('input', updateTotal);
 </script>
+
+
+
+<!--option A -->
+<script>
+    // JavaScript to handle the modal for Option A
+   const deleteFileButtonsOptionA = document.querySelectorAll('.delete-file-btn-order');  // Correct class name for Option A
+   const fileIdInputOptionA = document.getElementById('file_id_a');  // Hidden input for Option A
+   
+   deleteFileButtonsOptionA.forEach(button => {
+       button.addEventListener('click', function() {
+           const fileId = this.getAttribute('data-file-id');
+           console.log('File ID:', fileId);  // Debugging log to see if fileId is passed correctly
+           fileIdInputOptionA.value = fileId; // Set the file ID in the hidden input for Option A modal
+       });
+   });
+   
+   </script>
+   <!-- option A -->
+   
+   <!-- option B -->
+   <script>
+       // JavaScript to handle the modal for Option A
+      const deleteFileButtonsOptionB = document.querySelectorAll('.delete-file-btn-order-b');  // Correct class name for Option A
+      const fileIdInputOptionB = document.getElementById('file_id_b');  // Hidden input for Option A
+      
+      deleteFileButtonsOptionB.forEach(button => {
+          button.addEventListener('click', function() {
+              const fileId = this.getAttribute('data-file-id');
+              console.log('File ID:', fileId);  // Debugging log to see if fileId is passed correctly
+              fileIdInputOptionB.value = fileId; // Set the file ID in the hidden input for Option A modal
+          });
+      });
+      
+      </script>
+   <!-- option B -->
+
 @endsection

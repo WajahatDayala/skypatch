@@ -292,14 +292,14 @@ class SalesAllQuotesController extends Controller
           ->get();
 
               //options A
-        $optionA = Option::select('*')
+        $optionA = Option::select('*','options.id as fileId')
         ->join('quotes','options.quote_id','quotes.id')
         ->where('option_type','A')
         ->where('options.quote_id',$id)
         ->get();
 
           //options B
-        $optionB = Option::select('*')
+        $optionB = Option::select('*','options.id as fileId')
           ->join('quotes','options.quote_id','quotes.id')
           ->where('option_type','B')
           ->where('options.quote_id',$id)

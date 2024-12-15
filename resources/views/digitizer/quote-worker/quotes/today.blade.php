@@ -21,11 +21,11 @@
                         <thead>
                             <tr class="text-dark">
                                 <th scope="col"> Sr# </th>
-                                <th scope="col"> OT# </th>
+                                <th scope="col"> QT# </th>
                                 <th scope="col"> Rcv'd Date </th>
                                 <th scope="col"> Sent Date </th>
                                 <th scope="col"> Design Name </th>
-                                <th scope="col"> Customer Nick </th>
+                                {{-- <th scope="col"> Customer Nick </th> --}}
                                 <th scope="col"> Designer </th>
                                 <th scope="col"> Status </th>
                                 <th scope="col"> Action </th>
@@ -37,7 +37,7 @@
                             <tr class="bg-danger bg-gradient text-white">
                                 @endif
                                 <td>{{ $loop->iteration }}</td>
-                                <td>OT-{{$q->order_id}}</td>
+                                <td>QT-{{$q->order_id}}</td>
                                 <td>{{$q->createdAt}}</td>
                                 <td>
                                     @if(!$q->date_finalized)
@@ -54,7 +54,7 @@
                                 </td>
 
 
-                                <td>{{$q->customer_name}}</td>
+                                {{-- <td>{{$q->customer_name}}</td> --}}
 
                                 <td>
                                     @if($q->designer_name)

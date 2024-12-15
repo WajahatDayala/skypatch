@@ -309,146 +309,21 @@
                             </div>
                         </div>
 
+                       
                         <div class="bg-table rounded h-100 p-4 mt-4">
                             <div class="row">
-                                <div class="col-6 border-end">
-                                    <div class="row bg-dark p-2">
-                                        <h6 class="text-light fw-light text-center mb-0">Option A</h1>
-                                    </div>
-                                    <table class="table table-bordered">
-                                        <tbody>
-                                            
-                                            <tr class="row">
-                                                <td>
-                                                    @foreach ($optionA as $a)
-                                                    @php
-                                                        $fileId = $a->fileId;
-                                                        $fileData = json_decode($a->file_upload, true); // Decode the JSON
-                                                        $filePath = $fileData['path'] ?? 'No file'; // Get the file path
-                                                        $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
-                                                    @endphp
-                                                    <input class="form-check-input" checked type="checkbox" name="checkedOptionA"
-                                                      id="checkedOptionA" value="{{$originalFilename }}">   
-                                                   {{ $originalFilename }}<br> <!-- Line break after filename -->
-                                                 
-                                                    @endforeach<br> <!-- Line break after filename -->
-                                                </td>
-                                                <td>
-                                                  
-                                                    <button type="button" class="btn btn-sm rounded-pill btn-primary m-2" data-bs-toggle="modal" data-bs-target="#fileUploadModalA">
-                                                        Upload Files
-                                                    </button>
-                                             
-
-                                                </td>
-                                                
-                                             
-                                            </tr>
-                                            <tr class="row">
-                                                <td>
-                                                    <strong>Comment</strong><br>
-                                                    <textarea class="form-control" placeholder="Leave a comment here"
-                                                        id="floatingTextarea" style="height: 150px;"></textarea>
-
-                                                    <div class="mt-3">
-                                                        <legend class="fs-6"><strong>Mail To:</strong></legend>
-                                                        <br>
-                                                        <div class="form-check">
-                                                            @if($order->email1)
-                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail1"
-                                                            id="gridCheckemail1" value="{{$order->email1}}">
-                                                            <label class="form-check-label" for="gridCheckemai11">
-                                                             
-                                                               {{$order->email1}}
-                                                            </label>
-                                                            @endif
-                                                        </div>
-                                                        <div class="form-check">
-                                                            @if($order->email2)
-                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail2"
-                                                            id="gridCheckemail2" value="{{$order->email2}}">
-                                                            <label class="form-check-label" for="gridCheckemail2">
-                                                            {{$order->email2}}
-                                                            </label>
-                                                            @endif
-                                                        </div>
-                                                        <div class="form-check">
-                                                            @if($order->email4)
-                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail3"
-                                                            id="gridCheckemail3" value="{{$order->email3}}">
-                                                            <label class="form-check-label" for="gridCheckemail3">
-                                                            {{$order->email3}}
-                                                            </label>
-                                                            @endif
-                                                        </div>
-                                                        <div class="form-check">
-                                                            @if($order->email4)
-                                                            <input class="form-check-input" checked type="checkbox" name="gridCheckemail4"
-                                                                id="gridCheckemail4" value="{{$order->email4}}">
-                                                            <label class="form-check-label" for="gridCheckemail4">
-                                                            {{$order->email4}}
-                                                            </label>
-                                                            @endif
-                                                        </div>
-                                                        <div class="form-check">
-                                                            @if($order->invoceEmail)
-                                                            <input checked class="form-check-input" type="checkbox" id="gridCheckinvoiceemail" name="gridCheckinvoiceemail" value="{{$order->invoceEmail}}">
-                                                            <label for="gridCheckinvoiceemail">{{ $order->invoceEmail }}</label>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-6 border-start">
-                                    <div class="row bg-dark p-2">
-                                        <h6 class="text-light fw-light text-center mb-0">Option B</h1>
-                                    </div>
-                                    <table class="table table-bordered">
-                                        <tbody>
-                                            
-                                                
-                                            <tr class="row">
-                                                <td>
-                                                    @foreach ($optionB as $b)
-                                                    @php
-                                                        $fileId = $b->fileId;
-                                                        $fileData = json_decode($b->file_upload, true); // Decode the JSON
-                                                        $filePath = $fileData['path'] ?? 'No file'; // Get the file path
-                                                        $originalFilename = $fileData['original_name'] ?? 'Unknown'; // Get the original filename
-                                                    @endphp
-                                                    <input class="form-check-input" checked type="checkbox" name="checkedOptionB"
-                                                    id="checkedOptionB" value="{{$originalFilename }}">
-                                                    {{ $originalFilename }}<br> <!-- Line break after filename -->
-                                                   
-                                                    @endforeach
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-sm rounded-pill btn-primary m-2"
-                                                    data-bs-toggle="modal" data-bs-target="#fileUploadModal">Upload Files</button>
-                                                </td>
-                                            </tr>
-                                            <tr class="row">
-                                                <td>
-                                                    {{-- <strong>Comment</strong><br>
-                                                    <textarea class="form-control" placeholder="Leave a comment here"
-                                                        id="floatingTextarea" style="height: 150px;"></textarea> --}}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                @include('order-details.process')
                             </div>
-
+                        
                             <div class="row d-flex justify-content-end align-items-center">
                                 <div class="col-2 d-flex">
                                     <button type="submit" class="btn btn-primary rounded-pill m-2">Send</button>
-                                    <button type="reset" class="btn btn-dark rounded-pill m-2">Reset</button>
+                                    <button type="button" class="btn btn-dark rounded-pill m-2">Reset</button>
                                 </div>
                             </div>
                         </div>
+
+
                     </form>
 
                     </div>
@@ -456,7 +331,6 @@
             </div>
 
 
-            <!-- file optionA -->
             
  <!-- Modal for Option A -->
  <div class="modal fade" id="fileUploadModalA" tabindex="-1" aria-labelledby="fileUploadModalLabelA" aria-hidden="true">
@@ -525,7 +399,55 @@
 
    <!-- end file upload-->
 
-            <!-- Content Div Ends here End -->
+        
+       <!-- Delete Confirmation Modal for Option A -->
+<div class="modal fade" id="deleteFileAModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileAModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFileAModalLabel">Delete File for Option A</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this file?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteFileAForm" method="POST" action="{{ route('allorders.deleteFileA') }}">
+                    @csrf
+                    <!-- Hidden input for file ID -->
+                    <input type="text" hidden id="file_id_a" name="file_id" value="">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+                       
+
+     <!-- Delete Confirmation Modal for Option A -->
+     <div class="modal fade" id="deleteFileBModal" tabindex="-1" role="dialog" aria-labelledby="deleteFileBModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteFileBModalLabel">Delete File for Option B</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this file?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteFileBForm" method="POST" action="{{ route('allorders.deleteFileB') }}">
+                        @csrf
+                        <!-- Hidden input for file ID -->
+                        <input type="text" hidden id="file_id_b" name="file_id" value="">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
             <script>
                 // Get elements
@@ -547,13 +469,44 @@
              // Add event listeners to update totals when prices change
              priceA.addEventListener('input', updateTotal);
              priceB.addEventListener('input', updateTotal);
-             
              </script>
 
-<!-- Include Bootstrap Bundle JS -->
+             
+<!--option A -->
+<script>
+    // JavaScript to handle the modal for Option A
+   const deleteFileButtonsOptionA = document.querySelectorAll('.delete-file-btn-order');  // Correct class name for Option A
+   const fileIdInputOptionA = document.getElementById('file_id_a');  // Hidden input for Option A
+   
+   deleteFileButtonsOptionA.forEach(button => {
+       button.addEventListener('click', function() {
+           const fileId = this.getAttribute('data-file-id');
+           console.log('File ID:', fileId);  // Debugging log to see if fileId is passed correctly
+           fileIdInputOptionA.value = fileId; // Set the file ID in the hidden input for Option A modal
+       });
+   });
+   
+   </script>
+   <!-- option A -->
 
 
-
+   
+<!-- option B -->
+<script>
+    // JavaScript to handle the modal for Option A
+   const deleteFileButtonsOptionB = document.querySelectorAll('.delete-file-btn-order-b');  // Correct class name for Option A
+   const fileIdInputOptionB = document.getElementById('file_id_b');  // Hidden input for Option A
+   
+   deleteFileButtonsOptionB.forEach(button => {
+       button.addEventListener('click', function() {
+           const fileId = this.getAttribute('data-file-id');
+           console.log('File ID:', fileId);  // Debugging log to see if fileId is passed correctly
+           fileIdInputOptionB.value = fileId; // Set the file ID in the hidden input for Option A modal
+       });
+   });
+   
+   </script>
+<!-- option B -->
 
 
 @endsection

@@ -151,14 +151,14 @@ class LeaderOrderController extends Controller
 
 
           //options A
-          $optionA = Option::select('*')
+          $optionA = Option::select('*','options.id as fileId')
           ->join('orders','options.order_id','orders.id')
           ->where('option_type','A')
           ->where('options.order_id',$id)
           ->get();
 
             //options B
-          $optionB = Option::select('*')
+          $optionB = Option::select('*','options.id as fileId')
            ->join('orders','options.order_id','orders.id')
            ->where('option_type','B')
            ->where('options.order_id',$id)
