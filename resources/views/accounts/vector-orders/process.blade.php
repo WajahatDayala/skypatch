@@ -151,7 +151,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-7">
-                                    <table class="table table-bordered">
+                                    {{-- <table class="table table-bordered">
                                         <tbody>
                                             <tr class="row">
                                                 <td class="col-3">
@@ -217,7 +217,8 @@
                                                 </td>
                                             </tr>
                                         </tbody>
-                                    </table>
+                                    </table> --}}
+                                    @include('vector-order-details.jobinfo')
                                 </div>
                                 <div class="col-5">
                                     <table class="table table-bordered">

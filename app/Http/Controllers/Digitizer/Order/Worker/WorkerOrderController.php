@@ -95,6 +95,7 @@ class WorkerOrderController extends Controller
         'users.email_4 as email4',
         'users.invoice_email as invoceEmail', 
         'statuses.name as status',
+        'ordersStatus.name as order_status_name',
         'fabrics.name as fabric_name',
         'required_formats.name as format',
         'placements.name as placement',
@@ -105,7 +106,7 @@ class WorkerOrderController extends Controller
         ->join('fabrics','orders.fabric_id','=','fabrics.id')
         ->join('placements','orders.placement_id','=','placements.id')
         ->join('required_formats','orders.required_format_id','=','required_formats.id')
-      
+        ->leftjoin('statuses as ordersStatus', 'orders.order_status', 'ordersStatus.id')
         ->where('orders.id', $order->id) 
         ->first(); 
 

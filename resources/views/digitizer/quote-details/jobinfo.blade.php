@@ -54,7 +54,7 @@
                         </td>
                         <td class="col-6">
                             <strong>Design Type</strong><br>
-                            <span></span>
+                            <span>{{$quote->order_status_name}}</span>
                         </td>
                     </tr>
                     <tr class="row">

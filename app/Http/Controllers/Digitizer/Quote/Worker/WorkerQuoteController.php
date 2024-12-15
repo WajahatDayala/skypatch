@@ -102,6 +102,7 @@ class WorkerQuoteController extends Controller
         $quote = Quote::select('*', 
         'quotes.id as quote_id',
         'quotes.name as design_name',
+        'users.id as customer_id',
         'users.name as customer_name',
         'users.email as email1',
         'users.email_2 as email2',
@@ -109,6 +110,7 @@ class WorkerQuoteController extends Controller
         'users.email_4 as email4',
         'users.invoice_email as invoceEmail', 
         'statuses.name as status',
+         'ordersStatus.name as order_status_name',
         'fabrics.name as fabric_name',
         'required_formats.name as format',
         'placements.name as placement',
@@ -119,7 +121,7 @@ class WorkerQuoteController extends Controller
         ->join('fabrics','quotes.fabric_id','=','fabrics.id')
         ->join('placements','quotes.placement_id','=','placements.id')
         ->join('required_formats','quotes.required_format_id','=','required_formats.id')
-      
+        ->leftjoin('statuses as ordersStatus', 'quotes.quotes_status', 'ordersStatus.id')
         ->where('quotes.id', $quote->id) 
         ->first(); 
 
