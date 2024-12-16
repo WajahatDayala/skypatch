@@ -119,20 +119,20 @@
         </tr>
         <tr>
             <td><b>Height</b></td>
-            <td></td>
-            <td></td>
+            <td>{{$jobInfo->height_A ?? ''}}</td>
+            <td>{{$jobInfo->height_B ?? ''}}</td>
             <td></td>
         </tr>
         <tr>
             <td><b>Width</b></td>
-            <td></td>
-            <td></td>
+            <td>{{$jobInfo->width_A ?? ''}}</td>
+            <td>{{$jobInfo->width_B ?? ''}}</td>
             <td></td>
         </tr>
         <tr>
             <td><b>No. Of Stitches</b></td>
-            <td></td>
-            <td></td>
+            <td>{{$jobInfo->stitches_A ?? ''}}</td>
+            <td>{{$jobInfo->stitches_B ?? ''}}</td>
             <td></td>
         </tr>
         <tr>

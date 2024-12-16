@@ -1099,6 +1099,14 @@ if (!empty($emails)) {
 
 
 
+                 //jobinfo
+        $jobInfo = JobInformation::select('*')
+        ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+        ->where('job_information.quote_id',$id)
+        ->first();
+
+
+
 
         return view('admin/quotes/printview', compact(
             'order',
@@ -1106,7 +1114,8 @@ if (!empty($emails)) {
             'orderStatus',
             'orderFiles',
             'orderInstruction',
-            'adminInstruction'
+            'adminInstruction',
+            'jobInfo'
         ));
     }
 
