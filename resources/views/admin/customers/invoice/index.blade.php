@@ -182,78 +182,11 @@ document.querySelectorAll('.btn-danger').forEach(button => {
     });
 });
 
-// Handle the toggle of the invoice status (paid/unpaid)
-document.querySelectorAll('.btn-success').forEach(button => {
-    button.addEventListener('click', function() {
-        const invoiceId = this.getAttribute('data-invoice-id'); // Get the invoice ID from the button
-        const currentStatus = parseInt(this.getAttribute('data-status')); // Get current status (1 = Paid, 0 = Unpaid)
-        const newStatus = currentStatus === 1 ? 0 : 1; // Toggle the status: if Paid (1), change to Unpaid (0), and vice versa
-        const tdId = `invoice-status-${invoiceId}`; // Get the corresponding td id dynamically
-
-        // Send the new status to the server via AJAX
-        fetch(`/admin/invoice/${invoiceId}/update-status`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-            body: JSON.stringify({ status: newStatus }) // Sending status to the server to update
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                // Update the modal with the new status
-                const statusText = newStatus === 1 ? 'This is a Paid Invoice' : 'This is a Payable Invoice';
-                const modalStatus = document.querySelector(`#orderStatusModal-${invoiceId} #invoiceStatus`);
-                if (modalStatus) {
-                    modalStatus.textContent = statusText;
-                }
-
-                // Also update the status in the corresponding <td> (in the table)
-                const statusTd = document.getElementById(tdId); // Get the corresponding <td>
-                if (statusTd) {
-                    // Find the <span> inside the <td> and update its content
-                    const statusSpan = statusTd.querySelector('span');
-                    if (statusSpan) {
-                        statusSpan.textContent = newStatus === 1 ? 'Paid' : 'Payable';
-
-                        // Change color of text based on the status
-                        if (newStatus === 1) {
-                            statusSpan.style.color = 'green';  // Paid status color (green)
-                        } else {
-                            statusSpan.style.color = 'red';    // Payable status color (red)
-                        }
-                    }
-                }
-
-                // Update the modal toggle button text based on new status
-                const toggleButton = document.querySelector(`#orderStatusModal-${invoiceId} #toggleStatusButton`);
-                if (toggleButton) {
-                    toggleButton.textContent = newStatus === 1 ? 'Mark as Payable' : 'Mark as Paid';
-                    toggleButton.setAttribute('data-status', newStatus); // Update the data-status attribute for future toggling
-                }
-
-                // Update the "Payable"/"Paid" button text inside the table
-                const tableButton = document.querySelector(`#invoice-status-${invoiceId} .btn-success`);
-                if (tableButton) {
-                    tableButton.textContent = newStatus === 1 ? 'Mark as Unpaid' : 'Mark as Paid';
-                    tableButton.setAttribute('data-status', newStatus); // Update the button's data-status for future toggling
-                }
-            } else {
-                console.error('Failed to update invoice status.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Optionally, alert the user about the error
-            // alert('An error occurred while updating the invoice status.');
-        });
-    });
-});
-
 
 
     </script>
+
+
 
 <!--send invoice -->
 <script>
@@ -289,81 +222,20 @@ document.querySelectorAll('.btn-success').forEach(button => {
         });
     });
     
-    // Rest of your code for toggling the status (as it is)
-    document.querySelectorAll('.btn-success').forEach(button => {
-        button.addEventListener('click', function() {
-            const invoiceId = this.getAttribute('data-invoice-id'); // Get the invoice ID from the button
-            const currentStatus = parseInt(this.getAttribute('data-status')); // Get current status (1 = Paid, 0 = Unpaid)
-            const newStatus = currentStatus === 1 ? 0 : 1; // Toggle the status: if Paid (1), change to Unpaid (0), and vice versa
-            const tdId = `invoice-status-${invoiceId}`; // Get the corresponding td id dynamically
-    
-            // Send the new status to the server via AJAX
-            fetch(`/admin/invoice/${invoiceId}/update-status`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                },
-                body: JSON.stringify({ status: newStatus }) // Sending status to the server to update
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    // Update the modal with the new status
-                    const statusText = newStatus === 1 ? 'This is a Paid Invoice' : 'This is a Payable Invoice';
-                    const modalStatus = document.querySelector(`#orderStatusModal-${invoiceId} #invoiceStatus`);
-                    if (modalStatus) {
-                        modalStatus.textContent = statusText;
-                    }
-    
-                    // Also update the status in the corresponding <td> (in the table)
-                    const statusTd = document.getElementById(tdId); // Get the corresponding <td>
-                    if (statusTd) {
-                        // Find the <span> inside the <td> and update its content
-                        const statusSpan = statusTd.querySelector('span');
-                        if (statusSpan) {
-                            statusSpan.textContent = newStatus === 1 ? 'Paid' : 'Payable';
-    
-                            // Change color of text based on the status
-                            if (newStatus === 1) {
-                                statusSpan.style.color = 'green';  // Paid status color (green)
-                            } else {
-                                statusSpan.style.color = 'red';    // Payable status color (red)
-                            }
-                        }
-                    }
-    
-                    // Update the modal toggle button text based on new status
-                    const toggleButton = document.querySelector(`#orderStatusModal-${invoiceId} #toggleStatusButton`);
-                    if (toggleButton) {
-                        toggleButton.textContent = newStatus === 1 ? 'Mark as Payable' : 'Mark as Paid';
-                        toggleButton.setAttribute('data-status', newStatus); // Update the data-status attribute for future toggling
-                    }
-    
-                    // Update the "Payable"/"Paid" button text inside the table
-                    const tableButton = document.querySelector(`#invoice-status-${invoiceId} .btn-success`);
-                    if (tableButton) {
-                        tableButton.textContent = newStatus === 1 ? 'Mark as Unpaid' : 'Mark as Paid';
-                        tableButton.setAttribute('data-status', newStatus); // Update the button's data-status for future toggling
-                    }
-                } else {
-                    console.error('Failed to update invoice status.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Optionally, alert the user about the error
-                // alert('An error occurred while updating the invoice status.');
-            });
-        });
-    });
+  
     </script>
     
     <!-- follow up -->
-<script>
-  document.querySelectorAll('#followUp').forEach(button => {
+
+    <!-- Follow Up Button (does not modify invoice status) -->
+
+    <!--  end follow up -->
+
+    <script>
+        // Follow Up Button - This does NOT modify invoice status
+document.querySelectorAll('#followUp').forEach(button => {
     button.addEventListener('click', function(event) {
-        // Prevent the default action of the <a> tag (i.e., navigating to a link)
+        // Prevent the default action (navigate link)
         event.preventDefault();
 
         const invoiceId = this.getAttribute('data-invoice-id');  // Get the invoice ID
@@ -376,27 +248,90 @@ document.querySelectorAll('.btn-success').forEach(button => {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             },
         })
-        .then(response => {
-            console.log('Response:', response);
-            return response.json();  // Try parsing the response as JSON
-        })
+        .then(response => response.json())  // Parse the response
         .then(data => {
             if (data.status === 'success') {
-                alert(data.message);  // Show success message
+                alert('Follow-up email sent successfully!');  // Show success message
             } else {
                 alert('Failed to send follow-up: ' + data.message); // Show error message
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Failed to send follow-up.');
+            alert('Failed to send follow-up email.');
         });
     });
 });
 
-    </script>
 
-    <!--  end follow up -->
+
+// Mark as Paid Button - This handles only the status change (Not Follow-up)
+document.querySelectorAll('#toggleStatusButton').forEach(button => {
+    button.addEventListener('click', function() {
+        const invoiceId = this.getAttribute('data-invoice-id');  // Get the invoice ID
+        const currentStatus = parseInt(this.getAttribute('data-status')); // Get the current status (1 = Paid, 0 = Unpaid)
+        const newStatus = currentStatus === 1 ? 0 : 1; // Toggle the status: if Paid (1), change to Unpaid (0), and vice versa
+        const tdId = `invoice-status-${invoiceId}`; // Get the corresponding <td> id dynamically
+
+        // Send the new status to the server via AJAX
+        fetch(`/admin/invoice/${invoiceId}/update-status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: JSON.stringify({ status: newStatus }) // Sending status to the server to update
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Update the modal with the new status
+                const statusText = newStatus === 1 ? 'This is a Paid Invoice' : 'This is a Payable Invoice';
+                const modalStatus = document.querySelector(`#orderStatusModal-${invoiceId} #invoiceStatus`);
+                if (modalStatus) {
+                    modalStatus.textContent = statusText;
+                }
+
+                // Also update the status in the corresponding <td> (in the table)
+                const statusTd = document.getElementById(tdId); // Get the corresponding <td>
+                if (statusTd) {
+                    const statusSpan = statusTd.querySelector('span');
+                    if (statusSpan) {
+                        statusSpan.textContent = newStatus === 1 ? 'Paid' : 'Payable';
+
+                        // Change color of text based on the status
+                        if (newStatus === 1) {
+                            statusSpan.style.color = 'green';  // Paid status color (green)
+                        } else {
+                            statusSpan.style.color = 'red';    // Payable status color (red)
+                        }
+                    }
+                }
+
+                // Update the modal toggle button text based on the new status
+                const toggleButton = document.querySelector(`#orderStatusModal-${invoiceId} #toggleStatusButton`);
+                if (toggleButton) {
+                    toggleButton.textContent = newStatus === 1 ? 'Mark as Payable' : 'Mark as Paid';
+                    toggleButton.setAttribute('data-status', newStatus); // Update the data-status attribute for future toggling
+                }
+
+                // Update the "Payable"/"Paid" button text inside the table
+                const tableButton = document.querySelector(`#invoice-status-${invoiceId} .btn-success`);
+                if (tableButton) {
+                    tableButton.textContent = newStatus === 1 ? 'Mark as Unpaid' : 'Mark as Paid';
+                    tableButton.setAttribute('data-status', newStatus); // Update the button's data-status for future toggling
+                }
+            } else {
+                console.error('Failed to update invoice status.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Optionally, alert the user about the error
+        });
+    });
+});
+    </script>
     
 
 @endsection
