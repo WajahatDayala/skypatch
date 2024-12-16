@@ -13,6 +13,9 @@ use App\Models\Instruction;
 use App\Models\Status;
 use App\Models\Invoice;
 use App\Models\InvoiceDetail;
+use App\Mail\InvoiceMail;
+use App\Mail\FollowUpMail;
+use Illuminate\Support\Facades\Mail;
 use PDF;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -61,64 +64,67 @@ class InvoiceControlller extends Controller
     //download pdf
     public function downloadPDF($id)
     {
-        // Fetch the invoice by ID
+         // Fetch the invoice by ID
     $invoice = Invoice::select('*')
-    ->join('users','invoices.customer_id','=','users.id')
-    ->where('invoices.id',$id)
+    ->join('users', 'invoices.customer_id', '=', 'users.id')
+    ->where('invoices.id', $id)
     ->first();
 
-    
-    // Fetch invoice details
-    $orderInvoice = InvoiceDetail::select('*',
-        'invoice_details.invoice_id',
-        'orders.payment_status as paymentStatus',
-        'invoice_details.order_id as orderId',
-        'invoice_details.vector_id as vectorId',
-        'orders.name as orderDesign',
-        'orders.created_at as ordersCreatedAt',
-        'orders.sent_date as orderSentDate', 
-        'vector_orders.name as vectorDesign',
-        'vector_orders.created_at as vectorCreatedAt',
-        'vector_orders.date_finalized as vectorSentDate'
-    )
-    ->leftjoin('orders', 'invoice_details.order_id', '=', 'orders.id')
-    ->leftjoin('vector_orders', 'invoice_details.vector_id', '=', 'vector_orders.id')
-    ->where('invoice_details.invoice_id', $id)
-    ->get();
-   
+// Fetch invoice details
+$orderInvoice = InvoiceDetail::select('*', 
+    'invoice_details.invoice_id',
+    'orders.payment_status as paymentStatus',
+    'invoice_details.order_id as orderId',
+    'invoice_details.vector_id as vectorId',
+    'orders.name as orderDesign',
+    'orders.created_at as ordersCreatedAt',
+    'orders.sent_date as orderSentDate', 
+    'vector_orders.name as vectorDesign',
+    'vector_orders.created_at as vectorCreatedAt',
+    'vector_orders.date_finalized as vectorSentDate'
+)
+->leftjoin('orders', 'invoice_details.order_id', '=', 'orders.id')
+->leftjoin('vector_orders', 'invoice_details.vector_id', '=', 'vector_orders.id')
+->where('invoice_details.invoice_id', $id)
+->get();
 
-   
- 
+// Initialize Dompdf
+$dompdf = new Dompdf();
 
-    // Initialize Dompdf
-    $dompdf = new Dompdf();
+// Set options
+$options = new Options();
+$options->set('isHtml5ParserEnabled', true);  // Enable HTML5 support
+$options->set('isPhpEnabled', true);          // Enable PHP functions (optional)
+$options->set('isExternalLinksEnabled', true); // Allow external links like image URLs
+$dompdf->setOptions($options);
 
-    // Set options
-    $options = new Options();
-    $options->set('isHtml5ParserEnabled', true);  // Enable HTML5 support
-    $options->set('isPhpEnabled', true);          // Enable PHP functions (optional)
-    $options->set('isExternalLinksEnabled', true); // Allow external links like image URLs
-    $dompdf->setOptions($options);
+// Set base path for assets (important for resolving image paths)
+$dompdf->setBasePath(public_path()); // Use public path to resolve image URLs
 
-    // Set base path for assets (important for resolving image paths)
-    $dompdf->setBasePath(public_path()); // Use public path to resolve image URLs
+// Load HTML content for the PDF (passing $invoice and $orderInvoice)
+$htmlContent = view('admin.customers.invoice.invoice_pdf', compact(
+    'invoice', 
+    'orderInvoice'
+))->render();
 
-    // Load HTML content for the PDF (passing $invoice and $invoiceDetails)
-    $htmlContent = view('admin.customers.invoice.invoice_pdf', compact(
-        'invoice', 
-        'orderInvoice'
-        ))->render();
-    $dompdf->loadHtml($htmlContent);
+// Load the HTML content into Dompdf
+$dompdf->loadHtml($htmlContent);
 
-    // // Render the PDF
-     $dompdf->render();
+// Render the PDF (first pass)
+$dompdf->render();
 
-    // // Stream the PDF to the browser (for download)
-     return $dompdf->stream("invoice_{$id}.pdf", array("Attachment" => true));  // Download the file
+// Output the PDF to a file
+$pdfOutput = $dompdf->output();
 
-    // return view('admin.customers.invoice.invoice_pdf', compact(
-    //      'invoice', 
-    //     'orderInvoice'));
+// Define the file path to save the PDF
+$pdfFilePath = public_path("invoices/invoice_{$id}.pdf");
+
+// Save the PDF file to the specified path
+file_put_contents($pdfFilePath, $pdfOutput);
+
+// Now, stream the PDF so the user can download it
+return $dompdf->stream("invoice_{$invoice->invoice_number}.pdf", array("Attachment" => true));
+
         
     }
     
@@ -148,6 +154,75 @@ class InvoiceControlller extends Controller
 
     return response()->json(['status' => 'error', 'message' => 'Invoice not found'], 404);
     }
+
+    //send invoice to email
+    public function sendInvoiceEmail($id)
+    {
+        try {
+            // Find the invoice record
+            $invoice = Invoice::findOrFail($id);  // Use findOrFail to handle not-found errors automatically
+    
+            // Fetch the customer's email address
+            $customerEmail = Invoice::select('users.invoice_email as customerEmail')
+                ->join('users', 'invoices.customer_id', '=', 'users.id')
+                ->where('invoices.id', $id)
+                ->first();
+    
+            // Ensure that a customer email was retrieved
+            if (!$customerEmail || !$customerEmail->customerEmail) {
+                return response()->json(['status' => 'error', 'message' => 'Customer email not found.'], 404);
+            }
+    
+            // Define the PDF file path
+            $pdfFilePath = public_path("invoices/invoice_{$id}.pdf");
+    
+            // Check if the PDF file exists
+            if (!file_exists($pdfFilePath)) {
+                return response()->json(['status' => 'error', 'message' => 'PDF file not found.'], 404);
+            }
+    
+            // Send the email with the PDF as an attachment
+            Mail::to($customerEmail->customerEmail)->send(new InvoiceMail($invoice, $pdfFilePath));
+    
+            // Return success response
+            return response()->json(['status' => 'success', 'message' => 'Invoice email sent successfully!']);
+        } catch (\Exception $e) {
+            // Log the exception for debugging
+           // \Log::error('Error sending invoice email: ' . $e->getMessage());
+    
+            // Return error response
+            return response()->json(['status' => 'error', 'message' => 'An error occurred while sending the email.'], 500);
+        }
+    }
+
+
+    //send follow up email
+      // Send follow-up reminder via email
+      public function sendFollowUp($invoiceId)
+      {
+        try {
+            $invoice = Invoice::findOrFail($invoiceId);  // Find the invoice
+            // Fetch the customer's email address
+            $customerEmail = Invoice::select('users.invoice_email as customerEmail')
+                ->join('users', 'invoices.customer_id', '=', 'users.id')
+                ->where('invoices.id', $invoiceId)
+                ->first();
+    
+            
+                Mail::to($customerEmail->customerEmail)->send(new FollowUpMail($invoice));
+            
+
+    
+            return response()->json(['status' => 'success', 'message' => 'Follow-up reminder sent successfully.']);
+        } catch (\Exception $e) {
+            \Log::error('Error sending follow-up email: ' . $e->getMessage());
+            return response()->json(['status' => 'error', 'message' => 'Failed to send follow-up email.']);
+        }
+    
+      }
+    
+    
+
 
     // Update invoice status (paid/unpaid)
     public function updateInvoiceStatus(Request $request, $invoiceId)

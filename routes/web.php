@@ -285,6 +285,8 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin/invoice/{invoiceId}/fetch-details', [InvoiceControlller::class, 'fetchInvoiceDetails']);
 
     Route::post('/admin/invoice/{invoiceId}/update-status', [InvoiceControlller::class, 'updateInvoiceStatus'])->name('invoice.update-status');
+    Route::post('/admin/invoice/{id}/send-invoice-email', [InvoiceControlller::class, 'sendInvoiceEmail']);
+    Route::post('/admin/invoice/{invoiceId}/send-followup', [InvoiceControlller::class, 'sendFollowUp']);
 
     //all employees
     Route::resource('/admin/employees', EmployeeController::class);

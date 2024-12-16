@@ -14,40 +14,7 @@
                         <h6 class="mb-0">All Invoices</h6>
 
                     </div>
-                    <!-- <div class="row">
-                        <div class="col-lg-4"></div>
-                        <div class="col-lg-4 "></div>
-                        <div class="col-lg-4"><a style="color:#fff; margin-left:70%;"
-                                class="btn btn-rounded btn-primary mb-3" href="{{ url('customer/orders/create') }}"><i
-                                    class="fa fa-plus">Add New</i></a></div>
-                    </div> -->
-                    <!-- <div class="row d-flex">
-                      <div class="col-6">
-                        <form action="">
-                          <div class="row mb-3">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label">Show: </label>
-                            <div class="w-50">
-                              <select class="form-select mb-3" aria-label="Default select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                              </select>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                      <div class="col-6 mb-4 d-flex justify-content-end">
-                        <form class="d-flex align-items-center justify-content-end">
-                          <div class="row mb-3">
-                            <label for="inputEmail3" class="col-sm-2 col-form-label me-3">Search: </label>
-                            <div class="w-75">
-                              <input type="text" class="form-control" id="search">
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div> -->
+                   
                     <div class="table-responsive">
                         <table id="dataTable" class="table  text-start align-middle table-bordered table-hover mb-0">
                             <thead>
@@ -80,18 +47,16 @@
                                         <td>{{ $i->total_amount ? $i->total_amount : 0 }}</td>
 
 
-                                        <td>
+                                        <td id="invoice-status-{{ $i->invoiceId }}">
                                             @if ($i->invoice_status === 1)
-                                                <!-- Assuming 1 means Paid -->
                                                 <span>Paid</span>
                                             @elseif($i->invoice_status === 0)
-                                                <!-- Assuming 0 means Unpaid -->
                                                 <span>Payable</span>
                                             @else
                                                 <span>N/A</span>
-                                                <!-- In case neither paymentStatus nor vectorPaymentStatus are available -->
                                             @endif
                                         </td>
+                                        
 
                                         <td>
                                             <a class="btn btn-sm btn-dark rounded-pill "
@@ -120,9 +85,15 @@
                     <p class="text-center"><strong id="invoiceStatus"></strong></p>
                     <div class="form-group">
                         <div class="text-center">
-                            <a class="btn btn-sm btn-primary rounded-pill" id="downloadInvoice" href="#">Download</a>
-                            <a class="btn btn-sm btn-dark rounded-pill" href=""><i class="fas fa-email"></i> Email</a>
-                            <a class="btn btn-sm btn-success rounded-pill" href=""><i class="fas fa-email"></i> Follow Up</a>
+                            <a class="btn btn-sm btn-primary rounded-pill" id="downloadInvoice" href="#"> Download</a>
+                            <button type="button" class="btn btn-sm btn-dark rounded-pill" id="emailInvoiceButton" data-invoice-id="{{ $i->invoiceId }}">
+                                {{-- <i class="fas fa-envelope"></i>  --}}
+                                Email
+                            </button>
+                            <a class="btn btn-sm btn-success rounded-pill" href="#" type="button" id="followUp" data-invoice-id="{{ $i->invoiceId }}">
+                                <i class="fas fa-envelope"></i> Follow Up
+                            </a>
+                            
                         </div>
                     </div>
                 </div>
@@ -214,9 +185,10 @@ document.querySelectorAll('.btn-danger').forEach(button => {
 // Handle the toggle of the invoice status (paid/unpaid)
 document.querySelectorAll('.btn-success').forEach(button => {
     button.addEventListener('click', function() {
-        const invoiceId = this.getAttribute('data-invoice-id');
-        const currentStatus = parseInt(this.getAttribute('data-status'));
-        const newStatus = currentStatus === 1 ? 0 : 1; // Toggle between 1 (paid) and 0 (unpaid)
+        const invoiceId = this.getAttribute('data-invoice-id'); // Get the invoice ID from the button
+        const currentStatus = parseInt(this.getAttribute('data-status')); // Get current status (1 = Paid, 0 = Unpaid)
+        const newStatus = currentStatus === 1 ? 0 : 1; // Toggle the status: if Paid (1), change to Unpaid (0), and vice versa
+        const tdId = `invoice-status-${invoiceId}`; // Get the corresponding td id dynamically
 
         // Send the new status to the server via AJAX
         fetch(`/admin/invoice/${invoiceId}/update-status`, {
@@ -225,30 +197,206 @@ document.querySelectorAll('.btn-success').forEach(button => {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             },
-            body: JSON.stringify({ status: newStatus }) // Only sending status to update
+            body: JSON.stringify({ status: newStatus }) // Sending status to the server to update
         })
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
                 // Update the modal with the new status
-                const statusText = newStatus === 1 ? 'This is a Paid Invoice' : 'This is a Payable Invoice.';
+                const statusText = newStatus === 1 ? 'This is a Paid Invoice' : 'This is a Payable Invoice';
                 const modalStatus = document.querySelector(`#orderStatusModal-${invoiceId} #invoiceStatus`);
                 if (modalStatus) {
                     modalStatus.textContent = statusText;
                 }
 
-                // Optionally, you can reload the invoice list or update the table row
-               // alert('Invoice status updated successfully!');
+                // Also update the status in the corresponding <td> (in the table)
+                const statusTd = document.getElementById(tdId); // Get the corresponding <td>
+                if (statusTd) {
+                    // Find the <span> inside the <td> and update its content
+                    const statusSpan = statusTd.querySelector('span');
+                    if (statusSpan) {
+                        statusSpan.textContent = newStatus === 1 ? 'Paid' : 'Payable';
+
+                        // Change color of text based on the status
+                        if (newStatus === 1) {
+                            statusSpan.style.color = 'green';  // Paid status color (green)
+                        } else {
+                            statusSpan.style.color = 'red';    // Payable status color (red)
+                        }
+                    }
+                }
+
+                // Update the modal toggle button text based on new status
+                const toggleButton = document.querySelector(`#orderStatusModal-${invoiceId} #toggleStatusButton`);
+                if (toggleButton) {
+                    toggleButton.textContent = newStatus === 1 ? 'Mark as Payable' : 'Mark as Paid';
+                    toggleButton.setAttribute('data-status', newStatus); // Update the data-status attribute for future toggling
+                }
+
+                // Update the "Payable"/"Paid" button text inside the table
+                const tableButton = document.querySelector(`#invoice-status-${invoiceId} .btn-success`);
+                if (tableButton) {
+                    tableButton.textContent = newStatus === 1 ? 'Mark as Unpaid' : 'Mark as Paid';
+                    tableButton.setAttribute('data-status', newStatus); // Update the button's data-status for future toggling
+                }
             } else {
-               // alert('Failed to update invoice status.');
+                console.error('Failed to update invoice status.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            //alert('An error occurred while updating the invoice status.');
+            // Optionally, alert the user about the error
+            // alert('An error occurred while updating the invoice status.');
+        });
+    });
+});
+
+
+
+    </script>
+
+<!--send invoice -->
+<script>
+    // Use event delegation to handle clicks on dynamically created buttons
+    document.addEventListener('DOMContentLoaded', function () {
+        // Delegate the event listener to the parent container (like the body)
+        document.body.addEventListener('click', function(event) {
+            // Check if the clicked element is the 'emailInvoiceButton'
+            if (event.target && event.target.id === 'emailInvoiceButton') {
+                const invoiceId = event.target.getAttribute('data-invoice-id');  // Get the invoice ID
+    
+                // Send the request to send the invoice email
+                fetch(`/admin/invoice/${invoiceId}/send-invoice-email`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('Invoice email sent successfully!');
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to send invoice email.');
+                });
+            }
+        });
+    });
+    
+    // Rest of your code for toggling the status (as it is)
+    document.querySelectorAll('.btn-success').forEach(button => {
+        button.addEventListener('click', function() {
+            const invoiceId = this.getAttribute('data-invoice-id'); // Get the invoice ID from the button
+            const currentStatus = parseInt(this.getAttribute('data-status')); // Get current status (1 = Paid, 0 = Unpaid)
+            const newStatus = currentStatus === 1 ? 0 : 1; // Toggle the status: if Paid (1), change to Unpaid (0), and vice versa
+            const tdId = `invoice-status-${invoiceId}`; // Get the corresponding td id dynamically
+    
+            // Send the new status to the server via AJAX
+            fetch(`/admin/invoice/${invoiceId}/update-status`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify({ status: newStatus }) // Sending status to the server to update
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Update the modal with the new status
+                    const statusText = newStatus === 1 ? 'This is a Paid Invoice' : 'This is a Payable Invoice';
+                    const modalStatus = document.querySelector(`#orderStatusModal-${invoiceId} #invoiceStatus`);
+                    if (modalStatus) {
+                        modalStatus.textContent = statusText;
+                    }
+    
+                    // Also update the status in the corresponding <td> (in the table)
+                    const statusTd = document.getElementById(tdId); // Get the corresponding <td>
+                    if (statusTd) {
+                        // Find the <span> inside the <td> and update its content
+                        const statusSpan = statusTd.querySelector('span');
+                        if (statusSpan) {
+                            statusSpan.textContent = newStatus === 1 ? 'Paid' : 'Payable';
+    
+                            // Change color of text based on the status
+                            if (newStatus === 1) {
+                                statusSpan.style.color = 'green';  // Paid status color (green)
+                            } else {
+                                statusSpan.style.color = 'red';    // Payable status color (red)
+                            }
+                        }
+                    }
+    
+                    // Update the modal toggle button text based on new status
+                    const toggleButton = document.querySelector(`#orderStatusModal-${invoiceId} #toggleStatusButton`);
+                    if (toggleButton) {
+                        toggleButton.textContent = newStatus === 1 ? 'Mark as Payable' : 'Mark as Paid';
+                        toggleButton.setAttribute('data-status', newStatus); // Update the data-status attribute for future toggling
+                    }
+    
+                    // Update the "Payable"/"Paid" button text inside the table
+                    const tableButton = document.querySelector(`#invoice-status-${invoiceId} .btn-success`);
+                    if (tableButton) {
+                        tableButton.textContent = newStatus === 1 ? 'Mark as Unpaid' : 'Mark as Paid';
+                        tableButton.setAttribute('data-status', newStatus); // Update the button's data-status for future toggling
+                    }
+                } else {
+                    console.error('Failed to update invoice status.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Optionally, alert the user about the error
+                // alert('An error occurred while updating the invoice status.');
+            });
+        });
+    });
+    </script>
+    
+    <!-- follow up -->
+<script>
+  document.querySelectorAll('#followUp').forEach(button => {
+    button.addEventListener('click', function(event) {
+        // Prevent the default action of the <a> tag (i.e., navigating to a link)
+        event.preventDefault();
+
+        const invoiceId = this.getAttribute('data-invoice-id');  // Get the invoice ID
+
+        // Send the request to send the follow-up email
+        fetch(`/admin/invoice/${invoiceId}/send-followup`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+        })
+        .then(response => {
+            console.log('Response:', response);
+            return response.json();  // Try parsing the response as JSON
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);  // Show success message
+            } else {
+                alert('Failed to send follow-up: ' + data.message); // Show error message
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to send follow-up.');
         });
     });
 });
 
     </script>
+
+    <!--  end follow up -->
+    
+
 @endsection
