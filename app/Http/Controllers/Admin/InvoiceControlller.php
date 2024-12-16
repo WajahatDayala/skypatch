@@ -159,17 +159,14 @@ return $dompdf->stream("invoice_{$invoice->invoice_number}.pdf", array("Attachme
     public function sendInvoiceEmail($id)
     {
         try {
-            // Find the invoice record
-            $invoice = Invoice::findOrFail($id);  // Use findOrFail to handle not-found errors automatically
-    
-            // Fetch the customer's email address
-            $customerEmail = Invoice::select('users.invoice_email as customerEmail')
+            // Find the invoice record along with customer details
+            $invoice = Invoice::select('invoices.id','invoices.invoice_status','invoices.invoice_number', 'users.name as customer_name', 'users.invoice_email as customerEmail')
                 ->join('users', 'invoices.customer_id', '=', 'users.id')
                 ->where('invoices.id', $id)
                 ->first();
     
-            // Ensure that a customer email was retrieved
-            if (!$customerEmail || !$customerEmail->customerEmail) {
+            // Ensure the invoice and customer email exist
+            if (!$invoice || !$invoice->customerEmail) {
                 return response()->json(['status' => 'error', 'message' => 'Customer email not found.'], 404);
             }
     
@@ -182,13 +179,14 @@ return $dompdf->stream("invoice_{$invoice->invoice_number}.pdf", array("Attachme
             }
     
             // Send the email with the PDF as an attachment
-            Mail::to($customerEmail->customerEmail)->send(new InvoiceMail($invoice, $pdfFilePath));
+            Mail::to($invoice->customerEmail)->send(new InvoiceMail($invoice, $pdfFilePath));
     
             // Return success response
             return response()->json(['status' => 'success', 'message' => 'Invoice email sent successfully!']);
+    
         } catch (\Exception $e) {
             // Log the exception for debugging
-           // \Log::error('Error sending invoice email: ' . $e->getMessage());
+            \Log::error('Error sending invoice email: ' . $e->getMessage());
     
             // Return error response
             return response()->json(['status' => 'error', 'message' => 'An error occurred while sending the email.'], 500);
