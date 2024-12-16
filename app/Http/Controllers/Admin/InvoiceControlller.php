@@ -203,14 +203,25 @@ return $dompdf->stream("invoice_{$invoice->invoice_number}.pdf", array("Attachme
         try {
             $invoice = Invoice::findOrFail($invoiceId);  // Find the invoice
             // Fetch the customer's email address
-            $customerEmail = Invoice::select('users.invoice_email as customerEmail')
-                ->join('users', 'invoices.customer_id', '=', 'users.id')
-                ->where('invoices.id', $invoiceId)
-                ->first();
-    
-            
-                Mail::to($customerEmail->customerEmail)->send(new FollowUpMail($invoice));
-            
+            // $customerEmail = Invoice::select('*','users.name as customer_name','users.invoice_email as customerEmail')
+            //     ->join('users', 'invoices.customer_id', '=', 'users.id')
+            //     ->where('invoices.id', $invoiceId)
+            //     ->first();
+
+
+
+            $invoiceDetail = InvoiceDetail::select('*', 'users.name as customer_name', 'users.invoice_email as customerEmail')
+            ->join('invoices', 'invoice_details.invoice_id', '=', 'invoices.id')
+            ->join('users', 'invoices.customer_id', '=', 'users.id')  
+            ->where('invoice_details.invoice_id', $invoiceId)
+            ->first();
+        
+        if ($invoiceDetail) {
+            $mail = Mail::to($invoiceDetail->customerEmail)->send(new FollowUpMail($invoiceDetail));
+        } else {
+            \Log::error('InvoiceDetail not found.');
+        }
+        
 
     
             return response()->json(['status' => 'success', 'message' => 'Follow-up reminder sent successfully.']);

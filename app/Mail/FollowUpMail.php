@@ -3,7 +3,7 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use App\Models\Invoice;
+use App\Models\InvoiceDetail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -14,11 +14,13 @@ class FollowUpMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $invoiceDetail;
     public $invoice;
 
-    public function __construct(Invoice $invoice)
+    public function __construct(InvoiceDetail $invoiceDetail)
     {
-        $this->invoice = $invoice;
+        $this->invoiceDetail = $invoiceDetail;
+        $this->invoice = $invoiceDetail->invoice;  // Assuming InvoiceDetail has an 'invoice' relationship
     }
 
     public function build()
