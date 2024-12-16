@@ -61,8 +61,8 @@
             <tr class="row">
                 <td>
                     <strong>Comment</strong><br>
-                    <textarea class="form-control" placeholder="Leave a comment here"
-                        id="floatingTextarea" style="height: 150px;"></textarea>
+                    <textarea class="form-control" name="comment" placeholder="Leave a comment here"
+                    id="floatingTextarea" style="height: 150px;"></textarea>
 
                     <div class="mt-3">
                         <legend class="fs-6"><strong>Mail To:</strong></legend>

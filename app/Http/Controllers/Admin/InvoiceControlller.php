@@ -186,7 +186,7 @@ return $dompdf->stream("invoice_{$invoice->invoice_number}.pdf", array("Attachme
     
         } catch (\Exception $e) {
             // Log the exception for debugging
-            \Log::error('Error sending invoice email: ' . $e->getMessage());
+          //  \Log::error('Error sending invoice email: ' . $e->getMessage());
     
             // Return error response
             return response()->json(['status' => 'error', 'message' => 'An error occurred while sending the email.'], 500);
@@ -217,14 +217,14 @@ return $dompdf->stream("invoice_{$invoice->invoice_number}.pdf", array("Attachme
         if ($invoiceDetail) {
             $mail = Mail::to($invoiceDetail->customerEmail)->send(new FollowUpMail($invoiceDetail));
         } else {
-            \Log::error('InvoiceDetail not found.');
+            //\Log::error('InvoiceDetail not found.');
         }
         
 
     
             return response()->json(['status' => 'success', 'message' => 'Follow-up reminder sent successfully.']);
         } catch (\Exception $e) {
-            \Log::error('Error sending follow-up email: ' . $e->getMessage());
+           //-* \Log::error('Error sending follow-up email: ' . $e->getMessage());
             return response()->json(['status' => 'error', 'message' => 'Failed to send follow-up email.']);
         }
     
@@ -268,10 +268,10 @@ return $dompdf->stream("invoice_{$invoice->invoice_number}.pdf", array("Attachme
         DB::rollback();
 
         // Log the error with context
-        Log::error('Error updating invoice status', [
-            'error' => $e->getMessage(),
-            'invoiceId' => $invoiceId,
-        ]);
+        // Log::error('Error updating invoice status', [
+        //     'error' => $e->getMessage(),
+        //     'invoiceId' => $invoiceId,
+        // ]);
 
         return response()->json([
             'status' => 'error',
