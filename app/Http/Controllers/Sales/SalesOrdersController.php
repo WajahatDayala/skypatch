@@ -180,6 +180,13 @@ class SalesOrdersController extends Controller
             ->get();
 
 
+               //jobinfo
+         $jobInfo = JobInformation::select('*')
+         ->leftjoin('orders','job_information.order_id','=','orders.id')
+         ->where('job_information.order_id',$id)
+         ->first();
+
+
 
 
         return view('admin/orders/printview', compact(
@@ -189,7 +196,8 @@ class SalesOrdersController extends Controller
             'orderFiles',
             'orderInstruction',
             'adminInstruction',
-            'allReasons'
+            'allReasons',
+            'jobInfo'
         ));
     }
 

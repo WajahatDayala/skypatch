@@ -487,6 +487,12 @@ class SalesAllQuotesController extends Controller
             )
             ->get();
 
+                                   //jobinfo
+        $jobInfo = JobInformation::select('*')
+        ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+        ->where('job_information.quote_id',$id)
+        ->first();
+
 
 
 
@@ -496,7 +502,8 @@ class SalesAllQuotesController extends Controller
             'orderStatus',
             'orderFiles',
             'orderInstruction',
-            'adminInstruction'
+            'adminInstruction',
+            'jobInfo'
         ));
     }
 

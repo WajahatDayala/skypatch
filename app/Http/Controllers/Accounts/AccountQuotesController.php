@@ -167,6 +167,12 @@ class AccountQuotesController extends Controller
             ->get();
 
 
+            $jobInfo = JobInformation::select('*')
+            ->leftjoin('quotes','job_information.quote_id','=','quotes.id')
+            ->where('job_information.quote_id',$id)
+            ->first();
+
+
 
 
         return view('admin/quotes/printview', compact(
@@ -175,7 +181,8 @@ class AccountQuotesController extends Controller
             'orderStatus',
             'orderFiles',
             'orderInstruction',
-            'adminInstruction'
+            'adminInstruction',
+            'jobInfo'
         ));
     }
 
